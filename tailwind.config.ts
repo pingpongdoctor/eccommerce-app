@@ -8,7 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {},
+      colors: {
+        errorInputBorderColor: "border-red-400",
+      },
       fontFamily: {
         dancingScript: ["var(--font-dancing-script)"],
       },

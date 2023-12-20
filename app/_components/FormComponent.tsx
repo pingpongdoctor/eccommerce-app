@@ -12,6 +12,9 @@ const inputBoxeInforArr: InputBoxInfor[] = [
   { id: "3", name: "message" },
 ];
 
+const validEmailRegex =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
 export default function FormComponent() {
   const [formInfor, setFormInfor] = useState<FormInfor>({
     username: "",
@@ -30,9 +33,13 @@ export default function FormComponent() {
     });
   };
 
-  useEffect(() => {
-    console.log(formInfor);
-  }, [formInfor]);
+  const isFormValid = function () {
+    if (!formInfor.username) {
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <div>
