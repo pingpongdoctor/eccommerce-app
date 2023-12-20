@@ -2,8 +2,11 @@
 import React, { ChangeEvent } from "react";
 
 interface Props {
-  inputOnchangeHandler?: (e: ChangeEvent) => void;
-  inputName: string;
+  inputOnchangeHandler?: (
+    e: ChangeEvent<HTMLInputElement>,
+    updatedField: "username" | "message" | "email"
+  ) => void;
+  inputName: "username" | "message" | "email";
 }
 
 export default function InputComponent({
@@ -20,7 +23,11 @@ export default function InputComponent({
         id={inputName}
         className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
         placeholder="Username"
-        onChange={inputOnchangeHandler}
+        onChange={(e) => {
+          if (typeof inputOnchangeHandler === "function") {
+            inputOnchangeHandler(e, inputName);
+          }
+        }}
       />
 
       <span className="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">

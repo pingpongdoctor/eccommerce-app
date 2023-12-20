@@ -9,6 +9,20 @@ interface FormInfor {
   message: string;
 }
 
+type InputBoxName = "username" | "email" | "message";
+
+const inputBoxesInforArr: {
+  id: string;
+  name: InputBoxName;
+}[] = [
+  {
+    id: "1",
+    name: "username",
+  },
+  { id: "2", name: "email" },
+  { id: "3", name: "message" },
+];
+
 export default function FormComponent() {
   const [formInfor, setFormInfor] = useState<FormInfor>({
     username: "",
@@ -17,26 +31,27 @@ export default function FormComponent() {
   });
 
   const handleUpdateFormInfor = function (
-    field: "username" | "email" | "message",
-    val: string
+    e: React.ChangeEvent<HTMLInputElement>,
+    updatedField: InputBoxName
   ) {
     setFormInfor((prevState: FormInfor) => {
       const newForm = { ...prevState };
-      newForm[field] = val;
+      newForm[updatedField] = e.target.value;
       return newForm;
     });
   };
 
-  const inputBoxesInforArr = [
-    {
-      name: "username",
-    },
-    { name: "email" },
-    { name: "message" },
-  ];
   return (
     <div>
-      <InputComponent />
+      {inputBoxesInforArr.map((box: { id: string; name: InputBoxName }) => {
+        return (
+          <InputComponent
+            key={box.id}
+            inputName={box.name}
+            inputOnchangeHandler={handleUpdateFormInfor}
+          />
+        );
+      })}
     </div>
   );
 }
