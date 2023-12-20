@@ -1,20 +1,9 @@
 "use client";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputComponent from "./InputComponent";
 
-interface FormInfor {
-  username: string;
-  email: string;
-  message: string;
-}
-
-type InputBoxName = "username" | "email" | "message";
-
-const inputBoxesInforArr: {
-  id: string;
-  name: InputBoxName;
-}[] = [
+const inputBoxeInforArr: InputBoxInfor[] = [
   {
     id: "1",
     name: "username",
@@ -41,9 +30,13 @@ export default function FormComponent() {
     });
   };
 
+  useEffect(() => {
+    console.log(formInfor);
+  }, [formInfor]);
+
   return (
     <div>
-      {inputBoxesInforArr.map((box: { id: string; name: InputBoxName }) => {
+      {inputBoxeInforArr.map((box: InputBoxInfor) => {
         return (
           <InputComponent
             key={box.id}

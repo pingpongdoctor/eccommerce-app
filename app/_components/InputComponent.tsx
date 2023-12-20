@@ -4,9 +4,9 @@ import React, { ChangeEvent } from "react";
 interface Props {
   inputOnchangeHandler?: (
     e: ChangeEvent<HTMLInputElement>,
-    updatedField: "username" | "message" | "email"
+    updatedField: InputBoxName
   ) => void;
-  inputName: "username" | "message" | "email";
+  inputName: InputBoxName;
 }
 
 export default function InputComponent({
