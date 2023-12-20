@@ -7,6 +7,7 @@ interface Props {
     updatedField: InputBoxName
   ) => void;
   inputName: InputBoxName;
+  isError?: boolean;
 }
 
 export default function InputComponent({
