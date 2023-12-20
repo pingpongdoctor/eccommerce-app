@@ -9,6 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {},
+      fontFamily: {
+        dancingScript: ["var(--font-dancing-script)"],
+      },
     },
   },
 };
