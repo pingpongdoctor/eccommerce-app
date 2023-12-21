@@ -3,6 +3,7 @@ import React, { ChangeEvent, FormEvent } from "react";
 import { useState, useEffect } from "react";
 import InputComponent from "./InputComponent";
 import ButtonComponent from "./ButtonComponent";
+import { postUserData } from "../_lib/postUserData";
 
 const inputBoxeInforArr: InputBoxInfor[] = [
   {
@@ -28,14 +29,14 @@ export default function FormComponent() {
     value: string,
     updatedField: Field,
     isError: boolean
-  ) {
+  ): void {
     try {
       setFormInfor((prevState) => ({
         ...prevState,
         [updatedField]: { value, isError },
       }));
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.log("Update form state" + e);
     }
   };
 
@@ -43,11 +44,11 @@ export default function FormComponent() {
     e: ChangeEvent<HTMLInputElement>,
     updatedField: Field,
     isError: boolean
-  ) {
+  ): void {
     updateFormInforState(e.target.value, updatedField, isError);
   };
 
-  const isFormValid = function () {
+  const isFormValid = function (): boolean {
     try {
       const fieldArr: Field[] = ["username", "email", "message"];
 
@@ -63,15 +64,24 @@ export default function FormComponent() {
       }
       return true;
     } catch (e) {
-      console.log(e);
+      console.log("Validate form error" + e);
       return false;
     }
   };
 
-  const submitFormHanlder = async function (e: FormEvent<HTMLFormElement>) {
+  const submitFormHanlder = async function (
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> {
     e.preventDefault();
-
     console.log(isFormValid());
+    if (isFormValid()) {
+      try {
+        const { username, message, email } = formInfor;
+        await postUserData(username.value, message.value, email.value);
+      } catch (e) {
+        console.log("Submit form error" + e);
+      }
+    }
   };
 
   return (
