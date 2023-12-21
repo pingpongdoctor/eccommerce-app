@@ -49,14 +49,20 @@ export default function FormComponent() {
   };
 
   const isFormValid = function () {
-    const fieldsArr: Field[] = ["username", "email", "message"];
-    fieldsArr.forEach((field) => {
-      if (!formInfor[field].value) {
-        updateFormInforState(formInfor[field].value, field, true);
-        return false;
+    try {
+      const fieldArr: Field[] = ["username", "email", "message"];
+
+      for (let i = 0; i < fieldArr.length; i++) {
+        if (!formInfor[fieldArr[i]].value) {
+          updateFormInforState(formInfor[fieldArr[i]].value, fieldArr[i], true);
+          return false;
+        }
       }
-    });
-    return true;
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   };
 
   const submitFormHanlder = async function (e: FormEvent<HTMLFormElement>) {
