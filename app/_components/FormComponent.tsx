@@ -30,11 +30,15 @@ export default function FormComponent() {
     updatedField: InputBoxName,
     isError: boolean
   ) {
-    setFormInfor((prevState: FormInfor) => {
-      const newForm: FormInfor = { ...prevState };
-      newForm[updatedField] = { value, isError };
-      return newForm;
-    });
+    try {
+      setFormInfor((prevState: FormInfor) => {
+        const newForm: FormInfor = { ...prevState };
+        newForm[updatedField] = { value, isError };
+        return newForm;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleUpdateFormInforState = function (
