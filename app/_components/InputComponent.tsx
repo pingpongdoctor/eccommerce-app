@@ -26,7 +26,7 @@ export default function InputComponent({
         id={inputName}
         className={`peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0`}
         placeholder="Username"
-        onChange={(e) => {
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
           if (
             typeof inputOnchangeHandler === "function" &&
             isError != undefined

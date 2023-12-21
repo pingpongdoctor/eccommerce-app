@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { useState, useEffect } from "react";
 import InputComponent from "./InputComponent";
 
@@ -24,20 +24,33 @@ export default function FormComponent() {
     message: { value: "", isError: false },
   });
 
-  const handleUpdateFormInfor = function (
-    e: React.ChangeEvent<HTMLInputElement>,
+  const updateFormInforState = function (
+    value: string,
     updatedField: InputBoxName,
     isError: boolean
   ) {
     setFormInfor((prevState: FormInfor) => {
       const newForm: FormInfor = { ...prevState };
-      newForm[updatedField] = { value: e.target.value, isError };
+      newForm[updatedField] = { value, isError };
       return newForm;
     });
   };
 
+  const handleUpdateFormInforState = function (
+    e: ChangeEvent<HTMLInputElement>,
+    updatedField: InputBoxName,
+    isError: boolean
+  ) {
+    updateFormInforState(e.target.value, updatedField, isError);
+  };
+
   const isFormValid = function () {
-    if (!formInfor) {
+    if (
+      !formInfor.username.value ||
+      !formInfor.message.value ||
+      !formInfor.email.value ||
+      !formInfor.email.value.match(validEmailRegex)
+    ) {
       return false;
     }
 
@@ -52,7 +65,7 @@ export default function FormComponent() {
           <InputComponent
             key={box.id}
             inputName={box.name}
-            inputOnchangeHandler={handleUpdateFormInfor}
+            inputOnchangeHandler={handleUpdateFormInforState}
           />
         );
       })}
