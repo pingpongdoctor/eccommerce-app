@@ -4,10 +4,10 @@ import React, { ChangeEvent } from "react";
 interface Props {
   inputOnchangeHandler?: (
     e: ChangeEvent<HTMLInputElement>,
-    updatedField: InputBoxName,
+    updatedField: Field,
     isError: boolean
   ) => void;
-  inputName: InputBoxName;
+  inputName: Field;
   inputClassname?: string;
   isError?: boolean;
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, FormEvent } from "react";
 import { useState, useEffect } from "react";
 import InputComponent from "./InputComponent";
 import ButtonComponent from "./ButtonComponent";
@@ -27,7 +27,7 @@ export default function FormComponent() {
 
   const updateFormInforState = function (
     value: string,
-    updatedField: InputBoxName,
+    updatedField: Field,
     isError: boolean
   ) {
     try {
@@ -43,23 +43,28 @@ export default function FormComponent() {
 
   const handleUpdateFormInforState = function (
     e: ChangeEvent<HTMLInputElement>,
-    updatedField: InputBoxName,
+    updatedField: Field,
     isError: boolean
   ) {
     updateFormInforState(e.target.value, updatedField, isError);
   };
 
   const isFormValid = function () {
-    if (
-      !formInfor.username.value ||
-      !formInfor.message.value ||
-      !formInfor.email.value ||
-      !formInfor.email.value.match(validEmailRegex)
-    ) {
-      return false;
-    }
-
+    const fieldsArr: Field[] = ["username", "email", "message"];
+    fieldsArr.forEach((field) => {
+      if (!formInfor[field].value) {
+        updateFormInforState(formInfor[field].value, field, true);
+        return false;
+      }
+    });
     return true;
+  };
+
+  const submitFormHanlder = async function (e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (isFormValid()) {
+    }
   };
 
   return (
