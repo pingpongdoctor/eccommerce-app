@@ -59,7 +59,7 @@ export default function FormComponent() {
 
   return (
     <form className="flex flex-col gap-4 items-center">
-      <h1 className="font-dancingScript">Fill the form please</h1>
+      <h1 className="font-bold font-dancingScript">Fill the form please</h1>
       {inputBoxeInforArr.map((box: InputBoxInfor) => {
         return (
           <InputComponent

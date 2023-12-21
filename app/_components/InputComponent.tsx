@@ -8,6 +8,7 @@ interface Props {
     isError: boolean
   ) => void;
   inputName: InputBoxName;
+  inputClassname?: string;
   isError?: boolean;
 }
 
@@ -15,16 +16,17 @@ export default function InputComponent({
   inputOnchangeHandler,
   inputName,
   isError,
+  inputClassname,
 }: Props) {
   return (
     <label
       htmlFor={inputName}
-      className="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600"
+      className="relative w-full rounded-md border border-gray-200 shadow-sm focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600"
     >
       <input
         type="text"
         id={inputName}
-        className={`peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0`}
+        className={`peer border-none rounded-md placeholder-transparent focus:border-transparent outline-none ring-0`}
         placeholder="Username"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           if (
