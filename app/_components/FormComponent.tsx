@@ -58,7 +58,7 @@ export default function FormComponent() {
   };
 
   return (
-    <form className="flex flex-col gap-4 items-center">
+    <form className="flex flex-col gap-4 items-center sm:max-w-[500px] m-auto">
       <h1 className="font-bold font-dancingScript">Fill the form please</h1>
       {inputBoxeInforArr.map((box: InputBoxInfor) => {
         return (

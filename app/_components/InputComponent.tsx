@@ -16,7 +16,6 @@ export default function InputComponent({
   inputOnchangeHandler,
   inputName,
   isError,
-  inputClassname,
 }: Props) {
   return (
     <label
@@ -26,7 +25,7 @@ export default function InputComponent({
       <input
         type="text"
         id={inputName}
-        className={`peer border-none rounded-md placeholder-transparent focus:border-transparent outline-none ring-0`}
+        className={`peer px-1 py-3 border-none rounded-md placeholder:pl-2 placeholder-transparent focus:border-transparent outline-none ring-0`}
         placeholder="Username"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           if (
