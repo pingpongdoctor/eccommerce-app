@@ -2,6 +2,7 @@
 import React, { ChangeEvent } from "react";
 import { useState, useEffect } from "react";
 import InputComponent from "./InputComponent";
+import ButtonComponent from "./ButtonComponent";
 
 const inputBoxeInforArr: InputBoxInfor[] = [
   {
@@ -69,6 +70,7 @@ export default function FormComponent() {
           />
         );
       })}
+      <ButtonComponent buttonName="Submit" buttonType="submit" />
     </form>
   );
 }
