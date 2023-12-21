@@ -31,11 +31,10 @@ export default function FormComponent() {
     isError: boolean
   ) {
     try {
-      setFormInfor((prevState: FormInfor) => {
-        const newForm: FormInfor = { ...prevState };
-        newForm[updatedField] = { value, isError };
-        return newForm;
-      });
+      setFormInfor((prevState) => ({
+        ...prevState,
+        [updatedField]: { value, isError },
+      }));
     } catch (error) {
       console.log(error);
     }
