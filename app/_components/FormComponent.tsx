@@ -59,17 +59,20 @@ export default function FormComponent() {
   };
 
   return (
-    <form className="flex flex-col gap-4 items-center sm:max-w-[500px] m-auto">
+    <form className="flex flex-col justify-center items-center w-full sm:max-w-[500px] m-auto">
       <h1 className="font-bold font-dancingScript">Fill the form please</h1>
-      {inputBoxeInforArr.map((box: InputBoxInfor) => {
-        return (
-          <InputComponent
-            key={box.id}
-            inputName={box.name}
-            inputOnchangeHandler={handleUpdateFormInforState}
-          />
-        );
-      })}
+      <ul className="flex flex-col gap-4 mb-6 sm:mb-8 sm:gap-6 list-none w-full pl-0">
+        {inputBoxeInforArr.map((box: InputBoxInfor) => {
+          return (
+            <li className="w-full" key={box.id}>
+              <InputComponent
+                inputName={box.name}
+                inputOnchangeHandler={handleUpdateFormInforState}
+              />
+            </li>
+          );
+        })}
+      </ul>
       <ButtonComponent buttonName="Submit" buttonType="submit" />
     </form>
   );

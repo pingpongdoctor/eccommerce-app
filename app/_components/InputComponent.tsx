@@ -20,7 +20,7 @@ export default function InputComponent({
   return (
     <label
       htmlFor={inputName}
-      className="relative w-full rounded-md border border-gray-200 shadow-sm focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600"
+      className="relative w-full block rounded-md border border-gray-200 shadow-sm focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600"
     >
       <input
         type="text"

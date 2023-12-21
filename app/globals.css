@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  h1 {
+    @apply text-4xl mb-6 sm:mb-8;
+  }
+
+  h2 {
+    @apply text-3xl mb-6 sm:mb-8;
+  }
+
+  h4 {
+    @apply text-2xl mb-6 sm:mb-8;
+  }
+
   button {
     @apply cursor-pointer;
   }
