@@ -17,24 +17,27 @@ const validEmailRegex =
 
 export default function FormComponent() {
   const [formInfor, setFormInfor] = useState<FormInfor>({
-    username: "",
-    email: "",
-    message: "",
+    username: { value: "", isError: false },
+
+    email: { value: "", isError: false },
+
+    message: { value: "", isError: false },
   });
 
   const handleUpdateFormInfor = function (
     e: React.ChangeEvent<HTMLInputElement>,
-    updatedField: InputBoxName
+    updatedField: InputBoxName,
+    isError: boolean
   ) {
     setFormInfor((prevState: FormInfor) => {
-      const newForm = { ...prevState };
-      newForm[updatedField] = e.target.value;
+      const newForm: FormInfor = { ...prevState };
+      newForm[updatedField] = { value: e.target.value, isError };
       return newForm;
     });
   };
 
   const isFormValid = function () {
-    if (!formInfor.username) {
+    if (!formInfor) {
       return false;
     }
 
@@ -42,7 +45,8 @@ export default function FormComponent() {
   };
 
   return (
-    <div>
+    <form className="flex flex-col gap-4 items-center">
+      <h1 className="font-dancingScript">Fill the form please</h1>
       {inputBoxeInforArr.map((box: InputBoxInfor) => {
         return (
           <InputComponent
@@ -52,6 +56,6 @@ export default function FormComponent() {
           />
         );
       })}
-    </div>
+    </form>
   );
 }

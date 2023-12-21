@@ -4,7 +4,8 @@ import React, { ChangeEvent } from "react";
 interface Props {
   inputOnchangeHandler?: (
     e: ChangeEvent<HTMLInputElement>,
-    updatedField: InputBoxName
+    updatedField: InputBoxName,
+    isError: boolean
   ) => void;
   inputName: InputBoxName;
   isError?: boolean;
@@ -13,6 +14,7 @@ interface Props {
 export default function InputComponent({
   inputOnchangeHandler,
   inputName,
+  isError,
 }: Props) {
   return (
     <label
@@ -22,11 +24,14 @@ export default function InputComponent({
       <input
         type="text"
         id={inputName}
-        className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+        className={`peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0`}
         placeholder="Username"
         onChange={(e) => {
-          if (typeof inputOnchangeHandler === "function") {
-            inputOnchangeHandler(e, inputName);
+          if (
+            typeof inputOnchangeHandler === "function" &&
+            isError != undefined
+          ) {
+            inputOnchangeHandler(e, inputName, isError);
           }
         }}
       />

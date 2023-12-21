@@ -1,12 +1,13 @@
-interface FormInfor {
-  username: string;
-  email: string;
-  message: string;
-}
-
 type InputBoxName = "username" | "email" | "message";
 
-type InputBoxInfor = {
+interface FormInfor {
+  [index: InputBoxName]: { value: string; isError: boolean };
+  username: { value: string; isError: boolean };
+  message: { value: string; isError: boolean };
+  email: { value: string; isError: boolean };
+}
+
+interface InputBoxInfor {
   id: string;
   name: InputBoxName;
-};
+}
