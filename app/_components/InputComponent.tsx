@@ -25,7 +25,7 @@ export default function InputComponent({
       <input
         type="text"
         id={inputName}
-        className={`peer px-1 py-3 border-none rounded-md placeholder:pl-2 placeholder-transparent focus:border-transparent outline-none ring-0`}
+        className={`peer px-3 py-3 w-full border-none rounded-md placeholder-transparent focus:border-transparent outline-none ring-0`}
         placeholder="Username"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           if (
@@ -37,7 +37,7 @@ export default function InputComponent({
         }}
       />
 
-      <span className="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+      <span className="pointer-events-none absolute start-3 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
         {inputName}
       </span>
     </label>

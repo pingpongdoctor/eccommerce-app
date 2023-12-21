@@ -13,8 +13,7 @@ const inputBoxeInforArr: InputBoxInfor[] = [
   { id: "3", name: "message" },
 ];
 
-const validEmailRegex =
-  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const validEmailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 export default function FormComponent() {
   const [formInfor, setFormInfor] = useState<FormInfor>({
@@ -58,6 +57,10 @@ export default function FormComponent() {
           return false;
         }
       }
+
+      if (!formInfor.email.value.match(validEmailRegex)) {
+        return false;
+      }
       return true;
     } catch (e) {
       console.log(e);
@@ -68,12 +71,14 @@ export default function FormComponent() {
   const submitFormHanlder = async function (e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (isFormValid()) {
-    }
+    console.log(isFormValid());
   };
 
   return (
-    <form className="flex flex-col justify-center items-center w-full sm:max-w-[500px] m-auto">
+    <form
+      onSubmit={submitFormHanlder}
+      className="flex flex-col justify-center items-center w-full sm:max-w-[500px] m-auto"
+    >
       <h1 className="font-bold font-dancingScript">Fill the form please</h1>
       <ul className="flex flex-col gap-4 mb-6 sm:mb-8 sm:gap-6 list-none w-full pl-0">
         {inputBoxeInforArr.map((box: InputBoxInfor) => {
@@ -82,6 +87,7 @@ export default function FormComponent() {
               <InputComponent
                 inputName={box.name}
                 inputOnchangeHandler={handleUpdateFormInforState}
+                isError={formInfor[box.name].isError}
               />
             </li>
           );
