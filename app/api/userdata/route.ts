@@ -29,7 +29,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       { status: 201 }
     );
   } catch (error) {
-    console.log(error);
+    console.log("Posting user data error" + error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
