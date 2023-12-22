@@ -1,19 +1,16 @@
-export const postUserData = async function (
-  name: string,
-  message: string,
-  email: string
-): Promise<void> {
+export const getAllUserData = async function (): Promise<User[] | undefined> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user`, {
       headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({ name, message, email }),
     });
 
     if (!res.ok) {
-      const errorData = await res.json();
+      const errorData: { message: string } = await res.json();
       console.log("Error when posting user data" + errorData.message);
+      return undefined;
     }
+    const data: User[] = await res.json();
+    return data;
   } catch (e) {
     console.log("Post user data error" + e);
   }
