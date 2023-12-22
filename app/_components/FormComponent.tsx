@@ -1,12 +1,11 @@
 "use client";
-import React, { ChangeEvent, FormEvent } from "react";
-import { useState, useEffect } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import InputComponent from "./InputComponent";
 import ButtonComponent from "./ButtonComponent";
 import { postUserData } from "../_lib/postUserData";
 import { notify } from "./ReactToastifyProvider";
 
-const inputBoxeInforArr: InputBoxInfor[] = [
+const inputBoxInforArr: InputBoxInfor[] = [
   {
     id: "1",
     name: "username",
@@ -100,7 +99,7 @@ export default function FormComponent() {
     >
       <h1 className="font-bold font-dancingScript">Fill the form please</h1>
       <ul className="flex flex-col gap-4 mb-6 sm:mb-8 sm:gap-6 list-none w-full pl-0">
-        {inputBoxeInforArr.map((box: InputBoxInfor) => {
+        {inputBoxInforArr.map((box: InputBoxInfor) => {
           return (
             <li className="w-full" key={box.id}>
               <InputComponent

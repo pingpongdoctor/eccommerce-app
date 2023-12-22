@@ -11,3 +11,8 @@ interface InputBoxInfor {
   id: string;
   name: Field;
 }
+
+interface ColunmInfor {
+  id: string;
+  colunm: Field;
+}
