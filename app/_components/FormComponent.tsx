@@ -62,12 +62,17 @@ export default function FormComponent() {
           updateFormInforState(formInfor[fieldArr[i]].value, fieldArr[i], true);
           return false;
         }
+
+        if (
+          fieldArr[i] == "email" &&
+          formInfor[fieldArr[i]].value &&
+          !formInfor.email.value.match(validEmailRegex)
+        ) {
+          notify("error", "Email is invalid");
+          return false;
+        }
       }
 
-      if (!formInfor.email.value.match(validEmailRegex)) {
-        notify("error", "Email is invalid");
-        return false;
-      }
       return true;
     } catch (e) {
       console.log("Validate form error" + e);
