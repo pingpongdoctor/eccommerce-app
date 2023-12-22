@@ -9,7 +9,11 @@ const columnInforArr: ColunmInfor[] = [
   { id: "3", colunm: "message" },
 ];
 
-export default function TableComponent() {
+interface Props {
+  users: User[] | undefined;
+}
+
+export default function TableComponent({ users }: Props) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200">
       <table className="table-auto w-full divide-y-2 divide-gray-200 bg-white text-sm">
@@ -26,11 +30,22 @@ export default function TableComponent() {
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          <tr>
-            <td className=" text-center px-4 py-2 text-gray-900">John Doe</td>
-            <td className=" text-center px-4 py-2 text-gray-900">John Doe</td>
-            <td className=" text-center px-4 py-2 text-gray-900">John Doe</td>
-          </tr>
+          {users &&
+            users.map((user: User) => {
+              return (
+                <tr key={user._id}>
+                  <td className=" text-center px-4 py-2 text-gray-900">
+                    {user.name}
+                  </td>
+                  <td className=" text-center px-4 py-2 text-gray-900">
+                    {user.email}
+                  </td>
+                  <td className=" text-center px-4 py-2 text-gray-900">
+                    {user.message}
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>
