@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { roboto, dancingScript } from "./_fonts/fonts";
+import ReactToastifyProvider from "./_components/ReactToastifyProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} ${dancingScript.variable}`}>
-        {children}
+        <ReactToastifyProvider>{children}</ReactToastifyProvider>
       </body>
     </html>
   );
