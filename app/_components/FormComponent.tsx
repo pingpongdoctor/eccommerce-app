@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import InputComponent from "./InputComponent";
 import ButtonComponent from "./ButtonComponent";
 import { postUserData } from "../_lib/postUserData";
+import { notify } from "./ReactToastifyProvider";
 
 const inputBoxeInforArr: InputBoxInfor[] = [
   {
@@ -54,6 +55,7 @@ export default function FormComponent() {
 
       for (let i = 0; i < fieldArr.length; i++) {
         if (!formInfor[fieldArr[i]].value) {
+          notify("error", "miss required field");
           updateFormInforState(formInfor[fieldArr[i]].value, fieldArr[i], true);
           return false;
         }
