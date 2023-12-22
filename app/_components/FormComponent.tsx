@@ -1,5 +1,5 @@
 "use client";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import InputComponent from "./InputComponent";
 import ButtonComponent from "./ButtonComponent";
 import { postUserData } from "../_lib/postUserData";
@@ -32,7 +32,7 @@ export default function FormComponent() {
   const updateFormInforState = function (
     value: string,
     updatedField: Field,
-    isError: boolean
+    isError: boolean,
   ): void {
     try {
       setFormInfor((prevState) => ({
@@ -47,7 +47,7 @@ export default function FormComponent() {
   const handleUpdateFormInforState = function (
     e: ChangeEvent<HTMLInputElement>,
     updatedField: Field,
-    isError: boolean
+    isError: boolean,
   ): void {
     updateFormInforState(e.target.value, updatedField, isError);
   };
@@ -77,7 +77,7 @@ export default function FormComponent() {
   };
 
   const submitFormHanlder = async function (
-    e: FormEvent<HTMLFormElement>
+    e: FormEvent<HTMLFormElement>,
   ): Promise<void> {
     e.preventDefault();
     setIsDisabled(true);
@@ -92,7 +92,7 @@ export default function FormComponent() {
             `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/revalidate?tag=getuserdata`,
             {
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
         } catch (error) {
           console.log("Revalidating user data error" + error);
@@ -109,13 +109,27 @@ export default function FormComponent() {
     setIsDisabled(false);
   };
 
+  useEffect(() => {
+    setFormInfor((prevState: FormInfor) => {
+      const newState: FormInfor = { ...prevState };
+      for (const field in newState) {
+        newState[field as Field].isError = false;
+      }
+      return newState;
+    });
+  }, [
+    formInfor.email.value,
+    formInfor.message.value,
+    formInfor.username.value,
+  ]);
+
   return (
     <form
       onSubmit={submitFormHanlder}
-      className="flex flex-col justify-center items-center w-full sm:max-w-[500px] m-auto mb-[5rem]"
+      className="m-auto mb-[5rem] flex w-full flex-col items-center justify-center sm:max-w-[500px]"
     >
-      <h1 className="font-bold font-dancingScript">Fill the form please</h1>
-      <ul className="flex flex-col gap-4 mb-6 sm:mb-8 sm:gap-6 list-none w-full pl-0">
+      <h1 className="font-dancingScript font-bold">Fill the form please</h1>
+      <ul className="mb-6 flex w-full list-none flex-col gap-4 pl-0 sm:mb-8 sm:gap-6">
         {inputBoxInforArr.map((box: InputBoxInfor) => {
           return (
             <li className="w-full" key={box.id}>
