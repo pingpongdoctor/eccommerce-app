@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const notify = (
   option: "success" | "error" | "info",
-  message: string
+  message: string,
 ) => {
   toast[option](message, {
     position: toast.POSITION.BOTTOM_RIGHT,
@@ -24,7 +24,7 @@ export default function ReactToastifyProvider({
   return (
     <div>
       {children}
-      <ToastContainer limit={2} />
+      <ToastContainer limit={3} />
     </div>
   );
 }
