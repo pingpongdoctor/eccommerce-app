@@ -56,27 +56,34 @@ export default function FormComponent() {
     try {
       const fieldArr: Field[] = ["username", "email", "message"];
 
+      let isValid = true;
+
       for (let i = 0; i < fieldArr.length; i++) {
         if (!formInfor[fieldArr[i]].value) {
-          notify("error", `Please provide your ${fieldArr[i]}`);
+          notify(
+            "error",
+            `Please provide your ${fieldArr[i]}`,
+            `error-missing-${fieldArr[i]}`,
+          );
           updateFormInforState(formInfor[fieldArr[i]].value, fieldArr[i], true);
-          return false;
+          isValid = false;
         }
 
         if (
           fieldArr[i] == "email" &&
           formInfor[fieldArr[i]].value &&
-          !formInfor.email.value.match(validEmailRegex)
+          !formInfor[fieldArr[i]].value.match(validEmailRegex)
         ) {
-          notify("error", "Email is invalid");
-          return false;
+          notify("error", "Email is invalid", `error-invalid-${fieldArr[i]}`);
+          updateFormInforState(formInfor[fieldArr[i]].value, fieldArr[i], true);
+          isValid = false;
         }
       }
 
-      return true;
+      return isValid;
     } catch (e) {
       console.log("Validate form error" + e);
-      notify("error", "Validate form error");
+      notify("error", "Validate form error", `error-validate-form`);
       return false;
     }
   };
@@ -86,6 +93,7 @@ export default function FormComponent() {
   ): Promise<void> {
     e.preventDefault();
     setIsDisabled(true);
+
     if (isFormValid()) {
       try {
         const { username, message, email } = formInfor;
@@ -102,13 +110,17 @@ export default function FormComponent() {
         } catch (error) {
           console.log("Revalidating user data error" + error);
         }
-        notify("success", "User data has been submitted");
+        notify(
+          "success",
+          "User data has been submitted",
+          "success-submit-data",
+        );
 
         //Refresh the page to see the updated data
         router.refresh();
       } catch (e) {
         console.log("Submit form error" + e);
-        notify("error", "Validate form error");
+        notify("error", "Submit form error", "error-submit-form");
       }
     }
     setIsDisabled(false);

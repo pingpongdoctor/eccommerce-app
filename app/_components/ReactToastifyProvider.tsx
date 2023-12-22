@@ -7,11 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 export const notify = (
   option: "success" | "error" | "info",
   message: string,
+  toastId: string,
 ) => {
   toast[option](message, {
     position: toast.POSITION.BOTTOM_RIGHT,
-    toastId: option,
-    autoClose: 3000,
+    toastId,
+    autoClose: 2000,
     theme: "dark",
   });
 };
@@ -24,7 +25,7 @@ export default function ReactToastifyProvider({
   return (
     <div>
       {children}
-      <ToastContainer limit={3} />
+      <ToastContainer limit={4} />
     </div>
   );
 }

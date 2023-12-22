@@ -17,9 +17,6 @@ export default function InputComponent({
   inputName,
   isError,
 }: Props) {
-  useEffect(() => {
-    console.log(isError);
-  }, [isError]);
   return (
     <label
       htmlFor={inputName}
