@@ -5,7 +5,7 @@ import ReactToastifyProvider from "./_components/ReactToastifyProvider";
 
 export const metadata: Metadata = {
   title: {
-    default: "TravelsMate Form Page",
+    default: "TravelsMate Main Page",
     template: "%s | TravelsMate",
   },
   description: "This page is used for gathering user information",
