@@ -4,6 +4,7 @@ import InputComponent from "./InputComponent";
 import ButtonComponent from "./ButtonComponent";
 import { postUserData } from "../_lib/postUserData";
 import { notify } from "./ReactToastifyProvider";
+import { useRouter } from "next/navigation";
 
 const inputBoxInforArr: InputBoxInfor[] = [
   {
@@ -17,6 +18,7 @@ const inputBoxInforArr: InputBoxInfor[] = [
 const validEmailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 export default function FormComponent() {
+  const router = useRouter();
   const [formInfor, setFormInfor] = useState<FormInfor>({
     username: { value: "", isError: false },
 
@@ -83,7 +85,22 @@ export default function FormComponent() {
       try {
         const { username, message, email } = formInfor;
         await postUserData(username.value, message.value, email.value);
+
+        try {
+          //Revalidate user data by triggering the "revalidate" endpoint
+          await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=getuserdata`,
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        } catch (error) {
+          console.log("Revalidating user data error" + error);
+        }
         notify("success", "User data has been submitted");
+
+        //Refresh the page to see the updated data
+        router.refresh();
       } catch (e) {
         console.log("Submit form error" + e);
         notify("error", "Validate form error");
