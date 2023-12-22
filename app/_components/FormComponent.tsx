@@ -95,7 +95,7 @@ export default function FormComponent() {
   return (
     <form
       onSubmit={submitFormHanlder}
-      className="flex flex-col justify-center items-center w-full sm:max-w-[500px] m-auto"
+      className="flex flex-col justify-center items-center w-full sm:max-w-[500px] m-auto mb-10"
     >
       <h1 className="font-bold font-dancingScript">Fill the form please</h1>
       <ul className="flex flex-col gap-4 mb-6 sm:mb-8 sm:gap-6 list-none w-full pl-0">
