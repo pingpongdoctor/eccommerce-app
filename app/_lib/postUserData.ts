@@ -4,11 +4,14 @@ export const postUserData = async function (
   email: string
 ): Promise<void> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user`, {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({ name, message, email }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user`,
+      {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ name, message, email }),
+      }
+    );
 
     if (!res.ok) {
       const errorData = await res.json();

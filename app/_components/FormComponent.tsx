@@ -89,7 +89,7 @@ export default function FormComponent() {
         try {
           //Revalidate user data by triggering the "revalidate" endpoint
           await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=getuserdata`,
+            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/revalidate?tag=getuserdata`,
             {
               headers: { "Content-Type": "application/json" },
             }
