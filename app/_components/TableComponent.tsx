@@ -31,6 +31,7 @@ export default function TableComponent({ users }: Props) {
 
         <tbody className="divide-y divide-gray-200">
           {users &&
+            users.length > 0 &&
             users.map((user: User) => {
               return (
                 <tr key={user._id}>
@@ -46,6 +47,12 @@ export default function TableComponent({ users }: Props) {
                 </tr>
               );
             })}
+          {users && users.length == 0 && (
+            <tr>
+              <td className=" text-center px-4 py-2 text-gray-900"></td>
+              <td className=" text-center px-4 py-2 text-gray-900">No data</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
