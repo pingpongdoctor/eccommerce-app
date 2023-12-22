@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 
 export default function GlobalError({
   error,
@@ -7,7 +8,9 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  console.log(error);
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
   return (
     <html>
       <body>
