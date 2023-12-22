@@ -26,6 +26,8 @@ export default function FormComponent() {
     message: { value: "", isError: false },
   });
 
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+
   const updateFormInforState = function (
     value: string,
     updatedField: Field,
@@ -55,18 +57,20 @@ export default function FormComponent() {
 
       for (let i = 0; i < fieldArr.length; i++) {
         if (!formInfor[fieldArr[i]].value) {
-          notify("error", "miss required field");
+          notify("error", `Please provide your ${fieldArr[i]}`);
           updateFormInforState(formInfor[fieldArr[i]].value, fieldArr[i], true);
           return false;
         }
       }
 
       if (!formInfor.email.value.match(validEmailRegex)) {
+        notify("error", "Email is invalid");
         return false;
       }
       return true;
     } catch (e) {
       console.log("Validate form error" + e);
+      notify("error", "Validate form error");
       return false;
     }
   };
@@ -75,15 +79,18 @@ export default function FormComponent() {
     e: FormEvent<HTMLFormElement>
   ): Promise<void> {
     e.preventDefault();
-    console.log(isFormValid());
+    setIsDisabled(true);
     if (isFormValid()) {
       try {
         const { username, message, email } = formInfor;
         await postUserData(username.value, message.value, email.value);
+        notify("success", "User data has been submitted");
       } catch (e) {
         console.log("Submit form error" + e);
+        notify("error", "Validate form error");
       }
     }
+    setIsDisabled(false);
   };
 
   return (
@@ -105,7 +112,11 @@ export default function FormComponent() {
           );
         })}
       </ul>
-      <ButtonComponent buttonName="Submit" buttonType="submit" />
+      <ButtonComponent
+        buttonName="Submit"
+        buttonType="submit"
+        isDisabled={isDisabled}
+      />
     </form>
   );
 }
