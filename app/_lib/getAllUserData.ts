@@ -1,9 +1,12 @@
 export const getAllUserData = async function (): Promise<User[] | undefined> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user`, {
-      headers: { "Content-Type": "application/json" },
-      next: { revalidate: 3600, tags: ["getuserdata"] },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user`,
+      {
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600, tags: ["getuserdata"] },
+      }
+    );
 
     if (!res.ok) {
       const errorData: { message: string } = await res.json();

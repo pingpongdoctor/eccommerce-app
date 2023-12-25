@@ -11,7 +11,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="my-4 mx-2 sm:my-8 sm:mx-6">
+    <main className="mx-2 my-4 sm:mx-6 sm:my-8">
       <FormComponent />
       <TableComponent users={data} />
     </main>

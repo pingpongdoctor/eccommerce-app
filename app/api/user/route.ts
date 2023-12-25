@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const response = await fetch(`${process.env.BACKEND_API}/userData`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/userData`, {
       headers: { "Content-Type": "application/json" },
       method: "POST",
       body: JSON.stringify({ name, message, email }),
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
 export async function GET(_req: Request) {
   try {
-    const response = await fetch(`${process.env.BACKEND_API}/userData`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/userData`, {
       headers: { "Content-Type": "application/json" },
     });
 
