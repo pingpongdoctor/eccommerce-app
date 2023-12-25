@@ -116,6 +116,8 @@ export default function FormComponent() {
           "success-submit-data",
         );
 
+        const formEle = e.target as HTMLFormElement;
+        formEle.reset();
         router.refresh();
       } catch (e) {
         console.log("Submit form error" + e);
