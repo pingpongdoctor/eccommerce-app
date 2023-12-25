@@ -1,5 +1,5 @@
 "use client";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import InputComponent from "./InputComponent";
 import ButtonComponent from "./ButtonComponent";
 import { postUserData } from "../_lib/postUserData";
@@ -32,7 +32,7 @@ export default function FormComponent() {
   const updateFormInforState = function (
     value: string,
     updatedField: Field,
-    isError: boolean
+    isError: boolean,
   ): void {
     try {
       setFormInfor((prevState) => ({
@@ -47,7 +47,7 @@ export default function FormComponent() {
   const handleUpdateFormInforState = function (
     e: ChangeEvent<HTMLInputElement>,
     updatedField: Field,
-    isError: boolean
+    isError: boolean,
   ): void {
     updateFormInforState(e.target.value, updatedField, isError);
   };
@@ -56,31 +56,44 @@ export default function FormComponent() {
     try {
       const fieldArr: Field[] = ["username", "email", "message"];
 
+      let isValid = true;
+
       for (let i = 0; i < fieldArr.length; i++) {
         if (!formInfor[fieldArr[i]].value) {
-          notify("error", `Please provide your ${fieldArr[i]}`);
+          notify(
+            "error",
+            `Please provide your ${fieldArr[i]}`,
+            `error-missing-${fieldArr[i]}`,
+          );
           updateFormInforState(formInfor[fieldArr[i]].value, fieldArr[i], true);
-          return false;
+          isValid = false;
+        }
+
+        if (
+          fieldArr[i] == "email" &&
+          formInfor[fieldArr[i]].value &&
+          !formInfor[fieldArr[i]].value.match(validEmailRegex)
+        ) {
+          notify("error", "Email is invalid", `error-invalid-${fieldArr[i]}`);
+          updateFormInforState(formInfor[fieldArr[i]].value, fieldArr[i], true);
+          isValid = false;
         }
       }
 
-      if (!formInfor.email.value.match(validEmailRegex)) {
-        notify("error", "Email is invalid");
-        return false;
-      }
-      return true;
+      return isValid;
     } catch (e) {
       console.log("Validate form error" + e);
-      notify("error", "Validate form error");
+      notify("error", "Validate form error", `error-validate-form`);
       return false;
     }
   };
 
   const submitFormHanlder = async function (
-    e: FormEvent<HTMLFormElement>
+    e: FormEvent<HTMLFormElement>,
   ): Promise<void> {
     e.preventDefault();
     setIsDisabled(true);
+
     if (isFormValid()) {
       try {
         const { username, message, email } = formInfor;
@@ -89,33 +102,52 @@ export default function FormComponent() {
         try {
           //Revalidate user data by triggering the "revalidate" endpoint
           await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=getuserdata`,
+            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/revalidate?tag=getuserdata`,
             {
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
         } catch (error) {
           console.log("Revalidating user data error" + error);
         }
-        notify("success", "User data has been submitted");
+        notify(
+          "success",
+          "User data has been submitted",
+          "success-submit-data",
+        );
 
-        //Refresh the page to see the updated data
+        const formEle = e.target as HTMLFormElement;
+        formEle.reset();
         router.refresh();
       } catch (e) {
         console.log("Submit form error" + e);
-        notify("error", "Validate form error");
+        notify("error", "Submit form error", "error-submit-form");
       }
     }
     setIsDisabled(false);
   };
 
+  useEffect(() => {
+    setFormInfor((prevState: FormInfor) => {
+      const newState: FormInfor = { ...prevState };
+      for (const field in newState) {
+        newState[field as Field].isError = false;
+      }
+      return newState;
+    });
+  }, [
+    formInfor.email.value,
+    formInfor.message.value,
+    formInfor.username.value,
+  ]);
+
   return (
     <form
       onSubmit={submitFormHanlder}
-      className="flex flex-col justify-center items-center w-full sm:max-w-[500px] m-auto mb-[5rem]"
+      className="m-auto mb-[5rem] flex w-full flex-col items-center justify-center sm:max-w-[500px]"
     >
-      <h1 className="font-bold font-dancingScript">Fill the form please</h1>
-      <ul className="flex flex-col gap-4 mb-6 sm:mb-8 sm:gap-6 list-none w-full pl-0">
+      <h1 className="font-dancingScript font-bold">Fill the form please</h1>
+      <ul className="mb-6 flex w-full list-none flex-col gap-4 pl-0 sm:mb-8 sm:gap-6">
         {inputBoxInforArr.map((box: InputBoxInfor) => {
           return (
             <li className="w-full" key={box.id}>
