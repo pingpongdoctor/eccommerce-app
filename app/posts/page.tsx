@@ -5,7 +5,7 @@ import { POSTS_QUERY } from "@/sanity/lib/queries";
 import { draftMode } from "next/headers";
 import PostsPreview from "../_components/PostsPreview";
 
-export default async function Page() {
+export default async function PostsPage() {
   const initial = await loadQuery<SanityDocument[]>(
     POSTS_QUERY,
     {},
