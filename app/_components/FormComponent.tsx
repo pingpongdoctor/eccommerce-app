@@ -116,7 +116,6 @@ export default function FormComponent() {
           "success-submit-data",
         );
 
-        //Refresh the page to see the updated data
         router.refresh();
       } catch (e) {
         console.log("Submit form error" + e);
