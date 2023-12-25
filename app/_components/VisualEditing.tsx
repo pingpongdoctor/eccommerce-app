@@ -1,5 +1,3 @@
-// ./components/VisualEditing.tsx
-
 "use client";
 
 import { enableOverlays, HistoryAdapterNavigate } from "@sanity/overlays";
