@@ -12,7 +12,6 @@ export default async function PostsPage() {
     {},
     {
       perspective: draftMode().isEnabled ? "previewDrafts" : "published",
-      next: { revalidate: 3600, tags: ["posts"] },
     },
   );
 
