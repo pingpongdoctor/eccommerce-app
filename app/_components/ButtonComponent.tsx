@@ -8,6 +8,7 @@ interface Props {
   isDisabled?: boolean;
   buttonOnclickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   buttonColor?: "blue" | "black";
+  animate: boolean;
 }
 
 const bgColors: { [index: string]: string } = {
@@ -20,12 +21,18 @@ const borderColors: { [index: string]: string } = {
   black: "border-black",
 };
 
+const textColors: { [index: string]: string } = {
+  blue: "text-blue-700",
+  black: "text-black",
+};
+
 export default function ButtonComponent({
   buttonName,
   buttonType,
   isDisabled = false,
   buttonOnclickHandler,
   buttonColor = "black",
+  animate,
 }: Props) {
   return (
     <button
@@ -34,10 +41,18 @@ export default function ButtonComponent({
       disabled={isDisabled}
       onClick={buttonOnclickHandler}
     >
+      {animate && (
+        <span
+          className={`absolute left-0 top-0 flex h-full w-1 rounded ${bgColors[buttonColor]} transition-all group-hover:w-full group-disabled:hidden`}
+        ></span>
+      )}
       <span
-        className={`absolute left-0 top-0 flex h-full w-1 rounded ${bgColors[buttonColor]} transition-all group-hover:w-full group-disabled:hidden`}
-      ></span>
-      <span className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-md text-black transition-all group-hover:text-white group-disabled:hidden">
+        className={`absolute left-0 top-0 flex h-full w-full items-center justify-center rounded transition-all ${
+          animate
+            ? `${textColors[buttonColor]} group-hover:text-white`
+            : `text-white ${bgColors[buttonColor]}`
+        } group-disabled:hidden`}
+      >
         <p>{buttonName}</p>
       </span>
       <span className="absolute left-0 top-0 hidden h-full w-full items-center justify-center rounded-md group-disabled:flex">
