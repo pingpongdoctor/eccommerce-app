@@ -6,11 +6,7 @@ import ButtonComponent from "./ButtonComponent";
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-export default function CardComponent({
-  product,
-}: {
-  product: SanityDocument;
-}) {
+export default function ProductCard({ product }: { product: SanityDocument }) {
   return (
     <div className="w-full rounded-lg border border-gray-200 bg-white shadow transition-all duration-300 hover:shadow-lg">
       {product?.mainImage ? (
