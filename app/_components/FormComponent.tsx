@@ -164,6 +164,7 @@ export default function FormComponent() {
         buttonName="Submit"
         buttonType="submit"
         isDisabled={isDisabled}
+        animate={true}
       />
     </form>
   );
