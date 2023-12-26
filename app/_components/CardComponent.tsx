@@ -6,13 +6,17 @@ import ButtonComponent from "./ButtonComponent";
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-export default function CardComponent({ post }: { post: SanityDocument }) {
+export default function CardComponent({
+  product,
+}: {
+  product: SanityDocument;
+}) {
   return (
     <div className="w-full rounded-lg border border-gray-200 bg-white shadow transition-all duration-300 hover:shadow-lg">
-      {post?.mainImage ? (
+      {product?.mainImage ? (
         <img
           className="object-fit aspect-square h-auto w-full rounded-lg"
-          src={builder.image(post.mainImage).quality(80).url()}
+          src={builder.image(product.mainImage).quality(80).url()}
           alt="product image"
         />
       ) : (
@@ -23,12 +27,12 @@ export default function CardComponent({ post }: { post: SanityDocument }) {
       <div className="p-5">
         {
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {post.title ? post.title : "No Title"}
+            {product.title ? product.title : "No Title"}
           </h5>
         }
 
         <p className="mb-3 line-clamp-3 h-[4.5rem] text-pretty font-normal text-gray-700 dark:text-gray-400">
-          {post.description ? post.description : "No Description"}
+          {product.description ? product.description : "No Description"}
         </p>
         <div className="flex items-center justify-between">
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
