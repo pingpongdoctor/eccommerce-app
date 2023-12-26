@@ -1,25 +1,25 @@
 "use client";
 
-import { POST_QUERY } from "@/sanity/lib/queries";
+import { PRODUCT_QUERY } from "@/sanity/lib/queries";
 import { QueryResponseInitial, useQuery } from "@sanity/react-loader";
 import { QueryParams, SanityDocument } from "next-sanity";
 
-import Post from "./Post";
+import Product from "./Product";
 
-export default function PostsPreview({
+export default function ProductPreview({
   initial,
   params,
 }: {
   initial: QueryResponseInitial<SanityDocument>;
   params: QueryParams;
 }) {
-  const { data } = useQuery<SanityDocument | null>(POST_QUERY, params, {
+  const { data } = useQuery<SanityDocument | null>(PRODUCT_QUERY, params, {
     initial,
   });
 
   return data ? (
-    <Post post={data} />
+    <Product product={data} />
   ) : (
-    <div className="bg-red-100">No post found</div>
+    <div className="bg-red-100">No product found</div>
   );
 }

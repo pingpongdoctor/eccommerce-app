@@ -1,14 +1,14 @@
 import { SanityDocument } from "next-sanity";
-import Posts from "../_components/Posts";
+import Products from "../_components/Products";
 import { loadQuery } from "@/sanity/lib/store";
-import { POSTS_QUERY } from "@/sanity/lib/queries";
+import { PRODUCTS_QUERY } from "@/sanity/lib/queries";
 import { draftMode } from "next/headers";
-import PostsPreview from "../_components/PostsPreview";
+import ProductsPreview from "../_components/ProductsPreview";
 import { notFound } from "next/navigation";
 
-export default async function PostsPage() {
+export default async function ProductsPage() {
   const initial = await loadQuery<SanityDocument[]>(
-    POSTS_QUERY,
+    PRODUCTS_QUERY,
     {},
     {
       perspective: draftMode().isEnabled ? "previewDrafts" : "published",
@@ -20,8 +20,8 @@ export default async function PostsPage() {
   }
 
   return draftMode().isEnabled ? (
-    <PostsPreview initial={initial} />
+    <ProductsPreview initial={initial} />
   ) : (
-    <Posts posts={initial.data} />
+    <Products products={initial.data} />
   );
 }

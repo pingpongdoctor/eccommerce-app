@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Posts",
+    absolute: "Products",
   },
-  description: "This page shows posts",
+  description: "This page shows products",
 };
 
-export default function PostsLayout({
+export default function ProductsLayout({
   children,
 }: {
   children: React.ReactNode;

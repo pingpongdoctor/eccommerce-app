@@ -6,8 +6,8 @@ import imageUrlBuilder from "@sanity/image-url";
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-export default function Post({ post }: { post: SanityDocument }) {
-  const { title, mainImage, body } = post;
+export default function Product({ product }: { product: SanityDocument }) {
+  const { title, mainImage, body } = product;
   return (
     <main className="prose prose-lg container mx-auto p-4">
       {title ? <h1>{title}</h1> : null}
