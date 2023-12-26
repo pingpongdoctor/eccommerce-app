@@ -5,17 +5,7 @@ import ButtonComponent from "./ButtonComponent";
 import { postUserData } from "../_lib/postUserData";
 import { notify } from "./ReactToastifyProvider";
 import { useRouter } from "next/navigation";
-
-const inputBoxInforArr: InputBoxInfor[] = [
-  {
-    id: "1",
-    name: "username",
-  },
-  { id: "2", name: "email" },
-  { id: "3", name: "message" },
-];
-
-const validEmailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+import { inputBoxInforArr, validEmailRegex } from "../utils/data";
 
 export default function FormComponent() {
   const router = useRouter();
