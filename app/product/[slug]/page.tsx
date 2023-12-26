@@ -1,9 +1,9 @@
 import { SanityDocument, QueryParams } from "next-sanity";
-import Product from "@/app/_components/Product";
+import Product from "@/app/_components/ProductDetail";
 import { loadQuery } from "@/sanity/lib/store";
 import { PRODUCT_QUERY, PRODUCTS_QUERY } from "@/sanity/lib/queries";
 import { draftMode } from "next/headers";
-import ProductPreview from "@/app/_components/ProductPreview";
+import ProductPreview from "@/app/_components/ProductDetailPreview";
 import { client } from "@/sanity/lib/client";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -34,7 +34,11 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ProductPage({ params }: { params: QueryParams }) {
+export default async function DetailedProduct({
+  params,
+}: {
+  params: QueryParams;
+}) {
   const initial = await loadQuery<SanityDocument>(PRODUCT_QUERY, params, {
     perspective: draftMode().isEnabled ? "previewDrafts" : "published",
   });

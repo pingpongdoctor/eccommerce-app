@@ -4,9 +4,9 @@ import { PRODUCTS_QUERY } from "@/sanity/lib/queries";
 import { QueryResponseInitial, useQuery } from "@sanity/react-loader";
 import { SanityDocument } from "next-sanity";
 
-import Products from "./Products";
+import ProductCards from "./ProductCards";
 
-export default function ProductsPreview({
+export default function ProductCardsPreview({
   initial,
 }: {
   initial: QueryResponseInitial<SanityDocument[]>;
@@ -18,7 +18,7 @@ export default function ProductsPreview({
   );
 
   return data ? (
-    <Products products={data} />
+    <ProductCards products={data} />
   ) : (
     <div className="bg-red-100">No products found</div>
   );
