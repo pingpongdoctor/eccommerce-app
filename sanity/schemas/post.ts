@@ -26,6 +26,16 @@ export default defineType({
       to: { type: "author" },
     }),
     defineField({
+      name: "price",
+      title: "Price",
+      type: "string",
+    }),
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "string",
+    }),
+    defineField({
       name: "mainImage",
       title: "Main image",
       type: "image",

@@ -17,6 +17,10 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography"), require("flowbite/plugin")],
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("flowbite/plugin"),
+    require("@tailwindcss/line-clamp"),
+  ],
 };
 export default config;

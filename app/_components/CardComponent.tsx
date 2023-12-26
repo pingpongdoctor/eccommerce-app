@@ -27,8 +27,8 @@ export default function CardComponent({ post }: { post: SanityDocument }) {
           </h5>
         }
 
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          {post.description}
+        <p className="mb-3 line-clamp-3 h-[4.5rem] font-normal text-gray-700 dark:text-gray-400">
+          {post.description ? post.description : "No Description"}
         </p>
         <div className="flex justify-between">
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
