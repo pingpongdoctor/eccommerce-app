@@ -8,7 +8,7 @@ const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function CardComponent({ post }: { post: SanityDocument }) {
   return (
-    <div className="w-full rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+    <div className="w-full rounded-lg border border-gray-200 bg-white shadow transition-all duration-300 hover:shadow-lg">
       {post?.mainImage ? (
         <img
           className="object-fit aspect-square h-auto w-full rounded-lg"
@@ -27,16 +27,16 @@ export default function CardComponent({ post }: { post: SanityDocument }) {
           </h5>
         }
 
-        <p className="mb-3 line-clamp-3 h-[4.5rem] font-normal text-gray-700 dark:text-gray-400">
+        <p className="mb-3 line-clamp-3 h-[4.5rem] text-pretty font-normal text-gray-700 dark:text-gray-400">
           {post.description ? post.description : "No Description"}
         </p>
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between">
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
             $599
           </p>
           <ButtonComponent
             buttonName="Add to cart"
-            buttonColor="blue"
+            buttonColor="black"
             animate={false}
             buttonClassname="text-sm h-[40px]"
           />
