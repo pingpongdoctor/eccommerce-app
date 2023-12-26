@@ -1,5 +1,3 @@
-// ./components/PostPreview.tsx
-
 "use client";
 
 import { POSTS_QUERY } from "@/sanity/lib/queries";
