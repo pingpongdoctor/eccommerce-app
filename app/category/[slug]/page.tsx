@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import ProductCards from "@/app/_components/ProductCards";
 import ProductCardsPreview from "@/app/_components/ProductCardsPreview";
 
-export default async function Categories() {
+export default async function Category() {
   const initial = await loadQuery<SanityDocument[]>(
     PRODUCTS_QUERY,
     {},
