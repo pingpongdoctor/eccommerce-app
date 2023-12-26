@@ -9,6 +9,7 @@ interface Props {
   buttonOnclickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   buttonColor?: "blue" | "black";
   animate: boolean;
+  buttonClassname?: string;
 }
 
 const bgColors: { [index: string]: string } = {
@@ -33,10 +34,11 @@ export default function ButtonComponent({
   buttonOnclickHandler,
   buttonColor = "black",
   animate,
+  buttonClassname,
 }: Props) {
   return (
     <button
-      className={`group relative h-[50px] w-[100px] rounded-md border-[1.5px] font-bold ${borderColors[buttonColor]}`}
+      className={`prose group relative h-[50px] w-[100px] rounded-md border-[1.5px] font-bold ${borderColors[buttonColor]} ${buttonClassname}`}
       type={buttonType}
       disabled={isDisabled}
       onClick={buttonOnclickHandler}

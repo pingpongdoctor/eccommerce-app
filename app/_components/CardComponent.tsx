@@ -30,11 +30,17 @@ export default function CardComponent({ post }: { post: SanityDocument }) {
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
           {post.description}
         </p>
-        <ButtonComponent
-          buttonName="Readmore"
-          buttonColor="blue"
-          animate={false}
-        />
+        <div className="flex justify-between">
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            $599
+          </p>
+          <ButtonComponent
+            buttonName="Add to cart"
+            buttonColor="blue"
+            animate={false}
+            buttonClassname="text-sm h-[40px]"
+          />
+        </div>
       </div>
     </div>
   );
