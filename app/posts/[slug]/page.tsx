@@ -37,7 +37,6 @@ export async function generateStaticParams() {
 export default async function PostPage({ params }: { params: QueryParams }) {
   const initial = await loadQuery<SanityDocument>(POST_QUERY, params, {
     perspective: draftMode().isEnabled ? "previewDrafts" : "published",
-    next: { revalidate: 3600, tags: ["post"] },
   });
 
   if (!initial.data) {
