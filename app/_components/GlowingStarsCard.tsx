@@ -6,7 +6,7 @@ import {
   GlowingStarsTitle,
 } from "./GlowingStarsUI";
 
-export function CategoryCard() {
+export function GlowingStarsCard() {
   return (
     <div className="flex items-center justify-center py-20 antialiased [&_h2]:m-0">
       <GlowingStarsBackgroundCard>
