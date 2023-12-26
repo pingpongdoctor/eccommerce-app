@@ -1,19 +1,19 @@
 import React from "react";
 import { SanityDocument } from "next-sanity";
-import { dataset, projectId } from "@/sanity/env";
-import imageUrlBuilder from "@sanity/image-url";
 import ButtonComponent from "./ButtonComponent";
-
-const builder = imageUrlBuilder({ projectId, dataset });
+import Image from "next/image";
+import { builder } from "../utils/imageBuilder";
 
 export default function ProductCard({ product }: { product: SanityDocument }) {
   return (
     <div className="w-full rounded-lg border border-gray-200 bg-white shadow transition-all duration-300 hover:shadow-lg">
       {product?.mainImage ? (
-        <img
+        <Image
           className="object-fit aspect-square h-auto w-full rounded-lg"
           src={builder.image(product.mainImage).quality(80).url()}
           alt="product image"
+          width={300}
+          height={300}
         />
       ) : (
         <div className="flex aspect-square w-full items-center justify-center">

@@ -1,15 +1,12 @@
 import { SanityDocument } from "next-sanity";
 import Image from "next/image";
 import { PortableText } from "@portabletext/react";
-import { dataset, projectId } from "@/sanity/env";
-import imageUrlBuilder from "@sanity/image-url";
-
-const builder = imageUrlBuilder({ projectId, dataset });
+import { builder } from "../utils/imageBuilder";
 
 export default function Product({ product }: { product: SanityDocument }) {
   const { title, mainImage, body } = product;
   return (
-    <main className="prose prose-lg container mx-auto p-4">
+    <main className="container prose prose-lg mx-auto p-4">
       {title ? <h1>{title}</h1> : null}
       {mainImage ? (
         <Image

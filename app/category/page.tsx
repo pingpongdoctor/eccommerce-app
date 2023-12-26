@@ -1,38 +1,7 @@
 import React from "react";
 import { CategoryCard } from "../_components/CategoryCard";
 import Link from "next/link";
-
-const categoryInfor: {
-  id: string;
-  text: string;
-  revealText: string;
-  className: string;
-}[] = [
-  {
-    id: "comestic",
-    text: "Comestic Collection",
-    revealText: "Discover Comestic Products",
-    className: "w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl",
-  },
-  {
-    id: "supplement",
-    text: "Supplement Products",
-    revealText: "Find Your Wanted Supplements",
-    className: "w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl",
-  },
-  {
-    id: "food",
-    text: "Canadian Food",
-    revealText: "Enjoy Canadian Food",
-    className: "w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl",
-  },
-  {
-    id: "other",
-    text: "Other Merchandises",
-    revealText: "What ever you find can be here",
-    className: "w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl",
-  },
-];
+import { categoryInfor } from "../utils/data";
 
 export default function Categories() {
   return (
