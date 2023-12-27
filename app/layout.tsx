@@ -4,6 +4,7 @@ import { roboto, dancingScript } from "./_fonts/fonts";
 import ReactToastifyProvider from "./_components/ReactToastifyProvider";
 import { draftMode } from "next/headers";
 import VisualEditing from "./_components/VisualEditing";
+import "tw-elements-react/dist/css/tw-elements-react.min.css";
 
 export const metadata: Metadata = {
   title: {
