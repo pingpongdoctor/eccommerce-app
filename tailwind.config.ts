@@ -1,7 +1,5 @@
 import type { Config } from "tailwindcss";
 const svgToDataUri = require("mini-svg-data-uri");
-
-const colors = require("tailwindcss/colors");
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
@@ -12,6 +10,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/flowbite-react/lib/**/*.js",
+    "./node_modules/tw-elements-react/dist/js/**/*.js",
   ],
   theme: {
     extend: {
@@ -26,6 +25,7 @@ const config: Config = {
   plugins: [
     require("@tailwindcss/typography"),
     require("flowbite/plugin"),
+    require("tw-elements-react/dist/plugin.cjs"),
     addVariablesForColors,
     function ({ matchUtilities, theme }: any) {
       matchUtilities(
