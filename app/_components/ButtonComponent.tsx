@@ -43,7 +43,7 @@ export default function ButtonComponent({
 }: Props) {
   return (
     <button
-      className={`prose group relative h-[50px] w-[100px] rounded-md border-[1.5px] font-bold transition-transform duration-200 active:scale-[0.98] ${borderColors[buttonColor]} ${buttonClassname}`}
+      className={`group relative h-[50px] w-[100px] rounded-md border-[1.5px] font-bold transition-transform duration-200 active:scale-[0.98] ${borderColors[buttonColor]} ${buttonClassname}`}
       type={buttonType}
       disabled={isDisabled}
       onClick={buttonOnclickHandler}

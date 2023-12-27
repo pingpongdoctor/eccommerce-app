@@ -20,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} ${dancingScript.variable}`}>
+      <body
+        className={`${roboto.className} ${dancingScript.variable} antialiased`}
+      >
         <ReactToastifyProvider>
           {children}
           {draftMode().isEnabled && <VisualEditing />}
