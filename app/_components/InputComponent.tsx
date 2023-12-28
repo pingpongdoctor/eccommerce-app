@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent } from "react";
 
 interface Props {
   inputOnchangeHandler?: (

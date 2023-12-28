@@ -25,3 +25,10 @@ interface User {
   createdAt: string;
   updatedAt: string;
 }
+
+interface ImageInfor {
+  _type: string;
+  alt: string;
+  _key: string;
+  asset: [Object];
+}
