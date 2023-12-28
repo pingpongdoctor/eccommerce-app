@@ -6,6 +6,7 @@ export const postUserData = async function (
   email: string,
 ): Promise<void> {
   try {
+    console.log(baseUrl);
     const res = await fetch(`${baseUrl}/api/user`, {
       headers: { "Content-Type": "application/json" },
       method: "POST",
