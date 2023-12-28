@@ -19,13 +19,10 @@ interface Props {
 export default function Carousel({ images, carouselClassname }: Props) {
   console.log(images);
   return (
-    <TECarousel
-      showControls
-      showIndicators
-      ride="carousel"
-      className="w-[500px]"
-    >
-      <div className="relative w-full overflow-hidden after:clear-both after:block after:content-['']">
+    <TECarousel showControls showIndicators ride="carousel" className="w-full">
+      <div
+        className={`relative w-full overflow-hidden after:clear-both after:block after:content-[''] ${carouselClassname}`}
+      >
         {images?.length > 0 &&
           images.map(
             (image: ImageInfor & { id: number; imageLink: string }) => {
@@ -37,7 +34,7 @@ export default function Carousel({ images, carouselClassname }: Props) {
                 >
                   <Image
                     src={image.imageLink}
-                    className="block h-[500px] w-full object-cover"
+                    className="block aspect-square w-full object-cover"
                     alt={image._type}
                     width={300}
                     height={300}

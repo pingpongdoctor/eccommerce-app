@@ -5,7 +5,8 @@ import ButtonComponent from "./ButtonComponent";
 import { postUserData } from "../_lib/postUserData";
 import { notify } from "./ReactToastifyProvider";
 import { useRouter } from "next/navigation";
-import { inputBoxInforArr, validEmailRegex } from "../utils/data";
+import { inputBoxInforArr, validEmailRegex } from "../utils/utils";
+import { baseUrl } from "../utils/baseUrl";
 
 export default function FormComponent() {
   const router = useRouter();
@@ -91,12 +92,9 @@ export default function FormComponent() {
 
         try {
           //Revalidate user data by triggering the "revalidate" endpoint
-          await fetch(
-            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/revalidate?tag=getuserdata`,
-            {
-              headers: { "Content-Type": "application/json" },
-            },
-          );
+          await fetch(`${baseUrl}/api/revalidate?tag=getuserdata`, {
+            headers: { "Content-Type": "application/json" },
+          });
         } catch (error) {
           console.log("Revalidating user data error" + error);
         }

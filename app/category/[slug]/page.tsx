@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import ProductCards from "@/app/_components/ProductCards";
 import ProductCardsPreview from "@/app/_components/ProductCardsPreview";
 import { Metadata } from "next";
-import { categoryParams } from "@/app/utils/data";
+import { categoryParams } from "@/app/utils/utils";
 
 export async function generateMetadata({
   params,

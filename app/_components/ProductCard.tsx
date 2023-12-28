@@ -7,10 +7,10 @@ import { builder } from "../utils/imageBuilder";
 export default function ProductCard({ product }: { product: SanityDocument }) {
   return (
     <div className="w-full rounded-lg border border-gray-200 bg-white shadow transition-all duration-300 hover:shadow-lg">
-      {product?.mainImage ? (
+      {product?.mainImage?.length > 0 ? (
         <Image
           className="object-fit aspect-square h-auto w-full rounded-lg"
-          src={builder.image(product.mainImage).quality(80).url()}
+          src={builder.image(product.mainImage[0]).quality(80).url()}
           alt="product image"
           width={300}
           height={300}
