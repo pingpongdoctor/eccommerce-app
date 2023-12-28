@@ -33,6 +33,7 @@ export default function Product({ product }: { product: SanityDocument }) {
                 imageLink: string;
               })[]
             }
+            carouselClassname="sm:hidden"
           />
 
           <ul className="hidden max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
