@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { roboto, dancingScript } from "./_fonts/fonts";
 import ReactToastifyProvider from "./_components/ReactToastifyProvider";
+import { draftMode } from "next/headers";
+import VisualEditing from "./_components/VisualEditing";
+import "tw-elements-react/dist/css/tw-elements-react.min.css";
 
 export const metadata: Metadata = {
   title: {
@@ -18,8 +21,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} ${dancingScript.variable}`}>
-        <ReactToastifyProvider>{children}</ReactToastifyProvider>
+      <body
+        className={`${roboto.className} ${dancingScript.variable} antialiased`}
+      >
+        <ReactToastifyProvider>
+          {children}
+          {draftMode().isEnabled && <VisualEditing />}
+        </ReactToastifyProvider>
       </body>
     </html>
   );
