@@ -5,8 +5,10 @@ import ReactToastifyProvider from "./_components/ReactToastifyProvider";
 import { draftMode } from "next/headers";
 import VisualEditing from "./_components/VisualEditing";
 import "tw-elements-react/dist/css/tw-elements-react.min.css";
+import { baseUrl } from "./utils/baseUrl";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: {
     default: "TravelsMate Main Page",
     template: "%s | TravelsMate",
