@@ -19,12 +19,12 @@ export default function Product({ product }: { product: SanityDocument }) {
   //   }
   //   return imgArr;
   // };
-
+  console.log(body);
   return (
     <main className="m-4 bg-dot-black/[0.2] sm:m-8">
       {mainImage?.length > 0 ? (
         <div>
-          <CarouselComponent />
+          <CarouselComponent imageArr={mainImage} />
 
           <ul className="hidden max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
             {mainImage.map((image: ImageInfor) => {
@@ -35,7 +35,7 @@ export default function Product({ product }: { product: SanityDocument }) {
                 >
                   <Image
                     className="sm:aspect-square sm:w-full sm:rounded-lg sm:object-cover sm:shadow-md"
-                    src={builder.image(image.asset).quality(80).url()}
+                    src={builder.image(image).quality(80).url()}
                     width={300}
                     height={300}
                     alt={image.alt}
