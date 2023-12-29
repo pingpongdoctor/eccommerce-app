@@ -1,5 +1,4 @@
 import React from 'react';
-import urlBuilder from '@sanity/image-url';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { builder } from '../utils/imageBuilder';
 

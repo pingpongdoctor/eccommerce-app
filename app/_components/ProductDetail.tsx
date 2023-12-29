@@ -8,18 +8,6 @@ import RichTextImageComponent from './RichTextImageComponent';
 export default function Product({ product }: { product: SanityDocument }) {
   const { title, mainImage, body } = product;
 
-  // const addIdNumberToImage = function (
-  //   imgArr: (ImageInfor & { id?: number; imageLink?: string })[],
-  // ) {
-  //   let idVal = 1;
-  //   for (let i = 0; i < imgArr.length; i++) {
-  //     imgArr[i].id = idVal;
-  //     imgArr[i].imageLink = builder.image(imgArr[i].asset).quality(80).url();
-  //     idVal += 1;
-  //   }
-  //   return imgArr;
-  // };
-  console.log(body);
   return (
     <main className="m-4 bg-dot-black/[0.2] sm:m-8">
       {mainImage?.length > 0 ? (
@@ -39,6 +27,7 @@ export default function Product({ product }: { product: SanityDocument }) {
                     width={300}
                     height={300}
                     alt={image.alt}
+                    priority={true}
                   />
                 </li>
               );
