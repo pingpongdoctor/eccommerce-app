@@ -6,7 +6,6 @@ import { baseUrl } from "./utils/baseUrl";
 
 export default async function Home() {
   const data = await getAllUserData();
-  console.log(baseUrl);
 
   if (!data) {
     notFound();

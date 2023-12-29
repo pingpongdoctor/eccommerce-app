@@ -2,8 +2,10 @@ import React from "react";
 import { CategoryCard } from "../_components/CategoryCard";
 import Link from "next/link";
 import { categoryInfor } from "../utils/utils";
+import { baseUrl } from "../utils/baseUrl";
 
 export default function Categories() {
+  console.log(baseUrl);
   return (
     <main className="m-4 sm:m-8">
       <ul className="flex list-none flex-col gap-4 sm:w-full sm:flex-row sm:flex-wrap sm:gap-8">
