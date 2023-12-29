@@ -3,6 +3,9 @@ import React, { useEffect, useRef, useState, memo } from "react";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import { cn } from "../utils/cs";
+import { baseUrl } from "../utils/baseUrl";
+
+console.log(baseUrl);
 
 export const CategoryCard = ({
   text,
