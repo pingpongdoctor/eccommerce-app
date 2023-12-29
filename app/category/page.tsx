@@ -1,8 +1,7 @@
-import React from "react";
-import { CategoryCard } from "../_components/CategoryCard";
-import Link from "next/link";
-import { categoryInfor } from "../utils/utils";
-import { baseUrl } from "../utils/baseUrl";
+import React from 'react';
+import { CategoryCard } from '../_components/CategoryCard';
+import Link from 'next/link';
+import { categoryInfor } from '../utils/utils';
 
 export default function Categories() {
   return (
