@@ -24,11 +24,11 @@ export default function Icon() {
           color: "white",
         }}
       >
-        Travel
+        Thao
       </div>
     ),
     {
       ...size,
-    }
+    },
   );
 }
