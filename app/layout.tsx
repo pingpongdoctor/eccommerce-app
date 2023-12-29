@@ -1,19 +1,18 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { roboto, dancingScript } from "./_fonts/fonts";
-import ReactToastifyProvider from "./_components/ReactToastifyProvider";
-import { draftMode } from "next/headers";
-import VisualEditing from "./_components/VisualEditing";
-import "tw-elements-react/dist/css/tw-elements-react.min.css";
-import { baseUrl } from "./utils/baseUrl";
+import type { Metadata } from 'next';
+import './globals.css';
+import { roboto, dancingScript } from './_fonts/fonts';
+import ReactToastifyProvider from './_components/ReactToastifyProvider';
+import { draftMode } from 'next/headers';
+import VisualEditing from './_components/VisualEditing';
+import { baseUrl } from './utils/baseUrl';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "TravelsMate Main Page",
-    template: "%s | TravelsMate",
+    default: 'TravelsMate Main Page',
+    template: '%s | TravelsMate',
   },
-  description: "This page is used for gathering user information",
+  description: 'This page is used for gathering user information',
 };
 
 export default function RootLayout({

@@ -1,17 +1,13 @@
-import { SanityDocument } from "next-sanity";
-import Image from "next/image";
-import { PortableText } from "@portabletext/react";
-import { builder } from "../utils/imageBuilder";
-import dynamic from "next/dynamic";
-const Carousel = dynamic(() => import("../_components/Carousel"), {
-  ssr: false,
-});
+import { SanityDocument } from 'next-sanity';
+import Image from 'next/image';
+import { PortableText } from '@portabletext/react';
+import { builder } from '../utils/imageBuilder';
 
 export default function Product({ product }: { product: SanityDocument }) {
   const { title, mainImage, body } = product;
 
   const addIdNumberToImage = function (
-    imgArr: (ImageInfor & { id?: number; imageLink?: string })[],
+    imgArr: (ImageInfor & { id?: number; imageLink?: string })[]
   ) {
     let idVal = 1;
     for (let i = 0; i < imgArr.length; i++) {
@@ -23,19 +19,9 @@ export default function Product({ product }: { product: SanityDocument }) {
   };
 
   return (
-    <main className="bg-dot-black/[0.2] m-4 sm:m-8">
+    <main className="m-4 bg-dot-black/[0.2] sm:m-8">
       {mainImage?.length > 0 ? (
         <div>
-          <Carousel
-            images={
-              addIdNumberToImage(mainImage) as (ImageInfor & {
-                id: number;
-                imageLink: string;
-              })[]
-            }
-            carouselClassname="sm:hidden"
-          />
-
           <ul className="hidden max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
             {mainImage.map((image: ImageInfor) => {
               return (
