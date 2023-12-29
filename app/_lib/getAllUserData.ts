@@ -1,7 +1,6 @@
 import { baseUrl } from "../utils/baseUrl";
 
 export const getAllUserData = async function (): Promise<User[] | undefined> {
-  console.log(baseUrl);
   try {
     const res = await fetch(`${baseUrl}/api/user`, {
       headers: { "Content-Type": "application/json" },
