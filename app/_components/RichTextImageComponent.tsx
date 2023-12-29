@@ -1,13 +1,13 @@
 import React from 'react';
 import urlBuilder from '@sanity/image-url';
 import { getImageDimensions } from '@sanity/asset-utils';
-import { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import { builder } from '../utils/imageBuilder';
 
 export default function RichTextImageComponent({ value }: { value: any }) {
   const { width, height } = getImageDimensions(value);
   return (
     <img
-      src={urlBuilder().image(value).width(800).fit('max').auto('format').url()}
+      src={builder.image(value).width(800).fit('max').auto('format').url()}
       alt={value.alt || ' '}
       loading="lazy"
       style={{

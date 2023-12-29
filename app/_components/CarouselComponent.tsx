@@ -1,48 +1,61 @@
 'use client';
 
+import React from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import Image from 'next/image';
+import { builder } from '../utils/imageBuilder';
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 3, // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    slidesToSlide: 2, // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-    slidesToSlide: 1, // optional, default to 1.
-  },
-};
+interface Props {
+  imageArr: ImageInfor[];
+}
 
-import React from 'react';
-
-export default function CarouselComponent() {
+export default function CarouselComponent({ imageArr }: Props) {
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 1,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 1,
+    },
+    mobile: {
+      breakpoint: { max: 640, min: 0 },
+      items: 1,
+    },
+  };
   return (
-    <Carousel
-      swipeable={true}
-      draggable={false}
-      showDots={true}
-      responsive={responsive}
-      ssr={false} // means to render carousel on server-side.
-      infinite={true}
-      autoPlay={true}
-      autoPlaySpeed={1000}
-      keyBoardControl={true}
-      customTransition="all .5"
-      transitionDuration={500}
-      removeArrowOnDeviceType={['tablet', 'mobile']}
-    >
-      <div>Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-      <div>Item 4</div>
-    </Carousel>
+    <div className="sm:hidden">
+      <Carousel
+        swipeable={true}
+        draggable={false}
+        showDots={true}
+        responsive={responsive}
+        ssr={false} // means to render carousel on server-side.
+        infinite={true}
+        autoPlay={true}
+        autoPlaySpeed={1000}
+        keyBoardControl={true}
+        customTransition="all .5"
+        transitionDuration={500}
+        removeArrowOnDeviceType={['tablet', 'mobile']}
+      >
+        {imageArr?.length > 0 ? (
+          imageArr.map((imageInfor: ImageInfor) => (
+            <Image
+              key={imageInfor._key}
+              src={builder.image(imageInfor).quality(80).url()}
+              width={300}
+              height={300}
+              alt="carousel-image"
+              className="aspect-square w-full object-cover"
+            />
+          ))
+        ) : (
+          <div>Loading...</div>
+        )}
+      </Carousel>
+    </div>
   );
 }
