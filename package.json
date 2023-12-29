@@ -22,6 +22,7 @@
     "mini-svg-data-uri": "^1.4.4",
     "next": "14.0.4",
     "next-sanity": "^7.0.5",
+    "path": "^0.12.7",
     "react": "^18",
     "react-dom": "^18",
     "react-loader-spinner": "^6.1.4",
