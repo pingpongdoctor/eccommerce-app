@@ -1,12 +1,12 @@
-import { SanityDocument, QueryParams } from "next-sanity";
-import ProductDetail from "@/app/_components/ProductDetail";
-import { loadQuery } from "@/sanity/lib/store";
-import { PRODUCT_QUERY, PRODUCTS_QUERY } from "@/sanity/lib/queries";
-import { draftMode } from "next/headers";
-import ProductDetailPreview from "@/app/_components/ProductDetailPreview";
-import { client } from "@/sanity/lib/client";
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { SanityDocument, QueryParams } from 'next-sanity';
+import ProductDetail from '@/app/_components/ProductDetail';
+import { loadQuery } from '@/sanity/lib/store';
+import { PRODUCT_QUERY, PRODUCTS_QUERY } from '@/sanity/lib/queries';
+import { draftMode } from 'next/headers';
+import ProductDetailPreview from '@/app/_components/ProductDetailPreview';
+import { client } from '@/sanity/lib/client';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({
   params,
@@ -17,7 +17,7 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: "wrong product id",
+      title: 'wrong product id',
     };
   }
 
@@ -40,7 +40,7 @@ export default async function DetailedProduct({
   params: QueryParams;
 }) {
   const initial = await loadQuery<SanityDocument>(PRODUCT_QUERY, params, {
-    perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+    perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
   });
 
   if (!initial.data) {
