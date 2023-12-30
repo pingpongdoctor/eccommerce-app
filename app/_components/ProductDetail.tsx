@@ -10,6 +10,7 @@ export default function Product({ product }: { product: SanityDocument }) {
 
   return (
     <main className="m-4 bg-dot-black/[0.2] sm:m-8">
+      <h1>{title}</h1>
       {mainImage?.length > 0 ? (
         <div>
           <CarouselComponent imageArr={mainImage} />
