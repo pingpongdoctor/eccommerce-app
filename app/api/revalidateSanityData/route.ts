@@ -1,6 +1,6 @@
-import { revalidateTag } from "next/cache";
-import { type NextRequest, NextResponse } from "next/server";
-import { parseBody } from "next-sanity/webhook";
+import { revalidateTag } from 'next/cache';
+import { type NextRequest, NextResponse } from 'next/server';
+import { parseBody } from 'next-sanity/webhook';
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,13 +8,14 @@ export async function POST(req: NextRequest) {
       _type: string;
       slug?: string | undefined;
     }>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET);
+    console.log(process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET);
 
     if (!isValidSignature) {
-      return new Response("Invalid Signature", { status: 401 });
+      return new Response('Invalid Signature', { status: 401 });
     }
 
     if (!body?._type) {
-      return new Response("Bad Request", { status: 400 });
+      return new Response('Bad Request', { status: 400 });
     }
 
     revalidateTag(body._type);
