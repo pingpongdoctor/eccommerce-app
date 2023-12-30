@@ -13,7 +13,9 @@ export async function generateMetadata({
 }: {
   params: QueryParams;
 }): Promise<Metadata> {
-  const product = await client.fetch<SanityDocument>(PRODUCT_QUERY, params);
+  const product = await client.fetch<SanityDocument>(PRODUCT_QUERY, params, {
+    next: { tags: ['post'] },
+  });
 
   if (!product) {
     return {
@@ -27,7 +29,13 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const products = await client.fetch<SanityDocument[]>(PRODUCTS_QUERY);
+  const products = await client.fetch<SanityDocument[]>(
+    PRODUCTS_QUERY,
+    {},
+    {
+      next: { tags: ['post'], revalidate: 3600 },
+    }
+  );
 
   return products.map((product) => ({
     slug: product.slug.current,
@@ -41,6 +49,7 @@ export default async function DetailedProduct({
 }) {
   const initial = await loadQuery<SanityDocument>(PRODUCT_QUERY, params, {
     perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+    next: { tags: ['post'], revalidate: 3600 },
   });
 
   if (!initial.data) {
