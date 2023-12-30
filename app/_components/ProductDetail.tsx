@@ -1,40 +1,19 @@
-import { SanityDocument } from "next-sanity";
-import Image from "next/image";
-import { PortableText } from "@portabletext/react";
-import { builder } from "../utils/imageBuilder";
-import dynamic from "next/dynamic";
-const Carousel = dynamic(() => import("../_components/Carousel"), {
-  ssr: false,
-});
+import { SanityDocument } from 'next-sanity';
+import Image from 'next/image';
+import { PortableText } from '@portabletext/react';
+import { builder } from '../utils/imageBuilder';
+import CarouselComponent from './CarouselComponent';
+import RichTextImageComponent from './RichTextImageComponent';
 
 export default function Product({ product }: { product: SanityDocument }) {
   const { title, mainImage, body } = product;
 
-  const addIdNumberToImage = function (
-    imgArr: (ImageInfor & { id?: number; imageLink?: string })[],
-  ) {
-    let idVal = 1;
-    for (let i = 0; i < imgArr.length; i++) {
-      imgArr[i].id = idVal;
-      imgArr[i].imageLink = builder.image(imgArr[i].asset).quality(80).url();
-      idVal += 1;
-    }
-    return imgArr;
-  };
-
   return (
-    <main className="bg-dot-black/[0.2] m-4 sm:m-8">
+    <main className="m-4 bg-dot-black/[0.2] sm:m-8">
+      <h1>{title}</h1>
       {mainImage?.length > 0 ? (
         <div>
-          <Carousel
-            images={
-              addIdNumberToImage(mainImage) as (ImageInfor & {
-                id: number;
-                imageLink: string;
-              })[]
-            }
-            carouselClassname="sm:hidden"
-          />
+          <CarouselComponent imageArr={mainImage} />
 
           <ul className="hidden max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
             {mainImage.map((image: ImageInfor) => {
@@ -45,10 +24,11 @@ export default function Product({ product }: { product: SanityDocument }) {
                 >
                   <Image
                     className="sm:aspect-square sm:w-full sm:rounded-lg sm:object-cover sm:shadow-md"
-                    src={builder.image(image.asset).quality(80).url()}
+                    src={builder.image(image).quality(80).url()}
                     width={300}
                     height={300}
                     alt={image.alt}
+                    priority={true}
                   />
                 </li>
               );
@@ -56,7 +36,17 @@ export default function Product({ product }: { product: SanityDocument }) {
           </ul>
         </div>
       ) : null}
-      {body ? <PortableText value={body} /> : null}
+      {body ? (
+        <PortableText
+          value={body}
+          components={{
+            // ...
+            types: {
+              image: RichTextImageComponent,
+            },
+          }}
+        />
+      ) : null}
     </main>
   );
 }

@@ -1,10 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: {
-    absolute: "Products",
-  },
-  description: "This page shows products",
+  title: 'Categories',
+  description: 'This page shows all categories',
 };
 
 export default function CategoriesLayout({
