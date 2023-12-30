@@ -14,7 +14,7 @@ export async function generateMetadata({
   params: QueryParams;
 }): Promise<Metadata> {
   const product = await client.fetch<SanityDocument>(PRODUCT_QUERY, params, {
-    next: { tags: ['post'] },
+    next: { tags: ['post'], revalidate: 3600 },
   });
 
   if (!product) {
