@@ -1,3 +1,5 @@
+'use client';
+
 import { Fragment, useState } from 'react';
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react';
 import {
@@ -56,11 +58,11 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Example() {
+export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white">
+    <div className="bg-white">
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -253,6 +255,6 @@ export default function Example() {
           </div>
         </Dialog.Panel>
       </Dialog>
-    </header>
+    </div>
   );
 }

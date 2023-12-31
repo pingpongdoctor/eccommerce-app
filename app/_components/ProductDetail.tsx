@@ -15,25 +15,21 @@ export default function Product({ product }: { product: SanityDocument }) {
         <div>
           <CarouselComponent imageArr={mainImage} />
 
-          <ul className="hidden max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
+          <div className="hidden max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
             {mainImage.map((image: ImageInfor) => {
               return (
-                <li
+                <Image
+                  className="sm:aspect-square sm:w-[calc((100%-1rem)/2)] sm:rounded-lg sm:object-cover sm:shadow-md"
+                  src={builder.image(image).quality(80).url()}
+                  width={300}
+                  height={300}
+                  alt={image.alt}
+                  priority={true}
                   key={image._key}
-                  className="sm:aspect-square sm:w-[calc((100%-1rem)/2)] sm:rounded-lg sm:shadow-md"
-                >
-                  <Image
-                    className="sm:aspect-square sm:w-full sm:rounded-lg sm:object-cover sm:shadow-md"
-                    src={builder.image(image).quality(80).url()}
-                    width={300}
-                    height={300}
-                    alt={image.alt}
-                    priority={true}
-                  />
-                </li>
+                />
               );
             })}
-          </ul>
+          </div>
         </div>
       ) : null}
       {body ? (
