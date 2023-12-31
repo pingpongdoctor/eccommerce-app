@@ -13,7 +13,7 @@ export default function ProductCards({
 
   return (
     <main className="m-4 sm:m-8">
-      <ul className="flex list-none flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
         {products?.length > 0 &&
           products.map((product) => (
             <Link
@@ -21,12 +21,10 @@ export default function ProductCards({
               key={product._id}
               href={`/product/${product.slug.current}`}
             >
-              <li>
-                <CardComponent product={product} />
-              </li>
+              <CardComponent product={product} />
             </Link>
           ))}
-      </ul>
+      </div>
     </main>
   );
 }
