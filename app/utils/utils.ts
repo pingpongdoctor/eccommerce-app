@@ -1,3 +1,12 @@
+import {
+  ArrowPathIcon,
+  ChartPieIcon,
+  SparklesIcon,
+  BeakerIcon,
+  SquaresPlusIcon,
+  BookOpenIcon,
+} from '@heroicons/react/24/outline';
+
 export const categories = ['comestic', 'supplement', 'food', 'other'];
 export const categoryInfor: {
   id: string;
@@ -18,14 +27,14 @@ export const categoryInfor: {
     className: 'w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl',
   },
   {
-    id: 'food',
-    text: 'Canadian Food',
+    id: 'book',
+    text: 'Books',
     revealText: 'Enjoy Canadian Food',
     className: 'w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl',
   },
   {
-    id: 'other',
-    text: 'Other Merchandises',
+    id: 'jewelry',
+    text: 'Jewelry',
     revealText: 'What ever you find can be here',
     className: 'w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl',
   },
@@ -41,3 +50,31 @@ export const inputBoxInforArr: InputBoxInfor[] = [
 ];
 
 export const validEmailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+export const dropdownItemInforArr: DropdownItemInfor[] = [
+  {
+    name: 'All Categories',
+    description: 'Take a look at what we can serve you',
+    icon: ChartPieIcon,
+  },
+  {
+    name: 'Comestic',
+    description: 'Choose your high-quality comestic products',
+    icon: BeakerIcon,
+  },
+  {
+    name: 'Book',
+    description: 'Find all kinds of lovely book here',
+    icon: BookOpenIcon,
+  },
+  {
+    name: 'Supplement',
+    description: 'Take care your health with our supplement',
+    icon: SquaresPlusIcon,
+  },
+  {
+    name: 'Jewelry',
+    description: 'Lovely jewelry for minimalists',
+    icon: SparklesIcon,
+  },
+];

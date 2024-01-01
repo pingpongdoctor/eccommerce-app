@@ -1,4 +1,4 @@
-type Field = "username" | "email" | "message";
+type Field = 'username' | 'email' | 'message';
 
 interface FormInfor {
   [index: Field]: { value: string; isError: boolean };
@@ -31,4 +31,10 @@ interface ImageInfor {
   alt: string;
   _key: string;
   asset: [Object];
+}
+
+interface DropdownItemInfor {
+  name: string;
+  description: string;
+  icon: React.FC<any>;
 }
