@@ -27,9 +27,12 @@ export default function RootLayout({
         className={`${roboto.className} ${dancingScript.variable} antialiased`}
       >
         <ReactToastifyProvider>
-          <Navbar />
+          <header>
+            <Navbar />
+          </header>
           {children}
           {draftMode().isEnabled && <VisualEditing />}
+          <footer></footer>
         </ReactToastifyProvider>
       </body>
     </html>
