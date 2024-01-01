@@ -12,7 +12,7 @@ export default function Navbar() {
         <Link href="#" className="-m-1.5 p-1.5">
           <Image
             className="h-24 w-auto md:h-28"
-            src="./assets/glowy-lab.svg"
+            src="/assets/glowy-lab.svg"
             alt="logo"
             width={100}
             height={100}
