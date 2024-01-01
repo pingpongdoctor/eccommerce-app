@@ -5,7 +5,7 @@ import ReactToastifyProvider from './_components/ReactToastifyProvider';
 import { draftMode } from 'next/headers';
 import VisualEditing from './_components/VisualEditing';
 import { baseUrl } from './utils/baseUrl';
-import Navbar from './_components/Navbar';
+import Navbar from './_components/NavBar';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
