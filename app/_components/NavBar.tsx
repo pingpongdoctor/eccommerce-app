@@ -2,48 +2,76 @@
 
 import { dropdownItemInforArr } from '../utils/utils';
 import DropdownMenu from './DropdownMenu';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    <div className="mx-auto flex max-w-7xl flex-col p-4 md:block md:p-8 ">
-      <nav className="flex items-center justify-between bg-white">
-        <a href="#" className="-m-1.5 p-1.5">
-          <img
-            className="h-8 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt=""
+    <div className="mx-auto flex max-w-7xl flex-col gap-2 p-4 md:block md:p-8 ">
+      <nav className="flex h-8 items-center justify-between overflow-visible bg-white">
+        <Link href="#" className="-m-1.5 p-1.5">
+          <Image
+            className="h-24 w-auto md:h-28"
+            src="./assets/glowy-lab.svg"
+            alt="logo"
+            width={100}
+            height={100}
+            priority={true}
           />
-        </a>
+        </Link>
 
+        {/* table and desktop navigation links */}
         <ul className="hidden gap-x-12 md:flex">
           <DropdownMenu dropdownItemInforArr={dropdownItemInforArr} />
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          <Link
+            href="#"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             About
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          </Link>
+          <Link
+            href="#"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             Blog
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          </Link>
+          <Link
+            href="#"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             Contact
-          </a>
+          </Link>
         </ul>
 
-        <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+        <Link
+          href="#"
+          className="text-sm font-semibold leading-6 text-gray-900"
+        >
           Log in <span>&rarr;</span>
-        </a>
+        </Link>
       </nav>
 
+      {/* mobile navigation links */}
       <ul className=":gap-x-8 mx-auto flex gap-x-4 md:hidden">
         <DropdownMenu dropdownItemInforArr={dropdownItemInforArr} />
-        <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+        <Link
+          href="#"
+          className="text-sm font-semibold leading-6 text-gray-900"
+        >
           Features
-        </a>
-        <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+        </Link>
+        <Link
+          href="#"
+          className="text-sm font-semibold leading-6 text-gray-900"
+        >
           Marketplace
-        </a>
-        <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+        </Link>
+        <Link
+          href="#"
+          className="text-sm font-semibold leading-6 text-gray-900"
+        >
           Company
-        </a>
+        </Link>
       </ul>
     </div>
   );
