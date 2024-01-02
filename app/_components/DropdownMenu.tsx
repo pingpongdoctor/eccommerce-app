@@ -14,7 +14,7 @@ export default function DropdownMenu({ dropdownItemInforArr }: Props) {
   return (
     <Popover.Group>
       <Popover className="relative z-[60]">
-        <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 outline-none">
+        <Popover.Button className="flex cursor-default items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 outline-none">
           Categories
           <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" />
         </Popover.Button>
