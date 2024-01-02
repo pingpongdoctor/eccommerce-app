@@ -24,9 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto.className} ${dancingScript.variable} antialiased`}
-      >
+      <body className={`${roboto.className} ${dancingScript.variable}`}>
         <ReactToastifyProvider>
           <Navbar />
           {children}
