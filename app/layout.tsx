@@ -6,6 +6,7 @@ import { draftMode } from 'next/headers';
 import VisualEditing from './_components/VisualEditing';
 import { baseUrl } from './utils/baseUrl';
 import Navbar from './_components/NavBar';
+import FooterComponent from './_components/FooterComponent';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -30,6 +31,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           {draftMode().isEnabled && <VisualEditing />}
+          <FooterComponent />
         </ReactToastifyProvider>
       </body>
     </html>
