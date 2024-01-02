@@ -4,18 +4,22 @@
 
 @layer base {
   h1 {
-    @apply text-4xl mb-6 sm:mb-8;
+    @apply mb-6 text-4xl sm:mb-8;
   }
 
   h2 {
-    @apply text-3xl mb-6 sm:mb-8;
+    @apply mb-6 text-3xl sm:mb-8;
   }
 
   h4 {
-    @apply text-2xl mb-6 sm:mb-8;
+    @apply mb-6 text-2xl sm:mb-8;
+  }
+
+  a {
+    @apply cursor-default;
   }
 
   button {
-    @apply cursor-pointer;
+    @apply cursor-default;
   }
 }
