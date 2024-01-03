@@ -1,8 +1,8 @@
-import React from "react";
-import { SanityDocument } from "next-sanity";
-import ButtonComponent from "./ButtonComponent";
-import Image from "next/image";
-import { builder } from "../utils/imageBuilder";
+import React from 'react';
+import { SanityDocument } from 'next-sanity';
+import ButtonComponent from './ButtonComponent';
+import Image from 'next/image';
+import { builder } from '../utils/imageBuilder';
 
 export default function ProductCard({ product }: { product: SanityDocument }) {
   return (
@@ -23,12 +23,12 @@ export default function ProductCard({ product }: { product: SanityDocument }) {
       <div className="p-5">
         {
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {product.title ? product.title : "No Title"}
+            {product.title ? product.title : 'No Title'}
           </h5>
         }
 
         <p className="mb-3 line-clamp-3 h-[4.5rem] text-pretty font-normal text-gray-700 dark:text-gray-400">
-          {product.description ? product.description : "No Description"}
+          {product.description ? product.description : 'No Description'}
         </p>
         <div className="flex items-center justify-between">
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
