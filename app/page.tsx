@@ -1,4 +1,6 @@
 import BlogCard from './_components/BlogCard';
+import BlogCards from './_components/BlogCards';
+import CarouselComponent from './_components/CarouselComponent';
 import HeroSection from './_components/HeroSection';
 
 export default async function Home() {
@@ -10,7 +12,7 @@ export default async function Home() {
         </h1>
       </div>
       <HeroSection />
-      <BlogCard />
+      <BlogCards />
     </main>
   );
 }

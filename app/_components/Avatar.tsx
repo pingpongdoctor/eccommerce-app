@@ -3,22 +3,22 @@ import React from 'react';
 
 interface Props {
   avatarLink: string;
-  priority?: boolean;
+  avatarPriority?: boolean;
   avatarClassname?: string;
 }
 
 export default function Avatar({
   avatarLink,
-  priority = false,
+  avatarPriority = false,
   avatarClassname,
 }: Props) {
   return (
     <Image
-      className={`inline-block rounded-full ${avatarClassname}`}
+      className={`inline-block size-9 rounded-full ${avatarClassname} object-cover object-center`}
       src={avatarLink}
-      width={32}
-      height={32}
-      priority={priority}
+      width={30}
+      height={30}
+      priority={avatarPriority}
       alt="avatar"
     />
   );
