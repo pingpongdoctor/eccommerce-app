@@ -13,7 +13,7 @@ export default function Product({ product }: { product: SanityDocument }) {
       <h1>{title}</h1>
       {mainImage?.length > 0 ? (
         <div>
-          <CarouselComponent imageArr={mainImage} />
+          {/* <CarouselComponent imageArr={mainImage} /> */}
 
           <div className="hidden max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
             {mainImage.map((image: ImageInfor) => {
