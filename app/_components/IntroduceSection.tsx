@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function IntroduceSection() {
   return (
-    <div className="z-1 relative bg-white">
+    <div className="z-1 relative bg-white pb-12 pt-12 lg:pb-16 lg:pt-16">
       <div className="mb-8 flex gap-28">
         <div className="flex w-[40%] flex-col gap-8 text-pretty">
           <h1 className="mb-0">Our people</h1>
