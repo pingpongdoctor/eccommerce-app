@@ -50,9 +50,13 @@ export default async function Category({ params }: { params: QueryParams }) {
     notFound();
   }
 
-  return draftMode().isEnabled ? (
-    <ProductCardsPreview initial={initial} />
-  ) : (
-    <ProductCards products={initial.data} />
+  return (
+    <main>
+      {draftMode().isEnabled ? (
+        <ProductCardsPreview initial={initial} />
+      ) : (
+        <ProductCards products={initial.data} />
+      )}
+    </main>
   );
 }
