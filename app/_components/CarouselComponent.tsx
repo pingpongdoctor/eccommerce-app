@@ -4,6 +4,7 @@ import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useEffect, useState } from 'react';
 
 interface Props {
   CarouselFC: React.FC<any>[];
@@ -11,8 +12,6 @@ interface Props {
   carouselAutoPlaySpeed: number;
   carouselPauseOnHover?: boolean;
   carouselSwipeToSlide?: boolean;
-  carouselSlidesToShow: number;
-  carouselCenterPadding: string;
 }
 
 export default function CarouselComponent({
@@ -21,30 +20,52 @@ export default function CarouselComponent({
   carouselAutoPlaySpeed,
   carouselPauseOnHover = true,
   carouselSwipeToSlide = true,
-  carouselSlidesToShow,
-  carouselCenterPadding,
 }: Props) {
+  const [slides, setSlides] = useState<number>(3);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        setSlides(3);
+      } else if (window.innerWidth >= 640) {
+        setSlides(2);
+      } else {
+        setSlides(1);
+      }
+    });
+
+    return () => {
+      window.removeEventListener('resize', () => {
+        if (window.innerWidth >= 768) {
+          setSlides(3);
+        } else if (window.innerWidth >= 640) {
+          setSlides(2);
+        } else {
+          setSlides(1);
+        }
+      });
+    };
+  }, []);
+
   var settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     autoplay: carouselAutoPlay,
     autoplaySpeed: carouselAutoPlaySpeed,
     pauseOnHover: carouselPauseOnHover,
     swipeToSlide: carouselSwipeToSlide,
-    slidesToShow: carouselSlidesToShow,
+    slidesToShow: slides,
     slidesToScroll: 1,
     centerMode: true,
-    centerPadding: carouselCenterPadding,
+    row: 1,
   };
 
   return (
-    <Slider {...settings}>
-      {CarouselFC?.length > 0 &&
-        CarouselFC.map((CarouselItem, index) => (
-          <div key={index}>
-            <CarouselItem />
-          </div>
-        ))}
-    </Slider>
+    <div className="[&>div>div>div]:flex [&>div>div>div]:gap-4">
+      <Slider {...settings}>
+        {CarouselFC?.length > 0 &&
+          CarouselFC.map((CarouselItem, index) => <CarouselItem key={index} />)}
+      </Slider>
+    </div>
   );
 }

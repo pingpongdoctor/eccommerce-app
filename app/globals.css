@@ -29,3 +29,7 @@
     @apply cursor-default;
   }
 }
+
+.slick-track {
+  @apply flex gap-8;
+}
