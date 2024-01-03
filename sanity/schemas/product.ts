@@ -11,6 +11,16 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'featured',
+      title: 'Featured Product',
+      type: 'boolean',
+    }),
+    defineField({
+      name: 'new',
+      title: 'New Arrival',
+      type: 'boolean',
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
