@@ -14,7 +14,7 @@ export default function Avatar({
 }: Props) {
   return (
     <Image
-      className={`inline-block size-9 rounded-full ${avatarClassname} object-cover object-center`}
+      className={`inline-block size-8 rounded-full ${avatarClassname} object-cover object-center`}
       src={avatarLink}
       width={30}
       height={30}

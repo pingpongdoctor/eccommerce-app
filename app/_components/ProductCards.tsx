@@ -12,7 +12,7 @@ export default function ProductCards({
   }
 
   return (
-    <main className="m-4 sm:m-8">
+    <div className="m-4 sm:m-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
         {products?.length > 0 &&
           products.map((product) => (
@@ -25,6 +25,6 @@ export default function ProductCards({
             </Link>
           ))}
       </div>
-    </main>
+    </div>
   );
 }
