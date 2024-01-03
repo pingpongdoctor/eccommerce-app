@@ -4,7 +4,6 @@ import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useEffect, useState } from 'react';
 
 interface Props {
   CarouselFC: React.FC<any>[];
@@ -21,32 +20,6 @@ export default function CarouselComponent({
   carouselPauseOnHover = true,
   carouselSwipeToSlide = true,
 }: Props) {
-  const [slides, setSlides] = useState<number>(3);
-
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) {
-        setSlides(3);
-      } else if (window.innerWidth >= 640) {
-        setSlides(2);
-      } else {
-        setSlides(1);
-      }
-    });
-
-    return () => {
-      window.removeEventListener('resize', () => {
-        if (window.innerWidth >= 768) {
-          setSlides(3);
-        } else if (window.innerWidth >= 640) {
-          setSlides(2);
-        } else {
-          setSlides(1);
-        }
-      });
-    };
-  }, []);
-
   var settings = {
     dots: false,
     infinite: true,
@@ -54,7 +27,7 @@ export default function CarouselComponent({
     autoplaySpeed: carouselAutoPlaySpeed,
     pauseOnHover: carouselPauseOnHover,
     swipeToSlide: carouselSwipeToSlide,
-    slidesToShow: slides,
+    slidesToShow: 3,
     slidesToScroll: 1,
     centerMode: true,
     row: 1,
