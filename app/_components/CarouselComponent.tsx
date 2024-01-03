@@ -34,11 +34,12 @@ export default function CarouselComponent({
   };
 
   return (
-    <div className="[&>div>div>div]:flex [&>div>div>div]:gap-4 [&>div>div>div]:bg-white">
+    <div className="[&>div>div>div]:flex [&>div>div>div]:gap-8 [&>div>div>div]:bg-white">
       <Slider {...settings}>
         {CarouselFC?.length > 0 &&
           CarouselFC.map((CarouselItem, index) => <CarouselItem key={index} />)}
       </Slider>
+      2
     </div>
   );
 }
