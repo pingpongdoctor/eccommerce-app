@@ -4,7 +4,7 @@ import testImage from '../../public/assets/abc.avif';
 
 export default function IntroduceSection() {
   return (
-    <div className="z-1 relative bg-white p-4 pb-12 pt-12 md:p-8 lg:p-12 lg:pb-16 lg:pt-16 xl:mx-auto xl:max-w-7xl">
+    <div className="z-1 relative bg-white px-4 pb-12 pt-12 md:px-8 lg:px-12 lg:pb-16 lg:pt-16 xl:mx-auto xl:max-w-7xl">
       <div className="mb-8 block lg:flex lg:gap-16 xl:gap-28">
         <div className="flex w-full flex-col gap-8 text-pretty lg:w-[40%]">
           <h1 className="mb-0">Our people</h1>

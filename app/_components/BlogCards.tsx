@@ -25,7 +25,7 @@ export default function BlogCards() {
           carouselAutoPlay={true}
         />
       </div>
-      <div className="z-1 relative flex flex-col gap-4 bg-white p-4 md:p-8 lg:hidden">
+      <div className="z-1 relative flex flex-col gap-4 bg-white px-4 md:px-8 lg:hidden">
         <BlogCard />
         <BlogCard />
         <BlogCard />
