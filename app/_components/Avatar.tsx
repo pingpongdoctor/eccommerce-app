@@ -17,8 +17,8 @@ export default function Avatar({
       className={`inline-block size-8 rounded-full ${avatarClassname} object-cover object-center`}
       src={avatarLink}
       priority={avatarPriority}
-      width={300}
-      height={300}
+      width={30}
+      height={30}
       alt="avatar"
     />
   );

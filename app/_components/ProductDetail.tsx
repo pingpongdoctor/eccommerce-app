@@ -2,7 +2,6 @@ import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
-import CarouselComponent from './CarouselComponent';
 import RichTextImageComponent from './RichTextImageComponent';
 
 export default function Product({ product }: { product: SanityDocument }) {
@@ -13,9 +12,7 @@ export default function Product({ product }: { product: SanityDocument }) {
       <h1>{title}</h1>
       {mainImage?.length > 0 ? (
         <div>
-          {/* <CarouselComponent imageArr={mainImage} /> */}
-
-          <div className="hidden max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
+          <div className="max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
             {mainImage.map((image: ImageInfor) => {
               return (
                 <Image

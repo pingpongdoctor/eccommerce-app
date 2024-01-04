@@ -4,6 +4,7 @@ import { dropdownItemInforArr } from '../utils/utils';
 import DropdownMenu from './DropdownMenu';
 import Image from 'next/image';
 import Link from 'next/link';
+import glowlyLab from '../../public/assets/glowy-lab.png';
 
 export default function Navbar() {
   return (
@@ -12,11 +13,10 @@ export default function Navbar() {
         <Link href="#" className="-m-1.5 p-1.5">
           <Image
             className="h-24 w-auto md:h-28"
-            src="/assets/glowy-lab.svg"
+            src={glowlyLab}
             alt="logo"
-            width={100}
-            height={100}
-            priority={true}
+            priority
+            placeholder="blur"
           />
         </Link>
 
