@@ -4,7 +4,7 @@ import ProductCard from './ProductCard';
 import { getUrlBase64 } from '../_lib/getUrlBase64';
 import { builder } from '../utils/imageBuilder';
 
-export default function ProductCards({
+export default async function ProductCards({
   products,
 }: {
   products: SanityDocument[];
@@ -12,6 +12,15 @@ export default function ProductCards({
   if (products?.length == 0) {
     return <div className="p-4 text-red-500">No products found</div>;
   }
+
+  await Promise.all(
+    products.map(async (product: SanityDocument) => {
+      product.imgUrl = builder.image(product.mainImage[0]).quality(80).url();
+      product.imgBase64Url = await getUrlBase64(
+        builder.image(product.mainImage[0]).quality(80).url()
+      );
+    })
+  );
 
   return (
     <div className="m-4 sm:m-8">
