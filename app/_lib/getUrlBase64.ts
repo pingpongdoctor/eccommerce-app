@@ -1,6 +1,6 @@
 import { baseUrl } from '../utils/baseUrl';
 
-// dynamic image need base64 url values for the blurPlaceholderUrl when using blur-mode placeholder
+// dynamic image need base64 url values for the blurDataUrl when using blur-mode placeholder
 export const getUrlBase64 = async function name(
   imageUrl: string
 ): Promise<string | undefined> {

@@ -4,7 +4,7 @@ import Avatar from './Avatar';
 
 export default function BlogCard() {
   return (
-    <div className="aspect-[2/1] w-full rounded-2xl bg-[url('/assets/abc.avif')] bg-cover bg-center bg-no-repeat lg:aspect-[1/1.15]">
+    <div className="aspect-[2/1] w-full rounded-2xl bg-[url('/assets/abc.avif')] bg-cover bg-center bg-no-repeat text-sm lg:aspect-[1/1.15]">
       <div className="flex h-full w-full items-end rounded-2xl bg-gradient-to-t from-gray-900">
         <div className="flex w-full flex-col gap-2 p-8">
           <div className="flex items-center gap-6 text-gray-300">
