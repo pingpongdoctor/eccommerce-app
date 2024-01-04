@@ -14,14 +14,12 @@ export default async function ProductCard({
       {product?.mainImage?.length > 0 ? (
         <Image
           className="object-fit aspect-square h-auto w-full rounded-lg"
-          src={builder.image(product.mainImage[0]).quality(80).url()}
+          src={product.imgUrl}
           alt="product image"
           width={300}
           height={300}
           placeholder="blur"
-          blurDataURL={await getUrlBase64(
-            builder.image(product.mainImage[0]).quality(80).url()
-          )}
+          blurDataURL={product.imgBase64Url}
         />
       ) : (
         <div className="flex aspect-square w-full items-center justify-center">
