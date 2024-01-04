@@ -1,11 +1,11 @@
-"use client";
-import React, { ChangeEvent } from "react";
+'use client';
+import React, { ChangeEvent } from 'react';
 
 interface Props {
   inputOnchangeHandler?: (
     e: ChangeEvent<HTMLInputElement>,
     updatedField: Field,
-    isError: boolean,
+    isError: boolean
   ) => void;
   inputName: Field;
   inputClassname?: string;
@@ -21,7 +21,7 @@ export default function InputComponent({
     <label
       htmlFor={inputName}
       className={`relative block w-full rounded-md border ${
-        isError ? "border-red-300" : ""
+        isError ? 'border-red-300' : ''
       } border-gray-200 shadow-sm focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600`}
     >
       <input
@@ -31,8 +31,8 @@ export default function InputComponent({
         placeholder="Username"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           if (
-            typeof inputOnchangeHandler === "function" &&
-            isError != undefined
+            typeof inputOnchangeHandler === 'function' &&
+            isError !== undefined
           ) {
             inputOnchangeHandler(e, inputName, isError);
           }

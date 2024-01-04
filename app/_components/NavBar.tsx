@@ -8,7 +8,7 @@ import glowlyLab from '../../public/assets/glowy-lab.png';
 
 export default function Navbar() {
   return (
-    <div className="mx-auto flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8">
+    <div className="mx-auto flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:p-12">
       <nav className="flex h-8 items-center justify-between overflow-visible bg-white">
         <Link href="#" className="-m-1.5 p-1.5">
           <Image
