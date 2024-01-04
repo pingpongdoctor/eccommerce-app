@@ -1,6 +1,8 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
+import { getUrlBase64 } from '../_lib/getUrlBase64';
+import { builder } from '../utils/imageBuilder';
 
 export default function ProductCards({
   products,
@@ -14,16 +16,15 @@ export default function ProductCards({
   return (
     <div className="m-4 sm:m-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
-        {products?.length > 0 &&
-          products.map((product) => (
-            <Link
-              className="inline-block w-full sm:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] xl:w-[calc((100%-6rem)/4)]"
-              key={product._id}
-              href={`/product/${product.slug.current}`}
-            >
-              <ProductCard product={product} />
-            </Link>
-          ))}
+        {products.map((product) => (
+          <Link
+            className="inline-block w-full sm:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] xl:w-[calc((100%-6rem)/4)]"
+            key={product._id}
+            href={`/product/${product.slug.current}`}
+          >
+            <ProductCard product={product} />
+          </Link>
+        ))}
       </div>
     </div>
   );
