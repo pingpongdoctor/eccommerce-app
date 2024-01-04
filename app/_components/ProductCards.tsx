@@ -24,7 +24,7 @@ export default async function ProductCards({
   );
 
   return (
-    <div className="m-4 sm:m-8">
+    <div className="m-4 p-4 sm:m-8 md:p-8 lg:p-12 xl:mx-auto xl:max-w-7xl">
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
         {products.map((product) => (
           <Link
