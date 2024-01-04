@@ -19,11 +19,6 @@
     @apply mb-6 text-2xl font-semibold text-gray-900 md:mb-8;
   }
 
-  p {
-    @apply text-sm;
-  }
-
-  ,
   a,
   button {
     @apply cursor-default;

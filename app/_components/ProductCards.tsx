@@ -13,6 +13,7 @@ export default async function ProductCards({
     return <div className="p-4 text-red-500">No products found</div>;
   }
 
+  // use promise all to handle all promises at the same time to avoid waterfalls in data fetching
   await Promise.all(
     products.map(async (product: SanityDocument) => {
       product.imgUrl = builder.image(product.mainImage[0]).quality(80).url();
