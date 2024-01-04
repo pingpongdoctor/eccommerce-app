@@ -2,7 +2,7 @@ import React from 'react';
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { builder } from '../utils/imageBuilder';
-import { convertImageUrlHanlder } from '../_lib/convertImageBase64';
+import { getUrlBase64 } from '../_lib/getUrlBase64';
 
 export default async function ProductCard({
   product,
@@ -19,7 +19,7 @@ export default async function ProductCard({
           width={300}
           height={300}
           placeholder="blur"
-          blurDataURL={await convertImageUrlHanlder(
+          blurDataURL={await getUrlBase64(
             builder.image(product.mainImage[0]).quality(80).url()
           )}
         />

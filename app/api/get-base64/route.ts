@@ -5,14 +5,14 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const src = searchParams.get('src');
 
-  try {
-    if (!src) {
-      return NextResponse.json(
-        { message: 'Missed required query' },
-        { status: 400 }
-      );
-    }
+  if (!src) {
+    return NextResponse.json(
+      { message: 'Missed required query' },
+      { status: 400 }
+    );
+  }
 
+  try {
     const res = await fetch(src);
     const data = await res.arrayBuffer();
     const buffer = Buffer.from(data);
