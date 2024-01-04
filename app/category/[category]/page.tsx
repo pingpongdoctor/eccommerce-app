@@ -38,7 +38,7 @@ export default async function Category({ params }: { params: QueryParams }) {
     categories.includes(params.slug)
       ? PRODUCTS_QUERY_BASED_CATEGORY
       : PRODUCTS_QUERY,
-    { category: params.slug || '' },
+    params,
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import GlowyLab from '../../public/assets/glowy-lab.png';
 import {
   IconBrandFacebook,
   IconBrandInstagram,
@@ -12,12 +13,9 @@ export default function FooterComponent() {
     <div className="flex flex-col p-4 text-sm text-gray-600 md:p-8 lg:flex-row lg:items-center lg:gap-14 xl:mx-auto xl:max-w-7xl">
       <div className="mb-8 md:mb-10 lg:max-w-[400px]">
         <Image
-          src="/assets/glowy-lab.svg"
-          width={300}
-          height={300}
+          src={GlowyLab}
           alt="logo"
-          priority={false}
-          className="relative -left-[6.7rem] h-32 md:mb-4"
+          className="relative -left-[1.7rem] h-32 w-auto md:mb-4"
         />
         <p className="mb-4 md:mb-8">
           Making the world a better place through constructing elegant
