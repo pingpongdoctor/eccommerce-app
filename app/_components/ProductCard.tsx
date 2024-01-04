@@ -1,10 +1,14 @@
 import React from 'react';
 import { SanityDocument } from 'next-sanity';
-import ButtonComponent from './ButtonComponent';
 import Image from 'next/image';
 import { builder } from '../utils/imageBuilder';
+import { convertImageUrlHanlder } from '../_lib/convertImageBase64';
 
-export default function ProductCard({ product }: { product: SanityDocument }) {
+export default async function ProductCard({
+  product,
+}: {
+  product: SanityDocument;
+}) {
   return (
     <div className="flex flex-col">
       {product?.mainImage?.length > 0 ? (
@@ -14,6 +18,10 @@ export default function ProductCard({ product }: { product: SanityDocument }) {
           alt="product image"
           width={300}
           height={300}
+          placeholder="blur"
+          blurDataURL={await convertImageUrlHanlder(
+            builder.image(product.mainImage[0]).quality(80).url()
+          )}
         />
       ) : (
         <div className="flex aspect-square w-full items-center justify-center">

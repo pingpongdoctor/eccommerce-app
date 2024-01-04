@@ -16,6 +16,7 @@ export default function FooterComponent() {
           src={GlowyLab}
           alt="logo"
           className="relative -left-[1.7rem] h-32 w-auto md:mb-4"
+          placeholder="blur"
         />
         <p className="mb-4 md:mb-8">
           Making the world a better place through constructing elegant

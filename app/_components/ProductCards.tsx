@@ -1,6 +1,6 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
-import CardComponent from './ProductCard';
+import ProductCard from './ProductCard';
 
 export default function ProductCards({
   products,
@@ -21,7 +21,7 @@ export default function ProductCards({
               key={product._id}
               href={`/product/${product.slug.current}`}
             >
-              <CardComponent product={product} />
+              <ProductCard product={product} />
             </Link>
           ))}
       </div>
