@@ -39,7 +39,6 @@ export default function CarouselComponent({
         {CarouselFC?.length > 0 &&
           CarouselFC.map((CarouselItem, index) => <CarouselItem key={index} />)}
       </Slider>
-      2
     </div>
   );
 }

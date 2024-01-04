@@ -16,11 +16,6 @@ export default defineType({
       type: 'boolean',
     }),
     defineField({
-      name: 'new',
-      title: 'New Arrival',
-      type: 'boolean',
-    }),
-    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
