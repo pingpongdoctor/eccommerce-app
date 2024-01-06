@@ -2,7 +2,7 @@ import React from 'react';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { builder } from '../utils/imageBuilder';
 import Image from 'next/image';
-import { getUrlBase64 } from '../_lib/getUrlBase64';
+// import { getUrlBase64 } from '../_lib/getUrlBase64';
 
 export default async function RichTextImageComponent({
   value,
