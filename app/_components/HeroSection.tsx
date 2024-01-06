@@ -1,14 +1,19 @@
 import React from 'react';
-
+import heroImage from '../../public/assets/pexels-scott-webb-403571.jpg';
+import Image from 'next/image';
 export default function HeroSection() {
   return (
     <div className="m-4 md:m-8 lg:m-12">
-      <div className="sticky top-0 z-0 aspect-[1.5/1] w-full rounded-3xl bg-[url('/assets/pexels-scott-webb-403571.jpg')] bg-contain bg-center bg-no-repeat xl:mx-auto xl:max-w-[74rem]">
-        <div className="from-yellow-70 to-green-70 via-green-70 flex h-full w-full items-center bg-gradient-to-r">
-          <h1 className="ml-4 w-[60%] text-balance font-dancingScript text-4xl sm:text-5xl md:ml-8 md:text-6xl lg:ml-12 lg:text-7xl">
-            Welcome to the Glowy Lab Family
-          </h1>
-        </div>
+      <div className="relative xl:mx-auto xl:max-w-[74rem]">
+        <Image
+          className="aspect-[1.5/1] w-full rounded-3xl bg-contain bg-center bg-no-repeat"
+          src={heroImage}
+          alt="hero-image"
+          placeholder="blur"
+        />
+        <h1 className="absolute left-0 top-0 ml-4 flex h-full w-[60%] items-center text-balance font-dancingScript text-4xl sm:text-5xl md:ml-8 md:text-6xl lg:ml-12 lg:text-7xl">
+          Welcome to the Glowy Lab Family
+        </h1>
       </div>
     </div>
   );
