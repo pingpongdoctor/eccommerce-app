@@ -15,8 +15,8 @@ export default async function ProductCard({
         alt="product-image"
         width={300}
         height={300}
-        // placeholder="blur"
-        // blurDataURL={product.imgBase64Url}
+        placeholder="blur"
+        blurDataURL={product.imgBase64Url}
       />
 
       <p>{product.title ? product.title : 'No Title'}</p>
