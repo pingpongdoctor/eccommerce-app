@@ -1,7 +1,7 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
-import { getUrlBase64 } from '../_lib/getUrlBase64';
+// import { getUrlBase64 } from '../_lib/getUrlBase64';
 import { builder } from '../utils/imageBuilder';
 
 export default async function ProductCards({
