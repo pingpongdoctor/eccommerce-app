@@ -17,9 +17,9 @@ export default async function ProductCards({
   await Promise.all(
     products.map(async (product: SanityDocument) => {
       product.imgUrl = builder.image(product.mainImage[0]).quality(80).url();
-      product.imgBase64Url = await getUrlBase64(
-        builder.image(product.mainImage[0]).quality(80).url()
-      );
+      // product.imgBase64Url = await getUrlBase64(
+      //   builder.image(product.mainImage[0]).quality(80).url()
+      // );
     })
   );
 
