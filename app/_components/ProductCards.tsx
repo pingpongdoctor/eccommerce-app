@@ -1,7 +1,7 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
-// import { getUrlBase64 } from '../_lib/getUrlBase64';
+import { getUrlBase64 } from '../_lib/getUrlBase64';
 import { builder } from '../utils/imageBuilder';
 
 export default async function ProductCards({
@@ -17,9 +17,9 @@ export default async function ProductCards({
   await Promise.all(
     products.map(async (product: SanityDocument) => {
       product.imgUrl = builder.image(product.mainImage[0]).quality(80).url();
-      // product.imgBase64Url = await getUrlBase64(
-      //   builder.image(product.mainImage[0]).quality(80).url()
-      // );
+      product.imgBase64Url = await getUrlBase64(
+        builder.image(product.mainImage[0]).quality(80).url()
+      );
     })
   );
 
