@@ -11,10 +11,10 @@ import FooterComponent from './_components/FooterComponent';
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'TravelsMate Main Page',
-    template: '%s | TravelsMate',
+    default: 'Ecommerce Main Page',
+    template: '%s | Ecommerce',
   },
-  description: 'This page is used for gathering user information',
+  description: 'Main',
 };
 
 export default function RootLayout({
