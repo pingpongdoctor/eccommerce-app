@@ -16,15 +16,22 @@ export default async function Home() {
   const featuredProductPromise = loadQuery<SanityDocument[]>(
     FEATURED_PRODUCTS_QUERY,
     { featured: true },
-    { perspective: draftMode().isEnabled ? 'previewDrafts' : 'published' }
+    {
+      perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      next: { revalidate: 3600, tags: ['post'] },
+    }
   );
 
   const trendingProductPromise = loadQuery<SanityDocument[]>(
     TRENDING_PRODUCTS_QUERY,
     {},
-    { perspective: draftMode().isEnabled ? 'previewDrafts' : 'published' }
+    {
+      perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      next: { revalidate: 3600, tags: ['post'] },
+    }
   );
 
+  // handle promises at the same time to avoid waterfall when fetching data
   const [featuredProductData, trendingProductData] = await Promise.all([
     featuredProductPromise,
     trendingProductPromise,

@@ -5,6 +5,7 @@ export default function HeroSection() {
   return (
     <div className="m-4 md:m-8 lg:m-12">
       <div className="relative xl:mx-auto xl:max-w-[74rem]">
+        {/* use Next.js static image to let Next.js infer intial width and height and to allow using blurred placeholder without providing blurDataUrl */}
         <Image
           className="aspect-[1.5/1] w-full rounded-3xl bg-contain bg-center bg-no-repeat"
           src={heroImage}
