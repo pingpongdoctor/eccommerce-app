@@ -11,12 +11,7 @@ export async function GET(req: NextRequest) {
     );
   }
   try {
-    // const res = await fetch(src);
-    // const data = await res.arrayBuffer();
-    // const buffer = Buffer.from(data);
-    // const { base64 } = await getPlaiceholder(buffer);
     const base64 = await toBase64({ uri: src });
-    console.log(base64);
     return NextResponse.json({ src: base64 }, { status: 200 });
   } catch (error) {
     console.log('Internal Server Error' + error);
