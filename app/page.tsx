@@ -4,7 +4,7 @@ import IntroduceSection from './_components/IntroduceSection';
 import { loadQuery } from '@/sanity/lib/store';
 import {
   FEATURED_PRODUCTS_QUERY,
-  TRENDING_PRODUCTS_QUERY,
+  NEW_PRODUCTS_QUERY,
 } from '@/sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
 import { draftMode } from 'next/headers';
@@ -18,16 +18,14 @@ export default async function Home() {
     { featured: true },
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      next: { revalidate: 3600, tags: ['post'] },
     }
   );
 
   const trendingProductPromise = loadQuery<SanityDocument[]>(
-    TRENDING_PRODUCTS_QUERY,
+    NEW_PRODUCTS_QUERY,
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      next: { revalidate: 3600, tags: ['post'] },
     }
   );
 

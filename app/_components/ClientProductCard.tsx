@@ -1,8 +1,13 @@
-import React from 'react';
+'use client';
+
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 
-export default function ProductCard({ product }: { product: SanityDocument }) {
+export default function ClientProductCard({
+  product,
+}: {
+  product: SanityDocument;
+}) {
   return (
     <div className="flex flex-col gap-2">
       <Image
