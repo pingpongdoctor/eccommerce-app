@@ -1,48 +1,38 @@
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'post',
-  title: 'Post',
+  name: 'homepage',
+  title: 'Home Page',
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Title',
+      name: 'herotext',
+      title: 'Hero Text',
       type: 'string',
     }),
     defineField({
-      name: 'featured',
-      title: 'Featured Product',
-      type: 'boolean',
+      name: 'heroimage',
+      title: 'Hero Image',
+      type: 'image',
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-    }),
-    defineField({
-      name: 'author',
-      title: 'Author',
-      type: 'reference',
-      to: { type: 'author' },
-    }),
-    defineField({
-      name: 'price',
-      title: 'Price',
+      name: 'introheading',
+      title: 'Intro Heading',
       type: 'string',
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'string',
+      name: 'introcontent',
+      title: 'Intro Content',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+        },
+      ],
     }),
     defineField({
-      name: 'images',
-      title: 'Images',
+      name: 'introimages',
+      title: 'Intro Images',
       type: 'array',
       of: [
         {
@@ -59,38 +49,12 @@ export default defineType({
           ],
         },
       ],
-    }),
-    defineField({
-      name: 'category',
-      title: 'Category',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Comestic', value: 'comestic' },
-          { title: 'Supplement', value: 'supplement' },
-          { title: 'Food', value: 'food' },
-          { title: 'Other', value: 'other' },
-        ],
-        layout: 'dropdown',
-      },
-    }),
-    defineField({
-      name: 'publishedAt',
-      title: 'Published at',
-      type: 'datetime',
-    }),
-    defineField({
-      name: 'body',
-      title: 'Body',
-      type: 'blockContent',
+      validation: (Rule) => Rule.required().length(4),
     }),
   ],
-
   preview: {
     select: {
-      title: 'title',
-      author: 'author.name',
-      media: 'mainImage',
+      title: 'herotext',
     },
   },
 });
