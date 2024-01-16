@@ -12,6 +12,7 @@ import { draftMode } from 'next/headers';
 import ProductCardsPreview from './_components/ProductCardsPreview';
 import ProductCards from './_components/ProductCards';
 import { Suspense } from 'react';
+import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<SanityDocument[]>(
@@ -30,7 +31,7 @@ export default async function Home() {
     }
   );
 
-  const homepageContentPromise = loadQuery<SanityDocument[]>(
+  const homepageContentPromise = loadQuery<SanityDocument>(
     HOMEPAGE_QUERY,
     {},
     {
@@ -46,13 +47,17 @@ export default async function Home() {
       homepageContentPromise,
     ]);
 
-  console.log(homePageData.data[0]);
-
   return (
     <main>
       <HeroSection />
 
-      <IntroduceComponent introContent={homePageData.data[0].introcontent} />
+      {draftMode().isEnabled ? (
+        <PreviewIntroduceComponent initial={homePageData} />
+      ) : (
+        <Suspense>
+          <IntroduceComponent homePageData={homePageData.data} />
+        </Suspense>
+      )}
 
       <BlogCards />
 
