@@ -5,12 +5,16 @@ import { loadQuery } from '@/sanity/lib/store';
 import {
   FEATURED_PRODUCTS_QUERY,
   NEW_PRODUCTS_QUERY,
+  HOMEPAGE_QUERY,
 } from '@/sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
 import { draftMode } from 'next/headers';
 import ProductCardsPreview from './_components/ProductCardsPreview';
 import ProductCards from './_components/ProductCards';
 import { Suspense } from 'react';
+import { builder } from './utils/imageBuilder';
+import { getUrlBase64 } from './_lib/getUrlBase64';
+import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<SanityDocument[]>(
@@ -29,15 +33,32 @@ export default async function Home() {
     }
   );
 
+  const homepageContentPromise = loadQuery<SanityDocument[]>(
+    HOMEPAGE_QUERY,
+    {},
+    {
+      perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+    }
+  );
+
   // handle promises at the same time to avoid waterfall when fetching data
-  const [featuredProductData, trendingProductData] = await Promise.all([
-    featuredProductPromise,
-    trendingProductPromise,
-  ]);
+  const [featuredProductData, trendingProductData, homePageData] =
+    await Promise.all([
+      featuredProductPromise,
+      trendingProductPromise,
+      homepageContentPromise,
+    ]);
+
+  const heroImageUrl = builder
+    .image(homePageData.data[0].heroimage)
+    .quality(80)
+    .url();
+
+  const blurHeroImageUrl = await getUrlBase64(heroImageUrl);
 
   return (
     <main>
-      <HeroSection />
+      <HeroSection heroImage={heroImageUrl} blurHeroImage={blurHeroImageUrl} />
       <IntroduceSection />
       <BlogCards />
 
