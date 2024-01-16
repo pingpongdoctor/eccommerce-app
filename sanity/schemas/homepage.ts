@@ -11,11 +11,6 @@ export default defineType({
       type: 'string',
     }),
     defineField({
-      name: 'heroimage',
-      title: 'Hero Image',
-      type: 'image',
-    }),
-    defineField({
       name: 'introheading',
       title: 'Intro Heading',
       type: 'string',
@@ -29,27 +24,6 @@ export default defineType({
           type: 'block',
         },
       ],
-    }),
-    defineField({
-      name: 'introimages',
-      title: 'Intro Images',
-      type: 'array',
-      of: [
-        {
-          type: 'image',
-          options: {
-            hotspot: true,
-          },
-          fields: [
-            {
-              name: 'alt',
-              type: 'string',
-              title: 'Alternative Text',
-            },
-          ],
-        },
-      ],
-      validation: (Rule) => Rule.required().length(4),
     }),
   ],
   preview: {
