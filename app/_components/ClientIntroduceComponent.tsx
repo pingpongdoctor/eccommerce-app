@@ -1,9 +1,11 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import testImage from '../../public/assets/abc.avif';
 import { PortableText } from '@portabletext/react';
 
-export default function IntroduceSection({
+export default function IntroduceComponent({
   introContent,
 }: {
   introContent: any;

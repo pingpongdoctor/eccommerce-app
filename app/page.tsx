@@ -1,6 +1,6 @@
 import BlogCards from './_components/BlogCards';
 import HeroSection from './_components/HeroSection';
-import IntroduceSection from './_components/IntroduceSection';
+import IntroduceComponent from './_components/IntroduceComponent';
 import { loadQuery } from '@/sanity/lib/store';
 import {
   FEATURED_PRODUCTS_QUERY,
@@ -51,7 +51,9 @@ export default async function Home() {
   return (
     <main>
       <HeroSection />
-      <IntroduceSection introContent={homePageData.data[0].introcontent} />
+
+      <IntroduceComponent introContent={homePageData.data[0].introcontent} />
+
       <BlogCards />
 
       <div>
