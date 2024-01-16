@@ -12,9 +12,6 @@ import { draftMode } from 'next/headers';
 import ProductCardsPreview from './_components/ProductCardsPreview';
 import ProductCards from './_components/ProductCards';
 import { Suspense } from 'react';
-import { builder } from './utils/imageBuilder';
-import { getUrlBase64 } from './_lib/getUrlBase64';
-import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<SanityDocument[]>(
@@ -49,17 +46,12 @@ export default async function Home() {
       homepageContentPromise,
     ]);
 
-  const heroImageUrl = builder
-    .image(homePageData.data[0].heroimage)
-    .quality(80)
-    .url();
-
-  const blurHeroImageUrl = await getUrlBase64(heroImageUrl);
+  console.log(homePageData.data[0]);
 
   return (
     <main>
-      <HeroSection heroImage={heroImageUrl} blurHeroImage={blurHeroImageUrl} />
-      <IntroduceSection />
+      <HeroSection />
+      <IntroduceSection introContent={homePageData.data[0].introcontent} />
       <BlogCards />
 
       <div>
