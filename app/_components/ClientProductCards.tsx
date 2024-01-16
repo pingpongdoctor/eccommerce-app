@@ -19,9 +19,7 @@ export default function ClientProductCards({
     Promise.all(
       products.map(async (product: SanityDocument) => {
         product.imgUrl = builder.image(product.images[0]).quality(80).url();
-        product.imgBase64Url = await getUrlBase64(
-          builder.image(product.images[0]).quality(80).url()
-        );
+        product.imgBase64Url = await getUrlBase64(product.imgUrl);
       })
     ).then(() => {
       setProductData(products);
