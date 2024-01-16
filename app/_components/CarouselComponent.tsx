@@ -27,7 +27,7 @@ export default function CarouselComponent({
     autoplaySpeed: carouselAutoPlaySpeed,
     pauseOnHover: carouselPauseOnHover,
     swipeToSlide: carouselSwipeToSlide,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     centerMode: true,
     row: 1,

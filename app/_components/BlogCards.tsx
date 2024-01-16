@@ -21,11 +21,11 @@ export default function BlogCards() {
             BlogCard,
             BlogCard,
           ]}
-          carouselAutoPlaySpeed={1200}
+          carouselAutoPlaySpeed={2000}
           carouselAutoPlay={true}
         />
       </div>
-      <div className="z-1 relative flex flex-col gap-4 bg-white px-4 md:px-8 lg:hidden">
+      <div className="flex flex-col gap-4 bg-white px-4 md:px-8 lg:hidden">
         <BlogCard />
         <BlogCard />
         <BlogCard />

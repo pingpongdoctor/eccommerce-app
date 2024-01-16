@@ -59,8 +59,6 @@ export default async function Home() {
         </Suspense>
       )}
 
-      <BlogCards />
-
       <div>
         <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
           Featured Products
@@ -90,6 +88,8 @@ export default async function Home() {
           </Suspense>
         )}
       </div>
+
+      <BlogCards />
     </main>
   );
 }
