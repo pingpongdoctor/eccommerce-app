@@ -2,20 +2,30 @@ import React from 'react';
 import Image from 'next/image';
 import testImage from '../../public/assets/abc.avif';
 import { PortableText } from '@portabletext/react';
+import RichTextImageComponent from './RichTextImageComponent';
+import { SanityDocument } from 'next-sanity';
 
 export default function IntroduceComponent({
-  introContent,
+  homePageData,
 }: {
-  introContent: any;
+  homePageData: SanityDocument;
 }) {
   return (
     <div className="bg-white px-4 pb-12 pt-12 md:px-8 lg:px-12 lg:pb-16 lg:pt-16 xl:mx-auto xl:max-w-7xl">
       <div className="mb-8 block lg:flex lg:gap-16 xl:gap-28">
-        <div className="w-full text-pretty lg:w-[40%]">
+        <div className="w-full text-pretty text-xl lg:w-[40%]">
           <h1>Our people</h1>
-          <p className="text-xl">
-            <PortableText value={introContent} />
-          </p>
+
+          <PortableText
+            value={homePageData.introcontent}
+            components={{
+              block: {
+                p: ({ value }: any) => {
+                  return <p>{value}</p>;
+                },
+              },
+            }}
+          />
         </div>
         <Image
           src={testImage}
