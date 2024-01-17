@@ -8,9 +8,9 @@ import ClientProductCards from './ClientProductCards';
 export default function ProductCardsPreview({
   initial,
 }: {
-  initial: QueryResponseInitial<SanityDocument[]>;
+  initial: QueryResponseInitial<(Product & SanityDocument)[]>;
 }) {
-  const { data } = useQuery<SanityDocument[] | null>(
+  const { data } = useQuery<(Product & SanityDocument)[] | null>(
     PRODUCTS_QUERY,
     {},
     { initial }

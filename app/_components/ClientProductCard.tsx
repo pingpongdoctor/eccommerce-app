@@ -6,7 +6,7 @@ import Image from 'next/image';
 export default function ClientProductCard({
   product,
 }: {
-  product: SanityDocument;
+  product: ProductWithImgUrl & SanityDocument;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -22,7 +22,7 @@ export default function ClientProductCard({
 
       <p>{product.title ? product.title : 'No Title'}</p>
 
-      <p className="text-lg font-[400] text-gray-900">$599</p>
+      <p className="text-lg font-[400] text-gray-900">{product.price}</p>
     </div>
   );
 }
