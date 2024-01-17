@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import testImage from '../../public/assets/abc.avif';
 import { PortableText } from '@portabletext/react';
 import { SanityDocument } from 'next-sanity';
 import supplementImg from '../../public/assets/supplement.jpg';
