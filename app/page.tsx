@@ -47,6 +47,33 @@ export default async function Home() {
       homepageContentPromise,
     ]);
 
+  const dataArr = [
+    {
+      id: '1',
+      type: 'Featured Products',
+      component: draftMode().isEnabled ? (
+        <ProductCardsPreview initial={featuredProductData} />
+      ) : (
+        // use suspense to allow next.js to progressively send chunks of this page to the client side
+        <Suspense fallback={<p>Loading feed...</p>}>
+          <ProductCards products={featuredProductData.data} />
+        </Suspense>
+      ),
+    },
+    {
+      id: '2',
+      type: 'New Products',
+      component: draftMode().isEnabled ? (
+        <ProductCardsPreview initial={trendingProductData} />
+      ) : (
+        <Suspense fallback={<p>Loading feed...</p>}>
+          <ProductCards products={trendingProductData.data} />
+        </Suspense>
+      ),
+    },
+    { id: '3', type: 'From Blogs', component: <BlogCards /> },
+  ];
+
   return (
     <main>
       <HeroSection />
@@ -59,37 +86,18 @@ export default async function Home() {
         </Suspense>
       )}
 
-      <div>
-        <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
-          Featured Products
-        </h3>
-
-        {draftMode().isEnabled ? (
-          <ProductCardsPreview initial={featuredProductData} />
-        ) : (
-          // use suspense to allow next.js to progressively send chunks of this page to the client side
-          // reduce server response time from 1400 ms to less than 200 ms (tested with Google lighthouse)
-          <Suspense fallback={<p>Loading feed...</p>}>
-            <ProductCards products={featuredProductData.data} />
-          </Suspense>
-        )}
-      </div>
-
-      <div>
-        <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
-          Trending Products
-        </h3>
-
-        {draftMode().isEnabled ? (
-          <ProductCardsPreview initial={trendingProductData} />
-        ) : (
-          <Suspense fallback={<p>Loading feed...</p>}>
-            <ProductCards products={trendingProductData.data} />
-          </Suspense>
-        )}
-      </div>
-
-      <BlogCards />
+      {dataArr?.length > 0 &&
+        dataArr.map((data) => (
+          <div key={data.id} className="pb-8 lg:pb-16">
+            <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+              <h3>{data.type}</h3>
+              <p className="font-semibold text-gray-900">
+                See all <span>&rarr;</span>
+              </p>
+            </div>
+            {data.component}
+          </div>
+        ))}
     </main>
   );
 }
