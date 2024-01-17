@@ -47,6 +47,8 @@ export default async function Home() {
       homepageContentPromise,
     ]);
 
+  console.log(homePageData.data);
+
   return (
     <main>
       <HeroSection />
