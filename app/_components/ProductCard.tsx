@@ -2,7 +2,11 @@ import React from 'react';
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 
-export default function ProductCard({ product }: { product: SanityDocument }) {
+export default function ProductCard({
+  product,
+}: {
+  product: ProductWithImgUrl & SanityDocument;
+}) {
   return (
     <div className="flex flex-col gap-2">
       <Image
@@ -17,7 +21,7 @@ export default function ProductCard({ product }: { product: SanityDocument }) {
 
       <p>{product.title ? product.title : 'No Title'}</p>
 
-      <p className="text-lg font-[400] text-gray-900">$599</p>
+      <p className="text-lg font-[400] text-gray-900">${product.price}</p>
     </div>
   );
 }

@@ -15,7 +15,7 @@ import { Suspense } from 'react';
 import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 
 export default async function Home() {
-  const featuredProductPromise = loadQuery<SanityDocument[]>(
+  const featuredProductPromise = loadQuery<(Product & SanityDocument)[]>(
     FEATURED_PRODUCTS_QUERY,
     { featured: true },
     {
@@ -23,7 +23,7 @@ export default async function Home() {
     }
   );
 
-  const trendingProductPromise = loadQuery<SanityDocument[]>(
+  const trendingProductPromise = loadQuery<(Product & SanityDocument)[]>(
     NEW_PRODUCTS_QUERY,
     {},
     {
@@ -46,8 +46,6 @@ export default async function Home() {
       trendingProductPromise,
       homepageContentPromise,
     ]);
-
-  console.log(featuredProductData.data);
 
   return (
     <main>

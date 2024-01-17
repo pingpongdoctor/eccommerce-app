@@ -7,15 +7,19 @@ interface HomePageData {
 }
 
 interface Product {
-  _id: string;
   slug: { _type: string; current: string };
   title: 'string';
   images: any;
-  description: string;
+  detail: string;
   featured: boolean;
   price: string;
   category: 'comestic' | 'book' | 'supplement' | 'jewelry';
 }
+
+type ProductWithImgUrl = Product & {
+  imgUrl: string;
+  imgBase64Url: string | undefined;
+};
 
 interface FormInfor {
   [index: Field]: { value: string; isError: boolean };
