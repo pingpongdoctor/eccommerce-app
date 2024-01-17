@@ -16,26 +16,26 @@ export const categoryInfor: {
 }[] = [
   {
     id: 'comestic',
-    text: 'Comestic Collection',
-    revealText: 'Discover Comestic Products',
+    text: 'Comestic',
+    revealText: 'Find Comestic Products Here',
     className: 'w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl',
   },
   {
     id: 'supplement',
-    text: 'Supplement Products',
-    revealText: 'Find Your Wanted Supplements',
+    text: 'Supplement',
+    revealText: 'Find Supplements Here',
     className: 'w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl',
   },
   {
     id: 'book',
     text: 'Books',
-    revealText: 'Enjoy Canadian Food',
+    revealText: 'Find Books Here',
     className: 'w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl',
   },
   {
     id: 'jewelry',
     text: 'Jewelry',
-    revealText: 'What ever you find can be here',
+    revealText: 'Find Jewelry Here',
     className: 'w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl',
   },
 ];
