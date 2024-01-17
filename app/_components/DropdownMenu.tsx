@@ -29,7 +29,14 @@ export default function DropdownMenu({ dropdownItemInforArr }: Props) {
           leaveTo="opacity-0 translate-y-1"
         >
           <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-            <div className="p-4">
+            {/* {({ close }) => ( */}
+            <div
+              className="p-4"
+              // onBlur={(e) => {
+              //   close();
+              //   console.log(e.target);
+              // }}
+            >
               {dropdownItemInforArr.map(
                 (dropdownItemInfor: DropdownItemInfor) => (
                   <DropdownItem
@@ -41,6 +48,7 @@ export default function DropdownMenu({ dropdownItemInforArr }: Props) {
                 )
               )}
             </div>
+            {/* )} */}
           </Popover.Panel>
         </Transition>
       </Popover>

@@ -1,6 +1,4 @@
 import {
-  ArrowPathIcon,
-  ChartPieIcon,
   SparklesIcon,
   BeakerIcon,
   SquaresPlusIcon,
@@ -52,11 +50,6 @@ export const inputBoxInforArr: InputBoxInfor[] = [
 export const validEmailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 export const dropdownItemInforArr: DropdownItemInfor[] = [
-  {
-    name: 'All Categories',
-    description: 'Take a look at what we can serve you',
-    icon: ChartPieIcon,
-  },
   {
     name: 'Comestic',
     description: 'Choose your high-quality comestic products',
