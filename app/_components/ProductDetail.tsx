@@ -2,7 +2,6 @@ import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
-import RichTextImageComponent from './RichTextImageComponent';
 
 export default function Product({ product }: { product: SanityDocument }) {
   const { title, images, body } = product;
@@ -29,17 +28,7 @@ export default function Product({ product }: { product: SanityDocument }) {
           </div>
         </div>
       ) : null}
-      {body ? (
-        <PortableText
-          value={body}
-          components={{
-            // ...
-            types: {
-              image: RichTextImageComponent,
-            },
-          }}
-        />
-      ) : null}
+      {body ? <PortableText value={body} /> : null}
     </main>
   );
 }
