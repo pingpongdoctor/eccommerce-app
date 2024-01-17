@@ -6,7 +6,7 @@ import Image from 'next/image';
 export default function ClientProductCard({
   product,
 }: {
-  product: ProductWithImgUrl & SanityDocument;
+  product: Omit<ProductWithImgUrl, 'imgBase64Url'> & SanityDocument;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -16,8 +16,6 @@ export default function ClientProductCard({
         alt="product-image"
         width={300}
         height={300}
-        placeholder="blur"
-        blurDataURL={product.imgBase64Url}
       />
 
       <p>{product.title ? product.title : 'No Title'}</p>
