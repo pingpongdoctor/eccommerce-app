@@ -14,6 +14,7 @@ import ProductCards from './_components/ProductCards';
 import { Suspense } from 'react';
 import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 import CategoryCards from './_components/CategoryCards';
+import IncentiveComponent from './_components/IncentiveComponent';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(Product & SanityDocument)[]>(
@@ -73,7 +74,6 @@ export default async function Home() {
       ),
     },
     { id: '3', type: 'From Blogs', component: <BlogCards /> },
-    { id: '3', type: 'Shop By Category', component: <CategoryCards /> },
   ];
 
   return (
@@ -100,6 +100,15 @@ export default async function Home() {
             {data.component}
           </div>
         ))}
+
+      <div className="pb-8 lg:pb-16">
+        <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+          Browse by Category
+        </h3>
+        <CategoryCards />
+      </div>
+
+      <IncentiveComponent />
     </main>
   );
 }
