@@ -1,3 +1,5 @@
+'use client';
+
 import { SanityDocument } from 'next-sanity';
 import React from 'react';
 import { QueryResponseInitial, useQuery } from '@sanity/react-loader';

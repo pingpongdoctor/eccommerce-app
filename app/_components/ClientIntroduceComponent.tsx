@@ -14,18 +14,9 @@ export default function ClientIntroduceComponent({
   return (
     <div className="bg-white px-4 pb-12 pt-12 md:px-8 lg:px-12 lg:pb-16 lg:pt-16 xl:mx-auto xl:max-w-7xl">
       <div className="mb-8 block lg:flex lg:gap-16 xl:gap-28">
-        <div className="w-full text-pretty lg:w-[40%]">
-          <h1>Our people</h1>
-          <PortableText
-            value={homePageData.introcontent}
-            components={{
-              block: {
-                p: ({ value }: any) => {
-                  return <p>{value}</p>;
-                },
-              },
-            }}
-          />
+        <div className="w-full text-pretty lg:w-[45%]">
+          <h1 className="text-pretty">{homePageData.introheading}</h1>
+          <PortableText value={homePageData.introcontent} />
         </div>
         <Image
           src={testImage}
