@@ -9,9 +9,9 @@ import ClientIntroduceComponent from './ClientIntroduceComponent';
 export default function PreviewIntroduceComponent({
   initial,
 }: {
-  initial: QueryResponseInitial<SanityDocument>;
+  initial: QueryResponseInitial<HomePageData & SanityDocument>;
 }) {
-  const { data } = useQuery<SanityDocument | null>(
+  const { data } = useQuery<(HomePageData & SanityDocument) | null>(
     HOMEPAGE_QUERY,
     {},
     {

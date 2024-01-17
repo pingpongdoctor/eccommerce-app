@@ -6,6 +6,17 @@ interface HomePageData {
   introcontent: any;
 }
 
+interface Product {
+  _id: string;
+  slug: { _type: string; current: string };
+  title: 'string';
+  images: any;
+  description: string;
+  featured: boolean;
+  price: string;
+  category: 'comestic' | 'book' | 'supplement' | 'jewelry';
+}
+
 interface FormInfor {
   [index: Field]: { value: string; isError: boolean };
   username: { value: string; isError: boolean };

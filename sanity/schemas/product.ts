@@ -25,19 +25,8 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'author',
-      title: 'Author',
-      type: 'reference',
-      to: { type: 'author' },
-    }),
-    defineField({
       name: 'price',
       title: 'Price',
-      type: 'string',
-    }),
-    defineField({
-      name: 'description',
-      title: 'Description',
       type: 'string',
     }),
     defineField({
@@ -68,8 +57,8 @@ export default defineType({
         list: [
           { title: 'Comestic', value: 'comestic' },
           { title: 'Supplement', value: 'supplement' },
-          { title: 'Food', value: 'food' },
-          { title: 'Other', value: 'other' },
+          { title: 'Book', value: 'book' },
+          { title: 'Jewelry', value: 'jewelry' },
         ],
         layout: 'dropdown',
       },
@@ -80,8 +69,8 @@ export default defineType({
       type: 'datetime',
     }),
     defineField({
-      name: 'body',
-      title: 'Body',
+      name: 'detail',
+      title: 'Detail',
       type: 'blockContent',
     }),
   ],
