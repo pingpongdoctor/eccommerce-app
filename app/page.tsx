@@ -31,7 +31,7 @@ export default async function Home() {
     }
   );
 
-  const homepageContentPromise = loadQuery<SanityDocument>(
+  const homepageContentPromise = loadQuery<HomePageData & SanityDocument>(
     HOMEPAGE_QUERY,
     {},
     {
@@ -47,7 +47,7 @@ export default async function Home() {
       homepageContentPromise,
     ]);
 
-  console.log(homePageData.data);
+  console.log(featuredProductData.data);
 
   return (
     <main>
