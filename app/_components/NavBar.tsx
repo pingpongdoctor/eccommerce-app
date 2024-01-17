@@ -21,7 +21,7 @@ export default function Navbar() {
         </Link>
 
         {/* table and desktop navigation links */}
-        <div className="hidden items-center md:flex md:gap-10 lg:gap-12 xl:gap-16 [&>a]:font-semibold [&>a]:text-gray-900 ">
+        <div className="hidden items-center md:flex md:gap-10 lg:gap-12 xl:gap-16 [&>a]:font-semibold">
           <Link href="#">Home</Link>
           <DropdownMenu dropdownItemInforArr={dropdownItemInforArr} />
           <Link href="#">About</Link>
@@ -35,7 +35,7 @@ export default function Navbar() {
       </nav>
 
       {/* mobile navigation links */}
-      <div className="mx-auto flex gap-x-4 md:hidden [&>a]:font-semibold [&>a]:text-gray-900">
+      <div className="mx-auto flex gap-x-4 md:hidden [&>a]:font-semibold">
         <DropdownMenu dropdownItemInforArr={dropdownItemInforArr} />
         <Link href="#">Features</Link>
         <Link href="#">Marketplace</Link>
