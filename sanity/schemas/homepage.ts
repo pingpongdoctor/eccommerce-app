@@ -18,12 +18,7 @@ export default defineType({
     defineField({
       name: 'introcontent',
       title: 'Intro Content',
-      type: 'array',
-      of: [
-        {
-          type: 'block',
-        },
-      ],
+      type: 'blockContent',
     }),
   ],
   preview: {

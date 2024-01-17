@@ -6,7 +6,7 @@ import BlogCard from './BlogCard';
 
 export default function BlogCards() {
   return (
-    <>
+    <div className="mx-auto overflow-x-hidden">
       <div className="hidden lg:block">
         <CarouselComponent
           CarouselFC={[
@@ -30,6 +30,6 @@ export default function BlogCards() {
         <BlogCard />
         <BlogCard />
       </div>
-    </>
+    </div>
   );
 }
