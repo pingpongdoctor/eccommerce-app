@@ -10,7 +10,7 @@ import bookImg from '../../public/assets/books.jpg';
 export default function IntroduceComponent({
   homePageData,
 }: {
-  homePageData: SanityDocument;
+  homePageData: HomePageData;
 }) {
   return (
     <div className="bg-white px-4 pb-12 pt-12 md:px-8 lg:px-12 lg:pb-16 lg:pt-16 xl:mx-auto xl:max-w-7xl">

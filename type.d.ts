@@ -1,5 +1,11 @@
 type Field = 'username' | 'email' | 'message';
 
+interface HomePageData {
+  herotext: string;
+  introheading: string;
+  introcontent: any;
+}
+
 interface FormInfor {
   [index: Field]: { value: string; isError: boolean };
   username: { value: string; isError: boolean };
