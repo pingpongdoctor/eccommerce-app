@@ -7,7 +7,7 @@ import {
   BookOpenIcon,
 } from '@heroicons/react/24/outline';
 
-export const categories = ['comestic', 'supplement', 'food', 'other'];
+export const categories = ['comestic', 'supplement', 'book', 'jewelry'];
 export const categoryInfor: {
   id: string;
   text: string;
