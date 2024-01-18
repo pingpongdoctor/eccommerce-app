@@ -16,6 +16,15 @@ const config: Config = {
       fontFamily: {
         dancingScript: ['var(--font-dancing-script)'],
       },
+      keyframes: {
+        grow: {
+          '0%': { width: '0' },
+          '100%': { width: 'full' },
+        },
+      },
+      animation: {
+        scaleAnimation: 'grow 2s ease-in-out',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography'), require('flowbite/plugin')],

@@ -4,6 +4,8 @@ import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
 import { solidBlureDataUrl } from '../utils/utils';
 import RatingStar from './RatingStar';
+import ButtonComponent from './ButtonComponent';
+import CustomerReview from './CustomerReview';
 
 export default function Product({
   product,
@@ -13,7 +15,7 @@ export default function Product({
   const { title, detail, price, images } = product;
 
   return (
-    <div className="px-4 md:px-8 lg:mx-auto lg:max-w-7xl lg:px-12">
+    <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       {images?.length > 0 && (
         <div className="mb-8 list-none md:flex md:max-w-[900px] md:items-center md:gap-4 lg:mb-12 lg:gap-8">
           <Image
@@ -54,9 +56,38 @@ export default function Product({
           </div>
         </div>
       )}
-      <h2>{title}</h2>
-      {detail ? <PortableText value={detail} /> : null}
-      <RatingStar />
+
+      <div className="mb-8 lg:mb-12 lg:flex lg:min-h-[300px]">
+        <div className="lg:grow lg:border-r-2">
+          <h2>{title}</h2>
+          {detail && (
+            <div className="hidden lg:block">
+              <PortableText value={detail} />
+            </div>
+          )}
+        </div>
+
+        <div className="mb-8 w-auto lg:w-[350px] lg:px-12 xl:w-[400px]">
+          <p className="mb-4 text-2xl">${price}</p>
+          <div className="mb-8 flex items-center gap-4">
+            <RatingStar />
+            <p className="pb-1">50 review</p>
+          </div>
+          <ButtonComponent
+            buttonClassname="w-full"
+            buttonName="Add to bag"
+            animate
+          />
+        </div>
+
+        {detail && (
+          <div className="lg:hidden">
+            <PortableText value={detail} />
+          </div>
+        )}
+      </div>
+
+      <CustomerReview />
     </div>
   );
 }
