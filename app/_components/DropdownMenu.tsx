@@ -3,7 +3,6 @@
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { useRef, useEffect } from 'react';
 
 import DropdownItem from './DropdownItem';
 
@@ -44,6 +43,10 @@ export default function DropdownMenu({ dropdownItemInforArr }: Props) {
                       DropdownIcon={dropdownItemInfor.icon}
                       dropdownName={dropdownItemInfor.name}
                       dropdownDescription={dropdownItemInfor.description}
+                      dropdownPath={dropdownItemInfor.path}
+                      dropdownClickEventHanlder={() => {
+                        close();
+                      }}
                     />
                   )
                 )}
