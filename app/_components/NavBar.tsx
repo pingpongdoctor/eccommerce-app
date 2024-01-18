@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <div className="mx-auto mb-8 flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12">
       <nav className="flex h-8 items-center justify-between overflow-visible bg-white">
-        <Link href="#" className="-m-1.5 p-1.5">
+        <Link href="/" className="-m-1.5 p-1.5">
           <Image
             className="h-24 w-auto md:h-28"
             src={glowlyLab}
