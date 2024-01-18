@@ -25,7 +25,7 @@ export default function ClientProductCards({
     ).then((data: (ProductWithImgUrl & SanityDocument)[]) => {
       setProductsWithImgUrl(data);
     });
-  }, []);
+  }, [products]);
 
   if (productsWithImgUrl?.length > 0) {
     return (
