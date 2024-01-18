@@ -1,50 +1,47 @@
-"use client";
-import { ThreeDots } from "react-loader-spinner";
-import React from "react";
+'use client';
+import { ThreeDots } from 'react-loader-spinner';
+import React from 'react';
 
 interface Props {
   buttonName: string;
-  buttonType?: "submit" | "reset" | "button" | undefined;
   isDisabled?: boolean;
   buttonOnclickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  buttonColor?: "blue" | "black";
+  buttonColor?: 'blue' | 'black';
   animate: boolean;
   buttonClassname?: string;
 }
 
 const bgColors: { [index: string]: string } = {
-  blue: "bg-blue-600",
-  black: "bg-black",
+  blue: 'bg-blue-600',
+  black: 'bg-black',
 };
 
 const hoverBgColors: { [index: string]: string } = {
-  blue: "hover:bg-blue-700",
-  black: "hover:bg-black",
+  blue: 'hover:bg-blue-700',
+  black: 'hover:bg-black',
 };
 
 const borderColors: { [index: string]: string } = {
-  blue: "border-blue-600",
-  black: "border-black",
+  blue: 'border-blue-600',
+  black: 'border-black',
 };
 
 const textColors: { [index: string]: string } = {
-  blue: "text-blue-600",
-  black: "text-black",
+  blue: 'text-blue-600',
+  black: 'text-black',
 };
 
 export default function ButtonComponent({
   buttonName,
-  buttonType,
   isDisabled = false,
   buttonOnclickHandler,
-  buttonColor = "black",
+  buttonColor = 'black',
   animate,
   buttonClassname,
 }: Props) {
   return (
     <button
       className={`group relative h-[50px] w-[100px] rounded-md border-[1.5px] font-bold transition-transform duration-200 active:scale-[0.98] ${borderColors[buttonColor]} ${buttonClassname}`}
-      type={buttonType}
       disabled={isDisabled}
       onClick={buttonOnclickHandler}
     >
@@ -67,7 +64,7 @@ export default function ButtonComponent({
           visible={true}
           height="50"
           width="50"
-          color={animate ? buttonColor : "white"}
+          color={animate ? buttonColor : 'white'}
           radius="9"
           ariaLabel="three-dots-loading"
         />
