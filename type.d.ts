@@ -18,7 +18,6 @@ interface Product {
 
 type ProductWithImgUrl = Product & {
   imgUrl: string;
-  imgBase64Url: string | undefined;
 };
 
 interface FormInfor {
@@ -55,6 +54,7 @@ interface ImageInfor {
 }
 
 interface DropdownItemInfor {
+  path: string;
   name: string;
   description: string;
   icon: React.FC<any>;

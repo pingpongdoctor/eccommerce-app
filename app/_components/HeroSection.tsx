@@ -12,6 +12,7 @@ export default function HeroSection() {
           src={heroImage}
           alt="hero-image"
           placeholder="blur"
+          priority
         />
         <h1 className="absolute left-0 top-0 ml-4 flex h-full w-[60%] items-center text-balance font-dancingScript text-4xl sm:text-5xl md:ml-8 md:text-6xl lg:ml-12 lg:text-7xl">
           Welcome to the Glowy Lab

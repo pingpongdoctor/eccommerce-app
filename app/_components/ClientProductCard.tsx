@@ -2,11 +2,12 @@
 
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
+import { solidBlureDataUrl } from '../utils/utils';
 
 export default function ClientProductCard({
   product,
 }: {
-  product: Omit<ProductWithImgUrl, 'imgBase64Url'> & SanityDocument;
+  product: ProductWithImgUrl & SanityDocument;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -16,6 +17,8 @@ export default function ClientProductCard({
         alt="product-image"
         width={300}
         height={300}
+        placeholder="blur"
+        blurDataURL={solidBlureDataUrl}
       />
 
       <p>{product.title ? product.title : 'No Title'}</p>
