@@ -51,21 +51,25 @@ export const validEmailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 export const dropdownItemInforArr: DropdownItemInfor[] = [
   {
+    path: '/category/comestic',
     name: 'Comestic',
     description: 'Choose your high-quality comestic products',
     icon: BeakerIcon,
   },
   {
+    path: '/category/book',
     name: 'Book',
     description: 'Find all kinds of lovely book here',
     icon: BookOpenIcon,
   },
   {
+    path: '/category/supplement',
     name: 'Supplement',
     description: 'Take care your health with our supplement',
     icon: SquaresPlusIcon,
   },
   {
+    path: '/category/jewelry',
     name: 'Jewelry',
     description: 'Lovely jewelry for minimalists',
     icon: SparklesIcon,
