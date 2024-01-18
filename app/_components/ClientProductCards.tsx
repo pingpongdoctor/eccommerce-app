@@ -3,7 +3,6 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import ClientProductCard from './ClientProductCard';
-import { getUrlBase64 } from '../_lib/getUrlBase64';
 import { builder } from '../utils/imageBuilder';
 import { useEffect, useState } from 'react';
 
@@ -21,7 +20,6 @@ export default function ClientProductCards({
     Promise.all(
       products.map(async (product: Product & SanityDocument) => {
         product.imgUrl = builder.image(product.images[0]).quality(80).url();
-        product.imgBase64Url = await getUrlBase64(product.imgUrl);
         return product as ProductWithImgUrl & SanityDocument;
       })
     ).then((data: (ProductWithImgUrl & SanityDocument)[]) => {

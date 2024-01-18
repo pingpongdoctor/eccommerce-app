@@ -3,8 +3,6 @@ import Link from 'next/link';
 import ProductCard from './ProductCard';
 import { builder } from '../utils/imageBuilder';
 
-import { getUrlBase64 } from '../_lib/getUrlBase64';
-
 export default async function ProductCards({
   products,
 }: {
@@ -18,7 +16,6 @@ export default async function ProductCards({
   const productsWithImgUrl = await Promise.all(
     products.map(async (product: Product & SanityDocument) => {
       product.imgUrl = builder.image(product.images[0]).quality(80).url();
-      product.imgBase64Url = await getUrlBase64(product.imgUrl);
       return product as ProductWithImgUrl & SanityDocument;
     })
   );
