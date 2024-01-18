@@ -18,7 +18,6 @@ interface Product {
 
 type ProductWithImgUrl = Product & {
   imgUrl: string;
-  imgBase64Url: string | undefined;
 };
 
 interface FormInfor {
