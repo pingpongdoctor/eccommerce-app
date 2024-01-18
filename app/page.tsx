@@ -15,6 +15,7 @@ import { Suspense } from 'react';
 import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 import CategoryCards from './_components/CategoryCards';
 import IncentiveComponent from './_components/IncentiveComponent';
+import ProductCardSkeleton from './_components/ProductCardSkeleton';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(Product & SanityDocument)[]>(
@@ -57,7 +58,7 @@ export default async function Home() {
         <ProductCardsPreview initial={featuredProductData} />
       ) : (
         // use suspense to allow next.js to progressively send chunks of this page to the client side
-        <Suspense fallback={<p>Loading feed...</p>}>
+        <Suspense fallback={<ProductCardSkeleton />}>
           <ProductCards products={featuredProductData.data} />
         </Suspense>
       ),
@@ -68,7 +69,7 @@ export default async function Home() {
       component: draftMode().isEnabled ? (
         <ProductCardsPreview initial={trendingProductData} />
       ) : (
-        <Suspense fallback={<p>Loading feed...</p>}>
+        <Suspense fallback={<ProductCardSkeleton />}>
           <ProductCards products={trendingProductData.data} />
         </Suspense>
       ),
