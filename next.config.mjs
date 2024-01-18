@@ -3,8 +3,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "cdn.sanity.io",
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
       },
     ],
   },
@@ -14,4 +14,4 @@ const nextConfig = {
   // ...other config settings
 };
 
-module.exports = nextConfig;
+export default nextConfig;

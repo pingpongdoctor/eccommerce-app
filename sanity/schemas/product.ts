@@ -11,6 +11,11 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'featured',
+      title: 'Featured Product',
+      type: 'boolean',
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -20,24 +25,13 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'author',
-      title: 'Author',
-      type: 'reference',
-      to: { type: 'author' },
-    }),
-    defineField({
       name: 'price',
       title: 'Price',
       type: 'string',
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'string',
-    }),
-    defineField({
-      name: 'mainImage',
-      title: 'Main image',
+      name: 'images',
+      title: 'Images',
       type: 'array',
       of: [
         {
@@ -63,8 +57,8 @@ export default defineType({
         list: [
           { title: 'Comestic', value: 'comestic' },
           { title: 'Supplement', value: 'supplement' },
-          { title: 'Food', value: 'food' },
-          { title: 'Other', value: 'other' },
+          { title: 'Book', value: 'book' },
+          { title: 'Jewelry', value: 'jewelry' },
         ],
         layout: 'dropdown',
       },
@@ -75,8 +69,8 @@ export default defineType({
       type: 'datetime',
     }),
     defineField({
-      name: 'body',
-      title: 'Body',
+      name: 'detail',
+      title: 'Detail',
       type: 'blockContent',
     }),
   ],
@@ -85,11 +79,6 @@ export default defineType({
     select: {
       title: 'title',
       author: 'author.name',
-      media: 'mainImage',
-    },
-    prepare(selection) {
-      const { author } = selection;
-      return { ...selection, subtitle: author && `by ${author}` };
     },
   },
 });

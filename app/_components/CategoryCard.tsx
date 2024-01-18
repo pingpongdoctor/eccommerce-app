@@ -100,7 +100,7 @@ export const CategoryCard = ({
         ></motion.div>
 
         <div className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
-          <p className="bg-[#323238] bg-clip-text py-10 text-base font-bold text-transparent sm:text-[3rem]">
+          <p className="bg-[#9797a5] bg-clip-text py-10 text-base font-bold text-transparent sm:text-[3rem]">
             {text}
           </p>
           <MemoizedStars />
@@ -140,6 +140,11 @@ const Stars = () => {
   const randomMove = () => Math.random() * 4 - 2;
   const randomOpacity = () => Math.random();
   const random = () => Math.random();
+  const position = {
+    top: `top-[${Math.random() * 100}%]`,
+    left: `left-[${Math.random() * 100}%]`,
+  };
+
   return (
     <div className="absolute inset-0">
       {[...Array(140)].map((_, i) => (
@@ -152,21 +157,11 @@ const Stars = () => {
             scale: [1, 1.2, 0],
           }}
           transition={{
-            duration: random() * 10 + 20,
+            duration: random() * 10 + 10,
             repeat: Infinity,
             ease: 'linear',
           }}
-          style={{
-            position: 'absolute',
-            top: `${random() * 100}%`,
-            left: `${random() * 100}%`,
-            width: `2px`,
-            height: `2px`,
-            backgroundColor: 'white',
-            borderRadius: '50%',
-            zIndex: 1,
-          }}
-          className="inline-block"
+          className={`absolute -left-20 top-[50%] z-[1] inline-block h-[2px] w-[2px] rounded-[50%] bg-white`}
         ></motion.span>
       ))}
     </div>

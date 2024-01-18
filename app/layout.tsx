@@ -5,14 +5,16 @@ import ReactToastifyProvider from './_components/ReactToastifyProvider';
 import { draftMode } from 'next/headers';
 import VisualEditing from './_components/VisualEditing';
 import { baseUrl } from './utils/baseUrl';
+import Navbar from './_components/NavBar';
+import FooterComponent from './_components/FooterComponent';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'TravelsMate Main Page',
-    template: '%s | TravelsMate',
+    default: 'Ecommerce Main Page',
+    template: '%s | Ecommerce',
   },
-  description: 'This page is used for gathering user information',
+  description: 'Main',
 };
 
 export default function RootLayout({
@@ -22,12 +24,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto.className} ${dancingScript.variable} antialiased`}
-      >
+      <body className={`${roboto.className} ${dancingScript.variable}`}>
         <ReactToastifyProvider>
+          <Navbar />
           {children}
           {draftMode().isEnabled && <VisualEditing />}
+          <FooterComponent />
         </ReactToastifyProvider>
       </body>
     </html>
