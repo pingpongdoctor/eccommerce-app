@@ -1,22 +1,18 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
+import { toBase64 } from '@rossbob/image-to-base64';
+
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
-  const tag = searchParams.get('tag');
-
-  if (!tag) {
+  const src = searchParams.get('src');
+  if (!src) {
     return NextResponse.json(
       { message: 'Missed required query' },
       { status: 400 }
     );
   }
-
   try {
-    revalidateTag(tag);
-    return NextResponse.json(
-      { message: 'successful revalidation' },
-      { status: 200 }
-    );
+    const base64 = await toBase64({ uri: src });
+    return NextResponse.json({ src: base64 }, { status: 200 });
   } catch (error) {
     console.log('Internal Server Error' + error);
     return NextResponse.json(

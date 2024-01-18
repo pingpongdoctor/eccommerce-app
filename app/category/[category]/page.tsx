@@ -16,33 +16,32 @@ export async function generateMetadata({
 }: {
   params: QueryParams;
 }): Promise<Metadata> {
-  if (!categories.includes(params.slug)) {
+  if (!categories.includes(params.category)) {
     return {
-      title: 'All products',
+      title: 'Products',
     };
   }
 
   return {
-    title: params.slug + 'products',
+    title: params.category + 'products',
   };
 }
 
 export async function generateStaticParams() {
   return categories.map((category) => ({
-    slug: category,
+    category,
   }));
 }
 
 export default async function Category({ params }: { params: QueryParams }) {
-  const initial = await loadQuery<SanityDocument[]>(
-    `${
-      categories.includes(params.slug)
-        ? PRODUCTS_QUERY_BASED_CATEGORY
-        : PRODUCTS_QUERY
-    }`,
-    { category: params.slug || '' },
+  const initial = await loadQuery<(Product & SanityDocument)[]>(
+    categories.includes(params.category)
+      ? PRODUCTS_QUERY_BASED_CATEGORY
+      : PRODUCTS_QUERY,
+    params,
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      next: { tags: ['post'], revalidate: 3600 },
     }
   );
 
@@ -50,9 +49,13 @@ export default async function Category({ params }: { params: QueryParams }) {
     notFound();
   }
 
-  return draftMode().isEnabled ? (
-    <ProductCardsPreview initial={initial} />
-  ) : (
-    <ProductCards products={initial.data} />
+  return (
+    <main>
+      {draftMode().isEnabled ? (
+        <ProductCardsPreview initial={initial} />
+      ) : (
+        <ProductCards products={initial.data} />
+      )}
+    </main>
   );
 }

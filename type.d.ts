@@ -1,4 +1,25 @@
-type Field = "username" | "email" | "message";
+type Field = 'username' | 'email' | 'message';
+
+interface HomePageData {
+  herotext: string;
+  introheading: string;
+  introcontent: any;
+}
+
+interface Product {
+  slug: { _type: string; current: string };
+  title: 'string';
+  images: any;
+  detail: string;
+  featured: boolean;
+  price: string;
+  category: 'comestic' | 'book' | 'supplement' | 'jewelry';
+}
+
+type ProductWithImgUrl = Product & {
+  imgUrl: string;
+  imgBase64Url: string | undefined;
+};
 
 interface FormInfor {
   [index: Field]: { value: string; isError: boolean };
@@ -31,4 +52,10 @@ interface ImageInfor {
   alt: string;
   _key: string;
   asset: [Object];
+}
+
+interface DropdownItemInfor {
+  name: string;
+  description: string;
+  icon: React.FC<any>;
 }

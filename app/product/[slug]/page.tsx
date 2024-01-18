@@ -56,9 +56,13 @@ export default async function DetailedProduct({
     notFound();
   }
 
-  return draftMode().isEnabled ? (
-    <ProductDetailPreview initial={initial} params={params} />
-  ) : (
-    <ProductDetail product={initial.data} />
+  return (
+    <main>
+      {draftMode().isEnabled ? (
+        <ProductDetailPreview initial={initial} params={params} />
+      ) : (
+        <ProductDetail product={initial.data} />
+      )}
+    </main>
   );
 }

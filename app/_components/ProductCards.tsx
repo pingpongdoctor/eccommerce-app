@@ -1,32 +1,43 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
-import CardComponent from './ProductCard';
+import ProductCard from './ProductCard';
+import { builder } from '../utils/imageBuilder';
 
-export default function ProductCards({
+import { getUrlBase64 } from '../_lib/getUrlBase64';
+
+export default async function ProductCards({
   products,
 }: {
-  products: SanityDocument[];
+  products: (Product & SanityDocument)[];
 }) {
-  if (products?.length == 0) {
+  if (products?.length === 0) {
     return <div className="p-4 text-red-500">No products found</div>;
   }
 
+  // use promise all to handle all promises at the same time to avoid waterfalls in data fetching
+  const productsWithImgUrl = await Promise.all(
+    products.map(async (product: Product & SanityDocument) => {
+      product.imgUrl = builder.image(product.images[0]).quality(80).url();
+      product.imgBase64Url = await getUrlBase64(product.imgUrl);
+      return product as ProductWithImgUrl & SanityDocument;
+    })
+  );
+
   return (
-    <main className="m-4 sm:m-8">
-      <ul className="flex list-none flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
-        {products?.length > 0 &&
-          products.map((product) => (
+    <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
+        {productsWithImgUrl.map(
+          (product: ProductWithImgUrl & SanityDocument) => (
             <Link
               className="inline-block w-full sm:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] xl:w-[calc((100%-6rem)/4)]"
               key={product._id}
               href={`/product/${product.slug.current}`}
             >
-              <li>
-                <CardComponent product={product} />
-              </li>
+              <ProductCard product={product} />
             </Link>
-          ))}
-      </ul>
-    </main>
+          )
+        )}
+      </div>
+    </div>
   );
 }

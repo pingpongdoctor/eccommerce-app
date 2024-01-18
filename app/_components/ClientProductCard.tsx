@@ -1,11 +1,12 @@
-import React from 'react';
+'use client';
+
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 
-export default function ProductCard({
+export default function ClientProductCard({
   product,
 }: {
-  product: ProductWithImgUrl & SanityDocument;
+  product: Omit<ProductWithImgUrl, 'imgBase64Url'> & SanityDocument;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -15,13 +16,11 @@ export default function ProductCard({
         alt="product-image"
         width={300}
         height={300}
-        placeholder="blur"
-        blurDataURL={product.imgBase64Url}
       />
 
       <p>{product.title ? product.title : 'No Title'}</p>
 
-      <p className="text-lg text-gray-900">${product.price}</p>
+      <p className="text-lg font-[400] text-gray-900">{product.price}</p>
     </div>
   );
 }

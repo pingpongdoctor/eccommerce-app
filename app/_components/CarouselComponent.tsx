@@ -1,61 +1,44 @@
 'use client';
 
 import React from 'react';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import Image from 'next/image';
-import { builder } from '../utils/imageBuilder';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface Props {
-  imageArr: ImageInfor[];
+  CarouselFC: React.FC<any>[];
+  carouselAutoPlay: boolean;
+  carouselAutoPlaySpeed: number;
+  carouselPauseOnHover?: boolean;
+  carouselSwipeToSlide?: boolean;
 }
 
-export default function CarouselComponent({ imageArr }: Props) {
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 1,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 1,
-    },
-    mobile: {
-      breakpoint: { max: 640, min: 0 },
-      items: 1,
-    },
+export default function CarouselComponent({
+  CarouselFC,
+  carouselAutoPlay,
+  carouselAutoPlaySpeed,
+  carouselPauseOnHover = true,
+  carouselSwipeToSlide = true,
+}: Props) {
+  var settings = {
+    dots: false,
+    infinite: true,
+    autoplay: carouselAutoPlay,
+    autoplaySpeed: carouselAutoPlaySpeed,
+    pauseOnHover: carouselPauseOnHover,
+    swipeToSlide: carouselSwipeToSlide,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    centerMode: true,
+    row: 1,
   };
+
   return (
-    <div className="sm:hidden">
-      <Carousel
-        swipeable={true}
-        draggable={false}
-        showDots={true}
-        responsive={responsive}
-        ssr={false} // means to render carousel on server-side.
-        infinite={true}
-        autoPlay={true}
-        autoPlaySpeed={1000}
-        keyBoardControl={true}
-        customTransition="all .5"
-        transitionDuration={500}
-        removeArrowOnDeviceType={['tablet', 'mobile']}
-      >
-        {imageArr?.length > 0 ? (
-          imageArr.map((imageInfor: ImageInfor) => (
-            <Image
-              key={imageInfor._key}
-              src={builder.image(imageInfor).quality(80).url()}
-              width={300}
-              height={300}
-              alt="carousel-image"
-              className="aspect-square w-full object-cover"
-            />
-          ))
-        ) : (
-          <div>Loading...</div>
-        )}
-      </Carousel>
+    <div className="[&>div>div>div]:flex [&>div>div>div]:gap-8 [&>div>div>div]:bg-white">
+      <Slider {...settings}>
+        {CarouselFC?.length > 0 &&
+          CarouselFC.map((CarouselItem, index) => <CarouselItem key={index} />)}
+      </Slider>
     </div>
   );
 }
