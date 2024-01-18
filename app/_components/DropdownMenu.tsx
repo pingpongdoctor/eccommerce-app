@@ -3,6 +3,7 @@
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { useRef, useEffect } from 'react';
 
 import DropdownItem from './DropdownItem';
 
@@ -29,26 +30,25 @@ export default function DropdownMenu({ dropdownItemInforArr }: Props) {
           leaveTo="opacity-0 translate-y-1"
         >
           <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-            {/* {({ close }) => ( */}
-            <div
-              className="p-4"
-              // onBlur={(e) => {
-              //   close();
-              //   console.log(e.target);
-              // }}
-            >
-              {dropdownItemInforArr.map(
-                (dropdownItemInfor: DropdownItemInfor) => (
-                  <DropdownItem
-                    key={dropdownItemInfor.name}
-                    DropdownIcon={dropdownItemInfor.icon}
-                    dropdownName={dropdownItemInfor.name}
-                    dropdownDescription={dropdownItemInfor.description}
-                  />
-                )
-              )}
-            </div>
-            {/* )} */}
+            {({ close }) => (
+              <div
+                className="p-4"
+                onMouseLeave={() => {
+                  close();
+                }}
+              >
+                {dropdownItemInforArr.map(
+                  (dropdownItemInfor: DropdownItemInfor) => (
+                    <DropdownItem
+                      key={dropdownItemInfor.name}
+                      DropdownIcon={dropdownItemInfor.icon}
+                      dropdownName={dropdownItemInfor.name}
+                      dropdownDescription={dropdownItemInfor.description}
+                    />
+                  )
+                )}
+              </div>
+            )}
           </Popover.Panel>
         </Transition>
       </Popover>

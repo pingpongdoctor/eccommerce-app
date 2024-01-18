@@ -1,9 +1,9 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
-import { getUrlBase64 } from '../_lib/getUrlBase64';
 import { builder } from '../utils/imageBuilder';
-import { toBase64 } from '@rossbob/image-to-base64';
+
+import { getUrlBase64 } from '../_lib/getUrlBase64';
 
 export default async function ProductCards({
   products,
@@ -18,7 +18,7 @@ export default async function ProductCards({
   const productsWithImgUrl = await Promise.all(
     products.map(async (product: Product & SanityDocument) => {
       product.imgUrl = builder.image(product.images[0]).quality(80).url();
-      product.imgBase64Url = await toBase64({ uri: product.imgUrl });
+      product.imgBase64Url = await getUrlBase64(product.imgUrl);
       return product as ProductWithImgUrl & SanityDocument;
     })
   );

@@ -3,10 +3,8 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import ClientProductCard from './ClientProductCard';
-import { getUrlBase64 } from '../_lib/getUrlBase64';
 import { builder } from '../utils/imageBuilder';
 import { useEffect, useState } from 'react';
-import { toBase64 } from '@rossbob/image-to-base64';
 
 export default function ClientProductCards({
   products,
