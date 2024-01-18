@@ -5,7 +5,7 @@ import { builder } from '../utils/imageBuilder';
 import { solidBlureDataUrl } from '../utils/utils';
 import RatingStar from './RatingStar';
 import ButtonComponent from './ButtonComponent';
-import CustomerReview from './CustomerReview';
+import CustomerReviews from './CustomerReviews';
 
 export default function Product({
   product,
@@ -87,7 +87,7 @@ export default function Product({
         )}
       </div>
 
-      <CustomerReview />
+      <CustomerReviews />
     </div>
   );
 }
