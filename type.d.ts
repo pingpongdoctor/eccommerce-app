@@ -54,6 +54,7 @@ interface ImageInfor {
 }
 
 interface DropdownItemInfor {
+  path: string;
   name: string;
   description: string;
   icon: React.FC<any>;
