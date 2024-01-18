@@ -13,9 +13,13 @@ export async function generateMetadata({
 }: {
   params: QueryParams;
 }): Promise<Metadata> {
-  const product = await client.fetch<SanityDocument>(PRODUCT_QUERY, params, {
-    next: { tags: ['post'], revalidate: 3600 },
-  });
+  const product = await client.fetch<Product & SanityDocument>(
+    PRODUCT_QUERY,
+    params,
+    {
+      next: { tags: ['post'], revalidate: 3600 },
+    }
+  );
 
   if (!product) {
     return {
@@ -29,7 +33,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const products = await client.fetch<SanityDocument[]>(
+  const products = await client.fetch<(Product & SanityDocument)[]>(
     PRODUCTS_QUERY,
     {},
     {
@@ -47,10 +51,14 @@ export default async function DetailedProduct({
 }: {
   params: QueryParams;
 }) {
-  const initial = await loadQuery<SanityDocument>(PRODUCT_QUERY, params, {
-    perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-    next: { tags: ['post'], revalidate: 3600 },
-  });
+  const initial = await loadQuery<Product & SanityDocument>(
+    PRODUCT_QUERY,
+    params,
+    {
+      perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      next: { tags: ['post'], revalidate: 3600 },
+    }
+  );
 
   if (!initial.data) {
     notFound();

@@ -10,7 +10,7 @@ interface Product {
   slug: { _type: string; current: string };
   title: 'string';
   images: any;
-  detail: string;
+  detail: any;
   featured: boolean;
   price: string;
   category: 'comestic' | 'book' | 'supplement' | 'jewelry';

@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import glowyLab from '../../public/assets/glowy-lab.png';
+import Link from 'next/link';
 import {
   IconBrandFacebook,
   IconBrandInstagram,
@@ -12,12 +13,14 @@ export default function FooterComponent() {
   return (
     <div className="flex flex-col p-4 text-sm text-gray-600 md:p-8 lg:flex-row lg:items-center lg:gap-14 lg:p-12 xl:mx-auto xl:max-w-7xl">
       <div className="mb-8 md:mb-10 lg:max-w-[400px]">
-        <Image
-          src={glowyLab}
-          alt="logo"
-          className="relative -left-[1.7rem] h-32 w-auto md:mb-4"
-          placeholder="blur"
-        />
+        <Link href="/">
+          <Image
+            src={glowyLab}
+            alt="logo"
+            className="relative -left-[1.7rem] h-32 w-auto md:mb-4"
+            placeholder="blur"
+          />
+        </Link>
         <p className="mb-4 md:mb-8">
           Making the world a better place through constructing elegant
           hierarchies.
