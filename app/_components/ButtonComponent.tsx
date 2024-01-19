@@ -19,18 +19,20 @@ export default function ButtonComponent({
 }: Props) {
   return (
     <button
-      className={`group relative h-[50px] w-[100px] rounded-md border-none font-bold transition-transform duration-200 active:scale-[0.98] ${buttonClassname}`}
+      className={`group relative h-[50px] rounded-[0.42rem] border ${
+        animate ? 'border-gray-900' : 'border-gray-300'
+      }  w-full font-bold transition-transform duration-200 active:scale-[0.98] ${buttonClassname}`}
       disabled={isDisabled}
       onClick={buttonOnclickHandler}
     >
       {animate && (
         <span
-          className={`absolute left-0 top-0 flex h-full w-1 rounded-md bg-black transition-all group-hover:w-full group-disabled:hidden`}
+          className={`absolute left-0 top-0 flex h-full w-1 rounded-md bg-gray-900 transition-all group-hover:w-full group-disabled:hidden`}
         ></span>
       )}
       <span
         className={`absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-md transition-all ${
-          animate ? `text-black group-hover:text-white` : `bg-black text-white`
+          animate ? `group-hover:text-white` : `bg-white hover:bg-[#fafafa]`
         } group-disabled:hidden`}
       >
         <p>{buttonName}</p>

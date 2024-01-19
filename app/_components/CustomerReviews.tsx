@@ -37,40 +37,44 @@ export default function CustomerReviews({ customerReviewsClassname }: Props) {
         </div>
 
         <div>
-          {spanWidth?.length > 0 &&
-            spanWidth.map((ele: string, index: number) => {
-              return (
-                <div
-                  key={index}
-                  className="flex items-center gap-4 hover:animate-pulse"
-                >
-                  <div className="flex gap-2">
-                    <p>{star[index]}</p>
-                    <StarIcon className="mt-[0.05rem] h-5 text-gray-900" />
-                  </div>
+          {/* reviewing bars */}
+          <ul className="mb-8 list-none lg:mb-12">
+            {spanWidth?.length > 0 &&
+              spanWidth.map((ele: string, index: number) => {
+                return (
+                  <li
+                    key={index}
+                    className="flex items-center gap-4 hover:animate-pulse"
+                  >
+                    <div className="flex gap-2">
+                      <p>{star[index]}</p>
+                      <StarIcon className="mt-[0.05rem] h-5 text-gray-900" />
+                    </div>
 
-                  <div className="relative h-3 min-w-[250px] rounded-xl border border-gray-300 bg-gray-50">
-                    <span
-                      className={`${ele} absolute left-0 top-0 h-full w-full animate-scaleAnimation rounded-xl bg-gray-900 transition-all`}
-                    ></span>
-                  </div>
+                    <div className="relative h-3 min-w-[250px] rounded-xl border border-gray-300 bg-gray-50">
+                      <span
+                        className={`${ele} absolute left-0 top-0 h-full w-full animate-scaleAnimation rounded-xl bg-gray-900 transition-all`}
+                      ></span>
+                    </div>
 
-                  <p className="ml-1 text-nowrap text-sm">
-                    {spanWidth[index].slice(7, -2)} %
-                  </p>
-                </div>
-              );
-            })}
+                    <p className="ml-1 text-nowrap text-sm">
+                      {spanWidth[index].slice(7, -2)} %
+                    </p>
+                  </li>
+                );
+              })}
+          </ul>
 
           <ButtonComponent
-            buttonClassname="bg-gray-300"
+            buttonClassname="text-sm h-[40px]"
             buttonName="Write a review"
             animate={false}
           />
         </div>
       </div>
 
-      <div className="[&>div]:border-b-[1px] last:[&>div]:border-none">
+      {/* customer review messages */}
+      <div className="[&>div]:border-b-[1px]">
         <CustomerReview />
         <CustomerReview />
         <CustomerReview />

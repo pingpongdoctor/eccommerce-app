@@ -16,6 +16,7 @@ export default function Product({
 
   return (
     <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+      {/* product images */}
       {images?.length > 0 && (
         <div className="mb-8 list-none md:flex md:max-w-[900px] md:items-center md:gap-4 lg:mb-12 lg:gap-8">
           <Image
@@ -57,6 +58,7 @@ export default function Product({
         </div>
       )}
 
+      {/* product title and detail */}
       <div className="mb-8 lg:mb-12 lg:flex">
         <div className="lg:grow lg:border-r-[1px] lg:pr-12">
           <div className="lg:min-h-[400px]">
@@ -75,11 +77,7 @@ export default function Product({
             <RatingStar />
             <p className="pb-1">50 review</p>
           </div>
-          <ButtonComponent
-            buttonClassname="w-full"
-            buttonName="Add to bag"
-            animate
-          />
+          <ButtonComponent buttonName="Add to bag" animate />
         </div>
 
         {detail && (
@@ -89,7 +87,10 @@ export default function Product({
         )}
       </div>
 
+      {/* customer reviews */}
       <CustomerReviews />
+
+      {/* customers also buy */}
     </div>
   );
 }
