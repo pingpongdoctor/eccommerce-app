@@ -5,7 +5,7 @@ import RatingStar from './RatingStar';
 
 export default function CustomerReview() {
   return (
-    <div className="flex flex-col gap-4 py-12">
+    <div className="flex flex-col gap-4 py-12 last:border-none">
       <div className="flex items-center gap-4">
         <Avatar avatarClassname="size-11" avatarSrc={userAvatar} />
         <div className="flex flex-col">

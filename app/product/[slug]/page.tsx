@@ -51,7 +51,7 @@ export default async function DetailedProduct({
 }: {
   params: QueryParams;
 }) {
-  const initial = await loadQuery<Product & SanityDocument>(
+  const initialData = await loadQuery<Product & SanityDocument>(
     PRODUCT_QUERY,
     params,
     {
@@ -60,16 +60,25 @@ export default async function DetailedProduct({
     }
   );
 
-  if (!initial.data) {
+  if (!initialData.data) {
     notFound();
   }
+
+  const customerAlsoBuyInitialData = await loadQuery<Product & SanityDocument>(
+    PRODUCT_QUERY,
+    params,
+    {
+      perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      next: { tags: ['post'], revalidate: 3600 },
+    }
+  );
 
   return (
     <main>
       {draftMode().isEnabled ? (
-        <ProductDetailPreview initial={initial} params={params} />
+        <ProductDetailPreview initial={initialData} params={params} />
       ) : (
-        <ProductDetail product={initial.data} />
+        <ProductDetail product={initialData.data} />
       )}
     </main>
   );
