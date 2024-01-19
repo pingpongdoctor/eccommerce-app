@@ -74,12 +74,14 @@ export default async function DetailedProduct({
     (Product & SanityDocument)[]
   >(
     PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
-    { category: initialData.data.category },
+    { category: initialData.data.category, slug: params.slug },
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
       next: { tags: ['post'], revalidate: 3600 },
     }
   );
+
+  console.log(customerAlsoBuyInitialData.data);
 
   return (
     <main>
