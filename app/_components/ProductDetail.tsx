@@ -57,17 +57,19 @@ export default function Product({
         </div>
       )}
 
-      <div className="mb-8 lg:mb-12 lg:flex lg:min-h-[300px]">
-        <div className="lg:grow lg:border-r-2">
-          <h2>{title}</h2>
-          {detail && (
-            <div className="hidden lg:block">
-              <PortableText value={detail} />
-            </div>
-          )}
+      <div className="mb-8 lg:mb-12 lg:flex">
+        <div className="lg:grow lg:border-r-[1px] lg:pr-12">
+          <div className="lg:min-h-[400px]">
+            <h2>{title}</h2>
+            {detail && (
+              <div className="hidden lg:block">
+                <PortableText value={detail} />
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="mb-8 w-auto lg:w-[350px] lg:px-12 xl:w-[400px]">
+        <div className="mb-8 w-auto lg:w-[350px] lg:pl-12 xl:w-[400px]">
           <p className="mb-4 text-2xl">${price}</p>
           <div className="mb-8 flex items-center gap-4">
             <RatingStar />
