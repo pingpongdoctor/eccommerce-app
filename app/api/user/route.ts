@@ -1,62 +1,37 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 
 export async function POST(req: Request) {
-  const { name, message, email } = await req.json();
+  const { email, name, auth0Id, imgUrl }: { [x: string]: string } =
+    await req.json();
 
-  if (!name || !message || !email) {
+  if (!email || !name || !auth0Id || !imgUrl) {
     return NextResponse.json(
-      { message: "Missing required data" },
+      { message: 'Missed required data' },
       { status: 400 }
     );
   }
 
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/userData`, {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({ name, message, email }),
+    const user = await prisma.user.upsert({
+      where: { auth0Id },
+      create: { email, name, auth0Id, imgUrl },
+      update: { email, name, auth0Id, imgUrl, createdAt: new Date() },
     });
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { message: "Fail posting user data" },
-        { status: 500 }
-      );
-    }
-
     return NextResponse.json(
-      { message: "New user data is created" },
-      { status: 201 }
+      { message: 'successful user persisting' },
+      {
+        status: 201,
+      }
     );
-  } catch (error) {
-    console.log("Posting user data error" + error);
+  } catch (e) {
+    console.log('Internal server error' + e);
     return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
-  }
-}
-
-export async function GET(_req: Request) {
-  try {
-    const response = await fetch(`${process.env.BACKEND_URL}/userData`, {
-      headers: { "Content-Type": "application/json" },
-    });
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { message: "Fail getting user data" },
-        { status: 500 }
-      );
-    }
-
-    const userData: User[] = await response.json();
-
-    return NextResponse.json(userData, { status: 200 });
-  } catch (error) {
-    console.log("Internal Server Error" + error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
+      {
+        message:
+          'Internal server error' + (e as Error).name + (e as Error).message,
+      },
       { status: 500 }
     );
   }

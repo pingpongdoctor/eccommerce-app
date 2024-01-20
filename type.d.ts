@@ -1,5 +1,7 @@
 type Field = 'username' | 'email' | 'message';
 
+type Categories = 'comestic' | 'book' | 'supplement' | 'jewelry';
+
 interface HomePageData {
   herotext: string;
   introheading: string;
@@ -10,10 +12,10 @@ interface Product {
   slug: { _type: string; current: string };
   title: 'string';
   images: any;
-  detail: string;
+  detail: any;
   featured: boolean;
   price: string;
-  category: 'comestic' | 'book' | 'supplement' | 'jewelry';
+  category: Categories;
 }
 
 type ProductWithImgUrl = Product & {

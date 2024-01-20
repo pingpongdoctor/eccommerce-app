@@ -11,7 +11,7 @@ export default function BlogCard() {
             <p>Mar 16,2020</p>
             <div className="h-1 w-1 rounded-full bg-gray-400"></div>
             <div className="flex items-center gap-3 lg:gap-2">
-              <Avatar avatarLink="/assets/abc.avif" avatarPriority={false} />
+              <Avatar avatarSrc="/assets/abc.avif" avatarPriority={false} />
               <p>Ashley</p>
             </div>
           </div>
