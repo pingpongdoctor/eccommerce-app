@@ -14,7 +14,7 @@ datasource db {
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
-  googleId String
+  auth0Id String @unique
   name  String
   imgUrl String
   products UsersProducts[]
