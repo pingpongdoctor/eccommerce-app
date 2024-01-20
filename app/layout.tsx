@@ -7,6 +7,7 @@ import VisualEditing from './_components/VisualEditing';
 import { baseUrl } from './utils/baseUrl';
 import Navbar from './_components/NavBar';
 import FooterComponent from './_components/FooterComponent';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -26,10 +27,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.className} ${dancingScript.variable}`}>
         <ReactToastifyProvider>
-          <Navbar />
-          {children}
-          {draftMode().isEnabled && <VisualEditing />}
-          <FooterComponent />
+          <UserProvider>
+            <Navbar />
+            {children}
+            {draftMode().isEnabled && <VisualEditing />}
+            <FooterComponent />
+          </UserProvider>
         </ReactToastifyProvider>
       </body>
     </html>
