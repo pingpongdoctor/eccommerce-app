@@ -23,6 +23,10 @@
   button {
     @apply cursor-default;
   }
+
+  button {
+    @apply text-gray-700;
+  }
 }
 
 .slick-track {

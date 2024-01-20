@@ -2,33 +2,95 @@ import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
+import { solidBlureDataUrl } from '../utils/utils';
+import RatingStar from './RatingStar';
+import ButtonComponent from './ButtonComponent';
+import CustomerReviews from './CustomerReviews';
 
-export default function Product({ product }: { product: SanityDocument }) {
-  const { title, images, body } = product;
+export default function Product({
+  product,
+}: {
+  product: Product & SanityDocument;
+}) {
+  const { title, detail, price, images } = product;
 
   return (
-    <main className="m-4 bg-dot-black/[0.2] sm:m-8">
-      <h1>{title}</h1>
-      {images?.length > 0 ? (
-        <div>
-          <div className="max-w-[700px] list-none sm:flex sm:flex-wrap sm:gap-4">
-            {images.map((image: ImageInfor) => {
-              return (
-                <Image
-                  className="sm:aspect-square sm:w-[calc((100%-1rem)/2)] sm:rounded-lg sm:object-cover sm:shadow-md"
-                  src={builder.image(image).quality(80).url()}
-                  width={300}
-                  height={300}
-                  alt={image.alt}
-                  priority={true}
-                  key={image._key}
-                />
-              );
-            })}
+    <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+      {/* product images */}
+      {images?.length > 0 && (
+        <div className="mb-8 list-none md:flex md:max-w-[900px] md:items-center md:gap-4 lg:mb-12 lg:gap-8">
+          <Image
+            className="aspect-square w-full rounded-lg object-cover md:w-[95%] lg:w-[78%]"
+            src={builder.image(images[0]).quality(80).url()}
+            width={200}
+            height={200}
+            alt={images[0].alt}
+            priority
+            key={images[0]._key}
+            placeholder="blur"
+            blurDataURL={solidBlureDataUrl}
+          />
+          <div className="hidden md:flex md:flex-col md:gap-4 lg:gap-8">
+            <Image
+              className="aspect-square w-full rounded-lg object-cover"
+              src={builder.image(images[0]).quality(80).url()}
+              width={200}
+              height={200}
+              alt={images[0].alt}
+              priority
+              key={images[0]._key}
+              placeholder="blur"
+              blurDataURL={solidBlureDataUrl}
+            />
+
+            <Image
+              className="aspect-square w-full rounded-lg object-cover"
+              src={builder.image(images[0]).quality(80).url()}
+              width={200}
+              height={200}
+              alt={images[0].alt}
+              priority
+              key={images[0]._key}
+              placeholder="blur"
+              blurDataURL={solidBlureDataUrl}
+            />
           </div>
         </div>
-      ) : null}
-      {body ? <PortableText value={body} /> : null}
-    </main>
+      )}
+
+      {/* product title and detail */}
+      <div className="mb-8 lg:mb-12 lg:flex">
+        <div className="lg:grow lg:border-r-[1px] lg:pr-12">
+          <div className="lg:min-h-[400px]">
+            <h2>{title}</h2>
+            {detail && (
+              <div className="hidden lg:block">
+                <PortableText value={detail} />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mb-8 w-auto lg:w-[350px] lg:pl-12 xl:w-[400px]">
+          <p className="mb-4 text-2xl">${price}</p>
+          <div className="mb-8 flex items-center gap-4">
+            <RatingStar />
+            <p className="pb-1">50 review</p>
+          </div>
+          <ButtonComponent buttonName="Add to bag" animate />
+        </div>
+
+        {detail && (
+          <div className="lg:hidden">
+            <PortableText value={detail} />
+          </div>
+        )}
+      </div>
+
+      {/* customer reviews */}
+      <CustomerReviews />
+
+      {/* customers also buy */}
+    </div>
   );
 }
