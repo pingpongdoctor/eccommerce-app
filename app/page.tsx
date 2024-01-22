@@ -16,7 +16,6 @@ import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 import CategoryCards from './_components/CategoryCards';
 import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
-import React from 'react';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(Product & SanityDocument)[]>(
@@ -79,34 +78,36 @@ export default async function Home() {
   ];
 
   return (
-    <main>
+    <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
       <HeroSection />
 
       {draftMode().isEnabled ? (
         <PreviewIntroduceComponent initial={homePageData} />
       ) : (
-        <Suspense>
-          <IntroduceComponent homePageData={homePageData.data} />
-        </Suspense>
+        <IntroduceComponent homePageData={homePageData.data} />
       )}
 
       {dataArr?.length > 0 &&
         dataArr.map((data) => (
-          <React.Fragment key={data.id}>
-            <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
-              <h3>{data.type}</h3>
-              <p className="font-semibold text-gray-900">
-                See all <span>&rarr;</span>
-              </p>
+          <div key={data.id}>
+            <div>
+              <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+                <h3>{data.type}</h3>
+                <p className="font-semibold text-gray-900">
+                  See all <span>&rarr;</span>
+                </p>
+              </div>
+              {data.component}
             </div>
-            {data.component}
-          </React.Fragment>
+          </div>
         ))}
 
-      <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
-        Browse by Category
-      </h3>
-      <CategoryCards />
+      <div>
+        <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+          Browse by Category
+        </h3>
+        <CategoryCards />
+      </div>
 
       <IncentiveComponent />
     </main>

@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function HeroSection() {
   return (
-    <div className="px-4 pb-8 md:px-8 lg:px-12 lg:pb-16 xl:mx-auto xl:max-w-7xl">
+    <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       <div className="relative xl:mx-auto xl:max-w-[74rem]">
         {/* use Next.js static image to let Next.js infer intial width and height and to allow using blurred placeholder without providing blurDataUrl */}
         <Image
