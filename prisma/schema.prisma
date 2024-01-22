@@ -38,7 +38,7 @@ model UsersProducts {
   userId Int
   productId Int
   user User @relation(fields: [userId],references: [id])
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict, onUpdate:Cascade)
   createdAt DateTime @default(now())
 
   @@id([userId,productId])
