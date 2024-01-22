@@ -8,7 +8,8 @@ import glowlyLab from '../../public/assets/glowy-lab.png';
 import { useUser } from '@auth0/nextjs-auth0/client';
 
 export default function Navbar() {
-  const { user, error, isLoading } = useUser();
+  const { user } = useUser();
+
   return (
     <div className="mx-auto mb-8 flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12">
       <nav className="flex h-8 items-center justify-between overflow-visible bg-white">
