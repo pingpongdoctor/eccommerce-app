@@ -27,7 +27,7 @@ interface Props {
 export default function CustomerReviews({ customerReviewsClassname }: Props) {
   return (
     <div
-      className={`lg:flex lg:justify-between lg:gap-32 ${customerReviewsClassname}`}
+      className={`mx-auto px-4 md:px-8 lg:flex lg:justify-between lg:gap-32 lg:px-12 xl:max-w-7xl ${customerReviewsClassname}`}
     >
       <div>
         <h3 className="mb-4">Customer Reiview</h3>
