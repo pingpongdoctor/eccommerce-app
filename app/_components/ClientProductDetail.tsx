@@ -10,22 +10,16 @@ import ButtonComponent from './ButtonComponent';
 
 interface Props {
   product: Product & SanityDocument;
-  productClassname?: string;
 }
 
-export default function ClientProductDetail({
-  product,
-  productClassname,
-}: Props) {
+export default function ClientProductDetail({ product }: Props) {
   const { title, detail, price, images } = product;
 
   return (
     <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       {/* product images */}
       {images?.length > 0 && (
-        <div
-          className={`px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl ${productClassname}`}
-        >
+        <div className="mb-8 list-none md:flex md:max-w-[900px] md:items-center md:gap-4 lg:mb-12 lg:gap-8">
           <Image
             className="aspect-square w-full rounded-lg object-cover md:w-[95%] lg:w-[78%]"
             src={builder.image(images[0]).quality(80).url()}
@@ -33,7 +27,6 @@ export default function ClientProductDetail({
             height={200}
             alt={images[0].alt}
             priority
-            key={images[0]._key}
             placeholder="blur"
             blurDataURL={solidBlureDataUrl}
           />
@@ -45,7 +38,6 @@ export default function ClientProductDetail({
               height={200}
               alt={images[0].alt}
               priority
-              key={images[0]._key}
               placeholder="blur"
               blurDataURL={solidBlureDataUrl}
             />
@@ -57,7 +49,6 @@ export default function ClientProductDetail({
               height={200}
               alt={images[0].alt}
               priority
-              key={images[0]._key}
               placeholder="blur"
               blurDataURL={solidBlureDataUrl}
             />
