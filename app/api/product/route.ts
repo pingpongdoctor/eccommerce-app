@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import prisma from '@/lib/prisma';
+import { revalidateTag } from 'next/cache';
 
 //endpoint used for creating and updating products, that is triggered by Sanity webhook
 export async function POST(req: NextRequest) {
@@ -10,13 +11,11 @@ export async function POST(req: NextRequest) {
     price: string;
     category: Categories;
     featured: boolean;
+    _type: string;
   } | null>(
     req,
     process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_UPDATE_PRODUCT
   );
-
-  console.log(body);
-  console.log(isValidSignature);
 
   if (!isValidSignature) {
     return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
@@ -27,7 +26,8 @@ export async function POST(req: NextRequest) {
     !body?.title ||
     !body?.price ||
     !body?.category ||
-    !body?.hasOwnProperty('featured')
+    !body?.hasOwnProperty('featured') ||
+    !body?._type
   ) {
     return NextResponse.json(
       { message: 'Missed required data' },
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   };
 
   try {
-    const product = await prisma.product.upsert({
+    await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,
@@ -55,7 +55,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    console.log(product);
+    //revalidate product data in SSG pages
+    revalidateTag(body._type);
 
     return NextResponse.json(
       { message: 'New product is created' },
@@ -67,12 +68,7 @@ export async function POST(req: NextRequest) {
     console.log('Internal server error' + e);
     return NextResponse.json(
       {
-        message:
-          'Internal server error' +
-          ' ' +
-          (e as Error).name +
-          ' ' +
-          (e as Error).message,
+        message: 'Internal server error' + ' ' + (e as Error).message,
       },
       { status: 500 }
     );
