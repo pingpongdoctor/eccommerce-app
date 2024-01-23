@@ -13,11 +13,11 @@ export default function ProductCardsPreview({
   isCustomerAlsoBuyData = false,
   customerAlsoBuyCategory = 'comestic',
 }: {
-  initial: QueryResponseInitial<(Product & SanityDocument)[]>;
+  initial: QueryResponseInitial<(SanityProduct & SanityDocument)[]>;
   isCustomerAlsoBuyData?: boolean;
   customerAlsoBuyCategory?: Categories;
 }) {
-  const { data } = useQuery<(Product & SanityDocument)[] | null>(
+  const { data } = useQuery<(SanityProduct & SanityDocument)[] | null>(
     isCustomerAlsoBuyData ? PRODUCTS_QUERY_CUSTOMER_ALSO_BUY : PRODUCTS_QUERY,
     isCustomerAlsoBuyData ? { category: customerAlsoBuyCategory } : {},
     { initial }

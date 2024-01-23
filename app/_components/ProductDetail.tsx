@@ -7,7 +7,7 @@ import RatingStar from './RatingStar';
 import ButtonComponent from './ButtonComponent';
 
 interface Props {
-  product: Product & SanityDocument;
+  product: SanityProduct & SanityDocument;
 }
 
 export default function ProductDetail({ product }: Props) {

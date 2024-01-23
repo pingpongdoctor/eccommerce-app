@@ -18,7 +18,7 @@ import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
 
 export default async function Home() {
-  const featuredProductPromise = loadQuery<(Product & SanityDocument)[]>(
+  const featuredProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
     FEATURED_PRODUCTS_QUERY,
     { featured: true },
     {
@@ -26,7 +26,7 @@ export default async function Home() {
     }
   );
 
-  const trendingProductPromise = loadQuery<(Product & SanityDocument)[]>(
+  const trendingProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
     NEW_PRODUCTS_QUERY,
     {},
     {
