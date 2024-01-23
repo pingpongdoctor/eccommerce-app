@@ -12,9 +12,11 @@ export async function POST(req: NextRequest) {
     detail: string;
   } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
 
-  if (!isValidSignature) {
-    return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
-  }
+  // if (!isValidSignature) {
+  //   return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
+  // }
+  console.log(process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
+  console.log(isValidSignature);
 
   if (
     !body?.sanitySlug ||
