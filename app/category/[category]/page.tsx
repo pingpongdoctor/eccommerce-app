@@ -52,6 +52,8 @@ export async function generateStaticParams() {
   }));
 }
 
+console.log(process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
+
 export default async function Category({ params }: { params: QueryParams }) {
   const initial = await loadQuery<(Product & SanityDocument)[]>(
     categories.includes(params.category)
