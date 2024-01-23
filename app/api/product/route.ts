@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
 
   if (!isValidSignature) {
-    return NextResponse.json({ message: 'Invalid Signature' }, { status: 400 });
+    return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
   }
 
   if (
