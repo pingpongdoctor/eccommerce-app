@@ -2,6 +2,10 @@ type Field = 'username' | 'email' | 'message';
 
 type Categories = 'comestic' | 'book' | 'supplement' | 'jewelry';
 
+type EmailTemplates = 'welcome' | 'reset-password' | 'password-change';
+
+type TemplateEnvs = Record<EmailTemplates, string>;
+
 interface HomePageData {
   herotext: string;
   introheading: string;
