@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import prisma from '@/lib/prisma';
 
+//endpoint used for creating and updating products, that is triggered by Sanity webhook
 export async function POST(req: NextRequest) {
   const { body, isValidSignature } = await parseBody<{
     sanitySlug: string;
@@ -9,7 +10,13 @@ export async function POST(req: NextRequest) {
     price: string;
     category: Categories;
     featured: boolean;
-  } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
+  } | null>(
+    req,
+    process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_UPDATE_PRODUCT
+  );
+
+  console.log(body);
+  console.log(isValidSignature);
 
   if (!isValidSignature) {
     return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
@@ -32,11 +39,11 @@ export async function POST(req: NextRequest) {
     title: body.title,
     price: body.price,
     category: body.category,
-    featured: Boolean(body.featured),
+    featured: body.featured,
   };
 
   try {
-    await prisma.product.upsert({
+    const product = await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,
@@ -47,6 +54,8 @@ export async function POST(req: NextRequest) {
         createdAt: new Date(),
       },
     });
+
+    console.log(product);
 
     return NextResponse.json(
       { message: 'New product is created' },
