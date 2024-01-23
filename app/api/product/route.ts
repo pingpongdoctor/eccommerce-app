@@ -1,30 +1,52 @@
-import { revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
+import prisma from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   const { body, isValidSignature } = await parseBody<{
-    _type: string;
-  }>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET);
+    sanitySlug: string;
+    title: string;
+    price: string;
+    category: Categories;
+    featured: boolean;
+    detail: string;
+  } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
 
   if (!isValidSignature) {
-    return new Response('Invalid Signature', { status: 401 });
   }
 
-  if (!body?._type) {
-    return new Response('Bad Request', { status: 400 });
+  if (
+    !body?.sanitySlug ||
+    !body?.title ||
+    !body?.price ||
+    !body?.category ||
+    !body?.hasOwnProperty('featured')
+  ) {
+    return NextResponse.json(
+      { message: 'Missed required data' },
+      { status: 400 }
+    );
   }
 
   try {
-    revalidateTag(body._type);
-    return NextResponse.json({
-      status: 200,
-      revalidated: true,
-      now: Date.now(),
-      body,
+    await prisma.product.create({
+      data: {
+        sanitySlug: body.sanitySlug,
+        title: body.title,
+        price: body.price,
+        category: body.category,
+        featured: body.featured,
+        detail: body.detail,
+      },
     });
-  } catch (error: any) {
-    console.error(error);
-    return new Response(error.message, { status: 500 });
+  } catch (e) {
+    console.log('Internal server error' + e);
+    return NextResponse.json(
+      {
+        message:
+          'Internal server error' + (e as Error).name + (e as Error).message,
+      },
+      { status: 500 }
+    );
   }
 }
