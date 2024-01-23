@@ -1,4 +1,5 @@
 'use client';
+
 import { ThreeDots } from 'react-loader-spinner';
 import React from 'react';
 
@@ -35,14 +36,14 @@ export default function ButtonComponent({
           animate ? `group-hover:text-white` : `bg-white hover:bg-[#fafafa]`
         } group-disabled:hidden`}
       >
-        <p>{buttonName}</p>
+        {buttonName}
       </span>
       <span className="absolute left-0 top-0 hidden h-full w-full items-center justify-center rounded-md group-disabled:flex">
         <ThreeDots
           visible={true}
           height="50"
           width="50"
-          color={animate ? 'black' : 'white'}
+          color="black"
           radius="9"
           ariaLabel="three-dots-loading"
         />

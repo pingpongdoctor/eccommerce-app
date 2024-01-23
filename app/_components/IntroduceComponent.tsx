@@ -13,7 +13,7 @@ export default function IntroduceComponent({
   homePageData: HomePageData & SanityDocument;
 }) {
   return (
-    <div className="bg-white px-4 pb-8 md:px-8 lg:px-12 lg:pb-16 xl:mx-auto xl:max-w-7xl ">
+    <div className="bg-white px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl ">
       <div className="mb-8 block lg:flex lg:gap-16 xl:gap-28">
         <div className="w-full text-pretty text-xl lg:w-[55%] [&_p]:mb-4">
           <h1 className="text-pretty">{homePageData.introheading}</h1>
