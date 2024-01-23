@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import prisma from '@/lib/prisma';
 
+//endpoint used for creating and updating products, that is triggered by Sanity webhook
 export async function POST(req: NextRequest) {
   const { body, isValidSignature } = await parseBody<{
     sanitySlug: string;
@@ -9,10 +10,16 @@ export async function POST(req: NextRequest) {
     price: string;
     category: Categories;
     featured: boolean;
-    detail: string;
-  } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
+  } | null>(
+    req,
+    process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_UPDATE_PRODUCT
+  );
+
+  console.log(body);
+  console.log(isValidSignature);
 
   if (!isValidSignature) {
+    return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
   }
 
   if (
@@ -28,23 +35,44 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const productData = {
+    title: body.title,
+    price: body.price,
+    category: body.category,
+    featured: body.featured,
+  };
+
   try {
-    await prisma.product.create({
-      data: {
+    const product = await prisma.product.upsert({
+      where: { sanitySlug: body.sanitySlug },
+      create: {
+        ...productData,
         sanitySlug: body.sanitySlug,
-        title: body.title,
-        price: body.price,
-        category: body.category,
-        featured: body.featured,
-        detail: body.detail,
+      },
+      update: {
+        ...productData,
+        createdAt: new Date(),
       },
     });
+
+    console.log(product);
+
+    return NextResponse.json(
+      { message: 'New product is created' },
+      {
+        status: 201,
+      }
+    );
   } catch (e) {
     console.log('Internal server error' + e);
     return NextResponse.json(
       {
         message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
+          'Internal server error' +
+          ' ' +
+          (e as Error).name +
+          ' ' +
+          (e as Error).message,
       },
       { status: 500 }
     );
