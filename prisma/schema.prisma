@@ -33,7 +33,6 @@ model Product {
   id        Int     @id @default(autoincrement())
   sanitySlug String @unique
   title     String
-  detail String
   price String
   category Category
   featured Boolean @default(false)

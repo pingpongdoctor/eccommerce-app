@@ -9,22 +9,18 @@ export async function POST(req: NextRequest) {
     price: string;
     category: Categories;
     featured: boolean;
-    detail: string;
   } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
 
-  // if (!isValidSignature) {
-  //   return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
-  // }
-  console.log(process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
-  console.log(isValidSignature);
+  if (!isValidSignature) {
+    return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
+  }
 
   if (
     !body?.sanitySlug ||
     !body?.title ||
     !body?.price ||
     !body?.category ||
-    !body?.hasOwnProperty('featured') ||
-    !body?.detail
+    !body?.hasOwnProperty('featured')
   ) {
     return NextResponse.json(
       { message: 'Missed required data' },
@@ -37,7 +33,6 @@ export async function POST(req: NextRequest) {
     price: body.price,
     category: body.category,
     featured: Boolean(body.featured),
-    detail: body.detail,
   };
 
   try {
