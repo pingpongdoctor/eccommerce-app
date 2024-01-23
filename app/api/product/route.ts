@@ -20,7 +20,8 @@ export async function POST(req: NextRequest) {
     !body?.title ||
     !body?.price ||
     !body?.category ||
-    !body?.hasOwnProperty('featured')
+    !body?.hasOwnProperty('featured') ||
+    !body?.detail
   ) {
     return NextResponse.json(
       { message: 'Missed required data' },
