@@ -1,3 +1,5 @@
+'use client';
+
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
@@ -10,7 +12,7 @@ interface Props {
   product: Product & SanityDocument;
 }
 
-export default function ProductDetail({ product }: Props) {
+export default function ClientProductDetail({ product }: Props) {
   const { title, detail, price, images } = product;
 
   return (

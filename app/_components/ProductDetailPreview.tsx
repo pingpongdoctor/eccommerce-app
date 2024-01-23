@@ -5,6 +5,7 @@ import { QueryResponseInitial, useQuery } from '@sanity/react-loader';
 import { QueryParams, SanityDocument } from 'next-sanity';
 
 import ProductDetail from './ProductDetail';
+import ClientProductDetail from './ClientProductDetail';
 
 export default function ProductPreview({
   initial,
@@ -21,5 +22,5 @@ export default function ProductPreview({
     }
   );
 
-  return data && <ProductDetail product={data} />;
+  return data && <ClientProductDetail product={data} />;
 }

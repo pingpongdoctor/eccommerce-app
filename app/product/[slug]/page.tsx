@@ -13,6 +13,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
+import CustomerReviews from '@/app/_components/CustomerReviews';
+import { Suspense } from 'react';
 
 export async function generateMetadata({
   params,
@@ -81,21 +83,33 @@ export default async function DetailedProduct({
     }
   );
 
-  console.log(customerAlsoBuyInitialData.data);
-
   return (
-    <main>
+    <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
       {draftMode().isEnabled ? (
         <ProductDetailPreview initial={initialData} params={params} />
       ) : (
         <ProductDetail product={initialData.data} />
       )}
 
-      {draftMode().isEnabled ? (
-        <ProductCardsPreview initial={customerAlsoBuyInitialData} />
-      ) : (
-        <ProductCards products={customerAlsoBuyInitialData.data} />
-      )}
+      {/* customer reviews */}
+      <CustomerReviews />
+
+      <div>
+        {customerAlsoBuyInitialData?.data?.length > 0 && (
+          <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+            <h3>Products you may like</h3>
+            <p className="font-semibold text-gray-900">
+              See all <span>&rarr;</span>
+            </p>
+          </div>
+        )}
+
+        {draftMode().isEnabled ? (
+          <ProductCardsPreview initial={customerAlsoBuyInitialData} />
+        ) : (
+          <ProductCards products={customerAlsoBuyInitialData.data} />
+        )}
+      </div>
     </main>
   );
 }

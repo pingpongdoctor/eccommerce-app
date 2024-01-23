@@ -15,7 +15,7 @@ import { Suspense } from 'react';
 import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 import CategoryCards from './_components/CategoryCards';
 import IncentiveComponent from './_components/IncentiveComponent';
-import ProductCardSkeleton from './_components/ProductCardSkeleton';
+import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(Product & SanityDocument)[]>(
@@ -58,7 +58,7 @@ export default async function Home() {
         <ProductCardsPreview initial={featuredProductData} />
       ) : (
         // use suspense to allow next.js to progressively send chunks of this page to the client side
-        <Suspense fallback={<ProductCardSkeleton />}>
+        <Suspense fallback={<ProductCardsSkeleton />}>
           <ProductCards products={featuredProductData.data} />
         </Suspense>
       ),
@@ -69,7 +69,7 @@ export default async function Home() {
       component: draftMode().isEnabled ? (
         <ProductCardsPreview initial={trendingProductData} />
       ) : (
-        <Suspense fallback={<ProductCardSkeleton />}>
+        <Suspense fallback={<ProductCardsSkeleton />}>
           <ProductCards products={trendingProductData.data} />
         </Suspense>
       ),
@@ -78,31 +78,31 @@ export default async function Home() {
   ];
 
   return (
-    <main>
+    <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
       <HeroSection />
 
       {draftMode().isEnabled ? (
         <PreviewIntroduceComponent initial={homePageData} />
       ) : (
-        <Suspense>
-          <IntroduceComponent homePageData={homePageData.data} />
-        </Suspense>
+        <IntroduceComponent homePageData={homePageData.data} />
       )}
 
       {dataArr?.length > 0 &&
         dataArr.map((data) => (
-          <div key={data.id} className="pb-8 lg:pb-16">
-            <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
-              <h3>{data.type}</h3>
-              <p className="font-semibold text-gray-900">
-                See all <span>&rarr;</span>
-              </p>
+          <div key={data.id}>
+            <div>
+              <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+                <h3>{data.type}</h3>
+                <p className="font-semibold text-gray-900">
+                  See all <span>&rarr;</span>
+                </p>
+              </div>
+              {data.component}
             </div>
-            {data.component}
           </div>
         ))}
 
-      <div className="pb-8 lg:pb-16">
+      <div>
         <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
           Browse by Category
         </h3>

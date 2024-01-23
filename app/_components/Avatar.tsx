@@ -1,5 +1,6 @@
 import Image, { StaticImageData } from 'next/image';
 import React from 'react';
+import { solidBlureDataUrl } from '../utils/utils';
 
 interface Props {
   avatarSrc: string | StaticImageData;
@@ -19,6 +20,8 @@ export default function Avatar({
       priority={avatarPriority}
       width={30}
       height={30}
+      placeholder="blur"
+      blurDataURL={solidBlureDataUrl}
       alt="avatar"
     />
   );
