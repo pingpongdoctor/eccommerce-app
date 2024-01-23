@@ -23,9 +23,5 @@ export default function ProductCardsPreview({
     { initial }
   );
 
-  return data ? (
-    <ClientProductCards products={data} />
-  ) : (
-    <div className="bg-red-100">No products found</div>
-  );
+  return data && <ClientProductCards products={data} />;
 }
