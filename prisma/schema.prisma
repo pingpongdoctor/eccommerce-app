@@ -11,6 +11,13 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum Category{
+comestic
+supplement
+book
+jewelry
+}
+
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
@@ -26,9 +33,8 @@ model Product {
   id        Int     @id @default(autoincrement())
   sanitySlug String @unique
   title     String
-  detail String
   price String
-  category String
+  category Category
   featured Boolean @default(false)
   users UsersProducts[]
   createdAt DateTime @default(now())

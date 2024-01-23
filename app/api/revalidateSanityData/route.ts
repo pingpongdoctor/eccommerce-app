@@ -8,23 +8,21 @@ export async function POST(req: NextRequest) {
   } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET);
 
   if (!isValidSignature) {
-    return new Response('Invalid Signature', { status: 401 });
+    return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
   }
 
   if (!body?._type) {
-    return new Response('Bad Request', { status: 400 });
+    return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
   }
 
   try {
     revalidateTag(body._type);
     return NextResponse.json({
-      status: 200,
       revalidated: true,
       now: Date.now(),
-      body,
     });
   } catch (error: any) {
     console.error(error);
-    return new Response(error.message, { status: 500 });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
