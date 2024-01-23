@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
   } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_PRODUCT);
 
   if (!isValidSignature) {
+    return NextResponse.json({ message: 'Invalid Signature' }, { status: 400 });
   }
 
   if (
@@ -29,23 +30,43 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const productData = {
+    title: body.title,
+    price: body.price,
+    category: body.category,
+    featured: Boolean(body.featured),
+    detail: body.detail,
+  };
+
   try {
-    await prisma.product.create({
-      data: {
+    await prisma.product.upsert({
+      where: { sanitySlug: body.sanitySlug },
+      create: {
+        ...productData,
         sanitySlug: body.sanitySlug,
-        title: body.title,
-        price: body.price,
-        category: body.category,
-        featured: body.featured,
-        detail: body.detail,
+      },
+      update: {
+        ...productData,
+        createdAt: new Date(),
       },
     });
+
+    return NextResponse.json(
+      { message: 'New product is created' },
+      {
+        status: 201,
+      }
+    );
   } catch (e) {
     console.log('Internal server error' + e);
     return NextResponse.json(
       {
         message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
+          'Internal server error' +
+          ' ' +
+          (e as Error).name +
+          ' ' +
+          (e as Error).message,
       },
       { status: 500 }
     );
