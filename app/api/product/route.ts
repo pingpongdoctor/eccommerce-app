@@ -74,3 +74,46 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+//endpoint used for deleting products, that is triggered by Sanity webhook
+export async function DELETE(req: NextRequest) {
+  const { body, isValidSignature } = await parseBody<{
+    sanitySlug: string;
+    _type: string;
+  } | null>(req, process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_DELETE_PRODUCT);
+
+  if (!isValidSignature) {
+    return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
+  }
+
+  if (!body?.sanitySlug || !body?._type) {
+    return NextResponse.json(
+      { message: 'Missed required data' },
+      { status: 400 }
+    );
+  }
+
+  try {
+    await prisma.product.delete({
+      where: { sanitySlug: body.sanitySlug },
+    });
+
+    //revalidate product data in SSG pages
+    revalidateTag(body._type);
+
+    return NextResponse.json(
+      { message: 'The product is deleted', revalidate: true },
+      {
+        status: 200,
+      }
+    );
+  } catch (e) {
+    console.log('Internal server error' + e);
+    return NextResponse.json(
+      {
+        message: 'Internal server error' + ' ' + (e as Error).message,
+      },
+      { status: 500 }
+    );
+  }
+}
