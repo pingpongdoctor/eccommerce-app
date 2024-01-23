@@ -14,7 +14,6 @@ import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import CustomerReviews from '@/app/_components/CustomerReviews';
-import { Suspense } from 'react';
 
 export async function generateMetadata({
   params,
