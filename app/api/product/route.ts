@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   };
 
   try {
-    await prisma.product.upsert({
+    const product = await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     revalidateTag(body._type);
 
     return NextResponse.json(
-      { message: 'New product is created' },
+      { message: 'New product is created', revalidate: true },
       {
         status: 201,
       }
