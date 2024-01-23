@@ -6,11 +6,11 @@ import { builder } from '../utils/imageBuilder';
 export default async function ProductCards({
   products,
 }: {
-  products: (Product & SanityDocument)[];
+  products: (SanityProduct & SanityDocument)[];
 }) {
   // use promise all to handle all promises at the same time to avoid waterfalls in data fetching
   const productsWithImgUrl = await Promise.all(
-    products.map(async (product: Product & SanityDocument) => {
+    products.map(async (product: SanityProduct & SanityDocument) => {
       product.imgUrl = builder.image(product.images[0]).quality(80).url();
       return product as ProductWithImgUrl & SanityDocument;
     })

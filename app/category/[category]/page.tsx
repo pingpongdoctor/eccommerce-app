@@ -53,7 +53,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Category({ params }: { params: QueryParams }) {
-  const initial = await loadQuery<(Product & SanityDocument)[]>(
+  const initial = await loadQuery<(SanityProduct & SanityDocument)[]>(
     categories.includes(params.category)
       ? PRODUCTS_QUERY_BASED_CATEGORY
       : PRODUCTS_QUERY,

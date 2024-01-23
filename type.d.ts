@@ -12,7 +12,7 @@ interface HomePageData {
   introcontent: any;
 }
 
-interface Product {
+interface SanityProduct {
   slug: { _type: string; current: string };
   title: 'string';
   images: any;
@@ -22,7 +22,7 @@ interface Product {
   category: Categories;
 }
 
-type ProductWithImgUrl = Product & {
+type ProductWithImgUrl = SanityProduct & {
   imgUrl: string;
 };
 

@@ -9,12 +9,13 @@ import { useState, ChangeEvent } from 'react';
 export default function ProductsWithSearchBar({
   initial,
 }: {
-  initial: QueryResponseInitial<(Product & SanityDocument)[]>;
+  initial: QueryResponseInitial<(SanityProduct & SanityDocument)[]>;
 }) {
   const [searchResult, setSearchResult] = useState<string>('');
   const handleUpdateSearchResult = function (e: ChangeEvent<HTMLInputElement>) {
     setSearchResult(e.target.value);
   };
+
   return (
     <>
       <SearchBar changeEventHanlder={handleUpdateSearchResult} />
