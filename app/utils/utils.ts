@@ -157,3 +157,15 @@ export const footerInfor: {
 
 export const solidBlureDataUrl =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPccehcPQAHSwLJQnqfnAAAAABJRU5ErkJggg==';
+
+export const emailTemplates: EmailTemplates[] = [
+  'welcome',
+  'password-change',
+  'reset-password',
+];
+
+export const templateEnvs: TemplateEnvs = {
+  welcome: 'SENGRID_TEMPLATE_ID_WELCOME',
+  'password-change': 'SENGRID_TEMPLATE_ID_PASSWORD_CHANGE',
+  'reset-password': 'SENGRID_TEMPLATE_ID_WELCOME_RESET_PASSWORD',
+};
