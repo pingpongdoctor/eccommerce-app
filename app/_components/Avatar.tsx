@@ -15,7 +15,7 @@ export default function Avatar({
 }: Props) {
   return (
     <Image
-      className={`inline-block size-7 rounded-full ${avatarClassname} object-cover object-center`}
+      className={`inline-block size-10 rounded-full ${avatarClassname} object-cover object-center`}
       src={avatarSrc}
       priority={avatarPriority}
       width={30}
