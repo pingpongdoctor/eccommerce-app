@@ -27,7 +27,11 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('@tailwindcss/typography'), require('flowbite/plugin')],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('flowbite/plugin'),
+    require('@headlessui/tailwindcss')({ prefix: 'ui' }),
+  ],
 };
 
 export default withMT(config);

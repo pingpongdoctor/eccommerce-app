@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 export default function ClientProductCards({
   products,
 }: {
-  products: (Product & SanityDocument)[];
+  products: (SanityProduct & SanityDocument)[];
 }) {
   const [productsWithImgUrl, setProductsWithImgUrl] = useState<
     (ProductWithImgUrl & SanityDocument)[]
@@ -18,7 +18,7 @@ export default function ClientProductCards({
   // use promise all to handle all promises at the same time to avoid waterfalls in data fetching
   useEffect(() => {
     Promise.all(
-      products.map(async (product: Product & SanityDocument) => {
+      products.map(async (product: SanityProduct & SanityDocument) => {
         product.imgUrl = builder.image(product.images[0]).quality(80).url();
         return product as ProductWithImgUrl & SanityDocument;
       })

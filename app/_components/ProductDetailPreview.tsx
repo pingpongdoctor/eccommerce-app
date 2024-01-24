@@ -3,18 +3,16 @@
 import { PRODUCT_QUERY } from '@/sanity/lib/queries';
 import { QueryResponseInitial, useQuery } from '@sanity/react-loader';
 import { QueryParams, SanityDocument } from 'next-sanity';
-
-import ProductDetail from './ProductDetail';
 import ClientProductDetail from './ClientProductDetail';
 
 export default function ProductPreview({
   initial,
   params,
 }: {
-  initial: QueryResponseInitial<Product & SanityDocument>;
+  initial: QueryResponseInitial<SanityProduct & SanityDocument>;
   params: QueryParams;
 }) {
-  const { data } = useQuery<(Product & SanityDocument) | null>(
+  const { data } = useQuery<(SanityProduct & SanityDocument) | null>(
     PRODUCT_QUERY,
     params,
     {
