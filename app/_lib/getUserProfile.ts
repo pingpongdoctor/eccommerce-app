@@ -1,7 +1,9 @@
 import { User } from '@prisma/client';
 import { baseUrl } from '../utils/baseUrl';
 
-export async function getUser(): Promise<Omit<User, 'auth0Id'> | undefined> {
+export async function getUserProfile(): Promise<
+  Omit<User, 'auth0Id'> | undefined
+> {
   try {
     const res = await fetch(`${baseUrl}/api/user`, {
       headers: {

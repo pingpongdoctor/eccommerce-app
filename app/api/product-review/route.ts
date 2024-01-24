@@ -1,6 +1,6 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
-import { getUser } from '@/app/_lib/getUser';
+import { getUserProfile } from '@/app/_lib/getUserProfile';
 import prisma from '@/lib/prisma';
 
 export const POST = withApiAuthRequired(async (req: Request) => {
@@ -15,7 +15,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     );
   }
 
-  const user = await getUser();
+  const user = await getUserProfile();
   if (!user) {
     return NextResponse.json(
       {
