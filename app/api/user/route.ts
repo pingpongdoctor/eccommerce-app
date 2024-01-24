@@ -1,5 +1,46 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { User } from '@prisma/client';
+
+export const GET = withApiAuthRequired(async () => {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json(
+      {
+        message: 'user is not found on Auth0 cloud database',
+      },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const auth0Id: string = session.user.sub;
+    const userData: Omit<User, 'auth0Id'> | null = await prisma.user.findFirst({
+      where: { auth0Id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        imgUrl: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!userData) {
+      return NextResponse.json(
+        { message: 'user is not found in app database' },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({ data: userData }, { status: 200 });
+  } catch (e: any) {
+    console.log(e);
+    return NextResponse.json({ message: e.message }, { status: 500 });
+  }
+});
 
 export async function POST(req: Request) {
   const { email, name, auth0Id, imgUrl }: { [x: string]: string } =

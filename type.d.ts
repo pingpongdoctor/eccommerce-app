@@ -12,6 +12,22 @@ interface HomePageData {
   introcontent: any;
 }
 
+interface User {
+  id: number;
+  email: string;
+  name: string;
+  imgUrl: string;
+}
+
+interface Product {
+  id: number;
+  sanitySlug: string;
+  title: string;
+  price: string;
+  category: Categories;
+  featured: boolean;
+}
+
 interface SanityProduct {
   slug: { _type: string; current: string };
   title: 'string';
