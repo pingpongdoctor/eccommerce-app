@@ -14,14 +14,13 @@ import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import CustomerReviews from '@/app/_components/CustomerReviews';
-import { Suspense } from 'react';
 
 export async function generateMetadata({
   params,
 }: {
   params: QueryParams;
 }): Promise<Metadata> {
-  const product = await client.fetch<Product & SanityDocument>(
+  const product = await client.fetch<SanityProduct & SanityDocument>(
     PRODUCT_QUERY,
     params,
     {
@@ -41,7 +40,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const products = await client.fetch<(Product & SanityDocument)[]>(
+  const products = await client.fetch<(SanityProduct & SanityDocument)[]>(
     PRODUCTS_QUERY,
     {},
     {
@@ -59,7 +58,7 @@ export default async function DetailedProduct({
 }: {
   params: QueryParams;
 }) {
-  const initialData = await loadQuery<Product & SanityDocument>(
+  const initialData = await loadQuery<SanityProduct & SanityDocument>(
     PRODUCT_QUERY,
     params,
     {
@@ -73,7 +72,7 @@ export default async function DetailedProduct({
   }
 
   const customerAlsoBuyInitialData = await loadQuery<
-    (Product & SanityDocument)[]
+    (SanityProduct & SanityDocument)[]
   >(
     PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
     { category: initialData.data.category, slug: params.slug },
