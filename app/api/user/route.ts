@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { User } from '@prisma/client';
 
+//get users
 export const GET = withApiAuthRequired(async () => {
   const session = await getSession();
   if (!session) {
@@ -42,6 +43,7 @@ export const GET = withApiAuthRequired(async () => {
   }
 });
 
+//post user
 export const POST = withApiAuthRequired(async (req: Request) => {
   const { email, name, auth0Id, imgUrl }: { [x: string]: string } =
     await req.json();
