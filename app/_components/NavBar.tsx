@@ -7,7 +7,7 @@ import Link from 'next/link';
 import glowlyLab from '../../public/assets/glowy-lab.png';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ArrowLongRightIcon } from '@heroicons/react/16/solid';
-import { getUser } from '../_lib/getUser';
+import { getUserProfile } from '../_lib/getUserProfile';
 import { useState, useEffect } from 'react';
 import { User } from '@prisma/client';
 import SimpleMenuComponent from './SimpleMenuComponent';
@@ -20,9 +20,11 @@ export default function Navbar() {
 
   const { user, isLoading } = useUser();
 
+  console.log(user);
+
   useEffect(() => {
     if (user) {
-      getUser()
+      getUserProfile()
         .then((userData: Omit<User, 'auth0Id'> | undefined) => {
           console.log(userData);
           if (userData) {
@@ -62,7 +64,7 @@ export default function Navbar() {
             isLoading ? 'lg:justify-end' : 'lg:justify-between'
           }`}
         >
-          {!user && !isLoading && (
+          {!userProfile && !isLoading && (
             <Link
               href="/api/auth/login"
               className="group relative ml-auto h-[25px] w-[88px] font-semibold"
@@ -77,14 +79,14 @@ export default function Navbar() {
             </Link>
           )}
 
-          {user && userProfile && (
+          {userProfile && !isLoading && (
             <SimpleMenuComponent
               avatarSrc={userProfile.imgUrl}
               username={userProfile.name}
             />
           )}
 
-          {user && userProfile && !isLoading && (
+          {userProfile && !isLoading && (
             <Link
               href="/api/auth/logout"
               className="group relative hidden h-[25px] w-[88px] font-semibold lg:block"
