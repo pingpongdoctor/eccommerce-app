@@ -8,11 +8,13 @@ import prisma from '@/lib/prisma';
 export async function GET() {
   try {
     const headerList = headers();
-    const token = headerList.get('Authorization')?.split(' ')[1];
-    console.log(token);
+    const key = headerList.get('Authorization')?.split(' ')[1];
+
+    if (key !== process.env.ROUTE_API_KEY) {
+      return NextResponse.json({ message: 'Wrong api key' }, { status: 401 });
+    }
 
     const reviews = await prisma.review.findMany();
-    console.log(reviews);
     return NextResponse.json(reviews, { status: 200 });
   } catch (e) {
     console.log('Internal server error' + e);
