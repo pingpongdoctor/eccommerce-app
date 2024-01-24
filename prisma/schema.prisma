@@ -36,6 +36,9 @@ model Review {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate:Cascade)
   content String
   star Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([userId])
 }
 

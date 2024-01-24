@@ -42,7 +42,7 @@ export const GET = withApiAuthRequired(async () => {
   }
 });
 
-export async function POST(req: Request) {
+export const POST = withApiAuthRequired(async (req: Request) => {
   const { email, name, auth0Id, imgUrl }: { [x: string]: string } =
     await req.json();
 
@@ -76,4 +76,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-}
+});
