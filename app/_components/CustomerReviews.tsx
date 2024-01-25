@@ -5,14 +5,7 @@ import CustomerReview from './CustomerReview';
 import ButtonComponent from './ButtonComponent';
 import { Review } from '@prisma/client';
 import { calculateRatingBarWidth } from '../_lib/calculateRatingBarWidth';
-
-const star: { [index: number]: number } = {
-  0: 5,
-  1: 4,
-  2: 3,
-  3: 2,
-  4: 1,
-};
+import TextAreaComponent from './TextAreaComponent';
 
 interface Props {
   customerReviewsClassname?: string;
@@ -69,6 +62,12 @@ export default function CustomerReviews({
                 }
               )}
           </ul>
+
+          <TextAreaComponent
+            textareaId="review-message"
+            textareaPlaceholder="Write your review"
+            textareaClassname="mb-4"
+          />
 
           <ButtonComponent
             buttonClassname="text-sm h-[40px]"
