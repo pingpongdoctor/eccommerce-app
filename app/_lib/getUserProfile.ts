@@ -14,13 +14,13 @@ export async function getUserProfile(): Promise<
     const data = await res.json();
 
     if (!res.ok) {
-      console.log(data.message);
+      console.log('Error fetching user profile' + ' ' + data.message);
       return undefined;
     }
 
     return data.data;
   } catch (e: any) {
-    console.log('Error fetching user data' + ' ' + e);
+    console.log('Error in getUserProfile function' + ' ' + e.message);
     return undefined;
   }
 }
