@@ -3,6 +3,7 @@ import RatingStar from './RatingStar';
 import { StarIcon } from '@heroicons/react/20/solid';
 import CustomerReview from './CustomerReview';
 import ButtonComponent from './ButtonComponent';
+import { Review } from '@prisma/client';
 
 const spanWidth = [
   'max-w-[35%]',
@@ -22,9 +23,13 @@ const star: { [index: number]: number } = {
 
 interface Props {
   customerReviewsClassname?: string;
+  productReviews: (Review & { user: { name: string; imgUrl: string } })[];
 }
 
-export default function CustomerReviews({ customerReviewsClassname }: Props) {
+export default function CustomerReviews({
+  customerReviewsClassname,
+  productReviews,
+}: Props) {
   return (
     <div
       className={`mx-auto px-4 md:px-8 lg:flex lg:justify-between lg:gap-32 lg:px-12 xl:max-w-7xl ${customerReviewsClassname}`}
@@ -75,9 +80,17 @@ export default function CustomerReviews({ customerReviewsClassname }: Props) {
 
       {/* customer review messages */}
       <div className="[&>div]:border-b-[1px]">
-        <CustomerReview />
-        <CustomerReview />
-        <CustomerReview />
+        {productReviews.length > 0 &&
+          productReviews.map(
+            (
+              productReview: Review & { user: { name: string; imgUrl: string } }
+            ) => (
+              <CustomerReview
+                key={productReview.id}
+                productReview={productReview}
+              />
+            )
+          )}
       </div>
     </div>
   );

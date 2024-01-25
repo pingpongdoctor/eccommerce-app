@@ -14,6 +14,8 @@ import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import CustomerReviews from '@/app/_components/CustomerReviews';
+import { getProductReviews } from '@/app/_lib/getProductReviews';
+import { Review } from '@prisma/client';
 
 export async function generateMetadata({
   params,
@@ -81,6 +83,11 @@ export default async function DetailedProduct({
       next: { tags: ['post'], revalidate: 3600 },
     }
   );
+
+  const productReviews:
+    | (Review & { user: { name: string; imgUrl: string } })[]
+    | undefined = await getProductReviews(params.slug);
+
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
       {draftMode().isEnabled ? (
@@ -90,7 +97,7 @@ export default async function DetailedProduct({
       )}
 
       {/* customer reviews */}
-      <CustomerReviews />
+      {productReviews && <CustomerReviews productReviews={productReviews} />}
 
       <div>
         {customerAlsoBuyInitialData?.data?.length > 0 && (

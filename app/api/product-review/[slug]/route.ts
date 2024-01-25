@@ -51,7 +51,7 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(reviews, { status: 200 });
+    return NextResponse.json({ data: reviews }, { status: 200 });
   } catch (e) {
     console.log('Internal server error' + e);
     return NextResponse.json(
@@ -68,7 +68,6 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
   const body = await req.json();
 
   const productSlug = context.params?.slug as string | undefined;
-  console.log(productSlug);
 
   if (!body?.content || !body?.hasOwnProperty('star')) {
     return NextResponse.json(
@@ -91,8 +90,6 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       );
     }
 
-    console.log(user);
-
     //get product
     const product = await prisma.product.findUnique({
       where: { sanitySlug: productSlug },
@@ -100,8 +97,6 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
         id: true,
       },
     });
-
-    console.log(product);
 
     if (!product) {
       return NextResponse.json(
