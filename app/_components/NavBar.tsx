@@ -54,9 +54,9 @@ export default function Navbar() {
         <div className="hidden items-center md:flex md:gap-10 lg:gap-12 xl:gap-16 [&>a]:font-semibold">
           <Link href="/">Home</Link>
           <DropdownMenu dropdownItemInforArr={dropdownItemInforArr} />
-          <Link href="/about">About</Link>
-          <Link href="/blog">Blog</Link>
-          <Link href="/contact">Contact</Link>
+          <Link href="#">About</Link>
+          <Link href="#">Blog</Link>
+          <Link href="#">Contact</Link>
         </div>
 
         <div
