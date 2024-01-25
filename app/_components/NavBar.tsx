@@ -20,13 +20,10 @@ export default function Navbar() {
 
   const { user, isLoading } = useUser();
 
-  console.log(user);
-
   useEffect(() => {
     if (user) {
       getUserProfile()
         .then((userData: Omit<User, 'auth0Id'> | undefined) => {
-          console.log(userData);
           if (userData) {
             setUserProfile(userData);
           }

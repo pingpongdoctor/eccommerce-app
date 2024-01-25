@@ -81,7 +81,6 @@ export default async function DetailedProduct({
       next: { tags: ['post'], revalidate: 3600 },
     }
   );
-
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
       {draftMode().isEnabled ? (
