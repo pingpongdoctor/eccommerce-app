@@ -2,15 +2,26 @@ import React from 'react';
 import userAvatar from '../../public/assets/abc.avif';
 import Avatar from './Avatar';
 import RatingStar from './RatingStar';
+import { Review } from '@prisma/client';
 
-export default function CustomerReview() {
+interface Props {
+  productReview: Review & { user: { name: string; imgUrl: string } };
+}
+
+export default function CustomerReview({ productReview }: Props) {
   return (
     <div className="flex flex-col gap-4 py-12 last:border-none">
       <div className="flex items-center gap-4">
-        <Avatar avatarClassname="size-11" avatarSrc={userAvatar} />
+        <Avatar
+          avatarClassname="size-11"
+          avatarSrc={productReview.user.imgUrl}
+        />
         <div className="flex flex-col">
-          <p>Simon</p>
-          <RatingStar ratingClassname="[&>div_span_svg]:h-5 [&>div_span_svg]:w-5" />
+          <p>{productReview.user.name}</p>
+          <RatingStar
+            starValue={productReview.star}
+            ratingClassname="[&>div_span_svg]:h-5 [&>div_span_svg]:w-5"
+          />
         </div>
       </div>
       <p>
