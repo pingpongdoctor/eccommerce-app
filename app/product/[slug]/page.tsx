@@ -60,6 +60,7 @@ export default async function DetailedProduct({
 }: {
   params: QueryParams;
 }) {
+  //get data for a specific product
   const initialData = await loadQuery<SanityProduct & SanityDocument>(
     PRODUCT_QUERY,
     params,
@@ -73,6 +74,7 @@ export default async function DetailedProduct({
     notFound();
   }
 
+  //get products that customers also buy
   const customerAlsoBuyInitialData = await loadQuery<
     (SanityProduct & SanityDocument)[]
   >(
@@ -84,12 +86,14 @@ export default async function DetailedProduct({
     }
   );
 
+  //get reviews
   const productReviews:
     | (Review & { user: { name: string; imgUrl: string } })[]
     | undefined = await getProductReviews(params.slug);
 
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
+      {/* product detail */}
       {draftMode().isEnabled ? (
         <ProductDetailPreview initial={initialData} params={params} />
       ) : (
@@ -99,6 +103,7 @@ export default async function DetailedProduct({
       {/* customer reviews */}
       {productReviews && <CustomerReviews productReviews={productReviews} />}
 
+      {/* product you may like */}
       <div>
         {customerAlsoBuyInitialData?.data?.length > 0 && (
           <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">

@@ -16,7 +16,7 @@ export default function TextAreaComponent({
   return (
     <label
       htmlFor={textareaId}
-      className={`relative block w-full rounded-md border border-gray-300 shadow-sm focus-within:border-gray-400 ${textareaClassname}`}
+      className={`relative block w-full rounded-md border border-gray-400 shadow-sm ${textareaClassname}`}
     >
       <textarea
         onChange={textareaChangeEventHanlder}
