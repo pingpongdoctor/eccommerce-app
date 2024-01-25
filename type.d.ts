@@ -1,5 +1,3 @@
-type Field = 'username' | 'email' | 'message';
-
 type Categories = 'comestic' | 'book' | 'supplement' | 'jewelry';
 
 type EmailTemplates = 'welcome' | 'reset-password' | 'password-change';
