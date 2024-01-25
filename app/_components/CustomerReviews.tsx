@@ -6,14 +6,6 @@ import ButtonComponent from './ButtonComponent';
 import { Review } from '@prisma/client';
 import { calculateRatingBarWidth } from '../_lib/calculateRatingBarWidth';
 
-const spanWidth = [
-  'max-w-[35%]',
-  'max-w-[15%]',
-  'max-w-[25%]',
-  'max-w-[35%]',
-  'max-w-[5%]',
-];
-
 const star: { [index: number]: number } = {
   0: 5,
   1: 4,
@@ -31,6 +23,7 @@ export default function CustomerReviews({
   customerReviewsClassname,
   productReviews,
 }: Props) {
+  console.log(calculateRatingBarWidth(productReviews));
   return (
     <div
       className={`mx-auto px-4 md:px-8 lg:flex lg:justify-between lg:gap-32 lg:px-12 xl:max-w-7xl ${customerReviewsClassname}`}
@@ -47,25 +40,30 @@ export default function CustomerReviews({
           <ul className="mb-8 list-none lg:mb-12">
             {productReviews?.length > 0 &&
               calculateRatingBarWidth(productReviews).map(
-                (barWidth: string, index: number) => {
+                (
+                  barWidthObject: { starNum: string; ratio: string },
+                  index: number
+                ) => {
                   return (
                     <li
-                      key={index}
+                      key={barWidthObject.starNum}
                       className="flex items-center gap-4 hover:animate-pulse"
                     >
                       <div className="flex gap-2">
-                        <p>{star[index]}</p>
+                        <p>{barWidthObject.starNum}</p>
                         <StarIcon className="mt-[0.05rem] h-5 text-gray-900" />
                       </div>
 
                       <div className="relative h-3 min-w-[250px] rounded-xl border border-gray-300 bg-gray-50">
                         <span
-                          style={{ maxWidth: `${barWidth}` }}
+                          style={{ maxWidth: `${barWidthObject.ratio}` }}
                           className="absolute left-0 top-0 h-full w-full animate-scaleAnimation rounded-xl bg-gray-900 transition-all"
                         ></span>
                       </div>
 
-                      <p className="ml-1 text-nowrap text-sm">{barWidth}</p>
+                      <p className="ml-1 text-nowrap text-sm">
+                        {barWidthObject.ratio}
+                      </p>
                     </li>
                   );
                 }
