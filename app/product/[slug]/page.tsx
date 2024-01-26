@@ -104,12 +104,19 @@ export default async function DetailedProduct({
       )}
 
       {/* customer reviews */}
-      {productReviews && (
-        <CustomerReviews
-          productReviews={productReviews}
-          productSlug={params.slug}
-        />
-      )}
+
+      <CustomerReviews
+        productReviews={
+          productReviews?.sort(
+            (
+              a: Review & { user: { name: string; imgUrl: string } },
+              b: Review & { user: { name: string; imgUrl: string } }
+            ) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          ) || []
+        }
+        productSlug={params.slug}
+      />
 
       {/* product you may like */}
       <div>

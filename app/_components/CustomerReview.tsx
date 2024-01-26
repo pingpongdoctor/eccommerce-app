@@ -1,5 +1,4 @@
 import React from 'react';
-import userAvatar from '../../public/assets/abc.avif';
 import Avatar from './Avatar';
 import RatingStar from './RatingStar';
 import { Review } from '@prisma/client';
@@ -24,10 +23,7 @@ export default function CustomerReview({ productReview }: Props) {
           />
         </div>
       </div>
-      <p>
-        This is the bag of my dreams. I took it on my last vacation and was able
-        to fit an absurd amount of snacks for the many long and hungry flights.
-      </p>
+      <p>{productReview.content}</p>
     </div>
   );
 }

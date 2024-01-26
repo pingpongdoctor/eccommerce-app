@@ -8,6 +8,7 @@ import { notify } from './ReactToastifyProvider';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { getUserProfile } from '../_lib/getUserProfile';
 import { User } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   productSlug: string;
@@ -18,6 +19,8 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
   const [star, setStar] = useState<number | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
   const { user } = useUser();
+
+  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -59,6 +62,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
     try {
       await postNewReview(productSlug, review, star, userId);
       notify('success', 'Thank your for your review', 'review-success');
+      router.refresh();
     } catch (e: any) {
       console.log(
         'Error in handleReviewContentUpdate function' + ' ' + e.message
@@ -66,6 +70,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
       notify('error', 'There is an error, please try again', 'submit-error');
     }
   };
+
   return (
     <form onSubmit={handleSubmitReview}>
       <TextAreaComponent
