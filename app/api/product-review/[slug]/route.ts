@@ -63,7 +63,11 @@ export async function GET(
 //create review
 export const POST = withApiAuthRequired(async (req: Request, context) => {
   const body = await req.json();
-  const { content, star }: { content: string; star: number } = body;
+  const {
+    content,
+    star,
+    userId,
+  }: { content: string; star: number; userId: number } = body;
 
   const productSlug = context.params?.slug as string | undefined;
 
@@ -86,17 +90,6 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
   }
 
   try {
-    //get user
-    const user = await getUserProfileFromServer();
-    if (!user) {
-      return NextResponse.json(
-        {
-          message: 'Can not get user',
-        },
-        { status: 400 }
-      );
-    }
-
     //get product
     const product = await prisma.product.findUnique({
       where: { sanitySlug: productSlug },
@@ -121,7 +114,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
         star,
         user: {
           connect: {
-            id: user.id,
+            id: userId,
           },
         },
         product: {
