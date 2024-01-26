@@ -98,10 +98,9 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
     );
   }
 
-  const { productQuantity }: { productSlug: string; productQuantity: number } =
-    await req.json();
+  const { productQuantity }: { productQuantity: number } = await req.json();
 
-  const productSlug = context.params?.userId as string | undefined;
+  const productSlug = context.params?.slug as string | undefined;
 
   if (!productSlug || !productQuantity) {
     return NextResponse.json(
