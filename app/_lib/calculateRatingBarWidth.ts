@@ -4,6 +4,16 @@ import { Review } from '@prisma/client';
 export const calculateRatingBarWidth = function (
   productReviews: (Review & { user: { name: string; imgUrl: string } })[]
 ): { starNum: string; ratio: string }[] {
+  if (productReviews.length == 0) {
+    return [
+      { starNum: '5', ratio: '0%' },
+      { starNum: '4', ratio: '0%' },
+      { starNum: '3', ratio: '0%' },
+      { starNum: '2', ratio: '0%' },
+      { starNum: '1', ratio: '0%' },
+    ];
+  }
+
   try {
     const starCounts: number[] = [0, 0, 0, 0, 0];
 

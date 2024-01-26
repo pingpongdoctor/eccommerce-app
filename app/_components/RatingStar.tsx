@@ -16,7 +16,6 @@ export default function RatingStar({
   starReadonly = true,
   starChangeEventHandler,
 }: Props) {
-  console.log(starValue);
   return (
     <div className={`[&>div_span_svg]:text-gray-900 ${ratingClassname}`}>
       <Rating
