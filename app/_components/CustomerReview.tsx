@@ -15,7 +15,7 @@ export default function CustomerReview({ productReview }: Props) {
           avatarClassname="size-11"
           avatarSrc={productReview.user.imgUrl}
         />
-        <div className="flex flex-col">
+        <div className="flex flex-col font-medium text-gray-700">
           <p>{productReview.user.name}</p>
           <RatingStar
             starValue={productReview.star}
