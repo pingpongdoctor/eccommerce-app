@@ -16,11 +16,12 @@ export default function RatingStar({
   starReadonly = true,
   starChangeEventHandler,
 }: Props) {
+  console.log(starValue);
   return (
     <div className={`[&>div_span_svg]:text-gray-900 ${ratingClassname}`}>
       <Rating
         readonly={starReadonly}
-        value={starValue}
+        value={Math.round(starValue || 0)}
         placeholder="rating-star"
         onChange={starChangeEventHandler}
       />
