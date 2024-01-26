@@ -14,6 +14,8 @@ import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import CustomerReviews from '@/app/_components/CustomerReviews';
+import { getProductReviews } from '@/app/_lib/getProductReviews';
+import { Review } from '@prisma/client';
 
 export async function generateMetadata({
   params,
@@ -58,6 +60,7 @@ export default async function DetailedProduct({
 }: {
   params: QueryParams;
 }) {
+  //get data for a specific product
   const initialData = await loadQuery<SanityProduct & SanityDocument>(
     PRODUCT_QUERY,
     params,
@@ -71,6 +74,7 @@ export default async function DetailedProduct({
     notFound();
   }
 
+  //get products that customers also buy
   const customerAlsoBuyInitialData = await loadQuery<
     (SanityProduct & SanityDocument)[]
   >(
@@ -82,21 +86,43 @@ export default async function DetailedProduct({
     }
   );
 
+  //get reviews
+  const productReviews:
+    | (Review & { user: { name: string; imgUrl: string } })[]
+    | undefined = await getProductReviews(params.slug);
+
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
+      {/* product detail */}
       {draftMode().isEnabled ? (
         <ProductDetailPreview initial={initialData} params={params} />
       ) : (
-        <ProductDetail product={initialData.data} />
+        <ProductDetail
+          product={initialData.data}
+          productReviews={productReviews}
+        />
       )}
 
       {/* customer reviews */}
-      <CustomerReviews />
 
+      <CustomerReviews
+        productReviews={
+          productReviews?.sort(
+            (
+              a: Review & { user: { name: string; imgUrl: string } },
+              b: Review & { user: { name: string; imgUrl: string } }
+            ) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          ) || []
+        }
+        productSlug={params.slug}
+      />
+
+      {/* product you may like */}
       <div>
         {customerAlsoBuyInitialData?.data?.length > 0 && (
-          <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
-            <h3>Products you may like</h3>
+          <div className="mx-auto mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+            <h3 className="mb-0">Products you may like</h3>
             <p className="font-semibold text-gray-900">
               See all <span>&rarr;</span>
             </p>
