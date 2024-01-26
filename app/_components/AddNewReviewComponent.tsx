@@ -2,10 +2,12 @@
 import TextAreaComponent from './TextAreaComponent';
 import RatingStar from './RatingStar';
 import ButtonComponent from './ButtonComponent';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { postNewReview } from '../_lib/postNewReview';
 import { notify } from './ReactToastifyProvider';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { getUserProfile } from '../_lib/getUserProfile';
+import { User } from '@prisma/client';
 
 interface Props {
   productSlug: string;
@@ -14,7 +16,22 @@ interface Props {
 export default function AddNewReviewComponent({ productSlug }: Props) {
   const [review, setReview] = useState<string>('');
   const [star, setStar] = useState<number | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
   const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      getUserProfile().then(
+        (userProfile: Omit<User, 'auth0Id'> | undefined) => {
+          if (userProfile) {
+            setUserId(userProfile.id);
+          } else {
+            setUserId(null);
+          }
+        }
+      );
+    }
+  }, [user]);
 
   const handleReviewContentUpdate = function (
     e: ChangeEvent<HTMLTextAreaElement>
@@ -29,7 +46,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
   const handleSubmitReview = async function (e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!user) {
+    if (!user || !userId) {
       notify('info', 'Please log in to write a review', 'login-requirement');
       return;
     }
@@ -40,7 +57,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
     }
 
     try {
-      await postNewReview(productSlug, review, star);
+      await postNewReview(productSlug, review, star, userId);
       notify('success', 'Thank your for your review', 'review-success');
     } catch (e: any) {
       console.log(
