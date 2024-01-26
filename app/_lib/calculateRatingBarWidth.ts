@@ -18,7 +18,7 @@ export const calculateRatingBarWidth = function (
     return starCounts
       .map((value: number, index: number) => ({
         ['starNum']: `${index + 1}`,
-        ['ratio']: `${(value / totalReviews) * 100}%`,
+        ['ratio']: `${Math.round((value / totalReviews) * 100)}%`,
       }))
       .reverse();
   } catch (e: any) {
