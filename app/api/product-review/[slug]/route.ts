@@ -1,9 +1,6 @@
-import {
-  withApiAuthRequired,
-  AppRouteHandlerFnContext,
-} from '@auth0/nextjs-auth0';
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
-import { getUserProfile } from '@/app/_lib/getUserProfile';
+import { getUserProfileFromServer } from '@/app/_lib/getUserProfileFromServer';
 import { headers } from 'next/headers';
 import prisma from '@/lib/prisma';
 
@@ -66,10 +63,20 @@ export async function GET(
 //create review
 export const POST = withApiAuthRequired(async (req: Request, context) => {
   const body = await req.json();
+  const { content, star }: { content: string; star: number } = body;
 
   const productSlug = context.params?.slug as string | undefined;
 
-  if (!body?.content || !body?.hasOwnProperty('star')) {
+  if (!productSlug) {
+    return NextResponse.json(
+      {
+        message: 'Miss required params',
+      },
+      { status: 400 }
+    );
+  }
+
+  if (!content || !body?.hasOwnProperty('star')) {
     return NextResponse.json(
       {
         message: 'Miss required data',
@@ -80,7 +87,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
 
   try {
     //get user
-    const user = await getUserProfile();
+    const user = await getUserProfileFromServer();
     if (!user) {
       return NextResponse.json(
         {
@@ -110,8 +117,8 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
     //create review and connect review to the above product and user
     await prisma.review.create({
       data: {
-        content: body.content,
-        star: body.star,
+        content,
+        star,
         user: {
           connect: {
             id: user.id,

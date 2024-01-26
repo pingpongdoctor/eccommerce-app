@@ -1,18 +1,20 @@
 'use client';
 
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Rating } from '@material-tailwind/react';
 
 interface Props {
   ratingClassname?: string;
   starValue?: number;
   starReadonly?: boolean;
+  starChangeEventHandler?: (value: number) => void;
 }
 
 export default function RatingStar({
   ratingClassname,
   starValue,
   starReadonly = true,
+  starChangeEventHandler,
 }: Props) {
   return (
     <div className={`[&>div_span_svg]:text-gray-900 ${ratingClassname}`}>
@@ -20,6 +22,7 @@ export default function RatingStar({
         readonly={starReadonly}
         value={starValue}
         placeholder="rating-star"
+        onChange={starChangeEventHandler}
       />
     </div>
   );
