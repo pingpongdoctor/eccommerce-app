@@ -16,8 +16,12 @@ import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 import CategoryCards from './_components/CategoryCards';
 import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
+import { getSession } from '@auth0/nextjs-auth0';
+import { getUserProfileFromServer } from './_lib/getUserProfileFromServer';
 
 export default async function Home() {
+  const session = await getSession();
+
   const featuredProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
     FEATURED_PRODUCTS_QUERY,
     { featured: true },

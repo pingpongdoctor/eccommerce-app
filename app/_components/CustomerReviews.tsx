@@ -2,20 +2,21 @@ import React from 'react';
 import RatingStar from './RatingStar';
 import { StarIcon } from '@heroicons/react/20/solid';
 import CustomerReview from './CustomerReview';
-import ButtonComponent from './ButtonComponent';
 import { Review } from '@prisma/client';
 import { calculateRatingBarWidth } from '../_lib/calculateRatingBarWidth';
-import TextAreaComponent from './TextAreaComponent';
 import { calculateAverageStar } from '../_lib/calculateAverageStar';
+import AddNewReviewComponent from './AddNewReviewComponent';
 
 interface Props {
   customerReviewsClassname?: string;
   productReviews: (Review & { user: { name: string; imgUrl: string } })[];
+  productSlug: string;
 }
 
-export default function CustomerReviews({
+export default async function CustomerReviews({
   customerReviewsClassname,
   productReviews,
+  productSlug,
 }: Props) {
   return (
     <div
@@ -25,7 +26,10 @@ export default function CustomerReviews({
         <h3 className="mb-4">Customer Reiview</h3>
         <div className="mb-6 flex gap-4">
           <RatingStar starValue={calculateAverageStar(productReviews)} />
-          <p className="pb-1">{productReviews.length}</p>
+          <p className="pb-1">
+            {productReviews.length}{' '}
+            {productReviews.length == 1 ? 'review' : 'reviews'}
+          </p>
         </div>
 
         <div>
@@ -61,19 +65,7 @@ export default function CustomerReviews({
           </ul>
 
           {/* add your review */}
-          <div>
-            <TextAreaComponent
-              textareaId="review-message"
-              textareaPlaceholder="Write your review"
-              textareaClassname="mb-4"
-            />
-            <RatingStar starReadonly={false} />
-            <ButtonComponent
-              buttonClassname="text-sm h-[40px]"
-              buttonName="Add your review"
-              animate={false}
-            />
-          </div>
+          <AddNewReviewComponent productSlug={productSlug} />
         </div>
       </div>
 

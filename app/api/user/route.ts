@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { User } from '@prisma/client';
@@ -16,6 +16,7 @@ export const GET = withApiAuthRequired(async () => {
 
   try {
     const auth0Id: string = session.user.sub;
+
     const userData: Omit<User, 'auth0Id'> | null = await prisma.user.findFirst({
       where: { auth0Id },
       select: {

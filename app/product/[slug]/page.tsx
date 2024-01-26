@@ -97,11 +97,19 @@ export default async function DetailedProduct({
       {draftMode().isEnabled ? (
         <ProductDetailPreview initial={initialData} params={params} />
       ) : (
-        <ProductDetail product={initialData.data} />
+        <ProductDetail
+          product={initialData.data}
+          productReviews={productReviews}
+        />
       )}
 
       {/* customer reviews */}
-      {productReviews && <CustomerReviews productReviews={productReviews} />}
+      {productReviews && (
+        <CustomerReviews
+          productReviews={productReviews}
+          productSlug={params.slug}
+        />
+      )}
 
       {/* product you may like */}
       <div>

@@ -86,7 +86,7 @@ export default function Navbar() {
           {userProfile && !isLoading && (
             <Link
               href="/api/auth/logout"
-              className="group relative hidden h-[25px] w-[88px] font-semibold lg:block"
+              className="group relative hidden h-[25px] w-[88px] font-semibold md:block"
             >
               <span className="group absolute left-0 top-0 z-[1] flex h-full w-full items-center justify-center gap-2 group-hover:text-white">
                 <span>Log out</span>
