@@ -1,6 +1,6 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
-import { getUserProfileFromServer } from '@/app/_lib/getUserProfileFromServer';
+import { revalidateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import prisma from '@/lib/prisma';
 
@@ -125,9 +125,12 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       },
     });
 
+    revalidateTag('review');
+
     return NextResponse.json(
       {
         message: 'review is created',
+        revalidate: true,
       },
       { status: 201 }
     );
