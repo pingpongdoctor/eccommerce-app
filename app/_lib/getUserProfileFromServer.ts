@@ -1,14 +1,13 @@
-import { User } from '@prisma/client';
 import { baseUrl } from '../utils/baseUrl';
+import { User } from '@prisma/client';
+import { headers } from 'next/headers';
 
-export async function getUserProfile(): Promise<
+export async function getUserProfileFromServer(): Promise<
   Omit<User, 'auth0Id'> | undefined
 > {
   try {
     const res = await fetch(`${baseUrl}/api/user`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: headers(),
     });
 
     const data = await res.json();

@@ -5,12 +5,17 @@ import { builder } from '../utils/imageBuilder';
 import { solidBlureDataUrl } from '../utils/utils';
 import RatingStar from './RatingStar';
 import ButtonComponent from './ButtonComponent';
+import { Review } from '@prisma/client';
+import { calculateAverageStar } from '../_lib/calculateAverageStar';
 
 interface Props {
   product: SanityProduct & SanityDocument;
+  productReviews:
+    | (Review & { user: { name: string; imgUrl: string } })[]
+    | undefined;
 }
 
-export default function ProductDetail({ product }: Props) {
+export default function ProductDetail({ product, productReviews }: Props) {
   const { title, detail, price, images } = product;
 
   return (
@@ -23,7 +28,7 @@ export default function ProductDetail({ product }: Props) {
             src={builder.image(images[0]).quality(80).url()}
             width={200}
             height={200}
-            alt={images[0].alt}
+            alt={images[0].alt || 'product-image'}
             priority
             placeholder="blur"
             blurDataURL={solidBlureDataUrl}
@@ -34,7 +39,7 @@ export default function ProductDetail({ product }: Props) {
               src={builder.image(images[0]).quality(80).url()}
               width={200}
               height={200}
-              alt={images[0].alt}
+              alt={images[0].alt || 'product-image'}
               priority
               placeholder="blur"
               blurDataURL={solidBlureDataUrl}
@@ -45,7 +50,7 @@ export default function ProductDetail({ product }: Props) {
               src={builder.image(images[0]).quality(80).url()}
               width={200}
               height={200}
-              alt={images[0].alt}
+              alt={images[0].alt || 'product-image'}
               priority
               placeholder="blur"
               blurDataURL={solidBlureDataUrl}
@@ -67,14 +72,21 @@ export default function ProductDetail({ product }: Props) {
           </div>
         </div>
 
-        <div className="mb-8 w-auto lg:w-[350px] lg:pl-12 xl:w-[400px]">
-          <p className="mb-4 text-2xl">${price}</p>
-          <div className="mb-8 flex items-center gap-4">
-            <RatingStar />
-            <p className="pb-1">50 review</p>
+        {productReviews && (
+          <div className="mb-8 w-auto lg:w-[350px] lg:pl-12 xl:w-[400px]">
+            <p className="mb-4 text-2xl text-gray-900">${price}</p>
+
+            <div className="mb-8 flex items-center gap-4">
+              <RatingStar starValue={calculateAverageStar(productReviews)} />
+              <p className="pb-1">
+                {productReviews.length}{' '}
+                {productReviews.length == 1 ? 'review' : 'reviews'}
+              </p>
+            </div>
+
+            <ButtonComponent buttonName="Add to bag" animate />
           </div>
-          <ButtonComponent buttonName="Add to bag" animate />
-        </div>
+        )}
 
         {detail && (
           <div className="lg:hidden">
