@@ -121,8 +121,8 @@ export default async function DetailedProduct({
       {/* product you may like */}
       <div>
         {customerAlsoBuyInitialData?.data?.length > 0 && (
-          <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
-            <h3>Products you may like</h3>
+          <div className="mx-auto mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+            <h3 className="mb-0">Products you may like</h3>
             <p className="font-semibold text-gray-900">
               See all <span>&rarr;</span>
             </p>

@@ -79,10 +79,14 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
         textareaClassname="mb-4"
         textareaChangeEventHanlder={handleReviewContentUpdate}
       />
-      <RatingStar
-        starReadonly={false}
-        starChangeEventHandler={handleStarUpdate}
-      />
+      <div className="mb-2 mt-8 flex items-center gap-4">
+        <RatingStar
+          starReadonly={false}
+          starChangeEventHandler={handleStarUpdate}
+        />
+        <p className="mb-[4px]">(Please rating for the product)</p>
+      </div>
+
       <ButtonComponent
         buttonClassname="text-sm h-[40px]"
         buttonName="Add your review"
