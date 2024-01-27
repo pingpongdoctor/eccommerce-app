@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import prisma from '@/lib/prisma';
+import { getSession } from '@auth0/nextjs-auth0';
 
 //get all reviews
 export async function GET(
@@ -62,12 +63,18 @@ export async function GET(
 
 //create review
 export const POST = withApiAuthRequired(async (req: Request, context) => {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json(
+      {
+        message: 'user is not found on Auth0 cloud database',
+      },
+      { status: 400 }
+    );
+  }
+
   const body = await req.json();
-  const {
-    content,
-    star,
-    userId,
-  }: { content: string; star: number; userId: number } = body;
+  const { content, star }: { content: string; star: number } = body;
 
   const productSlug = context.params?.slug as string | undefined;
 
@@ -90,6 +97,17 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
   }
 
   try {
+    //get user
+    const auth0Id: string = session.user.sub;
+    const userData = await prisma.user.findUnique({ where: { auth0Id } });
+
+    if (!userData) {
+      return NextResponse.json(
+        { message: 'user is not found in app database' },
+        { status: 400 }
+      );
+    }
+
     //get product
     const product = await prisma.product.findUnique({
       where: { sanitySlug: productSlug },
@@ -114,7 +132,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
         star,
         user: {
           connect: {
-            id: userId,
+            id: userData.id,
           },
         },
         product: {
