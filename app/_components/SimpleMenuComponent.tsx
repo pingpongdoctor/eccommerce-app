@@ -16,7 +16,7 @@ const links = [
   {
     href: '/api/auth/logout',
     label: 'Log out',
-    classname: 'ui-active:bg-gray-50 block px-4 py-2 text-gray-700 md:hidden',
+    classname: 'ui-active:bg-gray-50 px-4 py-2 text-gray-700',
   },
 ];
 

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import glowlyLab from '../../public/assets/glowy-lab.png';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ArrowLongRightIcon } from '@heroicons/react/16/solid';
+import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
 import { useState, useEffect } from 'react';
 import { User } from '@prisma/client';
@@ -56,11 +57,7 @@ export default function Navbar() {
           <Link href="#">Contact</Link>
         </div>
 
-        <div
-          className={`flex w-auto justify-end transition-all md:w-[144px] md:items-center ${
-            isLoading ? 'lg:justify-end' : 'lg:justify-between'
-          }`}
-        >
+        <div className={`flex w-[102px] justify-end transition-all`}>
           {!userProfile && !isLoading && (
             <Link
               href="/api/auth/login"
@@ -77,25 +74,18 @@ export default function Navbar() {
           )}
 
           {userProfile && !isLoading && (
-            <SimpleMenuComponent
-              avatarSrc={userProfile.imgUrl}
-              username={userProfile.name}
-            />
-          )}
-
-          {userProfile && !isLoading && (
-            <Link
-              href="/api/auth/logout"
-              className="group relative hidden h-[25px] w-[88px] font-semibold md:block"
-            >
-              <span className="group absolute left-0 top-0 z-[1] flex h-full w-full items-center justify-center gap-2 group-hover:text-white">
-                <span>Log out</span>
-                <span className="group-hover:hidden">&rarr;</span>
-                <ArrowLongRightIcon className="hidden h-5 group-hover:block" />
-              </span>
-
-              <span className="absolute left-0 top-0 z-0 h-full w-0 rounded-lg bg-gray-900 transition-all group-hover:w-full"></span>
-            </Link>
+            <div className="flex items-center gap-4">
+              <SimpleMenuComponent
+                avatarSrc={userProfile.imgUrl}
+                username={userProfile.name}
+              />
+              <div className="group flex items-end gap-1">
+                <ShoppingBagIcon className="h-7 text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600" />
+                <p className="text-lg font-medium text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600">
+                  2
+                </p>
+              </div>
+            </div>
           )}
 
           {isLoading && (
