@@ -5,9 +5,6 @@ import ButtonComponent from './ButtonComponent';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { postNewReview } from '../_lib/postNewReview';
 import { notify } from './ReactToastifyProvider';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
-import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
 interface Props {
@@ -17,24 +14,7 @@ interface Props {
 export default function AddNewReviewComponent({ productSlug }: Props) {
   const [review, setReview] = useState<string>('');
   const [star, setStar] = useState<number | null>(null);
-  const [userId, setUserId] = useState<number | null>(null);
-  const { user } = useUser();
-
   const router = useRouter();
-
-  useEffect(() => {
-    if (user) {
-      getUserProfileFromClientSide().then(
-        (userProfile: Omit<User, 'auth0Id'> | undefined) => {
-          if (userProfile) {
-            setUserId(userProfile.id);
-          } else {
-            setUserId(null);
-          }
-        }
-      );
-    }
-  }, [user]);
 
   const handleReviewContentUpdate = function (
     e: ChangeEvent<HTMLTextAreaElement>
@@ -49,18 +29,13 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
   const handleSubmitReview = async function (e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!user || !userId) {
-      notify('info', 'Please log in to write a review', 'login-requirement');
-      return;
-    }
-
     if (!review || !star) {
       notify('error', 'Please write a review with star rating', 'review-error');
       return;
     }
 
     try {
-      await postNewReview(productSlug, review, star, userId);
+      await postNewReview(productSlug, review, star);
       notify('success', 'Thank your for your review', 'review-success');
       router.refresh();
     } catch (e: any) {
