@@ -20,6 +20,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
   const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
     null
   );
+  const [isDisable, setIsDisable] = useState<boolean>(false);
   const router = useRouter();
   const { user } = useUser();
 
@@ -27,8 +28,9 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
     if (user) {
       getUserProfileFromClientSide().then(
         (userData: Omit<User, 'auth0Id'> | undefined) => {
+          console.log(userData);
           if (userData) {
-            setUserProfile(userProfile);
+            setUserProfile(userData);
           }
         }
       );
@@ -59,6 +61,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
     }
 
     try {
+      setIsDisable(true);
       await postNewReview(productSlug, review, star);
       notify('success', 'Thank your for your review', 'review-success');
       router.refresh();
@@ -67,6 +70,8 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
         'Error in handleReviewContentUpdate function' + ' ' + e.message
       );
       notify('error', 'There is an error, please try again', 'submit-error');
+    } finally {
+      setIsDisable(false);
     }
   };
 
@@ -86,7 +91,11 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
         <p className="mb-[4px] text-sm">(Rating this product)</p>
       </div>
 
-      <ButtonComponent buttonName="Add your review" animate={false} />
+      <ButtonComponent
+        isDisabled={isDisable}
+        buttonName="Add your review"
+        animate={false}
+      />
     </form>
   );
 }
