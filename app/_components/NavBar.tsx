@@ -7,7 +7,7 @@ import Link from 'next/link';
 import glowlyLab from '../../public/assets/glowy-lab.png';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ArrowLongRightIcon } from '@heroicons/react/16/solid';
-import { getUserProfile } from '../_lib/getUserProfile';
+import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
 import { useState, useEffect } from 'react';
 import { User } from '@prisma/client';
 import SimpleMenuComponent from './SimpleMenuComponent';
@@ -22,7 +22,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (user) {
-      getUserProfile()
+      getUserProfileFromClientSide()
         .then((userData: Omit<User, 'auth0Id'> | undefined) => {
           if (userData) {
             setUserProfile(userData);

@@ -4,15 +4,13 @@ import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
 import { solidBlureDataUrl } from '../utils/utils';
 import RatingStar from './RatingStar';
-import ButtonComponent from './ButtonComponent';
 import { Review } from '@prisma/client';
 import { calculateAverageStar } from '../_lib/calculateAverageStar';
+import AddToBagComponent from './AddToBagComponent';
 
 interface Props {
   product: SanityProduct & SanityDocument;
-  productReviews:
-    | (Review & { user: { name: string; imgUrl: string } })[]
-    | undefined;
+  productReviews: (Review & { user: { name: string; imgUrl: string } })[];
 }
 
 export default function ProductDetail({ product, productReviews }: Props) {
@@ -65,28 +63,26 @@ export default function ProductDetail({ product, productReviews }: Props) {
           <div className="lg:min-h-[400px]">
             <h2>{title}</h2>
             {detail && (
-              <div className="hidden lg:block">
+              <div className="hidden text-xl lg:block">
                 <PortableText value={detail} />
               </div>
             )}
           </div>
         </div>
 
-        {productReviews && (
-          <div className="mb-8 w-auto lg:w-[350px] lg:pl-12 xl:w-[400px]">
-            <p className="mb-4 text-2xl text-gray-900">${price}</p>
+        <div className="mb-8 w-auto lg:w-[350px] lg:pl-12 xl:w-[400px]">
+          <p className="mb-4 text-2xl text-gray-900">${price}</p>
 
-            <div className="mb-8 flex items-center gap-4">
-              <RatingStar starValue={calculateAverageStar(productReviews)} />
-              <p className="pb-1">
-                {productReviews.length}{' '}
-                {productReviews.length == 1 ? 'review' : 'reviews'}
-              </p>
-            </div>
-
-            <ButtonComponent buttonName="Add to bag" animate />
+          <div className="mb-8 flex items-center gap-4">
+            <RatingStar starValue={calculateAverageStar(productReviews)} />
+            <p className="pb-1">
+              {productReviews.length}{' '}
+              {productReviews.length < 2 ? 'review' : 'reviews'}
+            </p>
           </div>
-        )}
+
+          <AddToBagComponent productSlug={product.slug.current} />
+        </div>
 
         {detail && (
           <div className="lg:hidden">

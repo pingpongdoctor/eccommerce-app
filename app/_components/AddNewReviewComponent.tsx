@@ -6,7 +6,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { postNewReview } from '../_lib/postNewReview';
 import { notify } from './ReactToastifyProvider';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { getUserProfile } from '../_lib/getUserProfile';
+import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
 import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
@@ -24,7 +24,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
 
   useEffect(() => {
     if (user) {
-      getUserProfile().then(
+      getUserProfileFromClientSide().then(
         (userProfile: Omit<User, 'auth0Id'> | undefined) => {
           if (userProfile) {
             setUserId(userProfile.id);
@@ -84,14 +84,10 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
           starReadonly={false}
           starChangeEventHandler={handleStarUpdate}
         />
-        <p className="mb-[4px]">(Please rating for the product)</p>
+        <p className="mb-[4px] text-sm">(Rating this product)</p>
       </div>
 
-      <ButtonComponent
-        buttonClassname="text-sm h-[40px]"
-        buttonName="Add your review"
-        animate={false}
-      />
+      <ButtonComponent buttonName="Add your review" animate={false} />
     </form>
   );
 }
