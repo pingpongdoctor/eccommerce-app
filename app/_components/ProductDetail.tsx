@@ -63,7 +63,7 @@ export default function ProductDetail({ product, productReviews }: Props) {
           <div className="lg:min-h-[400px]">
             <h2>{title}</h2>
             {detail && (
-              <div className="hidden text-xl lg:block">
+              <div className="hidden text-base lg:block">
                 <PortableText value={detail} />
               </div>
             )}
