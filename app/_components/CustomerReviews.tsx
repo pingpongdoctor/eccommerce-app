@@ -6,7 +6,6 @@ import { Review } from '@prisma/client';
 import { calculateRatingBarWidth } from '../_lib/calculateRatingBarWidth';
 import { calculateAverageStar } from '../_lib/calculateAverageStar';
 import AddNewReviewComponent from './AddNewReviewComponent';
-import { getUserProfileFromServer } from '../_lib/getUserProfileFromServer';
 
 interface Props {
   customerReviewsClassname?: string;
@@ -20,7 +19,6 @@ export default async function CustomerReviews({
   productReviews,
   productSlug,
 }: Props) {
-  const userProfile = await getUserProfileFromServer();
   return (
     <div
       className={`mx-auto px-4 md:px-8 lg:flex lg:justify-between lg:gap-16 lg:px-12 xl:max-w-7xl ${customerReviewsClassname}`}
@@ -67,7 +65,7 @@ export default async function CustomerReviews({
           </ul>
 
           {/* add your review */}
-          {userProfile && <AddNewReviewComponent productSlug={productSlug} />}
+          <AddNewReviewComponent productSlug={productSlug} />
         </div>
       </div>
 
