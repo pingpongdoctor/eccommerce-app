@@ -19,6 +19,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
   const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
     null
   );
+  const [isDisable, setIsDisable] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
@@ -50,6 +51,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
     }
 
     try {
+      setIsDisable(true);
       const isSuccess = await addProductToCart(productSlug, quantity);
 
       if (isSuccess) {
@@ -63,6 +65,8 @@ export default function AddToBagComponent({ productSlug }: Props) {
       console.log(
         'Error submiting products for the current user' + ' ' + e.message
       );
+    } finally {
+      setIsDisable(false);
     }
   };
 
@@ -75,7 +79,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
         selectedValue={quantity}
         listComponentHandler={handleUpdateQuantity}
       />
-      <ButtonComponent buttonName="Add to bag" animate />
+      <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
     </form>
   );
 }
