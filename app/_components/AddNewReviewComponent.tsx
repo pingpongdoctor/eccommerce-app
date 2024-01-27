@@ -5,10 +5,10 @@ import ButtonComponent from './ButtonComponent';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { postNewReview } from '../_lib/postNewReview';
 import { notify } from './ReactToastifyProvider';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { getUserProfile } from '../_lib/getUserProfile';
-import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
+import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
+import { User } from '@prisma/client';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 interface Props {
   productSlug: string;
@@ -17,19 +17,19 @@ interface Props {
 export default function AddNewReviewComponent({ productSlug }: Props) {
   const [review, setReview] = useState<string>('');
   const [star, setStar] = useState<number | null>(null);
-  const [userId, setUserId] = useState<number | null>(null);
-  const { user } = useUser();
-
+  const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
+    null
+  );
+  const [isDisable, setIsDisable] = useState<boolean>(false);
   const router = useRouter();
+  const { user } = useUser();
 
   useEffect(() => {
     if (user) {
-      getUserProfile().then(
-        (userProfile: Omit<User, 'auth0Id'> | undefined) => {
-          if (userProfile) {
-            setUserId(userProfile.id);
-          } else {
-            setUserId(null);
+      getUserProfileFromClientSide().then(
+        (userData: Omit<User, 'auth0Id'> | undefined) => {
+          if (userData) {
+            setUserProfile(userData);
           }
         }
       );
@@ -49,25 +49,31 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
   const handleSubmitReview = async function (e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!user || !userId) {
-      notify('info', 'Please log in to write a review', 'login-requirement');
+    if (!userProfile) {
+      notify('info', 'Please log in to write a review', 'login-info');
       return;
     }
 
     if (!review || !star) {
-      notify('error', 'Please write a review with star rating', 'review-error');
+      notify(
+        'error',
+        'Please write a review and rate the product',
+        'review-error'
+      );
       return;
     }
 
     try {
-      await postNewReview(productSlug, review, star, userId);
+      setIsDisable(true);
+      await postNewReview(productSlug, review, star);
       notify('success', 'Thank your for your review', 'review-success');
       router.refresh();
     } catch (e: any) {
       console.log(
         'Error in handleReviewContentUpdate function' + ' ' + e.message
       );
-      notify('error', 'There is an error, please try again', 'submit-error');
+    } finally {
+      setIsDisable(false);
     }
   };
 
@@ -84,11 +90,11 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
           starReadonly={false}
           starChangeEventHandler={handleStarUpdate}
         />
-        <p className="mb-[4px]">(Please rating for the product)</p>
+        <p className="mb-[4px] text-sm">(Rating this product)</p>
       </div>
 
       <ButtonComponent
-        buttonClassname="text-sm h-[40px]"
+        isDisabled={isDisable}
         buttonName="Add your review"
         animate={false}
       />

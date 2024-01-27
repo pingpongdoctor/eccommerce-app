@@ -63,8 +63,9 @@ model UsersProducts {
   productId Int
   user User @relation(fields: [userId],references: [id])
   product Product @relation(fields: [productId], references: [id], onDelete: Restrict, onUpdate:Cascade)
-  productQuantity Int @default(1)
+  productQuantity Int
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([userId,productId])
   @@index([userId])

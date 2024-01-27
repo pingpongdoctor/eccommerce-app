@@ -20,7 +20,7 @@ export default function ButtonComponent({
 }: Props) {
   return (
     <button
-      className={`group relative h-[50px] w-full rounded-[0.42rem] border border-gray-400 font-bold transition-transform duration-200 active:scale-[0.98] ${buttonClassname}`}
+      className={`group relative h-[50px] w-full rounded-[0.42rem] border border-gray-400 text-sm font-semibold transition-transform duration-200 active:scale-[0.98] ${buttonClassname}`}
       disabled={isDisabled}
       onClick={buttonOnclickHandler}
     >

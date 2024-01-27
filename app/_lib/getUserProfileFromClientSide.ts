@@ -1,7 +1,9 @@
+'use client';
+
 import { User } from '@prisma/client';
 import { baseUrl } from '../utils/baseUrl';
 
-export async function getUserProfile(): Promise<
+export async function getUserProfileFromClientSide(): Promise<
   Omit<User, 'auth0Id'> | undefined
 > {
   try {

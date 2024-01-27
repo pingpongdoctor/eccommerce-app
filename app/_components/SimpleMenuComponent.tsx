@@ -16,7 +16,7 @@ const links = [
   {
     href: '/api/auth/logout',
     label: 'Log out',
-    classname: 'ui-active:bg-gray-50 block px-4 py-2 text-gray-700 md:hidden',
+    classname: 'ui-active:bg-gray-50 px-4 py-2 text-gray-700',
   },
 ];
 
@@ -40,7 +40,7 @@ export default function SimpleMenuComponent({ avatarSrc, username }: Props) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 top-11 z-20 flex w-40 origin-top-right flex-col rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 top-11 z-20 flex w-40 origin-top-right flex-col rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
           <Menu.Item
             as="div"
             key="username"

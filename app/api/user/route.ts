@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { User } from '@prisma/client';
 
+//get user profile
 export const GET = withApiAuthRequired(async () => {
   const session = await getSession();
   if (!session) {
@@ -17,17 +18,19 @@ export const GET = withApiAuthRequired(async () => {
   try {
     const auth0Id: string = session.user.sub;
 
-    const userData: Omit<User, 'auth0Id'> | null = await prisma.user.findFirst({
-      where: { auth0Id },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        imgUrl: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    const userData: Omit<User, 'auth0Id'> | null = await prisma.user.findUnique(
+      {
+        where: { auth0Id },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          imgUrl: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      }
+    );
 
     if (!userData) {
       return NextResponse.json(
