@@ -28,7 +28,6 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
     if (user) {
       getUserProfileFromClientSide().then(
         (userData: Omit<User, 'auth0Id'> | undefined) => {
-          console.log(userData);
           if (userData) {
             setUserProfile(userData);
           }
@@ -56,7 +55,11 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
     }
 
     if (!review || !star) {
-      notify('error', 'Please write a review with star rating', 'review-error');
+      notify(
+        'error',
+        'Please write a review and rate the product',
+        'review-error'
+      );
       return;
     }
 
@@ -69,7 +72,6 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
       console.log(
         'Error in handleReviewContentUpdate function' + ' ' + e.message
       );
-      notify('error', 'There is an error, please try again', 'submit-error');
     } finally {
       setIsDisable(false);
     }
