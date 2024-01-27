@@ -86,7 +86,7 @@ export const GET = withApiAuthRequired(async (req: Request, context) => {
   }
 });
 
-//create or update userproduct records
+//create or update userproduct records (if update, we add more products to the products field in user table)
 export const POST = withApiAuthRequired(async (req: Request, context) => {
   const session = await getSession();
   if (!session) {
@@ -157,7 +157,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
         },
       },
       update: {
-        productQuantity,
+        productQuantity: { increment: productQuantity }, //add more product
         createdAt: new Date(),
       },
     });

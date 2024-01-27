@@ -17,7 +17,9 @@ export default function RatingStar({
   starChangeEventHandler,
 }: Props) {
   return (
-    <div className={`[&>div_span_svg]:text-gray-900 ${ratingClassname}`}>
+    <div
+      className={`[&>div_span_svg]:cursor-default [&>div_span_svg]:text-gray-900 ${ratingClassname}`}
+    >
       <Rating
         readonly={starReadonly}
         value={Math.round(starValue || 0)}

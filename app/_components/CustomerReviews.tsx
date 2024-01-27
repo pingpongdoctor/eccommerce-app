@@ -31,7 +31,7 @@ export default async function CustomerReviews({
           <RatingStar starValue={calculateAverageStar(productReviews)} />
           <p className="pb-1">
             {productReviews.length}{' '}
-            {productReviews.length == 1 ? 'review' : 'reviews'}
+            {productReviews.length < 2 ? 'review' : 'reviews'}
           </p>
         </div>
 

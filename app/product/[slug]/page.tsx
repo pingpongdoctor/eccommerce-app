@@ -99,12 +99,11 @@ export default async function DetailedProduct({
       ) : (
         <ProductDetail
           product={initialData.data}
-          productReviews={productReviews}
+          productReviews={productReviews || []}
         />
       )}
 
       {/* customer reviews */}
-
       <CustomerReviews
         productReviews={
           productReviews?.sort(
