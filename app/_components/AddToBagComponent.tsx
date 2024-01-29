@@ -78,6 +78,13 @@ export default function AddToBagComponent({ productSlug }: Props) {
       <ListComponent
         selectedValue={quantity}
         listComponentHandler={handleUpdateQuantity}
+        listData={[
+          { id: 1, value: 1 },
+          { id: 2, value: 2 },
+          { id: 3, value: 3 },
+          { id: 4, value: 4 },
+          { id: 5, value: 5 },
+        ]}
       />
       <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
     </form>

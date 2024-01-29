@@ -5,16 +5,16 @@ import { SanityDocument } from 'next-sanity';
 import { draftMode } from 'next/headers';
 import { PRODUCTS_QUERY_BASED_SLUGS } from '@/sanity/lib/queries';
 import { QueryResponseInitial } from '@sanity/react-loader';
+import { addProductImgUrls } from '../_lib/addProductImgUrls';
 
 export default withPageAuthRequired(async function ShoppingCart() {
-  const products:
-    | {
-        sanitySlug: string;
-      }[]
-    | undefined = await getProductsInCartFromServer();
+  //get products in shopping cart of the current user
+  const products: ProductInShoppingCart[] | undefined =
+    await getProductsInCartFromServer();
 
-  const productSlugs = products
-    ? products.map((product: { sanitySlug: string }) => product.sanitySlug)
+  //get product sanity documents
+  const productSlugs: string[] = products
+    ? products.map((product: ProductInShoppingCart) => product.productSlug)
     : [];
 
   const initialData: QueryResponseInitial<(SanityProduct & SanityDocument)[]> =
@@ -26,6 +26,13 @@ export default withPageAuthRequired(async function ShoppingCart() {
       }
     );
 
+  const sanityProducts: (SanityProduct & SanityDocument)[] = initialData.data;
+
+  //add img url to sanity documents
+  const sanityProductsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
+    await addProductImgUrls(sanityProducts);
+
+  console.log(sanityProductsWithImgUrl);
   return (
     <div>
       <h2>Shopping Cart</h2>

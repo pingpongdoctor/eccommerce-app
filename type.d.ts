@@ -20,6 +20,11 @@ interface SanityProduct {
   category: Categories;
 }
 
+interface ProductInShoppingCart {
+  productSlug: string;
+  productQuantity: number;
+}
+
 type ProductWithImgUrl = SanityProduct & {
   imgUrl: string;
 };
