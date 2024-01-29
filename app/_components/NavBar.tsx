@@ -13,7 +13,6 @@ import { useState, useEffect } from 'react';
 import { User } from '@prisma/client';
 import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
-import { baseUrl } from '../utils/baseUrl';
 import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 
 export default function Navbar() {
@@ -100,12 +99,15 @@ export default function Navbar() {
                 avatarSrc={userProfile.imgUrl}
                 username={userProfile.name}
               />
-              <div className="group flex items-end gap-1">
+              <Link
+                href="/shopping-cart"
+                className="group flex items-end gap-1"
+              >
                 <ShoppingBagIcon className="h-7 text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600" />
                 <p className="text-lg font-medium text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600">
                   {products.length}
                 </p>
-              </div>
+              </Link>
             </div>
           )}
 
