@@ -18,6 +18,7 @@ interface SanityProduct {
   featured: boolean;
   price: string;
   category: Categories;
+  instock: number;
 }
 
 interface ProductInShoppingCart {
