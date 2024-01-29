@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 
-//get products in the shopping cart for the current user
+////get products in shopping cart of the current user
 export const GET = withApiAuthRequired(async () => {
   const session = await getSession();
 
@@ -18,7 +18,10 @@ export const GET = withApiAuthRequired(async () => {
       where: { auth0Id },
       include: {
         products: {
-          select: { product: { select: { sanitySlug: true } } },
+          select: {
+            product: { select: { sanitySlug: true } },
+            productQuantity: true,
+          },
         },
       },
     });
@@ -27,13 +30,19 @@ export const GET = withApiAuthRequired(async () => {
       return NextResponse.json({ message: 'Please log in' }, { status: 400 });
     }
 
-    //get product sanity slug
-    const products = user.products.map(
+    //get products records containing product slugs and product quantity
+    const products: ProductInShoppingCart[] = user.products.map(
       (ele: {
+        productQuantity: number;
         product: {
           sanitySlug: string;
         };
-      }) => ele.product
+      }) => {
+        return {
+          productSlug: ele.product.sanitySlug,
+          productQuantity: ele.productQuantity,
+        };
+      }
     );
 
     return NextResponse.json(

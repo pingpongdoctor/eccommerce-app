@@ -2,7 +2,7 @@ import { baseUrl } from '../utils/baseUrl';
 import { headers } from 'next/headers';
 
 export async function getProductsInCartFromServer(): Promise<
-  { sanitySlug: string }[] | undefined
+  ProductInShoppingCart[] | undefined
 > {
   try {
     const res = await fetch(`${baseUrl}/api/product-shopping`, {
@@ -16,7 +16,7 @@ export async function getProductsInCartFromServer(): Promise<
       return undefined;
     }
 
-    const products: { sanitySlug: string }[] = data.products;
+    const products: ProductInShoppingCart[] = data.products;
 
     return products;
   } catch (e: any) {
