@@ -4,6 +4,7 @@ import { getProductsInCartFromServer } from '../_lib/getProductsInCartFromServer
 import { SanityDocument } from 'next-sanity';
 import { draftMode } from 'next/headers';
 import { PRODUCTS_QUERY_BASED_SLUGS } from '@/sanity/lib/queries';
+import { QueryResponseInitial } from '@sanity/react-loader';
 
 export default withPageAuthRequired(async function ShoppingCart() {
   const products:
@@ -16,15 +17,14 @@ export default withPageAuthRequired(async function ShoppingCart() {
     ? products.map((product: { sanitySlug: string }) => product.sanitySlug)
     : [];
 
-  const initialData = await loadQuery<(SanityProduct & SanityDocument)[]>(
-    PRODUCTS_QUERY_BASED_SLUGS,
-    { slugArr: productSlugs },
-    {
-      perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-    }
-  );
-
-  console.log(initialData.data);
+  const initialData: QueryResponseInitial<(SanityProduct & SanityDocument)[]> =
+    await loadQuery<(SanityProduct & SanityDocument)[]>(
+      PRODUCTS_QUERY_BASED_SLUGS,
+      { slugArr: productSlugs },
+      {
+        perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      }
+    );
 
   return (
     <div>
