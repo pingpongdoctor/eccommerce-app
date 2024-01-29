@@ -14,7 +14,7 @@ export default async function ProductCards({
   return (
     <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       <div className="flex flex-col gap-8 sm:flex-row sm:flex-wrap">
-        {productsWithImgUrl?.length > 0 &&
+        {productsWithImgUrl.length > 0 &&
           productsWithImgUrl.map(
             (product: ProductWithImgUrl & SanityDocument) => (
               <Link

@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
     category: Categories;
     featured: boolean;
     _type: string;
+    instock: number;
   } | null>(
     req,
     process.env.NEXT_PUBLIC_SANITY_HOOK_SECRET_CREATE_UPDATE_PRODUCT
@@ -27,7 +28,8 @@ export async function POST(req: NextRequest) {
     !body?.price ||
     !body?.category ||
     !body?.hasOwnProperty('featured') ||
-    !body?._type
+    !body?._type ||
+    !body?.instock
   ) {
     return NextResponse.json(
       { message: 'Missed required data' },
@@ -40,6 +42,7 @@ export async function POST(req: NextRequest) {
     price: body.price,
     category: body.category,
     featured: body.featured,
+    instock: body.instock,
   };
 
   try {

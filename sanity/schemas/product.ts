@@ -25,6 +25,11 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'instock',
+      title: 'In Stock',
+      type: 'number',
+    }),
+    defineField({
       name: 'price',
       title: 'Price',
       type: 'string',
@@ -74,7 +79,6 @@ export default defineType({
       type: 'blockContent',
     }),
   ],
-
   preview: {
     select: {
       title: 'title',

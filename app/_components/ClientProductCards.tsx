@@ -27,7 +27,7 @@ export default function ClientProductCards({
   return (
     <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       <div className="flex min-h-[400px] flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
-        {productsWithImgUrl?.length > 0 &&
+        {productsWithImgUrl.length > 0 &&
           productsWithImgUrl.map(
             (product: ProductWithImgUrl & SanityDocument) => (
               <Link
