@@ -4,7 +4,7 @@ import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 
 //get products in the shopping cart for the current user
-export const GET = async () => {
+export const GET = withApiAuthRequired(async () => {
   const session = await getSession();
 
   if (!session) {
@@ -51,4 +51,4 @@ export const GET = async () => {
       { status: 500 }
     );
   }
-};
+});
