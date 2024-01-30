@@ -5,7 +5,6 @@ import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 interface Props {
   listComponentChangeEventHandler?: (value: number) => void;
-  listComponentClickEventHandler?: (value: number) => void;
   selectedValue: number;
   listData: { id: number; value: string | number }[];
 }
@@ -22,9 +21,9 @@ export default function ListComponent({
       className="relative"
       onChange={listComponentChangeEventHandler}
     >
-      <Listbox.Button className="focus:outline-non relative w-full cursor-default rounded-lg border border-gray-400 bg-white py-2 pl-3 pr-10 text-left">
+      <Listbox.Button className="focus:outline-non relative min-w-[75px] cursor-default rounded-lg border border-gray-400 bg-white py-2 pl-3 pr-10 text-left">
         <p className="text-center text-sm font-medium text-gray-700">
-          Quantity: {selectedValue}
+          {selectedValue}
         </p>
         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
           <ChevronUpDownIcon

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { solidBlureDataUrl } from '../utils/utils';
 import { SanityDocument } from 'next-sanity';
+import ChangeItemQuatityComponent from './ChangeItemQuatityComponent';
 
 interface Props {
   product: ProductWithImgUrl & SanityDocument;
@@ -22,6 +23,7 @@ export default function ShoppingCartItem({ product }: Props) {
       <div>
         <div className="flex gap-16">
           <p>{product.title}</p>
+          <ChangeItemQuatityComponent product={product} />
         </div>
         <p>${product.price}</p>
       </div>
