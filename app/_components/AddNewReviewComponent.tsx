@@ -65,9 +65,12 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
 
     try {
       setIsDisable(true);
-      await postNewReview(productSlug, review, star);
-      notify('success', 'Thank your for your review', 'review-success');
-      router.refresh();
+      const isSuccess = await postNewReview(productSlug, review, star);
+
+      if (isSuccess) {
+        notify('success', 'Thank your for your review', 'review-success');
+        router.refresh();
+      }
     } catch (e: any) {
       console.log(
         'Error in handleReviewContentUpdate function' + ' ' + e.message

@@ -70,7 +70,7 @@ export default async function DetailedProduct({
     }
   );
 
-  if (!initialData?.data) {
+  if (!initialData.data) {
     notFound();
   }
 
