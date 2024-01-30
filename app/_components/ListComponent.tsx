@@ -8,6 +8,8 @@ interface Props {
   listComponentClickEventHandler?: (quantity: number) => void;
   selectedValue: number;
   listData: { id: number; value: number }[];
+  listClassname?: string;
+  listButtonClassname?: string;
 }
 
 export default function ListComponent({
@@ -15,6 +17,8 @@ export default function ListComponent({
   listComponentClickEventHandler,
   selectedValue,
   listData,
+  listClassname,
+  listButtonClassname,
 }: Props) {
   return (
     <Listbox
@@ -23,7 +27,9 @@ export default function ListComponent({
       className="relative"
       onChange={listComponentChangeEventHandler}
     >
-      <Listbox.Button className="focus:outline-non relative min-w-[75px] cursor-default rounded-lg border border-gray-400 bg-white py-2 pl-3 pr-10 text-left">
+      <Listbox.Button
+        className={`focus:outline-non relative w-full min-w-[75px] cursor-default rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-10 text-left ${listButtonClassname}`}
+      >
         <p className="text-center text-sm font-medium text-gray-700">
           {selectedValue}
         </p>
@@ -43,7 +49,9 @@ export default function ListComponent({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Listbox.Options className="absolute z-10 mt-1 w-full rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+        <Listbox.Options
+          className={`absolute z-10 mt-1 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm ${listClassname}`}
+        >
           {listData.map((ele: { id: number; value: number }) => (
             <Listbox.Option
               as="div"

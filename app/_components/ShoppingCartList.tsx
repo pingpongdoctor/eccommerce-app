@@ -27,7 +27,7 @@ export default async function ShoppingCartList({
     }
   );
   return (
-    <div>
+    <div className="mx-auto max-w-7xl px-4 *:mb-8 md:px-8 lg:px-12 *:lg:mb-12">
       {productsWithImgUrlAndQuantity.map(
         (
           product: ProductWithImgUrl &
