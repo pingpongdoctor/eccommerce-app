@@ -4,7 +4,7 @@ import { SanityDocument } from 'next-sanity';
 import ChangeItemQuatityComponent from './ChangeItemQuatityComponent';
 
 interface Props {
-  product: ProductWithImgUrl & SanityDocument;
+  product: ProductWithImgUrl & SanityDocument & { productQuantity: number };
 }
 
 export default function ShoppingCartItem({ product }: Props) {

@@ -57,10 +57,6 @@ export default function Navbar() {
     }
   }, [user, isNewProductAddedToCart]);
 
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
-
   return (
     <div className="mx-auto mb-8 flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12">
       <nav className="flex h-8 items-center justify-between overflow-visible bg-white">

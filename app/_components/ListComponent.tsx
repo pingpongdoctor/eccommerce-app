@@ -5,12 +5,14 @@ import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 interface Props {
   listComponentChangeEventHandler?: (value: number) => void;
+  listComponentClickEventHandler?: (quantity: number) => void;
   selectedValue: number;
-  listData: { id: number; value: string | number }[];
+  listData: { id: number; value: number }[];
 }
 
 export default function ListComponent({
   listComponentChangeEventHandler,
+  listComponentClickEventHandler,
   selectedValue,
   listData,
 }: Props) {
@@ -42,12 +44,17 @@ export default function ListComponent({
         leaveTo="transform opacity-0 scale-95"
       >
         <Listbox.Options className="absolute z-10 mt-1 w-full rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-          {listData.map((ele: { id: number; value: number | string }) => (
+          {listData.map((ele: { id: number; value: number }) => (
             <Listbox.Option
               as="div"
               key={ele.id}
               value={ele.value}
               className="block px-4 py-2 text-center text-gray-700 ui-active:bg-gray-50"
+              onClick={() => {
+                if (typeof listComponentClickEventHandler == 'function') {
+                  listComponentClickEventHandler(ele.value);
+                }
+              }}
             >
               {ele.value}
             </Listbox.Option>
