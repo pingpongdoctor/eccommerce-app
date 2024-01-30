@@ -1,19 +1,21 @@
 'use client';
 import React from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 
 interface Props {
   listComponentHandler?: (value: number) => void;
   selectedValue: number;
-  listData: { id: number; value: string | number; link?: string }[];
+  listData: { id: number; value: string | number }[];
+  useLinks?: boolean;
 }
 
 export default function ListComponent({
   listComponentHandler,
   selectedValue,
   listData,
+  useLinks = false,
 }: Props) {
   return (
     <Listbox
@@ -43,28 +45,26 @@ export default function ListComponent({
         leaveTo="transform opacity-0 scale-95"
       >
         <Listbox.Options className="absolute z-10 mt-1 w-full rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-          {listData.map(
-            (ele: { id: number; value: number | string; link?: string }) => (
-              <Listbox.Option
-                as="div"
-                key={ele.id}
-                value={ele.value}
-                className="block px-4 py-2 text-center text-gray-700 ui-active:bg-gray-50"
-              >
-                {ele.link ? (
-                  <Link
-                    href={ele.link}
-                    className="relative block"
-                    scroll={false}
-                  >
-                    {ele.value}
-                  </Link>
-                ) : (
-                  <>{ele.value}</>
-                )}
-              </Listbox.Option>
-            )
-          )}
+          {listData.map((ele: { id: number; value: number | string }) => (
+            <Listbox.Option
+              as="div"
+              key={ele.id}
+              value={ele.value}
+              className="block px-4 py-2 text-center text-gray-700 ui-active:bg-gray-50"
+            >
+              {useLinks ? (
+                <Link
+                  href={`/${ele.value}`}
+                  className="relative block"
+                  scroll={false}
+                >
+                  {ele.value}
+                </Link>
+              ) : (
+                <>{ele.value}</>
+              )}
+            </Listbox.Option>
+          ))}
         </Listbox.Options>
       </Transition>
     </Listbox>

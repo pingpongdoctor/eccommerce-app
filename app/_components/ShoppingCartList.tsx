@@ -1,7 +1,6 @@
 import { SanityDocument } from 'next-sanity';
 import ShoppingCartItem from './ShoppingCartItem';
 import { addProductImgUrls } from '../_lib/addProductImgUrls';
-import product from '@/sanity/schemas/product';
 
 interface Props {
   products: (SanityProduct & SanityDocument)[];
