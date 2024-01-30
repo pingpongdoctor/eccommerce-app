@@ -31,7 +31,10 @@ export default withPageAuthRequired(async function ShoppingCart() {
   return (
     <div>
       <h2>Shopping Cart</h2>
-      <ShoppingCartList products={sanityProducts} />
+      <ShoppingCartList
+        products={products || []}
+        sanityProducts={sanityProducts}
+      />
     </div>
   );
 });

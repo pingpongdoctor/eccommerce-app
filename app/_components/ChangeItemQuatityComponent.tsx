@@ -7,14 +7,13 @@ import { updateProductQuantityForProductsInCart } from '../_lib/updateProductQua
 import { globalStatesContext } from './GlobalStatesContext';
 
 interface Props {
-  product: ProductWithImgUrl & SanityDocument;
+  product: ProductWithImgUrl & SanityDocument & { productQuantity: number };
 }
 
 export default function ChangeItemQuatityComponent({ product }: Props) {
   const [currentQuantity, setCurrentQuantity] = useState<number>(
-    product.instock
+    product.productQuantity
   );
-
   const { setIsNewProductAddedToCart } = useContext(globalStatesContext);
 
   const handleUpdateQuantityState = async function (value: number) {
@@ -23,20 +22,15 @@ export default function ChangeItemQuatityComponent({ product }: Props) {
     }
   };
 
-  useEffect(() => {
-    updateProductQuantityForProductsInCart(
-      currentQuantity,
+  const handleSubmitNewProductQuantity = async function (quantity: number) {
+    const isSuccess = await updateProductQuantityForProductsInCart(
+      quantity,
       product.slug.current
-    )
-      .then((isSuccess: boolean) => {
-        if (isSuccess) {
-          setIsNewProductAddedToCart(true);
-        }
-      })
-      .catch((e: any) => {
-        console.log(e.message);
-      });
-  }, [currentQuantity]);
+    );
+    if (isSuccess) {
+      setIsNewProductAddedToCart(true);
+    }
+  };
 
   return (
     <div>
@@ -44,6 +38,7 @@ export default function ChangeItemQuatityComponent({ product }: Props) {
         selectedValue={currentQuantity}
         listData={generateProductInstockList(product.instock)}
         listComponentChangeEventHandler={handleUpdateQuantityState}
+        listComponentClickEventHandler={handleSubmitNewProductQuantity}
       />
     </div>
   );

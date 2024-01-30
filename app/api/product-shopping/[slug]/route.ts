@@ -111,7 +111,7 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
 
   const productSlug = context.params?.slug as string | undefined;
 
-  const { productQuantity } = await req.json();
+  const { productQuantity }: { productQuantity: string } = await req.json();
 
   if (!productSlug || !productQuantity) {
     return NextResponse.json(
