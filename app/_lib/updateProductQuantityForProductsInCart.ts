@@ -6,7 +6,7 @@ export async function updateProductQuantityForProductsInCart(
   productSlug: string
 ): Promise<boolean> {
   try {
-    const res = await fetch(`${baseUrl}/product-shopping/${productSlug}`, {
+    const res = await fetch(`${baseUrl}/api/product-shopping/${productSlug}`, {
       headers: {
         'Content-Type': 'application/json',
       },
