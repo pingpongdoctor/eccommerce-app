@@ -17,7 +17,7 @@ export default function ListComponent({
 }: Props) {
   return (
     <Listbox
-      defaultValue={selectedValue}
+      defaultValue={1}
       as="div"
       className="relative"
       onChange={listComponentHandler}
@@ -57,18 +57,10 @@ export default function ListComponent({
                     className="relative block"
                     scroll={false}
                   >
-                    <span className="absolute inset-y-0 right-0 hidden pr-2 ui-selected:flex ui-selected:items-center">
-                      <CheckIcon className="aria-hidden h-5 w-5" />
-                    </span>
                     {ele.value}
                   </Link>
                 ) : (
-                  <>
-                    <span className="absolute inset-y-0 right-0 hidden pr-2 ui-selected:flex ui-selected:items-center">
-                      <CheckIcon className="aria-hidden h-5 w-5" />
-                    </span>
-                    {ele.value}
-                  </>
+                  <>{ele.value}</>
                 )}
               </Listbox.Option>
             )
