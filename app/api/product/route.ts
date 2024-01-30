@@ -22,6 +22,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'Invalid Signature' }, { status: 401 });
   }
 
+  console.log(body);
+
   if (
     !body?.sanitySlug ||
     !body?.title ||
@@ -45,8 +47,10 @@ export async function POST(req: NextRequest) {
     instock: body.instock,
   };
 
+  console.log(productData);
+
   try {
-    await prisma.product.upsert({
+    const product = await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,
@@ -57,6 +61,8 @@ export async function POST(req: NextRequest) {
         createdAt: new Date(),
       },
     });
+
+    console.log(product);
 
     //revalidate product data in SSG pages
     revalidateTag(body._type);
