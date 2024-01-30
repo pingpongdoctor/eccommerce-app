@@ -9,6 +9,7 @@ interface Props {
 }
 
 export default function ShoppingCartItem({ product }: Props) {
+  console.log(product);
   return (
     <div className="flex gap-6 font-medium">
       <Image
@@ -24,7 +25,7 @@ export default function ShoppingCartItem({ product }: Props) {
       <div>
         <div className="flex gap-16">
           <p>{product.title}</p>
-          {/* <ListComponent /> */}
+          {/* <ListComponent listData={}/> */}
         </div>
         <p>${product.price}</p>
       </div>

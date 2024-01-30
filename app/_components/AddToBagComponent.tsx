@@ -11,9 +11,13 @@ import { User } from '@prisma/client';
 
 interface Props {
   productSlug: string;
+  productInstock: number;
 }
 
-export default function AddToBagComponent({ productSlug }: Props) {
+export default function AddToBagComponent({
+  productSlug,
+  productInstock,
+}: Props) {
   const [quantity, setQuantity] = useState<number>(1);
   const { user } = useUser();
   const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(

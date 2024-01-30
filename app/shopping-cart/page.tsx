@@ -28,6 +28,7 @@ export default withPageAuthRequired(async function ShoppingCart() {
 
   const sanityProducts: (SanityProduct & SanityDocument)[] = initialData.data;
 
+  console.log(sanityProducts);
   return (
     <div>
       <h2>Shopping Cart</h2>

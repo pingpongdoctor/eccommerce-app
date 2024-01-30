@@ -81,7 +81,10 @@ export default function ProductDetail({ product, productReviews }: Props) {
             </p>
           </div>
 
-          <AddToBagComponent productSlug={product.slug.current} />
+          <AddToBagComponent
+            productInstock={product.instock}
+            productSlug={product.slug.current}
+          />
         </div>
 
         {detail && (
