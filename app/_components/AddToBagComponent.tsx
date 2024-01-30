@@ -8,7 +8,7 @@ import { notify } from './ReactToastifyProvider';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
 import { User } from '@prisma/client';
-import { generateProductInstockData } from '../_lib/generateProductInstockData';
+import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
 
 interface Props {
@@ -86,7 +86,7 @@ export default function AddToBagComponent({
       <ListComponent
         selectedValue={quantity}
         listComponentHandler={handleUpdateQuantity}
-        listData={generateProductInstockData(productInstock)}
+        listData={generateProductInstockList(productInstock)}
       />
       <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
     </form>

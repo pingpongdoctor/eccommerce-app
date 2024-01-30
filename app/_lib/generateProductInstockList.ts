@@ -1,4 +1,4 @@
-export function generateProductInstockData(instockValue: number): {
+export function generateProductInstockList(instockValue: number): {
   id: number;
   value: number;
 }[] {
