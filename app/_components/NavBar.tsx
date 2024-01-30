@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { User } from '@prisma/client';
 import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
+import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 
 export default function Navbar() {
   const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
@@ -20,9 +21,11 @@ export default function Navbar() {
   );
 
   const { user, isLoading } = useUser();
+  const [products, setProducts] = useState<{ sanitySlug: string }[]>([]);
 
   useEffect(() => {
     if (user) {
+      //get user profile
       getUserProfileFromClientSide()
         .then((userData: Omit<User, 'auth0Id'> | undefined) => {
           if (userData) {
@@ -32,6 +35,23 @@ export default function Navbar() {
         .catch((e: any) => {
           console.log('error fetching user data' + ' ' + e);
         });
+
+      //get products in user cart
+      getProductsInCartFromClientSide().then(
+        (
+          products:
+            | {
+                sanitySlug: string;
+              }[]
+            | undefined
+        ) => {
+          if (products) {
+            setProducts(products);
+          } else {
+            setProducts([]);
+          }
+        }
+      );
     }
   }, [user]);
 
@@ -79,12 +99,15 @@ export default function Navbar() {
                 avatarSrc={userProfile.imgUrl}
                 username={userProfile.name}
               />
-              <div className="group flex items-end gap-1">
+              <Link
+                href="/shopping-cart"
+                className="group flex items-end gap-1"
+              >
                 <ShoppingBagIcon className="h-7 text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600" />
                 <p className="text-lg font-medium text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600">
-                  2
+                  {products.length}
                 </p>
-              </div>
+              </Link>
             </div>
           )}
 

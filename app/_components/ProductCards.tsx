@@ -1,7 +1,7 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
-import { builder } from '../utils/imageBuilder';
+import { addProductImgUrls } from '../_lib/addProductImgUrls';
 
 export default async function ProductCards({
   products,
@@ -9,17 +9,12 @@ export default async function ProductCards({
   products: (SanityProduct & SanityDocument)[];
 }) {
   // use promise all to handle all promises at the same time to avoid waterfalls in data fetching
-  const productsWithImgUrl = await Promise.all(
-    products.map(async (product: SanityProduct & SanityDocument) => {
-      product.imgUrl = builder.image(product.images[0]).quality(80).url();
-      return product as ProductWithImgUrl & SanityDocument;
-    })
-  );
+  const productsWithImgUrl = await addProductImgUrls(products);
 
   return (
     <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       <div className="flex flex-col gap-8 sm:flex-row sm:flex-wrap">
-        {productsWithImgUrl?.length > 0 &&
+        {productsWithImgUrl.length > 0 &&
           productsWithImgUrl.map(
             (product: ProductWithImgUrl & SanityDocument) => (
               <Link

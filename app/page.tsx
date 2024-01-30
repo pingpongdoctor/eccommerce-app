@@ -87,6 +87,13 @@ export default async function Home() {
         <IntroduceComponent homePageData={homePageData.data} />
       )}
 
+      <div>
+        <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+          Browse by Category
+        </h3>
+        <CategoryCards />
+      </div>
+
       {dataArr?.length > 0 &&
         dataArr.map((data) => (
           <div key={data.id}>
@@ -101,13 +108,6 @@ export default async function Home() {
             </div>
           </div>
         ))}
-
-      <div>
-        <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
-          Browse by Category
-        </h3>
-        <CategoryCards />
-      </div>
 
       <IncentiveComponent />
     </main>

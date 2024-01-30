@@ -18,6 +18,12 @@ interface SanityProduct {
   featured: boolean;
   price: string;
   category: Categories;
+  instock: number;
+}
+
+interface ProductInShoppingCart {
+  productSlug: string;
+  productQuantity: number;
 }
 
 type ProductWithImgUrl = SanityProduct & {

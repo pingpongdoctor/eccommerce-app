@@ -3,8 +3,8 @@
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import ClientProductCard from './ClientProductCard';
-import { builder } from '../utils/imageBuilder';
 import { useEffect, useState } from 'react';
+import { addProductImgUrls } from '../_lib/addProductImgUrls';
 
 export default function ClientProductCards({
   products,
@@ -17,20 +17,17 @@ export default function ClientProductCards({
 
   // use promise all to handle all promises at the same time to avoid waterfalls in data fetching
   useEffect(() => {
-    Promise.all(
-      products.map(async (product: SanityProduct & SanityDocument) => {
-        product.imgUrl = builder.image(product.images[0]).quality(80).url();
-        return product as ProductWithImgUrl & SanityDocument;
-      })
-    ).then((data: (ProductWithImgUrl & SanityDocument)[]) => {
-      setProductsWithImgUrl(data);
-    });
+    addProductImgUrls(products).then(
+      (data: (ProductWithImgUrl & SanityDocument)[]) => {
+        setProductsWithImgUrl(data);
+      }
+    );
   }, [products]);
 
   return (
     <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       <div className="flex min-h-[400px] flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8">
-        {productsWithImgUrl?.length > 0 &&
+        {productsWithImgUrl.length > 0 &&
           productsWithImgUrl.map(
             (product: ProductWithImgUrl & SanityDocument) => (
               <Link

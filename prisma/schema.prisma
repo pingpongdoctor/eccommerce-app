@@ -54,6 +54,7 @@ model Product {
   featured Boolean @default(false)
   users UsersProducts[]
   reviews Review[]
+  instock Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
