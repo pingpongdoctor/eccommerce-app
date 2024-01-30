@@ -1,5 +1,5 @@
 'use client';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useContext } from 'react';
 import ButtonComponent from './ButtonComponent';
 import ListComponent from './ListComponent';
 import { useState } from 'react';
@@ -8,6 +8,8 @@ import { notify } from './ReactToastifyProvider';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
 import { User } from '@prisma/client';
+import { generateProductInstockData } from '../_lib/generateProductInstockData';
+import { globalStatesContext } from './GlobalStatesContext';
 
 interface Props {
   productSlug: string;
@@ -24,6 +26,7 @@ export default function AddToBagComponent({
     null
   );
   const [isDisable, setIsDisable] = useState<boolean>(false);
+  const { setIsNewProductAddedToCart } = useContext(globalStatesContext);
 
   useEffect(() => {
     if (user) {
@@ -64,6 +67,7 @@ export default function AddToBagComponent({
           'Product has been added to your cart',
           'add-product-to-cart-success'
         );
+        setIsNewProductAddedToCart(true);
       }
     } catch (e: any) {
       console.log(
@@ -82,13 +86,7 @@ export default function AddToBagComponent({
       <ListComponent
         selectedValue={quantity}
         listComponentHandler={handleUpdateQuantity}
-        listData={[
-          { id: 1, value: 1 },
-          { id: 2, value: 2 },
-          { id: 3, value: 3 },
-          { id: 4, value: 4 },
-          { id: 5, value: 5 },
-        ]}
+        listData={generateProductInstockData(productInstock)}
       />
       <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
     </form>

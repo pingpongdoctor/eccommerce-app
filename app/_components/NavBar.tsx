@@ -14,14 +14,18 @@ import { User } from '@prisma/client';
 import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
 import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
+import { useContext } from 'react';
+import { globalStatesContext } from './GlobalStatesContext';
+import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
 
 export default function Navbar() {
   const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
     null
   );
-
   const { user, isLoading } = useUser();
-  const [products, setProducts] = useState<{ sanitySlug: string }[]>([]);
+  const [products, setProducts] = useState<ProductInShoppingCart[]>([]);
+  const { isNewProductAddedToCart, setIsNewProductAddedToCart } =
+    useContext(globalStatesContext);
 
   useEffect(() => {
     if (user) {
@@ -35,25 +39,27 @@ export default function Navbar() {
         .catch((e: any) => {
           console.log('error fetching user data' + ' ' + e);
         });
+    }
+  }, [user]);
 
+  useEffect(() => {
+    if (user) {
       //get products in user cart
-      getProductsInCartFromClientSide().then(
-        (
-          products:
-            | {
-                sanitySlug: string;
-              }[]
-            | undefined
-        ) => {
+      getProductsInCartFromClientSide()
+        .then((products: ProductInShoppingCart[] | undefined) => {
           if (products) {
             setProducts(products);
           } else {
             setProducts([]);
           }
-        }
-      );
+        })
+        .finally(setIsNewProductAddedToCart(false));
     }
-  }, [user]);
+  }, [user, isNewProductAddedToCart]);
+
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
 
   return (
     <div className="mx-auto mb-8 flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12">
@@ -105,7 +111,7 @@ export default function Navbar() {
               >
                 <ShoppingBagIcon className="h-7 text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600" />
                 <p className="text-lg font-medium text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600">
-                  {products.length}
+                  {products.length > 0 ? calculateTotalProducts(products) : 0}
                 </p>
               </Link>
             </div>
