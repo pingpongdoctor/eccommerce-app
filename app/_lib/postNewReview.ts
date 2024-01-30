@@ -17,7 +17,7 @@ export async function postNewReview(
 
     if (!res.ok) {
       const data = await res.json();
-      console.log(data.message);
+      console.log('Error posting new review' + ' ' + data.message);
       return false;
     }
 

@@ -2,27 +2,25 @@
 import React from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
-import Link from 'next/link';
 
 interface Props {
-  listComponentHandler?: (value: number) => void;
+  listComponentChangeEventHandler?: (value: number) => void;
+  listComponentClickEventHandler?: (value: number) => void;
   selectedValue: number;
   listData: { id: number; value: string | number }[];
-  useLinks?: boolean;
 }
 
 export default function ListComponent({
-  listComponentHandler,
+  listComponentChangeEventHandler,
   selectedValue,
   listData,
-  useLinks = false,
 }: Props) {
   return (
     <Listbox
       defaultValue={1}
       as="div"
       className="relative"
-      onChange={listComponentHandler}
+      onChange={listComponentChangeEventHandler}
     >
       <Listbox.Button className="focus:outline-non relative w-full cursor-default rounded-lg border border-gray-400 bg-white py-2 pl-3 pr-10 text-left">
         <p className="text-center text-sm font-medium text-gray-700">
@@ -52,17 +50,7 @@ export default function ListComponent({
               value={ele.value}
               className="block px-4 py-2 text-center text-gray-700 ui-active:bg-gray-50"
             >
-              {useLinks ? (
-                <Link
-                  href={`/${ele.value}`}
-                  className="relative block"
-                  scroll={false}
-                >
-                  {ele.value}
-                </Link>
-              ) : (
-                <>{ele.value}</>
-              )}
+              {ele.value}
             </Listbox.Option>
           ))}
         </Listbox.Options>

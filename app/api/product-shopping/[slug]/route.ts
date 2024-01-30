@@ -98,7 +98,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
 });
 
 // update the value of the productQuantity field of an userproduct record with a new value
-export const PUT = withApiAuthRequired(async (req: NextRequest, context) => {
+export const PUT = withApiAuthRequired(async (req: Request, context) => {
   const session = await getSession();
   if (!session) {
     return NextResponse.json(
@@ -110,8 +110,8 @@ export const PUT = withApiAuthRequired(async (req: NextRequest, context) => {
   }
 
   const productSlug = context.params?.slug as string | undefined;
-  const searchParams = req.nextUrl.searchParams;
-  const productQuantity = searchParams.get('quantity');
+
+  const { productQuantity } = await req.json();
 
   if (!productSlug || !productQuantity) {
     return NextResponse.json(

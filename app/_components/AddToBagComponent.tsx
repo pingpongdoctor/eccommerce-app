@@ -85,7 +85,7 @@ export default function AddToBagComponent({
     >
       <ListComponent
         selectedValue={quantity}
-        listComponentHandler={handleUpdateQuantity}
+        listComponentChangeEventHandler={handleUpdateQuantity}
         listData={generateProductInstockList(productInstock)}
       />
       <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
