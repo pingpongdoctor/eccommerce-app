@@ -13,7 +13,7 @@ export default function GlobalStatesContext({
   children: React.ReactNode;
 }) {
   const { user, isLoading } = useUser();
-  const [isNewProductAddedToCart, setIsNewProductAddedToCart] =
+  const [changeProductsInCart, setChangeProductsInCart] =
     useState<boolean>(false);
   const [
     needToRevalidateDataForShoppingCartPage,
@@ -39,8 +39,8 @@ export default function GlobalStatesContext({
   return (
     <globalStatesContext.Provider
       value={{
-        isNewProductAddedToCart,
-        setIsNewProductAddedToCart,
+        changeProductsInCart,
+        setChangeProductsInCart,
         userProfile,
         isLoading,
         needToRevalidateDataForShoppingCartPage,

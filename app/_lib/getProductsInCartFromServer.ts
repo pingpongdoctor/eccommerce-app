@@ -1,11 +1,12 @@
 import { baseUrl } from '../utils/baseUrl';
+import { headers } from 'next/headers';
 
 export async function getProductsInCartFromServer(): Promise<
   ProductInShoppingCart[] | undefined
 > {
   try {
     const res = await fetch(`${baseUrl}/api/product-shopping`, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: headers(),
     });
 
     const data = await res.json();

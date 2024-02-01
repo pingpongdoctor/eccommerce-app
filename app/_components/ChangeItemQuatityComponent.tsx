@@ -18,7 +18,7 @@ export default function ChangeItemQuatityComponent({ product }: Props) {
   const [currentQuantity, setCurrentQuantity] = useState<number>(
     product.productQuantity
   );
-  const { setIsNewProductAddedToCart } = useContext(globalStatesContext);
+  const { setChangeProductsInCart } = useContext(globalStatesContext);
 
   const router = useRouter();
 
@@ -34,7 +34,7 @@ export default function ChangeItemQuatityComponent({ product }: Props) {
       product.slug.current
     );
     if (isSuccess) {
-      setIsNewProductAddedToCart(true);
+      setChangeProductsInCart(true);
     }
   };
 
@@ -42,7 +42,7 @@ export default function ChangeItemQuatityComponent({ product }: Props) {
     const isSuccess = await deleteProductFromCart(product.slug.current);
 
     if (isSuccess) {
-      setIsNewProductAddedToCart(true);
+      setChangeProductsInCart(true);
       notify(
         'success',
         'Product is deleted from your cart',
