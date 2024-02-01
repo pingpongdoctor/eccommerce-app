@@ -17,7 +17,7 @@ import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
 export default function Navbar() {
   const { userProfile, isLoading } = useContext(globalStatesContext);
   const [products, setProducts] = useState<ProductInShoppingCart[]>([]);
-  const { isNewProductAddedToCart, setIsNewProductAddedToCart } =
+  const { changeProductsInCart, setChangeProductsInCart } =
     useContext(globalStatesContext);
 
   useEffect(() => {
@@ -31,9 +31,9 @@ export default function Navbar() {
             setProducts([]);
           }
         })
-        .finally(setIsNewProductAddedToCart(false));
+        .finally(setChangeProductsInCart(false));
     }
-  }, [userProfile, isNewProductAddedToCart]);
+  }, [userProfile, changeProductsInCart]);
 
   return (
     <div className="mx-auto mb-8 flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12">

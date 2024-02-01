@@ -1,5 +1,5 @@
 'use client';
-import { getProductsInCartFromServer } from '../_lib/getProductsInCartFromServer';
+import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 import { SanityDocument } from 'next-sanity';
 import { PRODUCTS_QUERY_BY_SLUGS } from '@/sanity/lib/queries';
 import ShoppingCartList from '../_components/ShoppingCartList';
@@ -8,15 +8,12 @@ import { useEffect, useState } from 'react';
 import { client } from '@/sanity/lib/client';
 import { useContext } from 'react';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
-import { useRouter } from 'next/navigation';
+import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
 
 export default function ShoppingCart() {
-  const {
-    userProfile,
-    needToRevalidateDataForShoppingCartPage,
-    setNeedToRevalidateDataForShoppingCartPage,
-  } = useContext(globalStatesContext);
-  const router = useRouter();
+  const { userProfile, changeProductsInCart, setChangeProductsInCart } =
+    useContext(globalStatesContext);
+
   const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
     []
   );
@@ -24,10 +21,13 @@ export default function ShoppingCart() {
     (SanityProduct & SanityDocument)[]
   >([]);
 
+  const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
+    useState<boolean>(true);
+
+  //get products in shopping cart of the current user
   useEffect(() => {
     if (userProfile) {
-      //get products in shopping cart of the current user
-      getProductsInCartFromServer()
+      getProductsInCartFromClientSide()
         .then((productsInCart: ProductInShoppingCart[] | undefined) => {
           if (productsInCart) {
             setProductsInCart(productsInCart);
@@ -36,13 +36,13 @@ export default function ShoppingCart() {
         .catch((e: any) => {
           console.log(e.message);
         })
-        .finally(setNeedToRevalidateDataForShoppingCartPage(false));
+        .finally(setChangeProductsInCart(false));
     }
-  }, [userProfile, needToRevalidateDataForShoppingCartPage]);
+  }, [userProfile, changeProductsInCart]);
 
+  //get product sanity documents
   useEffect(() => {
     if (productsInCart.length > 0) {
-      //get product sanity documents
       const productSlugs: string[] = productsInCart
         ? productsInCart.map(
             (product: ProductInShoppingCart) => product.productSlug
@@ -55,18 +55,39 @@ export default function ShoppingCart() {
         })
         .then((products: (SanityProduct & SanityDocument)[]) => {
           setSanityProductsInCart(products);
+        })
+        .catch((e: any) => {
+          console.log(e.message);
+        })
+        .finally(() => {
+          setIsFetchingSanityProducts(false);
         });
     }
   }, [productsInCart]);
 
   return (
-    <main>
+    <main className="min-h-[600px]">
       <h2 className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">Shopping Cart</h2>
 
-      <ShoppingCartList
-        products={productsInCart}
-        sanityProducts={sanityProductsInCart}
-      />
+      {isFetchingSanityProducts && (
+        <div className="mx-auto max-w-7xl px-4 *:mb-8 md:px-8 lg:px-12">
+          <ShoppingCartItemSkeleton />
+          <ShoppingCartItemSkeleton />
+        </div>
+      )}
+
+      {sanityProductsInCart.length > 0 && !isFetchingSanityProducts && (
+        <ShoppingCartList
+          products={productsInCart}
+          sanityProducts={sanityProductsInCart}
+        />
+      )}
+
+      {sanityProductsInCart.length == 0 && !isFetchingSanityProducts && (
+        <h2 className="mx-auto max-w-7xl px-4 *:mb-8 md:px-8 lg:px-12">
+          There are not any products in your cart
+        </h2>
+      )}
 
       <OrderSummaryComponent />
     </main>
