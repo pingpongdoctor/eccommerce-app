@@ -10,7 +10,7 @@ import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSi
 import { User } from '@prisma/client';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
-
+import { useRouter } from 'next/navigation';
 interface Props {
   productSlug: string;
   productInstock: number;
@@ -27,7 +27,7 @@ export default function AddToBagComponent({
   );
   const [isDisable, setIsDisable] = useState<boolean>(false);
   const { setIsNewProductAddedToCart } = useContext(globalStatesContext);
-
+  const router = useRouter();
   useEffect(() => {
     if (user) {
       getUserProfileFromClientSide().then(
@@ -55,6 +55,7 @@ export default function AddToBagComponent({
 
     if (!productSlug) {
       console.log('Missed required values');
+      return;
     }
 
     try {

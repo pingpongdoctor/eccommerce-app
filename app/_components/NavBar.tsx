@@ -17,6 +17,7 @@ import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromCl
 import { useContext } from 'react';
 import { globalStatesContext } from './GlobalStatesContext';
 import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
@@ -26,6 +27,8 @@ export default function Navbar() {
   const [products, setProducts] = useState<ProductInShoppingCart[]>([]);
   const { isNewProductAddedToCart, setIsNewProductAddedToCart } =
     useContext(globalStatesContext);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -81,8 +84,10 @@ export default function Navbar() {
 
         <div className={`flex w-[102px] justify-end transition-all`}>
           {!userProfile && !isLoading && (
-            <Link
-              href="/api/auth/login"
+            <div
+              onClick={() => {
+                window.location.href = '/shopping-cart';
+              }}
               className="group relative ml-auto h-[25px] w-[88px] font-semibold"
             >
               <span className="group absolute left-0 top-0 z-[1] flex h-full w-full items-center justify-center gap-2 group-hover:text-white">
@@ -92,7 +97,7 @@ export default function Navbar() {
               </span>
 
               <span className="absolute left-0 top-0 z-0 h-full w-0 rounded-lg bg-gray-900 transition-all group-hover:w-full"></span>
-            </Link>
+            </div>
           )}
 
           {userProfile && !isLoading && (

@@ -2,7 +2,7 @@ import { SanityDocument, QueryParams } from 'next-sanity';
 import { loadQuery } from '@/sanity/lib/store';
 import {
   PRODUCTS_QUERY,
-  PRODUCTS_QUERY_BASED_CATEGORY,
+  PRODUCTS_QUERY_BY_CATEGORY,
 } from '@/sanity/lib/queries';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -55,7 +55,7 @@ export async function generateStaticParams() {
 export default async function Category({ params }: { params: QueryParams }) {
   const initial = await loadQuery<(SanityProduct & SanityDocument)[]>(
     categories.includes(params.category)
-      ? PRODUCTS_QUERY_BASED_CATEGORY
+      ? PRODUCTS_QUERY_BY_CATEGORY
       : PRODUCTS_QUERY,
     params,
     {
