@@ -2,39 +2,23 @@
 import TextAreaComponent from './TextAreaComponent';
 import RatingStar from './RatingStar';
 import ButtonComponent from './ButtonComponent';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { postNewReview } from '../_lib/postNewReview';
 import { notify } from './ReactToastifyProvider';
 import { useRouter } from 'next/navigation';
-import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
-import { User } from '@prisma/client';
-import { useUser } from '@auth0/nextjs-auth0/client';
+import { globalStatesContext } from './GlobalStatesContext';
 
 interface Props {
   productSlug: string;
 }
 
 export default function AddNewReviewComponent({ productSlug }: Props) {
+  const { userProfile } = useContext(globalStatesContext);
   const [review, setReview] = useState<string>('');
   const [star, setStar] = useState<number | null>(null);
-  const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
-    null
-  );
+  null;
   const [isDisable, setIsDisable] = useState<boolean>(false);
   const router = useRouter();
-  const { user } = useUser();
-
-  useEffect(() => {
-    if (user) {
-      getUserProfileFromClientSide().then(
-        (userData: Omit<User, 'auth0Id'> | undefined) => {
-          if (userData) {
-            setUserProfile(userData);
-          }
-        }
-      );
-    }
-  }, [user]);
 
   const handleReviewContentUpdate = function (
     e: ChangeEvent<HTMLTextAreaElement>
