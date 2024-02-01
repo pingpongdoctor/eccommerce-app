@@ -27,7 +27,7 @@ const incentiveDataArr = [
 
 export default function IncentiveComponent() {
   return (
-    <div className="mx-auto flex flex-col items-center px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+    <div className="flex flex-col items-center px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       <h3 className="mb-8">We built our business on customer service</h3>
       <ul className="flex list-none flex-col gap-8 lg:flex-row">
         {incentiveDataArr.map((ele) => (

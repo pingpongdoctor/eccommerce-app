@@ -1,7 +1,14 @@
 'use client';
 import React from 'react';
+import ButtonComponent from './ButtonComponent';
 
-export default function OrderSummaryComponent() {
+interface Props {
+  orderSummaryComponentClassname?: string;
+}
+
+export default function OrderSummaryComponent({
+  orderSummaryComponentClassname,
+}: Props) {
   const summaryData = [
     {
       text: 'Subtotal',
@@ -15,16 +22,37 @@ export default function OrderSummaryComponent() {
       text: 'Tax estimate',
       ammount: 99,
     },
+    {
+      text: 'Order total',
+      ammount: 99,
+    },
   ];
   return (
-    <div className="bg-gray-300 p-4 md:p-8">
-      <h3>Order Summanry</h3>
-      {summaryData.map((ele) => (
-        <div key={ele.text} className="flex justify-between">
-          <p>{ele.text}</p>
-          <p>{ele.ammount}</p>
-        </div>
-      ))}
+    <div className={`${orderSummaryComponentClassname}`}>
+      <div className="rounded-md bg-gray-100/85 p-4">
+        <p className="text-lg font-medium">Order summary</p>
+        {summaryData.map((ele) => (
+          <div
+            key={ele.text}
+            className={`flex justify-between border-b py-4 text-sm ${
+              ele.text === 'Order total' && 'border-b-0'
+            }`}
+          >
+            <p
+              className={`${
+                ele.text === 'Order total'
+                  ? 'text-lg font-medium'
+                  : 'text-gray-500'
+              }`}
+            >
+              {ele.text}
+            </p>
+            <p className="font-medium">${ele.ammount}</p>
+          </div>
+        ))}
+
+        <ButtonComponent buttonName="Check out" animate={true} />
+      </div>
     </div>
   );
 }

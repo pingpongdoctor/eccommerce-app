@@ -69,27 +69,30 @@ export default function ShoppingCart() {
     <main className="min-h-[600px]">
       <h2 className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">Shopping Cart</h2>
 
-      {isFetchingSanityProducts && (
-        <div className="mx-auto max-w-7xl px-4 *:mb-8 md:px-8 lg:px-12">
-          <ShoppingCartItemSkeleton />
-          <ShoppingCartItemSkeleton />
-        </div>
-      )}
+      <div className="flex flex-col px-4 md:px-8 lg:flex-row lg:justify-between lg:px-12 xl:mx-auto xl:max-w-7xl">
+        {isFetchingSanityProducts && (
+          <div className="mb-8 *:mb-8 md:w-[35%] lg:mb-12">
+            <ShoppingCartItemSkeleton />
+            <ShoppingCartItemSkeleton />
+          </div>
+        )}
 
-      {sanityProductsInCart.length > 0 && !isFetchingSanityProducts && (
-        <ShoppingCartList
-          products={productsInCart}
-          sanityProducts={sanityProductsInCart}
-        />
-      )}
+        {sanityProductsInCart.length > 0 && !isFetchingSanityProducts && (
+          <ShoppingCartList
+            products={productsInCart}
+            sanityProducts={sanityProductsInCart}
+            shoppingCartListClassname="lg:w-[50%]"
+          />
+        )}
+
+        <OrderSummaryComponent orderSummaryComponentClassname="lg:w-[40%]" />
+      </div>
 
       {sanityProductsInCart.length == 0 && !isFetchingSanityProducts && (
-        <h2 className="mx-auto max-w-7xl px-4 *:mb-8 md:px-8 lg:px-12">
+        <h2 className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">
           There are not any products in your cart
         </h2>
       )}
-
-      <OrderSummaryComponent />
     </main>
   );
 }

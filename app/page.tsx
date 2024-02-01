@@ -88,7 +88,7 @@ export default async function Home() {
       )}
 
       <div>
-        <h3 className="mx-auto px-4 md:px-8 lg:px-12 xl:max-w-7xl">
+        <h3 className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
           Browse by Category
         </h3>
         <CategoryCards />

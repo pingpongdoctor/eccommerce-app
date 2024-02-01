@@ -36,7 +36,7 @@ export default function Navbar() {
   }, [userProfile, changeProductsInCart]);
 
   return (
-    <div className="mx-auto mb-8 flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12">
+    <div className="mb-8 flex flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12 xl:mx-auto xl:max-w-7xl">
       <nav className="flex h-8 items-center justify-between overflow-visible bg-white">
         <Link href="/" className="-m-1.5 p-1.5">
           <Image
