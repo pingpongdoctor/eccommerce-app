@@ -57,7 +57,7 @@ export default function ListComponent({
               as="div"
               key={ele.id}
               value={ele.value}
-              className="block px-4 py-2 text-center text-gray-700 ui-active:bg-gray-50"
+              className="block cursor-default px-4 py-2 text-center text-gray-700 ui-active:bg-gray-50"
               onClick={() => {
                 if (typeof listComponentClickEventHandler == 'function') {
                   listComponentClickEventHandler(ele.value);

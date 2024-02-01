@@ -8,9 +8,14 @@ import { useState, useEffect } from 'react';
 interface Props {
   sanityProducts: (SanityProduct & SanityDocument)[];
   products: ProductInShoppingCart[];
+  shoppingCartListClassname?: string;
 }
 
-export default function ShoppingCartList({ sanityProducts, products }: Props) {
+export default function ShoppingCartList({
+  sanityProducts,
+  products,
+  shoppingCartListClassname,
+}: Props) {
   const [productsWithImgUrlAndQuantity, setProductsWithImgUrlAndQuantity] =
     useState<
       (ProductWithImgUrl & SanityDocument & { productQuantity: number })[]
@@ -37,7 +42,7 @@ export default function ShoppingCartList({ sanityProducts, products }: Props) {
   }, [products, sanityProducts]);
 
   return (
-    <div className="mx-auto min-h-[550px] max-w-7xl px-4 *:mb-8 md:px-8 lg:px-12">
+    <div className={`mb-8 *:mb-8 lg:mb-12 ${shoppingCartListClassname}`}>
       {productsWithImgUrlAndQuantity.map(
         (
           product: ProductWithImgUrl &
