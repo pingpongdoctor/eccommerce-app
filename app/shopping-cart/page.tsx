@@ -8,9 +8,15 @@ import { useEffect, useState } from 'react';
 import { client } from '@/sanity/lib/client';
 import { useContext } from 'react';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
+import { useRouter } from 'next/navigation';
 
 export default function ShoppingCart() {
-  const { userProfile } = useContext(globalStatesContext);
+  const {
+    userProfile,
+    needToRevalidateDataForShoppingCartPage,
+    setNeedToRevalidateDataForShoppingCartPage,
+  } = useContext(globalStatesContext);
+  const router = useRouter();
   const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
     []
   );
@@ -29,9 +35,10 @@ export default function ShoppingCart() {
         })
         .catch((e: any) => {
           console.log(e.message);
-        });
+        })
+        .finally(setNeedToRevalidateDataForShoppingCartPage(false));
     }
-  }, [userProfile]);
+  }, [userProfile, needToRevalidateDataForShoppingCartPage]);
 
   useEffect(() => {
     if (productsInCart.length > 0) {
