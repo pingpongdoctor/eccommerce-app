@@ -22,7 +22,10 @@ export default function AddToBagComponent({
   const { userProfile } = useContext(globalStatesContext);
   const [quantity, setQuantity] = useState<number>(1);
   const [isDisable, setIsDisable] = useState<boolean>(false);
-  const { setIsNewProductAddedToCart } = useContext(globalStatesContext);
+  const {
+    setIsNewProductAddedToCart,
+    setNeedToRevalidateDataForShoppingCartPage,
+  } = useContext(globalStatesContext);
 
   const handleUpdateQuantity = function (value: number) {
     setQuantity(value);
@@ -53,6 +56,7 @@ export default function AddToBagComponent({
           'add-product-to-cart-success'
         );
         setIsNewProductAddedToCart(true);
+        setNeedToRevalidateDataForShoppingCartPage(true);
       }
     } catch (e: any) {
       console.log(
