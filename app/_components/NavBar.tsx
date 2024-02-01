@@ -5,48 +5,23 @@ import DropdownMenu from './DropdownMenu';
 import Image from 'next/image';
 import Link from 'next/link';
 import glowlyLab from '../../public/assets/glowy-lab.png';
-import { useUser } from '@auth0/nextjs-auth0/client';
 import { ArrowLongRightIcon } from '@heroicons/react/16/solid';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
-import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
-import { useState, useEffect } from 'react';
-import { User } from '@prisma/client';
+import { useState, useEffect, useContext } from 'react';
 import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
 import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
-import { useContext } from 'react';
 import { globalStatesContext } from './GlobalStatesContext';
 import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
-import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-  const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
-    null
-  );
-  const { user, isLoading } = useUser();
+  const { userProfile, isLoading } = useContext(globalStatesContext);
   const [products, setProducts] = useState<ProductInShoppingCart[]>([]);
   const { isNewProductAddedToCart, setIsNewProductAddedToCart } =
     useContext(globalStatesContext);
 
-  const router = useRouter();
-
   useEffect(() => {
-    if (user) {
-      //get user profile
-      getUserProfileFromClientSide()
-        .then((userData: Omit<User, 'auth0Id'> | undefined) => {
-          if (userData) {
-            setUserProfile(userData);
-          }
-        })
-        .catch((e: any) => {
-          console.log('error fetching user data' + ' ' + e);
-        });
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
+    if (userProfile) {
       //get products in user cart
       getProductsInCartFromClientSide()
         .then((products: ProductInShoppingCart[] | undefined) => {
@@ -58,7 +33,7 @@ export default function Navbar() {
         })
         .finally(setIsNewProductAddedToCart(false));
     }
-  }, [user, isNewProductAddedToCart]);
+  }, [userProfile, isNewProductAddedToCart]);
 
   return (
     <div className="mx-auto mb-8 flex max-w-7xl flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12">
