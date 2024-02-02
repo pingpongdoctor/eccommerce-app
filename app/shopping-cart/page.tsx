@@ -15,6 +15,7 @@ import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
 import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';
 import { addProductImgUrls } from '../_lib/addProductImgUrls';
 import { addProductQuantity } from '../_lib/addProductQuantity';
+import ClientProductCards from '../_components/ClientProductCards';
 
 //get products that customers also buy
 export default function ShoppingCart() {
@@ -146,13 +147,13 @@ export default function ShoppingCart() {
       </div>
 
       {/* product you may like */}
-
       <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
         <p className="text-lg font-medium text-gray-900">You may also like</p>
         <p className="font-medium text-gray-900">
           See all <span>&rarr;</span>
         </p>
       </div>
+      <ClientProductCards products={productsAlsoBuy} />
     </main>
   );
 }
