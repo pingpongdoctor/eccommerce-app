@@ -3,6 +3,9 @@ import React from 'react';
 import ButtonComponent from './ButtonComponent';
 
 interface Props {
+  subtotal: number;
+  shipping: number;
+  tax: number;
   orderSummaryComponentClassname?: string;
 }
 

@@ -13,6 +13,8 @@ import { useContext } from 'react';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
 import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
 import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';
+import { addProductImgUrls } from '../_lib/addProductImgUrls';
+import { addProductQuantity } from '../_lib/addProductQuantity';
 
 //get products that customers also buy
 export default function ShoppingCart() {
@@ -24,9 +26,14 @@ export default function ShoppingCart() {
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
+  const [productsWithImgUrlAndQuantity, setProductsWithImgUrlAndQuantity] =
+    useState<
+      (ProductWithImgUrl & SanityDocument & { productQuantity: number })[]
+    >([]);
   const [productsAlsoBuy, setProductsAlsoBuy] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
+  const [subtotal, setSubtotal] = useState<number | null>(null);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
     useState<boolean>(true);
 
@@ -81,10 +88,27 @@ export default function ShoppingCart() {
           { categoryArr: productCategories, slugArr: productSlugs }
         )
         .then((products: (SanityProduct & SanityDocument)[]) => {
-          console.log(products);
+          if (products.length > 0) {
+            setProductsAlsoBuy(products);
+          }
         });
     }
   }, [productsInCart]);
+
+  // set img url and product quantity to sanity documents
+  useEffect(() => {
+    if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
+      addProductImgUrls(sanityProductsInCart).then(
+        (productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[]) => {
+          const productsWithImgAndQuantity = addProductQuantity(
+            productsWithImgUrl,
+            productsInCart
+          );
+          setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
+        }
+      );
+    }
+  }, [productsInCart, sanityProductsInCart]);
 
   return (
     <main className="min-h-[600px]">
@@ -103,21 +127,22 @@ export default function ShoppingCart() {
           </>
         )}
 
-        {sanityProductsInCart.length > 0 && !isFetchingSanityProducts && (
-          <>
-            <ShoppingCartList
-              products={productsInCart}
-              sanityProducts={sanityProductsInCart}
-              shoppingCartListClassname="lg:w-[50%]"
-            />
-            <OrderSummaryComponent orderSummaryComponentClassname="lg:w-[40%]" />
-          </>
-        )}
+        {productsWithImgUrlAndQuantity.length > 0 &&
+          !isFetchingSanityProducts && (
+            <>
+              <ShoppingCartList
+                productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+                shoppingCartListClassname="lg:w-[50%]"
+              />
+              {/* <OrderSummaryComponent orderSummaryComponentClassname="lg:w-[40%]" /> */}
+            </>
+          )}
 
         {/* text shown when there is not product in cart */}
-        {sanityProductsInCart.length == 0 && !isFetchingSanityProducts && (
-          <h2>There are not any products in your cart</h2>
-        )}
+        {productsWithImgUrlAndQuantity.length == 0 &&
+          !isFetchingSanityProducts && (
+            <h2>There are not any products in your cart</h2>
+          )}
       </div>
 
       {/* product you may like */}
