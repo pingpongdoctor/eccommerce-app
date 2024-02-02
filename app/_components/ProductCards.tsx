@@ -22,7 +22,6 @@ export default async function ProductCards({
                 key={product._id}
                 href={`/product/${product.slug.current}`}
               >
-                {/* use suspense to allow next.js to progressively send chunks of this page to the client side */}
                 <ProductCard product={product} />
               </Link>
             )

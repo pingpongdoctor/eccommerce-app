@@ -10,7 +10,7 @@ export default function ProductCard({
   return (
     <div className="flex flex-col gap-2">
       <Image
-        className="object-fit aspect-[1/1.2] w-full rounded-xl object-cover object-center transition-all hover:opacity-90"
+        className="object-fit aspect-[1/1.2] w-full rounded-md object-cover object-center transition-all hover:opacity-90"
         src={product.imgUrl}
         alt="product-image"
         width={300}
