@@ -9,10 +9,9 @@ import { useState, useEffect } from 'react';
 import { StripeError } from '@stripe/stripe-js';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
-import OrderSummaryComponent from './OrderSummaryComponent';
-import ShoppingCartList from './ShoppingCartList';
 import OrderSummarySkeleton from './OrderSummarySkeleton';
 import ShoppingCartItemSkeleton from './ShoppingCartItemSkeleton';
+import CheckoutList from './CheckoutList';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -118,26 +117,19 @@ export default function PaymentForm({
 
       {productsWithImgUrlAndQuantity.length > 0 &&
         !isFetchingSanityProducts && (
-          <>
-            <ShoppingCartList
-              productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-              shoppingCartListClassname="lg:w-[50%]"
-            />
-            <OrderSummaryComponent
-              subtotal={subtotal}
-              tax={Math.round((subtotal * 12) / 100)}
-              shipping={Math.round((subtotal * 2) / 100)}
-              orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
-              showButton={false}
-            />
-          </>
+          <CheckoutList
+            productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+            checkoutListClassname="border-t mt-8 lg:mt-12 bg-white rounded-md p-6"
+            subtotal={subtotal}
+            tax={Math.round((subtotal * 12) / 100)}
+            shipping={Math.round((subtotal * 2) / 100)}
+          />
         )}
 
       <ButtonComponent
         isDisabled={isLoading || !stripe || !elements}
         animate
         buttonName="Pay now"
-        buttonClassname="mt-8 lg:mt-12"
       />
       {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}

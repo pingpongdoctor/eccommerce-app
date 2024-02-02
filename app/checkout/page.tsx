@@ -139,7 +139,7 @@ export default function CheckoutPage() {
   }, []);
 
   return (
-    <main className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">
+    <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
       {clientSecret && (
         <Elements
           stripe={stripePromise}

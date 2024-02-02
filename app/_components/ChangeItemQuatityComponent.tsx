@@ -12,9 +12,13 @@ import { useRouter } from 'next/navigation';
 
 interface Props {
   product: ProductWithImgUrl & SanityDocument & { productQuantity: number };
+  showIcon?: boolean;
 }
 
-export default function ChangeItemQuatityComponent({ product }: Props) {
+export default function ChangeItemQuatityComponent({
+  product,
+  showIcon = true,
+}: Props) {
   const [currentQuantity, setCurrentQuantity] = useState<number>(
     product.productQuantity
   );
@@ -62,10 +66,12 @@ export default function ChangeItemQuatityComponent({ product }: Props) {
         listClassname="max-h-[200px]"
         listButtonClassname="w-[100px]"
       />
-      <XMarkIcon
-        className="hidden h-6 text-gray-400 sm:block"
-        onClick={handleDeleteProductFromCart}
-      />
+      {showIcon && (
+        <XMarkIcon
+          className="hidden h-6 text-gray-400 sm:block"
+          onClick={handleDeleteProductFromCart}
+        />
+      )}
     </>
   );
 }
