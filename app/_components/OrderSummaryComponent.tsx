@@ -11,23 +11,26 @@ interface Props {
 
 export default function OrderSummaryComponent({
   orderSummaryComponentClassname,
+  subtotal,
+  shipping,
+  tax,
 }: Props) {
   const summaryData = [
     {
       text: 'Subtotal',
-      ammount: 99,
+      ammount: subtotal,
     },
     {
       text: 'Shipping estimate',
-      ammount: 99,
+      ammount: shipping,
     },
     {
       text: 'Tax estimate',
-      ammount: 99,
+      ammount: tax,
     },
     {
       text: 'Order total',
-      ammount: 99,
+      ammount: subtotal + shipping + tax,
     },
   ];
   return (
