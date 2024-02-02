@@ -44,7 +44,7 @@ export default function SimpleMenuComponent({ avatarSrc, username }: Props) {
           <Menu.Item
             as="div"
             key="username"
-            className="block truncate text-nowrap border-b-[1px] px-4 py-2 font-semibold text-gray-700"
+            className="block truncate text-nowrap border-b px-4 py-2 font-semibold text-gray-700"
           >
             {username}
           </Menu.Item>

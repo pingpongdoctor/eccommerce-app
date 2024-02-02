@@ -1,37 +1,168 @@
-import { loadQuery } from '@/sanity/lib/store';
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import { getProductsInCartFromServer } from '../_lib/getProductsInCartFromServer';
+'use client';
+import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 import { SanityDocument } from 'next-sanity';
-import { draftMode } from 'next/headers';
-import { PRODUCTS_QUERY_BASED_SLUGS } from '@/sanity/lib/queries';
-import { QueryResponseInitial } from '@sanity/react-loader';
+import {
+  PRODUCTS_QUERY_BY_SLUGS,
+  PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
+} from '@/sanity/lib/queries';
 import ShoppingCartList from '../_components/ShoppingCartList';
+import OrderSummaryComponent from '../_components/OrderSummaryComponent';
+import { useEffect, useState } from 'react';
+import { client } from '@/sanity/lib/client';
+import { useContext } from 'react';
+import { globalStatesContext } from '../_components/GlobalStatesContext';
+import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
+import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';
+import { addProductImgUrls } from '../_lib/addProductImgUrls';
+import { addProductQuantity } from '../_lib/addProductQuantity';
+import ClientProductCards from '../_components/ClientProductCards';
+import { calculateSubtotal } from '../_lib/calculateSubtotal';
 
-export default withPageAuthRequired(async function ShoppingCart() {
+//get products that customers also buy
+export default function ShoppingCart() {
+  const { userProfile, changeProductsInCart, setChangeProductsInCart } =
+    useContext(globalStatesContext);
+  const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
+    []
+  );
+  const [sanityProductsInCart, setSanityProductsInCart] = useState<
+    (SanityProduct & SanityDocument)[]
+  >([]);
+  const [productsWithImgUrlAndQuantity, setProductsWithImgUrlAndQuantity] =
+    useState<
+      (ProductWithImgUrl & SanityDocument & { productQuantity: number })[]
+    >([]);
+  const [productsAlsoBuy, setProductsAlsoBuy] = useState<
+    (SanityProduct & SanityDocument)[]
+  >([]);
+  const [subtotal, setSubtotal] = useState<number>(0);
+  const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
+    useState<boolean>(true);
+
   //get products in shopping cart of the current user
-  const products: ProductInShoppingCart[] | undefined =
-    await getProductsInCartFromServer();
+  useEffect(() => {
+    if (userProfile) {
+      getProductsInCartFromClientSide()
+        .then((productsInCart: ProductInShoppingCart[] | undefined) => {
+          if (productsInCart) {
+            setProductsInCart(productsInCart);
+          }
+        })
+        .catch((e: any) => {
+          console.log(e.message);
+        })
+        .finally(setChangeProductsInCart(false));
+    }
+  }, [userProfile, changeProductsInCart]);
 
   //get product sanity documents
-  const productSlugs: string[] = products
-    ? products.map((product: ProductInShoppingCart) => product.productSlug)
-    : [];
+  useEffect(() => {
+    if (productsInCart.length > 0) {
+      const productSlugs: string[] = productsInCart
+        ? productsInCart.map(
+            (product: ProductInShoppingCart) => product.productSlug
+          )
+        : [];
 
-  const initialData: QueryResponseInitial<(SanityProduct & SanityDocument)[]> =
-    await loadQuery<(SanityProduct & SanityDocument)[]>(
-      PRODUCTS_QUERY_BASED_SLUGS,
-      { slugArr: productSlugs },
-      {
-        perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      }
-    );
+      const productCategories: Categories[] = productsInCart
+        ? productsInCart.map(
+            (product: ProductInShoppingCart) => product.productCategory
+          )
+        : [];
 
-  const sanityProducts: (SanityProduct & SanityDocument)[] = initialData.data;
+      client
+        .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
+          slugArr: productSlugs,
+        })
+        .then((products: (SanityProduct & SanityDocument)[]) => {
+          setSanityProductsInCart(products);
+        })
+        .catch((e: any) => {
+          console.log(e.message);
+        })
+        .finally(() => {
+          setIsFetchingSanityProducts(false);
+        });
+
+      client
+        .fetch<(SanityProduct & SanityDocument)[]>(
+          PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
+          { categoryArr: productCategories, slugArr: productSlugs }
+        )
+        .then((products: (SanityProduct & SanityDocument)[]) => {
+          if (products.length > 0) {
+            setProductsAlsoBuy(products);
+          }
+        });
+    }
+  }, [productsInCart]);
+
+  useEffect(() => {
+    if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
+      // set the state for product with image url and quantity
+      addProductImgUrls(sanityProductsInCart).then(
+        (productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[]) => {
+          const productsWithImgAndQuantity = addProductQuantity(
+            productsWithImgUrl,
+            productsInCart
+          );
+          setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
+        }
+      );
+
+      //set subtotal state
+      setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
+    }
+  }, [productsInCart, sanityProductsInCart]);
 
   return (
-    <div>
-      <h2>Shopping Cart</h2>
-      <ShoppingCartList products={sanityProducts} />
-    </div>
+    <main className="min-h-[600px]">
+      <h2 className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">Shopping Cart</h2>
+
+      {/* products in cart */}
+      <div className="flex flex-col px-4 md:px-8 lg:flex-row lg:justify-between lg:px-12 xl:mx-auto xl:max-w-7xl">
+        {/* skeleton components */}
+        {isFetchingSanityProducts && (
+          <>
+            <div className="mb-8 *:mb-8 md:w-[35%] lg:mb-12">
+              <ShoppingCartItemSkeleton />
+              <ShoppingCartItemSkeleton />
+            </div>
+            <OrderSummarySkeleton />
+          </>
+        )}
+
+        {productsWithImgUrlAndQuantity.length > 0 &&
+          !isFetchingSanityProducts && (
+            <>
+              <ShoppingCartList
+                productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+                shoppingCartListClassname="lg:w-[50%]"
+              />
+              <OrderSummaryComponent
+                subtotal={subtotal}
+                tax={Math.round((subtotal * 10) / 100)}
+                shipping={Math.round((subtotal * 2) / 100)}
+                orderSummaryComponentClassname="lg:w-[40%]"
+              />
+            </>
+          )}
+
+        {/* text shown when there is not product in cart */}
+        {productsWithImgUrlAndQuantity.length == 0 &&
+          !isFetchingSanityProducts && (
+            <h2>There are not any products in your cart</h2>
+          )}
+      </div>
+
+      {/* product you may like */}
+      <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+        <p className="text-lg font-medium text-gray-900">You may also like</p>
+        <p className="font-medium text-gray-900">
+          See all <span>&rarr;</span>
+        </p>
+      </div>
+      <ClientProductCards products={productsAlsoBuy} />
+    </main>
   );
-});
+}

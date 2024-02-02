@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ProductCardsSkeleton() {
   return (
-    <div className="flex flex-col gap-8 px-4 sm:flex-row sm:flex-wrap md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+    <div className="flex animate-pulse flex-col gap-8 px-4 sm:flex-row sm:flex-wrap md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       {[1, 2, 3, 4].map((ele) => (
         <div
           key={ele}

@@ -71,7 +71,7 @@ export default async function CustomerReviews({
 
       {/* customer review messages */}
       <div
-        className={`max-h-[700px] w-full overflow-auto lg:max-h-[505px] [&>div]:border-b-[1px] ${
+        className={`max-h-[700px] w-full overflow-auto lg:max-h-[505px] [&>div]:border-b ${
           productReviews.length == 0 &&
           'flex h-[500px] items-center justify-center'
         }`}

@@ -1,22 +1,28 @@
+'use client';
+
 import { SanityDocument } from 'next-sanity';
 import ShoppingCartItem from './ShoppingCartItem';
-import { addProductImgUrls } from '../_lib/addProductImgUrls';
-import product from '@/sanity/schemas/product';
 
 interface Props {
-  products: (SanityProduct & SanityDocument)[];
+  productsWithImgUrlAndQuantity: (ProductWithImgUrl &
+    SanityDocument & { productQuantity: number })[];
+  shoppingCartListClassname?: string;
 }
 
-export default async function ShoppingCartList({ products }: Props) {
-  //add img url to sanity documents
-  const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
-    await addProductImgUrls(products);
-
+export default function ShoppingCartList({
+  productsWithImgUrlAndQuantity,
+  shoppingCartListClassname,
+}: Props) {
   return (
-    <div>
-      {productsWithImgUrl.map((product: ProductWithImgUrl & SanityDocument) => (
-        <ShoppingCartItem key={product._id} product={product} />
-      ))}
+    <div className={`mb-8 *:mb-8 lg:mb-12 ${shoppingCartListClassname}`}>
+      {productsWithImgUrlAndQuantity.map(
+        (
+          product: ProductWithImgUrl &
+            SanityDocument & { productQuantity: number }
+        ) => (
+          <ShoppingCartItem key={product._id} product={product} />
+        )
+      )}
     </div>
   );
 }
