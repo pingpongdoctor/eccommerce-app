@@ -19,7 +19,7 @@ export const GET = withApiAuthRequired(async () => {
       include: {
         products: {
           select: {
-            product: { select: { sanitySlug: true } },
+            product: { select: { sanitySlug: true, category: true } },
             productQuantity: true,
           },
         },
@@ -36,11 +36,13 @@ export const GET = withApiAuthRequired(async () => {
         productQuantity: number;
         product: {
           sanitySlug: string;
+          category: Categories;
         };
       }) => {
         return {
           productSlug: ele.product.sanitySlug,
           productQuantity: ele.productQuantity,
+          productCategory: ele.product.category,
         };
       }
     );
