@@ -1,3 +1,4 @@
+'use client';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 
 export default function ShoppingCartItemSkeleton() {
