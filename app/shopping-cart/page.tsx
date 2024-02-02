@@ -16,6 +16,7 @@ import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';
 import { addProductImgUrls } from '../_lib/addProductImgUrls';
 import { addProductQuantity } from '../_lib/addProductQuantity';
 import ClientProductCards from '../_components/ClientProductCards';
+import { calculateSubtotal } from '../_lib/calculateSubtotal';
 
 //get products that customers also buy
 export default function ShoppingCart() {
@@ -34,7 +35,7 @@ export default function ShoppingCart() {
   const [productsAlsoBuy, setProductsAlsoBuy] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
-  const [subtotal, setSubtotal] = useState<number | null>(null);
+  const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
     useState<boolean>(true);
 
@@ -96,9 +97,9 @@ export default function ShoppingCart() {
     }
   }, [productsInCart]);
 
-  // set img url and product quantity to sanity documents
   useEffect(() => {
     if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
+      // set the state for product with image url and quantity
       addProductImgUrls(sanityProductsInCart).then(
         (productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[]) => {
           const productsWithImgAndQuantity = addProductQuantity(
@@ -108,6 +109,9 @@ export default function ShoppingCart() {
           setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
         }
       );
+
+      //set subtotal state
+      setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
     }
   }, [productsInCart, sanityProductsInCart]);
 
@@ -135,7 +139,12 @@ export default function ShoppingCart() {
                 productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
                 shoppingCartListClassname="lg:w-[50%]"
               />
-              {/* <OrderSummaryComponent orderSummaryComponentClassname="lg:w-[40%]" /> */}
+              <OrderSummaryComponent
+                subtotal={subtotal}
+                tax={Math.round((subtotal * 10) / 100)}
+                shipping={Math.round((subtotal * 2) / 100)}
+                orderSummaryComponentClassname="lg:w-[40%]"
+              />
             </>
           )}
 

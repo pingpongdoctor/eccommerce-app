@@ -1,10 +1,10 @@
 import product from '@/sanity/schemas/product';
 import { SanityDocument } from 'next-sanity';
 
-export default function calculateSubtotal(
-  sanityProduct: (SanityProduct & SanityDocument)[],
-  productsInCart: ProductInShoppingCart[]
-) {
+export function calculateSubtotal(
+  productsInCart: ProductInShoppingCart[],
+  sanityProduct: (SanityProduct & SanityDocument)[]
+): number {
   let subtotal = 0;
 
   sanityProduct.map((sanityProduct: SanityProduct & SanityDocument) => {
@@ -15,4 +15,6 @@ export default function calculateSubtotal(
       }
     }
   });
+
+  return subtotal;
 }
