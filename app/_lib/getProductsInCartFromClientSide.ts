@@ -1,7 +1,7 @@
 import { baseUrl } from '../utils/baseUrl';
 
 export async function getProductsInCartFromClientSide(): Promise<
-  { sanitySlug: string }[] | undefined
+  ProductInShoppingCart[] | undefined
 > {
   try {
     const res = await fetch(`${baseUrl}/api/product-shopping`, {
@@ -17,7 +17,7 @@ export async function getProductsInCartFromClientSide(): Promise<
       return undefined;
     }
 
-    const products: { sanitySlug: string }[] = data.products;
+    const products: ProductInShoppingCart[] = data.products;
 
     return products;
   } catch (e: any) {

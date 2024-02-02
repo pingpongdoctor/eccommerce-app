@@ -8,6 +8,7 @@ import { baseUrl } from './utils/baseUrl';
 import Navbar from './_components/NavBar';
 import FooterComponent from './_components/FooterComponent';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import GlobalStatesContext from './_components/GlobalStatesContext';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -28,10 +29,12 @@ export default function RootLayout({
       <body className={`${roboto.className} ${dancingScript.variable}`}>
         <ReactToastifyProvider>
           <UserProvider>
-            <Navbar />
-            {children}
-            {draftMode().isEnabled && <VisualEditing />}
-            <FooterComponent />
+            <GlobalStatesContext>
+              <Navbar />
+              {children}
+              {draftMode().isEnabled && <VisualEditing />}
+              <FooterComponent />
+            </GlobalStatesContext>
           </UserProvider>
         </ReactToastifyProvider>
       </body>

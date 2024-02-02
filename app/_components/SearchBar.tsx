@@ -8,7 +8,7 @@ interface Props {
 
 export default function SearchBar({ changeEventHanlder }: Props) {
   return (
-    <div className="absolute left-0 right-0 top-0 mx-auto mb-8 px-4 md:px-8 lg:mb-12 lg:px-12 xl:mx-auto xl:max-w-7xl">
+    <div className="absolute left-0 right-0 top-0 mb-8 px-4 md:px-8 lg:mb-12 lg:px-12 xl:mx-auto xl:max-w-7xl">
       <label
         htmlFor="search-bar"
         className="relative block w-full rounded-md border border-gray-400 shadow-sm focus-within:border-gray-500"

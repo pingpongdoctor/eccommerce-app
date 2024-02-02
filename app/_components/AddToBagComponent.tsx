@@ -1,37 +1,28 @@
 'use client';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useContext } from 'react';
 import ButtonComponent from './ButtonComponent';
 import ListComponent from './ListComponent';
 import { useState } from 'react';
 import { addProductToCart } from '../_lib/addProductToCart';
 import { notify } from './ReactToastifyProvider';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
 import { User } from '@prisma/client';
+import { generateProductInstockList } from '../_lib/generateProductInstockList';
+import { globalStatesContext } from './GlobalStatesContext';
 
 interface Props {
   productSlug: string;
+  productInstock: number;
 }
 
-export default function AddToBagComponent({ productSlug }: Props) {
+export default function AddToBagComponent({
+  productSlug,
+  productInstock,
+}: Props) {
+  const { userProfile } = useContext(globalStatesContext);
   const [quantity, setQuantity] = useState<number>(1);
-  const { user } = useUser();
-  const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
-    null
-  );
   const [isDisable, setIsDisable] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (user) {
-      getUserProfileFromClientSide().then(
-        (userData: Omit<User, 'auth0Id'> | undefined) => {
-          if (userData) {
-            setUserProfile(userData);
-          }
-        }
-      );
-    }
-  }, [user]);
+  const { setChangeProductsInCart } = useContext(globalStatesContext);
 
   const handleUpdateQuantity = function (value: number) {
     setQuantity(value);
@@ -48,6 +39,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
 
     if (!productSlug) {
       console.log('Missed required values');
+      return;
     }
 
     try {
@@ -60,6 +52,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
           'Product has been added to your cart',
           'add-product-to-cart-success'
         );
+        setChangeProductsInCart(true);
       }
     } catch (e: any) {
       console.log(
@@ -77,14 +70,8 @@ export default function AddToBagComponent({ productSlug }: Props) {
     >
       <ListComponent
         selectedValue={quantity}
-        listComponentHandler={handleUpdateQuantity}
-        listData={[
-          { id: 1, value: 1 },
-          { id: 2, value: 2 },
-          { id: 3, value: 3 },
-          { id: 4, value: 4 },
-          { id: 5, value: 5 },
-        ]}
+        listComponentChangeEventHandler={handleUpdateQuantity}
+        listData={generateProductInstockList(productInstock)}
       />
       <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
     </form>
