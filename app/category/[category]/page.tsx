@@ -10,25 +10,7 @@ import { Metadata } from 'next';
 import { categories } from '@/app/utils/utils';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import ProductsWithSearchBar from '@/app/_components/ProductsWithSearchBar';
-
-const textInfor: { [index: string]: { mainText: string; text: string } } = {
-  comestic: {
-    mainText: 'Comestic',
-    text: 'Start finding your suitable comestic merchandise',
-  },
-  book: {
-    mainText: 'Books',
-    text: 'Here is where you start your smart journey',
-  },
-  jewelry: {
-    mainText: 'Jewelry',
-    text: 'This is the place for minimalist people',
-  },
-  supplement: {
-    mainText: 'Supplement',
-    text: 'Get healthier now with high-quality supplement',
-  },
-};
+import { textInfor } from '@/app/utils/utils';
 
 export async function generateMetadata({
   params,

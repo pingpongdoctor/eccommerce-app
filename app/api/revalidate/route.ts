@@ -17,11 +17,11 @@ export async function GET(req: NextRequest) {
       { message: 'successful revalidation' },
       { status: 200 }
     );
-  } catch (error) {
-    console.log('Internal Server Error' + error);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 }

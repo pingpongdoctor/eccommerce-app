@@ -42,11 +42,11 @@ export async function POST(req: Request) {
       { message: 'email has been sent' },
       { status: 200 }
     );
-  } catch (e: any) {
-    console.log('Internal Sever Error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      { message: 'Internal Sever Error' + ' ' + e.message },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 }

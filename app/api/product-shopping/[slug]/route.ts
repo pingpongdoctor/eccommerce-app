@@ -85,14 +85,11 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
         status: 201,
       }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 });
@@ -168,14 +165,11 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
         status: 201,
       }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 });
@@ -246,14 +240,11 @@ export const DELETE = withApiAuthRequired(async (req: Request, context) => {
         status: 201,
       }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 });

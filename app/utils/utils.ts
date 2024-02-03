@@ -5,7 +5,33 @@ import {
   BookOpenIcon,
 } from '@heroicons/react/24/outline';
 
-export const categories = ['comestic', 'supplement', 'book', 'jewelry'];
+export const textInfor: {
+  [index: string]: { mainText: string; text: string };
+} = {
+  comestic: {
+    mainText: 'Comestic',
+    text: 'Start finding your suitable comestic merchandise',
+  },
+  book: {
+    mainText: 'Books',
+    text: 'Here is where you start your smart journey',
+  },
+  jewelry: {
+    mainText: 'Jewelry',
+    text: 'This is the place for minimalist people',
+  },
+  supplement: {
+    mainText: 'Supplement',
+    text: 'Get healthier now with high-quality supplement',
+  },
+};
+
+export const categories: Categories[] = [
+  'comestic',
+  'supplement',
+  'book',
+  'jewelry',
+];
 export const categoryInfor: {
   id: string;
   text: string;
