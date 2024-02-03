@@ -18,11 +18,18 @@ import { addProductQuantity } from '../_lib/addProductQuantity';
 import ClientProductCards from '../_components/ClientProductCards';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import ProductCardsSkeleton from '../_components/ProductCardsSkeleton';
+import { useRouter } from 'next/navigation';
 
 //get products that customers also buy
 export default function ShoppingCart() {
-  const { userProfile, changeProductsInCart, setChangeProductsInCart } =
-    useContext(globalStatesContext);
+  const router = useRouter();
+  const {
+    userProfile,
+    changeProductsInCart,
+    setChangeProductsInCart,
+    user,
+    isLoading,
+  } = useContext(globalStatesContext);
   const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
     []
   );
@@ -39,6 +46,13 @@ export default function ShoppingCart() {
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
     useState<boolean>(true);
+
+  //protect this page from unauthenticated users
+  useEffect(() => {
+    if (!user && !isLoading) {
+      router.push('/');
+    }
+  }, [user, isLoading]);
 
   //get products in shopping cart of the current user
   useEffect(() => {
