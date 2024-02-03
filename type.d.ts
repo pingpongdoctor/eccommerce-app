@@ -25,6 +25,7 @@ interface ProductInShoppingCart {
   productSlug: string;
   productQuantity: number;
   productCategory: Categories;
+  productId: number;
 }
 
 type ProductWithImgUrl = SanityProduct & {
