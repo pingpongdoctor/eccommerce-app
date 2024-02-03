@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
-
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-export async function POST(req: Request) {
+
+//get client secret token to implement payment
+export const POST = withApiAuthRequired(async (req: Request) => {
   const { amount }: { amount: number } = await req.json();
 
   try {
@@ -21,4 +23,4 @@ export async function POST(req: Request) {
       { status: err.statusCode || 500 }
     );
   }
-}
+});
