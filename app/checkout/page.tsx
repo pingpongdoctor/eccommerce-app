@@ -10,9 +10,6 @@ import {
   PRODUCTS_QUERY_BY_SLUGS,
   PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
 } from '@/sanity/lib/queries';
-import ShoppingCartList from '../_components/ShoppingCartList';
-import OrderSummaryComponent from '../_components/OrderSummaryComponent';
-
 import { client } from '@/sanity/lib/client';
 import { useContext } from 'react';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
@@ -20,9 +17,7 @@ import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
 import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';
 import { addProductImgUrls } from '../_lib/addProductImgUrls';
 import { addProductQuantity } from '../_lib/addProductQuantity';
-import ClientProductCards from '../_components/ClientProductCards';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
-import ProductCardsSkeleton from '../_components/ProductCardsSkeleton';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -42,9 +37,6 @@ export default function CheckoutPage() {
     useState<
       (ProductWithImgUrl & SanityDocument & { productQuantity: number })[]
     >([]);
-  const [productsAlsoBuy, setProductsAlsoBuy] = useState<
-    (SanityProduct & SanityDocument)[]
-  >([]);
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
     useState<boolean>(true);
@@ -74,12 +66,6 @@ export default function CheckoutPage() {
           )
         : [];
 
-      const productCategories: Categories[] = productsInCart
-        ? productsInCart.map(
-            (product: ProductInShoppingCart) => product.productCategory
-          )
-        : [];
-
       client
         .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
           slugArr: productSlugs,
@@ -92,17 +78,6 @@ export default function CheckoutPage() {
         })
         .finally(() => {
           setIsFetchingSanityProducts(false);
-        });
-
-      client
-        .fetch<(SanityProduct & SanityDocument)[]>(
-          PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
-          { categoryArr: productCategories, slugArr: productSlugs }
-        )
-        .then((products: (SanityProduct & SanityDocument)[]) => {
-          if (products.length > 0) {
-            setProductsAlsoBuy(products);
-          }
         });
     }
   }, [productsInCart]);
@@ -140,20 +115,31 @@ export default function CheckoutPage() {
 
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
-      {clientSecret && (
-        <Elements
-          stripe={stripePromise}
-          options={{
-            appearance: { theme: 'stripe' },
-            clientSecret,
-          }}
-        >
-          <PaymentForm
-            subtotal={subtotal}
-            productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-            isFetchingSanityProducts={isFetchingSanityProducts}
-          />
-        </Elements>
+      {clientSecret &&
+        !isFetchingSanityProducts &&
+        productsWithImgUrlAndQuantity.length > 0 && (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              appearance: { theme: 'stripe' },
+              clientSecret,
+            }}
+          >
+            <PaymentForm
+              subtotal={subtotal}
+              productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+            />
+          </Elements>
+        )}
+
+      {(!clientSecret || isFetchingSanityProducts) && (
+        <>
+          <div className="mb-8 *:mb-8 md:w-[35%] lg:mb-12">
+            <ShoppingCartItemSkeleton />
+            <ShoppingCartItemSkeleton />
+          </div>
+          <OrderSummarySkeleton />
+        </>
       )}
     </main>
   );
