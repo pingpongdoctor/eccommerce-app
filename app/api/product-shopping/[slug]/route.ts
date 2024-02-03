@@ -1,5 +1,5 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
-import { NextResponse, type NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
 
@@ -174,7 +174,7 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
   }
 });
 
-//disconnect the relationship a product and the current user
+//delete a product from user shopping cart
 export const DELETE = withApiAuthRequired(async (req: Request, context) => {
   const session = await getSession();
   if (!session) {
