@@ -30,9 +30,13 @@ export default function GlobalStatesContext({
         (userData: Omit<User, 'auth0Id'> | undefined) => {
           if (userData) {
             setUserProfile(userData);
+          } else {
+            setUserProfile(null);
           }
         }
       );
+    } else {
+      setUserProfile(null);
     }
   }, [user]);
 
@@ -42,6 +46,7 @@ export default function GlobalStatesContext({
         changeProductsInCart,
         setChangeProductsInCart,
         userProfile,
+        user,
         isLoading,
         needToRevalidateDataForShoppingCartPage,
         setNeedToRevalidateDataForShoppingCartPage,
