@@ -4,7 +4,7 @@ import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 import { client } from '@/sanity/lib/client';
 
-//update product instock in our database, update product instock in sanity database and clear products in shopping cart
+//update product instock on our database and on sanity database, and clear products in shopping cart
 export const PUT = withApiAuthRequired(async (req: Request, context) => {
   const session = await getSession();
   if (!session) {
@@ -16,7 +16,11 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
 
   const {
     productsInShoppingCart,
-  }: { productsInShoppingCart: ProductInShoppingCart[] } = await req.json();
+  }: {
+    productsInShoppingCart: (ProductInShoppingCart & {
+      sanityProductId: string;
+    })[];
+  } = await req.json();
 
   if (!productsInShoppingCart) {
     return NextResponse.json(
@@ -46,7 +50,11 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
     // check if any product instock is less than product ordering quantity
     await Promise.all(
       productsInShoppingCart.map(
-        async (productInShoppingCart: ProductInShoppingCart) => {
+        async (
+          productInShoppingCart: ProductInShoppingCart & {
+            sanityProductId: string;
+          }
+        ) => {
           const product: {
             instock: number;
           } | null = await prisma.product.findUnique({
@@ -73,10 +81,29 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
       )
     );
 
-    //update product instock
+    //clear products in shopping cart
+    const productIds: number[] = productsInShoppingCart.map(
+      (
+        productInShoppingCart: ProductInShoppingCart & {
+          sanityProductId: string;
+        }
+      ) => productInShoppingCart.productId
+    );
+    await prisma.usersProducts.deleteMany({
+      where: {
+        userId: user.id,
+        productId: { in: productIds },
+      },
+    });
+
+    //update product instock on our database and on sanity database
     await Promise.all(
       productsInShoppingCart.map(
-        async (productInShoppingCart: ProductInShoppingCart) => {
+        async (
+          productInShoppingCart: ProductInShoppingCart & {
+            sanityProductId: string;
+          }
+        ) => {
           const product: {
             instock: number;
           } | null = await prisma.product.findUnique({
@@ -98,23 +125,15 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
               updatedAt: new Date(),
             },
           });
+
+          await client.patch(productInShoppingCart.sanityProductId, {
+            set: {
+              instock: product.instock - productInShoppingCart.productQuantity,
+            },
+          });
         }
       )
     );
-
-    //clear products in shopping cart
-    const productIds: number[] = productsInShoppingCart.map(
-      (productInShoppingCart: ProductInShoppingCart) =>
-        productInShoppingCart.productId
-    );
-    await prisma.usersProducts.deleteMany({
-      where: {
-        userId: user.id,
-        productId: { in: productIds },
-      },
-    });
-
-    //update product instock on sanity database
 
     return NextResponse.json({
       message: 'Products are updated after successful payment',
