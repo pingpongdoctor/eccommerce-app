@@ -1,5 +1,4 @@
 'use client';
-import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 import { SanityDocument } from 'next-sanity';
 import {
   PRODUCTS_QUERY_BY_SLUGS,
@@ -23,16 +22,7 @@ import { useRouter } from 'next/navigation';
 //get products that customers also buy
 export default function ShoppingCart() {
   const router = useRouter();
-  const {
-    userProfile,
-    changeProductsInCart,
-    setChangeProductsInCart,
-    user,
-    isLoading,
-  } = useContext(globalStatesContext);
-  const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
-    []
-  );
+  const { productsInCart, user, isLoading } = useContext(globalStatesContext);
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
@@ -53,22 +43,6 @@ export default function ShoppingCart() {
       router.push('/');
     }
   }, [user, isLoading]);
-
-  //get products in shopping cart of the current user
-  useEffect(() => {
-    if (userProfile) {
-      getProductsInCartFromClientSide()
-        .then((productsInCart: ProductInShoppingCart[] | undefined) => {
-          if (productsInCart) {
-            setProductsInCart(productsInCart);
-          }
-        })
-        .catch((e: any) => {
-          console.log(e.message);
-        })
-        .finally(setChangeProductsInCart(false));
-    }
-  }, [userProfile, changeProductsInCart]);
 
   //get product sanity documents
   useEffect(() => {

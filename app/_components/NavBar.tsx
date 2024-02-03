@@ -7,33 +7,15 @@ import Link from 'next/link';
 import glowlyLab from '../../public/assets/glowy-lab.png';
 import { ArrowLongRightIcon } from '@heroicons/react/16/solid';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
-import { useState, useEffect, useContext } from 'react';
 import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
-import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 import { globalStatesContext } from './GlobalStatesContext';
 import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
+import { useContext } from 'react';
 
 export default function Navbar() {
-  const { userProfile, isLoading } = useContext(globalStatesContext);
-  const [products, setProducts] = useState<ProductInShoppingCart[]>([]);
-  const { changeProductsInCart, setChangeProductsInCart } =
+  const { userProfile, isLoading, productsInCart } =
     useContext(globalStatesContext);
-
-  useEffect(() => {
-    if (userProfile) {
-      //get products in user cart
-      getProductsInCartFromClientSide()
-        .then((products: ProductInShoppingCart[] | undefined) => {
-          if (products) {
-            setProducts(products);
-          } else {
-            setProducts([]);
-          }
-        })
-        .finally(setChangeProductsInCart(false));
-    }
-  }, [userProfile, changeProductsInCart]);
 
   return (
     <div className="mb-8 flex flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12 xl:mx-auto xl:max-w-7xl">
@@ -85,7 +67,9 @@ export default function Navbar() {
               >
                 <ShoppingBagIcon className="h-7 text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600" />
                 <p className="text-lg font-medium text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600">
-                  {products.length > 0 ? calculateTotalProducts(products) : 0}
+                  {productsInCart.length > 0
+                    ? calculateTotalProducts(productsInCart)
+                    : 0}
                 </p>
               </Link>
             </div>
