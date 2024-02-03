@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { solidBlureDataUrl } from '../utils/utils';
 import { SanityDocument } from 'next-sanity';

@@ -1,4 +1,9 @@
 'use client';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import PaymentForm from '../_components/PaymentForm';
+import React, { useState, useEffect } from 'react';
+import { baseUrl } from '../utils/baseUrl';
 import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 import { SanityDocument } from 'next-sanity';
 import {
@@ -7,7 +12,7 @@ import {
 } from '@/sanity/lib/queries';
 import ShoppingCartList from '../_components/ShoppingCartList';
 import OrderSummaryComponent from '../_components/OrderSummaryComponent';
-import { useEffect, useState } from 'react';
+
 import { client } from '@/sanity/lib/client';
 import { useContext } from 'react';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
@@ -19,8 +24,12 @@ import ClientProductCards from '../_components/ClientProductCards';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import ProductCardsSkeleton from '../_components/ProductCardsSkeleton';
 
-//get products that customers also buy
-export default function ShoppingCart() {
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
+
+export default function CheckoutPage() {
+  const [clientSecret, setClientSecret] = useState<string>('');
   const { userProfile, changeProductsInCart, setChangeProductsInCart } =
     useContext(globalStatesContext);
   const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
@@ -116,63 +125,35 @@ export default function ShoppingCart() {
     }
   }, [productsInCart, sanityProductsInCart]);
 
+  useEffect(() => {
+    // Create PaymentIntent as soon as the page loads
+    fetch(`${baseUrl}/api/checkout_sessions`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ amount: 100 }),
+      method: 'POST',
+    })
+      .then((res) => res.json())
+      .then((data) => setClientSecret(data.clientSecret));
+  }, []);
+
   return (
-    <main className="min-h-[600px]">
-      <h2 className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">Shopping Cart</h2>
-
-      {/* products in cart */}
-      <div className="flex flex-col px-4 md:px-8 lg:flex-row lg:justify-between lg:px-12 xl:mx-auto xl:max-w-7xl">
-        {/* skeleton components */}
-        {isFetchingSanityProducts && (
-          <>
-            <div className="mb-8 *:mb-8 md:w-[35%] lg:mb-12">
-              <ShoppingCartItemSkeleton />
-              <ShoppingCartItemSkeleton />
-            </div>
-            <OrderSummarySkeleton />
-          </>
-        )}
-
-        {productsWithImgUrlAndQuantity.length > 0 &&
-          !isFetchingSanityProducts && (
-            <>
-              <ShoppingCartList
-                productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-                shoppingCartListClassname="lg:w-[50%]"
-              />
-              <OrderSummaryComponent
-                subtotal={subtotal}
-                tax={Math.round((subtotal * 12) / 100)}
-                shipping={Math.round((subtotal * 2) / 100)}
-                orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
-              />
-            </>
-          )}
-
-        {/* text shown when there is not product in cart */}
-        {productsWithImgUrlAndQuantity.length == 0 &&
-          !isFetchingSanityProducts && (
-            <h2>There are not any products in your cart</h2>
-          )}
-      </div>
-
-      {/* product you may like */}
-      {productsAlsoBuy.length > 0 && !isFetchingSanityProducts && (
-        <>
-          <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-            <p className="text-lg font-medium text-gray-900">
-              You may also like
-            </p>
-            <p className="font-medium text-gray-900">
-              See all <span>&rarr;</span>
-            </p>
-          </div>
-          <ClientProductCards products={productsAlsoBuy} />
-        </>
-      )}
-
-      {productsAlsoBuy.length === 0 && isFetchingSanityProducts && (
-        <ProductCardsSkeleton />
+    <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
+      {clientSecret && (
+        <Elements
+          stripe={stripePromise}
+          options={{
+            appearance: { theme: 'stripe' },
+            clientSecret,
+          }}
+        >
+          <PaymentForm
+            subtotal={subtotal}
+            productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+            isFetchingSanityProducts={isFetchingSanityProducts}
+          />
+        </Elements>
       )}
     </main>
   );

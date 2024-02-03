@@ -7,6 +7,7 @@ interface Props {
   shipping: number;
   tax: number;
   orderSummaryComponentClassname?: string;
+  showButton?: boolean;
 }
 
 export default function OrderSummaryComponent({
@@ -14,6 +15,7 @@ export default function OrderSummaryComponent({
   subtotal,
   shipping,
   tax,
+  showButton = true,
 }: Props) {
   const summaryData = [
     {
@@ -57,7 +59,9 @@ export default function OrderSummaryComponent({
           </div>
         ))}
 
-        <ButtonComponent buttonName="Check out" animate={true} />
+        {showButton && (
+          <ButtonComponent buttonName="Check out" animate={true} />
+        )}
       </div>
     </div>
   );
