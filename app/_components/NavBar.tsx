@@ -59,10 +59,8 @@ export default function Navbar() {
 
         <div className={`flex w-[102px] justify-end transition-all`}>
           {!userProfile && !isLoading && (
-            <div
-              onClick={() => {
-                window.location.href = '/shopping-cart';
-              }}
+            <Link
+              href="/api/auth/login"
               className="group relative ml-auto h-[25px] w-[88px] font-semibold"
             >
               <span className="group absolute left-0 top-0 z-[1] flex h-full w-full items-center justify-center gap-2 group-hover:text-white">
@@ -72,7 +70,7 @@ export default function Navbar() {
               </span>
 
               <span className="absolute left-0 top-0 z-0 h-full w-0 rounded-lg bg-gray-900 transition-all group-hover:w-full"></span>
-            </div>
+            </Link>
           )}
 
           {userProfile && !isLoading && (

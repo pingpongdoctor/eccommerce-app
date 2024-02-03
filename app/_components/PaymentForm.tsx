@@ -9,20 +9,16 @@ import { useState, useEffect } from 'react';
 import { StripeError } from '@stripe/stripe-js';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
-import OrderSummarySkeleton from './OrderSummarySkeleton';
-import ShoppingCartItemSkeleton from './ShoppingCartItemSkeleton';
 import CheckoutList from './CheckoutList';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
     SanityDocument & { productQuantity: number })[];
-  isFetchingSanityProducts: boolean;
   subtotal: number;
 }
 
 export default function PaymentForm({
   productsWithImgUrlAndQuantity,
-  isFetchingSanityProducts,
   subtotal,
 }: Props) {
   const stripe = useStripe();
@@ -105,26 +101,13 @@ export default function PaymentForm({
     <form id="payment-form" onSubmit={submitHandler}>
       <PaymentElement id="payment-element" />
 
-      {isFetchingSanityProducts && (
-        <>
-          <div className="mb-8 *:mb-8 md:w-[35%] lg:mb-12">
-            <ShoppingCartItemSkeleton />
-            <ShoppingCartItemSkeleton />
-          </div>
-          <OrderSummarySkeleton />
-        </>
-      )}
-
-      {productsWithImgUrlAndQuantity.length > 0 &&
-        !isFetchingSanityProducts && (
-          <CheckoutList
-            productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-            checkoutListClassname="border-t mt-8 lg:mt-12 bg-white rounded-md p-6"
-            subtotal={subtotal}
-            tax={Math.round((subtotal * 12) / 100)}
-            shipping={Math.round((subtotal * 2) / 100)}
-          />
-        )}
+      <CheckoutList
+        productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+        checkoutListClassname="border-t mt-8 lg:mt-12 bg-white rounded-md p-6"
+        subtotal={subtotal}
+        tax={Math.round((subtotal * 12) / 100)}
+        shipping={Math.round((subtotal * 2) / 100)}
+      />
 
       <ButtonComponent
         isDisabled={isLoading || !stripe || !elements}
