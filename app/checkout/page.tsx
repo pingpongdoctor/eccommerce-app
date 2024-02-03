@@ -2,31 +2,34 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../_components/PaymentForm';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { baseUrl } from '../utils/baseUrl';
 import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 import { SanityDocument } from 'next-sanity';
-import {
-  PRODUCTS_QUERY_BY_SLUGS,
-  PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
-} from '@/sanity/lib/queries';
+import { PRODUCTS_QUERY_BY_SLUGS } from '@/sanity/lib/queries';
 import { client } from '@/sanity/lib/client';
-import { useContext } from 'react';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
 import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
 import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';
 import { addProductImgUrls } from '../_lib/addProductImgUrls';
 import { addProductQuantity } from '../_lib/addProductQuantity';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
+import { useRouter } from 'next/navigation';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const [clientSecret, setClientSecret] = useState<string>('');
-  const { userProfile, changeProductsInCart, setChangeProductsInCart } =
-    useContext(globalStatesContext);
+  const {
+    userProfile,
+    changeProductsInCart,
+    setChangeProductsInCart,
+    user,
+    isLoading,
+  } = useContext(globalStatesContext);
   const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
     []
   );
@@ -40,6 +43,13 @@ export default function CheckoutPage() {
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
     useState<boolean>(true);
+
+  //protect this page from unauthenticated users
+  useEffect(() => {
+    if (!user && !isLoading) {
+      router.push('/');
+    }
+  }, [user, isLoading]);
 
   //get products in shopping cart of the current user
   useEffect(() => {
