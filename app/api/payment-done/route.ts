@@ -2,9 +2,9 @@ import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
+import { client } from '@/sanity/lib/client';
 
-//update product instock in database and clear products in shopping cart
-//update product instock on Sanity database
+//update product instock in our database, update product instock in sanity database and clear products in shopping cart
 export const PUT = withApiAuthRequired(async (req: Request, context) => {
   const session = await getSession();
   if (!session) {
@@ -15,10 +15,10 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
   }
 
   const {
-    productInShoppingCart,
-  }: { productInShoppingCart: ProductInShoppingCart[] } = await req.json();
+    productsInShoppingCart,
+  }: { productsInShoppingCart: ProductInShoppingCart[] } = await req.json();
 
-  if (!productInShoppingCart) {
+  if (!productsInShoppingCart) {
     return NextResponse.json(
       { message: 'Miss required data' },
       { status: 400 }
@@ -43,19 +43,78 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
       );
     }
 
-    //get product
+    // check if any product instock is less than product ordering quantity
+    await Promise.all(
+      productsInShoppingCart.map(
+        async (productInShoppingCart: ProductInShoppingCart) => {
+          const product: {
+            instock: number;
+          } | null = await prisma.product.findUnique({
+            where: { id: productInShoppingCart.productId },
+            select: { instock: true },
+          });
 
-    //update product
-    // await Promise.all(
-    //   productInShoppingCart.map((product: ProductInShoppingCart) => {
-    //     await prisma.usersProducts.update({
-    //       where: {
-    //         userId: user.id,
-    //         productId:
-    //       },
-    //     });
-    //   })
-    // );
+          if (!product) {
+            return NextResponse.json(
+              { message: 'product not available for purchase' },
+              { status: 400 }
+            );
+          }
+
+          if (productInShoppingCart.productQuantity > product.instock) {
+            return NextResponse.json(
+              {
+                message: `product with ${productInShoppingCart.productSlug} has not sufficient instock quantity for purchase`,
+              },
+              { status: 400 }
+            );
+          }
+        }
+      )
+    );
+
+    //update product instock
+    await Promise.all(
+      productsInShoppingCart.map(
+        async (productInShoppingCart: ProductInShoppingCart) => {
+          const product: {
+            instock: number;
+          } | null = await prisma.product.findUnique({
+            where: { id: productInShoppingCart.productId },
+            select: { instock: true },
+          });
+
+          if (!product) {
+            return NextResponse.json(
+              { message: 'product not available for purchase' },
+              { status: 400 }
+            );
+          }
+
+          await prisma.product.update({
+            where: { id: productInShoppingCart.productId },
+            data: {
+              instock: product.instock - productInShoppingCart.productQuantity,
+              updatedAt: new Date(),
+            },
+          });
+        }
+      )
+    );
+
+    //clear products in shopping cart
+    const productIds: number[] = productsInShoppingCart.map(
+      (productInShoppingCart: ProductInShoppingCart) =>
+        productInShoppingCart.productId
+    );
+    await prisma.usersProducts.deleteMany({
+      where: {
+        userId: user.id,
+        productId: { in: productIds },
+      },
+    });
+
+    //update product instock on sanity database
 
     return NextResponse.json({
       message: 'Products are updated after successful payment',
