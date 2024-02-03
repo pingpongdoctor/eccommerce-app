@@ -1,10 +1,15 @@
 export function calculateTotalProducts(
   products: ProductInShoppingCart[]
 ): number {
-  const totalNumber = products.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.productQuantity,
-    0
-  );
+  try {
+    const totalNumber = products.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.productQuantity,
+      0
+    );
 
-  return totalNumber;
+    return totalNumber;
+  } catch (e: any) {
+    console.log(e.message);
+    return 0;
+  }
 }
