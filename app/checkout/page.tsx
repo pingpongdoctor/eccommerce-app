@@ -4,7 +4,6 @@ import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../_components/PaymentForm';
 import React, { useState, useEffect, useContext } from 'react';
 import { baseUrl } from '../utils/baseUrl';
-import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 import { SanityDocument } from 'next-sanity';
 import { PRODUCTS_QUERY_BY_SLUGS } from '@/sanity/lib/queries';
 import { client } from '@/sanity/lib/client';
@@ -23,16 +22,7 @@ const stripePromise = loadStripe(
 export default function CheckoutPage() {
   const router = useRouter();
   const [clientSecret, setClientSecret] = useState<string>('');
-  const {
-    userProfile,
-    changeProductsInCart,
-    setChangeProductsInCart,
-    user,
-    isLoading,
-  } = useContext(globalStatesContext);
-  const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
-    []
-  );
+  const { productsInCart, user, isLoading } = useContext(globalStatesContext);
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
@@ -50,22 +40,6 @@ export default function CheckoutPage() {
       router.push('/');
     }
   }, [user, isLoading]);
-
-  //get products in shopping cart of the current user
-  useEffect(() => {
-    if (userProfile) {
-      getProductsInCartFromClientSide()
-        .then((productsInCart: ProductInShoppingCart[] | undefined) => {
-          if (productsInCart) {
-            setProductsInCart(productsInCart);
-          }
-        })
-        .catch((e: any) => {
-          console.log(e.message);
-        })
-        .finally(setChangeProductsInCart(false));
-    }
-  }, [userProfile, changeProductsInCart]);
 
   //get product sanity documents
   useEffect(() => {
