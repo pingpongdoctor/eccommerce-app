@@ -1,6 +1,5 @@
 'use client';
-
-import React from 'react';
+import { ReactNode } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,7 +19,7 @@ export const notify = (
 export default function ReactToastifyProvider({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <>

@@ -1,6 +1,5 @@
 'use client';
-import React from 'react';
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, ReactNode } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { User } from '@prisma/client';
 import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
@@ -11,7 +10,7 @@ export const globalStatesContext = createContext<any>(null);
 export default function GlobalStatesContext({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const { user, isLoading } = useUser();
   const [changeProductsInCart, setChangeProductsInCart] =
@@ -72,6 +71,7 @@ export default function GlobalStatesContext({
         isLoading,
         needToRevalidateDataForShoppingCartPage,
         setNeedToRevalidateDataForShoppingCartPage,
+        productsInCart,
       }}
     >
       {children}

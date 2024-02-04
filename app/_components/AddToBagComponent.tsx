@@ -5,8 +5,6 @@ import ListComponent from './ListComponent';
 import { useState } from 'react';
 import { addProductToCart } from '../_lib/addProductToCart';
 import { notify } from './ReactToastifyProvider';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { User } from '@prisma/client';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
 

@@ -1,5 +1,4 @@
 import Image, { StaticImageData } from 'next/image';
-import React from 'react';
 import { solidBlureDataUrl } from '../utils/utils';
 
 interface Props {

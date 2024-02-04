@@ -1,6 +1,4 @@
 'use client';
-
-import React, { ChangeEvent } from 'react';
 import { Rating } from '@material-tailwind/react';
 
 interface Props {

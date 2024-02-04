@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Avatar from './Avatar';
 
@@ -32,7 +32,7 @@ export default function SimpleMenuComponent({ avatarSrc, username }: Props) {
         <Avatar avatarSrc={avatarSrc} avatarClassname="size-10" />
       </Menu.Button>
       <Transition
-        as={React.Fragment}
+        as={Fragment}
         enter="transition ease-out duration-100"
         enterFrom="transform opacity-0 scale-95"
         enterTo="transform opacity-100 scale-100"

@@ -1,12 +1,11 @@
 'use client';
-
 import { ThreeDots } from 'react-loader-spinner';
-import React from 'react';
+import { MouseEvent } from 'react';
 
 interface Props {
   buttonName: string;
   isDisabled?: boolean;
-  buttonOnclickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  buttonOnclickHandler?: (e: MouseEvent<HTMLButtonElement>) => void;
   animate: boolean;
   buttonClassname?: string;
 }

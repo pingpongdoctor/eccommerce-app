@@ -6,9 +6,8 @@ import {
 } from '@/sanity/lib/queries';
 import ShoppingCartList from '../_components/ShoppingCartList';
 import OrderSummaryComponent from '../_components/OrderSummaryComponent';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { client } from '@/sanity/lib/client';
-import { useContext } from 'react';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
 import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
 import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';

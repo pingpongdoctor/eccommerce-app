@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import React from 'react';
+import { FC, MouseEvent } from 'react';
 
 interface Props {
-  DropdownIcon: React.FC<any>;
+  DropdownIcon: FC<any>;
   dropdownName: string;
   dropdownDescription: string;
   dropdownPath: string;
-  dropdownClickEventHanlder: (e: React.MouseEvent<HTMLElement>) => void;
+  dropdownClickEventHanlder: (e: MouseEvent<HTMLElement>) => void;
 }
 
 export default function DropdownItem({

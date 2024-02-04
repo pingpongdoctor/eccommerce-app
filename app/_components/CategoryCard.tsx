@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, memo, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
 import { cn } from '../utils/cs';
@@ -12,7 +12,7 @@ export const CategoryCard = ({
 }: {
   text: string;
   revealText: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
 }) => {
   const [widthPercentage, setWidthPercentage] = useState(0);
@@ -84,7 +84,7 @@ export const CategoryCard = ({
             style={{
               textShadow: '4px 4px 15px rgba(0,0,0,0.5)',
             }}
-            className="bg-gradient-to-b from-white to-neutral-300 bg-clip-text py-10 text-base font-bold text-transparent text-white sm:text-[3rem]"
+            className="to-neutral-300 bg-gradient-to-b from-white bg-clip-text py-10 text-base font-bold text-transparent text-white sm:text-[3rem]"
           >
             {revealText}
           </p>
@@ -96,7 +96,7 @@ export const CategoryCard = ({
             opacity: widthPercentage > 0 ? 1 : 0,
           }}
           transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-          className="absolute z-50 h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent will-change-transform"
+          className="via-neutral-800 absolute z-50 h-40 w-[8px] bg-gradient-to-b from-transparent to-transparent will-change-transform"
         ></motion.div>
 
         <div className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
@@ -114,7 +114,7 @@ export const TextRevealCardTitle = ({
   children,
   className,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }) => {
   return (
@@ -128,7 +128,7 @@ export const TextRevealCardDescription = ({
   children,
   className,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }) => {
   return (
