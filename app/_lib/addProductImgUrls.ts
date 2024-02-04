@@ -1,5 +1,6 @@
 import { builder } from '../utils/imageBuilder';
 import { SanityDocument } from 'next-sanity';
+
 export async function addProductImgUrls(
   products: (SanityProduct & SanityDocument)[]
 ): Promise<(ProductWithImgUrl & SanityDocument)[]> {
