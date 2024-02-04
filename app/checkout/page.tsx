@@ -3,7 +3,6 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../_components/PaymentForm';
 import React, { useState, useEffect, useContext } from 'react';
-import { baseUrl } from '../utils/baseUrl';
 import { SanityDocument } from 'next-sanity';
 import { PRODUCTS_QUERY_BY_SLUGS } from '@/sanity/lib/queries';
 import { client } from '@/sanity/lib/client';
@@ -14,6 +13,7 @@ import { addProductImgUrls } from '../_lib/addProductImgUrls';
 import { addProductQuantity } from '../_lib/addProductQuantity';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import { useRouter } from 'next/navigation';
+import { createStripePaymentIntent } from '../_lib/createStripePaymentIntent';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -85,17 +85,17 @@ export default function CheckoutPage() {
   }, [productsInCart, sanityProductsInCart]);
 
   useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    fetch(`${baseUrl}/api/checkout_sessions`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount: 100 }),
-      method: 'POST',
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
-  }, []);
+    if (user) {
+      // Create PaymentIntent as soon as the page loads
+      createStripePaymentIntent(200).then(
+        (secretString: string | undefined) => {
+          if (secretString) {
+            setClientSecret(secretString);
+          }
+        }
+      );
+    }
+  }, [user]);
 
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">

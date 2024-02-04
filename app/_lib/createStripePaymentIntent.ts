@@ -3,7 +3,7 @@ import { baseUrl } from '../utils/baseUrl';
 //return true if successfully creating payment intent
 export async function createStripePaymentIntent(
   amount: number
-): Promise<boolean> {
+): Promise<string | undefined> {
   try {
     const res = await fetch(`${baseUrl}/api/checkout_sessions`, {
       headers: {
@@ -17,14 +17,14 @@ export async function createStripePaymentIntent(
 
     if (!res.ok) {
       console.log('Error when creating payment intent' + ' ' + data.message);
-      return false;
+      return undefined;
     }
 
-    return true;
+    return data.clientSecret;
   } catch (e: any) {
     console.log(
       'Error in createStripePaymentIntent function' + ' ' + e.message
     );
-    return false;
+    return undefined;
   }
 }

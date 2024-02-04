@@ -1,12 +1,11 @@
 'use client';
-
-import React from 'react';
+import { FC } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 interface Props {
-  CarouselFC: React.FC<any>[];
+  CarouselFC: FC<any>[];
   carouselAutoPlay: boolean;
   carouselAutoPlaySpeed: number;
   carouselPauseOnHover?: boolean;

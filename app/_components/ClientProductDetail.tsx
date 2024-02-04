@@ -1,5 +1,4 @@
 'use client';
-
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';

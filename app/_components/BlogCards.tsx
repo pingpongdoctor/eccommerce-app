@@ -1,6 +1,4 @@
 'use client';
-
-import React from 'react';
 import CarouselComponent from './CarouselComponent';
 import BlogCard from './BlogCard';
 

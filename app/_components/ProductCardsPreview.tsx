@@ -1,5 +1,4 @@
 'use client';
-
 import {
   PRODUCTS_QUERY,
   PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
