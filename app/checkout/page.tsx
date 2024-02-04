@@ -68,7 +68,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
-      // set the state for product with image url and quantity
+      // set the state of products with image url and quantity
       addProductImgUrls(sanityProductsInCart).then(
         (productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[]) => {
           const productsWithImgAndQuantity = addProductQuantity(
