@@ -1,4 +1,3 @@
-import product from '@/sanity/schemas/product';
 import { SanityDocument } from 'next-sanity';
 
 export function calculateSubtotal(

@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 import { client } from '@/sanity/lib/client';
 
 //update product instock on our database and on sanity database, and clear products in shopping cart
-export const PUT = withApiAuthRequired(async (req: Request, context) => {
+export const PUT = withApiAuthRequired(async (req: Request) => {
   const session = await getSession();
   if (!session) {
     return NextResponse.json(
@@ -72,7 +72,8 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
           if (productInShoppingCart.productQuantity > product.instock) {
             return NextResponse.json(
               {
-                message: `product with ${productInShoppingCart.productSlug} has not sufficient instock quantity for purchase`,
+                message: `product with ${productInShoppingCart.productSlug} has not sufficient quantity for purchase`,
+                productSlug: productInShoppingCart.productSlug,
               },
               { status: 400 }
             );

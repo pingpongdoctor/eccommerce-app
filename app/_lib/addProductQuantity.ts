@@ -1,4 +1,5 @@
 import { SanityDocument } from 'next-sanity';
+
 export function addProductQuantity(
   productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[],
   productsInCart: ProductInShoppingCart[]
