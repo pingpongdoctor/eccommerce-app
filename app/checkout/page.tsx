@@ -2,7 +2,7 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../_components/PaymentForm';
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { SanityDocument } from 'next-sanity';
 import { PRODUCTS_QUERY_BY_SLUGS } from '@/sanity/lib/queries';
 import { client } from '@/sanity/lib/client';
