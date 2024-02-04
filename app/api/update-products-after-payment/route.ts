@@ -4,6 +4,24 @@ import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 import { client } from '@/sanity/lib/client';
 
+//function to get product
+const getProduct = async function (
+  productInShoppingCart: ProductInShoppingCart & {
+    sanityProductId: string;
+  }
+): Promise<{
+  instock: number;
+} | null> {
+  const product: {
+    instock: number;
+  } | null = await prisma.product.findUnique({
+    where: { id: productInShoppingCart.productId },
+    select: { instock: true },
+  });
+
+  return product;
+};
+
 //update product instock on our database and on sanity database, and clear products in shopping cart
 export const PUT = withApiAuthRequired(async (req: Request) => {
   const session = await getSession();
@@ -57,10 +75,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
         ) => {
           const product: {
             instock: number;
-          } | null = await prisma.product.findUnique({
-            where: { id: productInShoppingCart.productId },
-            select: { instock: true },
-          });
+          } | null = await getProduct(productInShoppingCart);
 
           if (!product) {
             return NextResponse.json(
@@ -107,10 +122,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
         ) => {
           const product: {
             instock: number;
-          } | null = await prisma.product.findUnique({
-            where: { id: productInShoppingCart.productId },
-            select: { instock: true },
-          });
+          } | null = await getProduct(productInShoppingCart);
 
           if (!product) {
             return NextResponse.json(
