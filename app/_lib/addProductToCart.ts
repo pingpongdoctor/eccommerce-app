@@ -1,10 +1,15 @@
+import { notify } from '../_components/ReactToastifyProvider';
 import { baseUrl } from '../utils/baseUrl';
 
 //return true if product is successfully updated
 export async function addProductToCart(
   productSlug: string,
   productQuantity: number
-): Promise<boolean> {
+): Promise<{
+  isSuccess: boolean;
+  notEnoughAvailableProduct?: boolean;
+  canNotAddMore?: boolean;
+}> {
   try {
     const res = await fetch(`${baseUrl}/api/product-shopping/${productSlug}`, {
       headers: {
@@ -18,11 +23,16 @@ export async function addProductToCart(
 
     if (!res.ok) {
       console.log('Error adding product to cart' + ' ' + data.message);
-      return false;
+      return { isSuccess: false };
     }
-    return true;
+
+    return {
+      isSuccess: true,
+      notEnoughAvailableProduct: data.notEnoughAvailableProduct,
+      canNotAddMore: data.canNotAddMore,
+    };
   } catch (e: any) {
     console.log('Error in addProductToCart function' + ' ' + e.message);
-    return false;
+    return { isSuccess: false };
   }
 }

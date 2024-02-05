@@ -55,13 +55,19 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
         }
       );
     }
+
     //find userProduct document
-    const userProductDocument = await prisma.usersProducts.findUnique({
+    const userProductDocument: {
+      productQuantity: number;
+    } | null = await prisma.usersProducts.findUnique({
       where: {
         userId_productId: {
           userId: userData.id,
           productId: product.id,
         },
+      },
+      select: {
+        productQuantity: true,
       },
     });
 
@@ -83,9 +89,19 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
           },
         },
       });
+
+      return NextResponse.json(
+        { message: 'successful creation' },
+        {
+          status: 201,
+        }
+      );
     } else {
       //update userProduct document
       const currentProductQuantity = userProductDocument.productQuantity;
+      const notEnoughAvailableProduct =
+        currentProductQuantity + productQuantity > product.instock;
+      const canNotAddMore = currentProductQuantity === product.instock;
 
       await prisma.usersProducts.update({
         where: {
@@ -95,21 +111,24 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
           },
         },
         data: {
-          productQuantity:
-            currentProductQuantity + productQuantity > product.instock
-              ? product.instock
-              : { increment: productQuantity }, //add more product
+          productQuantity: notEnoughAvailableProduct
+            ? product.instock
+            : { increment: productQuantity }, //add more product
           createdAt: new Date(),
         },
       });
-    }
 
-    return NextResponse.json(
-      { message: 'successful ' },
-      {
-        status: 201,
-      }
-    );
+      return NextResponse.json(
+        {
+          message: 'successful update',
+          notEnoughAvailableProduct,
+          canNotAddMore,
+        },
+        {
+          status: 200,
+        }
+      );
+    }
   } catch (err: any) {
     console.log('Internal server error' + err);
     return NextResponse.json(
