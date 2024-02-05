@@ -43,14 +43,25 @@ export default function AddToBagComponent({
     try {
       setIsDisable(true);
 
-      const isSuccess = await addProductToCart(productSlug, quantity);
+      const res = await addProductToCart(productSlug, quantity);
 
-      if (isSuccess) {
-        notify(
-          'success',
-          'Product has been added to your cart',
-          'add-product-to-cart-success'
-        );
+      if (res.isSuccess) {
+        if (!res.canNotAddMore) {
+          notify(
+            'success',
+            'Product has been added to your cart',
+            'add-product-to-cart-success'
+          );
+        }
+
+        if (res.notEnoughAvailableProduct as boolean) {
+          notify(
+            'info',
+            `Seller only has ${productInstock} products in stock`,
+            'add-product-to-cart-info'
+          );
+        }
+
         setChangeProductsInCart(true);
       }
     } catch (e: any) {

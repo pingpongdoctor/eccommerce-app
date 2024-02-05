@@ -38,7 +38,7 @@ export default function Navbar() {
           <Link href="#">Contact</Link>
         </div>
 
-        <div className={`flex w-[102px] justify-end transition-all`}>
+        <div className={`flex w-[109px] justify-end transition-all`}>
           {!userProfile && !isLoading && (
             <Link
               href="/api/auth/login"
