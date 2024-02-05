@@ -42,6 +42,7 @@ export default function AddToBagComponent({
 
     try {
       setIsDisable(true);
+
       const isSuccess = await addProductToCart(productSlug, quantity);
 
       if (isSuccess) {
@@ -70,6 +71,7 @@ export default function AddToBagComponent({
         selectedValue={quantity}
         listComponentChangeEventHandler={handleUpdateQuantity}
         listData={generateProductInstockList(productInstock)}
+        listClassname="max-h-[180px]"
       />
       <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
     </form>

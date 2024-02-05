@@ -41,9 +41,10 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
     //get product
     const product: {
       id: number;
+      instock: number;
     } | null = await prisma.product.findUnique({
       where: { sanitySlug: productSlug },
-      select: { id: true },
+      select: { id: true, instock: true },
     });
 
     if (!product) {
@@ -54,30 +55,54 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
         }
       );
     }
-
-    await prisma.usersProducts.upsert({
+    //find userProduct document
+    const userProductDocument = await prisma.usersProducts.findUnique({
       where: {
         userId_productId: {
           userId: userData.id,
           productId: product.id,
         },
       },
-      create: {
-        productQuantity,
-        user: {
-          connect: { id: userData.id },
-        },
-        product: {
-          connect: {
-            id: product.id,
+    });
+
+    if (!userProductDocument) {
+      //create userProduct document
+      await prisma.usersProducts.create({
+        data: {
+          productQuantity:
+            productQuantity > product.instock
+              ? product.instock
+              : productQuantity,
+          user: {
+            connect: { id: userData.id },
+          },
+          product: {
+            connect: {
+              id: product.id,
+            },
           },
         },
-      },
-      update: {
-        productQuantity: { increment: productQuantity }, //add more product
-        createdAt: new Date(),
-      },
-    });
+      });
+    } else {
+      //update userProduct document
+      const currentProductQuantity = userProductDocument.productQuantity;
+
+      await prisma.usersProducts.update({
+        where: {
+          userId_productId: {
+            userId: userData.id,
+            productId: product.id,
+          },
+        },
+        data: {
+          productQuantity:
+            currentProductQuantity + productQuantity > product.instock
+              ? product.instock
+              : { increment: productQuantity }, //add more product
+          createdAt: new Date(),
+        },
+      });
+    }
 
     return NextResponse.json(
       { message: 'successful ' },
