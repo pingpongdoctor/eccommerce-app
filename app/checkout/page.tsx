@@ -14,6 +14,7 @@ import { addProductQuantity } from '../_lib/addProductQuantity';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import { useRouter } from 'next/navigation';
 import { createStripePaymentIntent } from '../_lib/createStripePaymentIntent';
+import { addSanityProductId } from '../_lib/addSanityProductId';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -23,6 +24,14 @@ export default function CheckoutPage() {
   const router = useRouter();
   const [clientSecret, setClientSecret] = useState<string>('');
   const { productsInCart, user, isLoading } = useContext(globalStatesContext);
+  const [
+    productsInCartWithSanityProductId,
+    setProductsInCartWithSanityProductId,
+  ] = useState<
+    (ProductInShoppingCart & {
+      sanityProductId: string;
+    })[]
+  >();
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
@@ -81,6 +90,13 @@ export default function CheckoutPage() {
 
       //set subtotal state
       setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
+
+      // set the state of products in cart with sanity product id
+      const productsInCartWithSanityId: (ProductInShoppingCart & {
+        sanityProductId: string;
+      })[] = addSanityProductId(productsInCart, sanityProductsInCart);
+
+      setProductsInCartWithSanityProductId(productsInCartWithSanityId);
     }
   }, [productsInCart, sanityProductsInCart]);
 

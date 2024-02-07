@@ -1,11 +1,10 @@
+'use client';
 import {
   useElements,
   useStripe,
   PaymentElement,
 } from '@stripe/react-stripe-js';
-import { baseUrl } from '../utils/baseUrl';
 import { useState, useEffect } from 'react';
-import { StripeError } from '@stripe/stripe-js';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
@@ -27,6 +26,7 @@ export default function PaymentForm({
 
   useEffect(() => {
     if (!stripe) {
+      console.error('stripe instant not available');
       return;
     }
 
@@ -35,11 +35,13 @@ export default function PaymentForm({
     );
 
     if (!clientSecret) {
+      console.error('stripe client secret not available');
       return;
     }
 
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       if (!paymentIntent) {
+        console.error('payment intent not available');
         return;
       }
 
@@ -63,37 +65,39 @@ export default function PaymentForm({
   const submitHandler = async (e: any) => {
     e.preventDefault();
 
-    try {
-      if (!stripe || !elements) {
-        // Stripe.js hasn't yet loaded.
-        // Make sure to disable form submission until Stripe.js has loaded.
-        return;
-      }
+    // updateProductsAfterPayment();
 
-      setIsLoading(true);
+    // try {
+    //   if (!stripe || !elements) {
+    //     // Stripe.js hasn't yet loaded.
+    //     // Make sure to disable form submission until Stripe.js has loaded.
+    //     return;
+    //   }
 
-      const { error }: { error: StripeError } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          // Make sure to change this to your payment completion page
-          return_url: `${baseUrl}`,
-        },
-      });
+    //   setIsLoading(true);
 
-      if (error.type === 'card_error' || error.type === 'validation_error') {
-        if (!error.message) {
-          setMessage('An unexpected error occurred.');
-        } else {
-          setMessage(error.message);
-        }
-      } else {
-        setMessage('An unexpected error occurred.');
-      }
+    //   const { error }: { error: StripeError } = await stripe.confirmPayment({
+    //     elements,
+    //     confirmParams: {
+    //       // Make sure to change this to your payment completion page
+    //       return_url: `${baseUrl}`,
+    //     },
+    //   });
 
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    //   if (error.type === 'card_error' || error.type === 'validation_error') {
+    //     if (!error.message) {
+    //       setMessage('An unexpected error occurred.');
+    //     } else {
+    //       setMessage(error.message);
+    //     }
+    //   } else {
+    //     setMessage('An unexpected error occurred.');
+    //   }
+
+    //   setIsLoading(false);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
