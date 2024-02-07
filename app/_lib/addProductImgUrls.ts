@@ -5,13 +5,12 @@ export async function addProductImgUrls(
   products: (SanityProduct & SanityDocument)[]
 ): Promise<(ProductWithImgUrl & SanityDocument)[]> {
   try {
-    const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
-      await Promise.all(
-        products.map(async (product: SanityProduct & SanityDocument) => {
-          product.imgUrl = builder.image(product.images[0]).quality(80).url();
-          return product as ProductWithImgUrl & SanityDocument;
-        })
-      );
+    const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] = [
+      ...products,
+    ].map((product: SanityProduct & SanityDocument) => {
+      product.imgUrl = builder.image(product.images[0]).quality(80).url();
+      return product as ProductWithImgUrl & SanityDocument;
+    });
 
     return productsWithImgUrl;
   } catch (e: any) {

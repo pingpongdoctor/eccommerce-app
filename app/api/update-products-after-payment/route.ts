@@ -22,7 +22,7 @@ const getProduct = async function (
   return product;
 };
 
-//update product instock on our database and on sanity database, and clear products in shopping cart
+//update product that are in stock in our database and on sanity database, and clear products in shopping cart after successful payment
 export const PUT = withApiAuthRequired(async (req: Request) => {
   const session = await getSession();
   if (!session) {

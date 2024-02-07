@@ -22,6 +22,7 @@ interface SanityProduct {
 }
 
 interface ProductInShoppingCart {
+  [index: string]: string | number | Categories;
   productSlug: string;
   productQuantity: number;
   productCategory: Categories;
