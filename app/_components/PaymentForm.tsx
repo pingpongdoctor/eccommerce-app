@@ -8,16 +8,21 @@ import { useState, useEffect } from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
+import { updateProductsAfterPayment } from '../_lib/updateProductsAfterPayment';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
     SanityDocument & { productQuantity: number })[];
   subtotal: number;
+  productsInCartWithSanityProductId: (ProductInShoppingCart & {
+    sanityProductId: string;
+  })[];
 }
 
 export default function PaymentForm({
   productsWithImgUrlAndQuantity,
   subtotal,
+  productsInCartWithSanityProductId,
 }: Props) {
   const stripe = useStripe();
   const elements = useElements();
@@ -65,7 +70,7 @@ export default function PaymentForm({
   const submitHandler = async (e: any) => {
     e.preventDefault();
 
-    // updateProductsAfterPayment();
+    updateProductsAfterPayment(productsInCartWithSanityProductId);
 
     // try {
     //   if (!stripe || !elements) {
