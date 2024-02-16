@@ -31,7 +31,7 @@ export default function CheckoutPage() {
     (ProductInShoppingCart & {
       sanityProductId: string;
     })[]
-  >();
+  >([]);
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
@@ -41,7 +41,7 @@ export default function CheckoutPage() {
     >([]);
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
-    useState<boolean>(true);
+    useState<boolean>(false);
 
   //protect this page from unauthenticated users
   useEffect(() => {
@@ -53,6 +53,7 @@ export default function CheckoutPage() {
   //get product sanity documents
   useEffect(() => {
     if (productsInCart.length > 0) {
+      setIsFetchingSanityProducts(true);
       const productSlugs: string[] = productsInCart
         ? productsInCart.map(
             (product: ProductInShoppingCart) => product.productSlug
@@ -72,6 +73,12 @@ export default function CheckoutPage() {
         .finally(() => {
           setIsFetchingSanityProducts(false);
         });
+    } else {
+      setSanityProductsInCart([]);
+      setProductsWithImgUrlAndQuantity([]);
+      setProductsInCartWithSanityProductId([]);
+      setClientSecret('');
+      setSubtotal(0);
     }
   }, [productsInCart]);
 
@@ -100,9 +107,9 @@ export default function CheckoutPage() {
     }
   }, [productsInCart, sanityProductsInCart]);
 
+  // Create PaymentIntent as soon as the page loads
   useEffect(() => {
     if (user) {
-      // Create PaymentIntent as soon as the page loads
       createStripePaymentIntent(200).then(
         (secretString: string | undefined) => {
           if (secretString) {
@@ -112,6 +119,10 @@ export default function CheckoutPage() {
       );
     }
   }, [user]);
+
+  useEffect(() => {
+    console.log(isFetchingSanityProducts);
+  }, [isFetchingSanityProducts]);
 
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
@@ -128,6 +139,9 @@ export default function CheckoutPage() {
             <PaymentForm
               subtotal={subtotal}
               productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+              productsInCartWithSanityProductId={
+                productsInCartWithSanityProductId
+              }
             />
           </Elements>
         )}
@@ -140,6 +154,10 @@ export default function CheckoutPage() {
           </div>
           <OrderSummarySkeleton />
         </>
+      )}
+
+      {!isFetchingSanityProducts && sanityProductsInCart.length === 0 && (
+        <p>No products to proceed payment</p>
       )}
     </main>
   );

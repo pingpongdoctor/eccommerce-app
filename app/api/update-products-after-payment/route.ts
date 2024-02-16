@@ -65,7 +65,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
       );
     }
 
-    // check if any product instock is less than product ordering quantity
+    // check if any products do not have enough quantity for purchasing
     await Promise.all(
       productsInShoppingCart.map(
         async (
@@ -87,7 +87,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
           if (productInShoppingCart.productQuantity > product.instock) {
             return NextResponse.json(
               {
-                message: `product with ${productInShoppingCart.productSlug} has not sufficient quantity for purchase`,
+                message: `product with ${productInShoppingCart.productSlug} has not sufficient quantity for purchasing`,
                 productSlug: productInShoppingCart.productSlug,
               },
               { status: 400 }
@@ -149,7 +149,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
     );
 
     return NextResponse.json({
-      message: 'Products are updated after successful payment',
+      message: 'products are updated after successful payment',
     });
   } catch (e: any) {
     return NextResponse.json({ message: e.message });

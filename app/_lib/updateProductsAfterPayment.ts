@@ -5,9 +5,7 @@ export async function updateProductsAfterPayment(
   products: (ProductInShoppingCart & {
     sanityProductId: string;
   })[]
-): Promise<
-  'Not enough product quantity for purchase' | 'Successful update' | undefined
-> {
+): Promise<boolean> {
   try {
     const res = await fetch(`${baseUrl}/api/update-products-after-payment`, {
       headers: {
@@ -25,13 +23,15 @@ export async function updateProductsAfterPayment(
       );
 
       if (data.productSlug) {
-        return 'Not enough product quantity for purchase';
+        console.log(data.productSlug);
       }
+
+      return false;
     }
 
-    return 'Successful update';
+    return true;
   } catch (e: any) {
     console.log('Error in updateProductsAfterPayment function');
-    return undefined;
+    return false;
   }
 }

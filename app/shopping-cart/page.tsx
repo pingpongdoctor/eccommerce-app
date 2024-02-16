@@ -34,7 +34,7 @@ export default function ShoppingCart() {
   >([]);
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
-    useState<boolean>(true);
+    useState<boolean>(false);
 
   //protect this page from unauthenticated users
   useEffect(() => {
@@ -46,6 +46,7 @@ export default function ShoppingCart() {
   //get product sanity documents
   useEffect(() => {
     if (productsInCart.length > 0) {
+      setIsFetchingSanityProducts(true);
       const productSlugs: string[] = productsInCart
         ? productsInCart.map(
             (product: ProductInShoppingCart) => product.productSlug
@@ -82,6 +83,11 @@ export default function ShoppingCart() {
             setProductsAlsoBuy(products);
           }
         });
+    } else {
+      setSanityProductsInCart([]);
+      setProductsAlsoBuy([]);
+      setProductsWithImgUrlAndQuantity([]);
+      setSubtotal(0);
     }
   }, [productsInCart]);
 
@@ -137,10 +143,9 @@ export default function ShoppingCart() {
           )}
 
         {/* text shown when there is not product in cart */}
-        {productsWithImgUrlAndQuantity.length == 0 &&
-          !isFetchingSanityProducts && (
-            <h2>There are not any products in your cart</h2>
-          )}
+        {!isFetchingSanityProducts && sanityProductsInCart.length === 0 && (
+          <p>There are not any products in your cart</p>
+        )}
       </div>
 
       {/* product you may like */}
