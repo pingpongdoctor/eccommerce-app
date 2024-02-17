@@ -21,7 +21,7 @@ import { useRouter } from 'next/navigation';
 //get products that customers also buy
 export default function ShoppingCart() {
   const router = useRouter();
-  const { productsInCart, user, isLoading } = useContext(globalStatesContext);
+  const { productsInCart, isLoading, user } = useContext(globalStatesContext);
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
@@ -38,7 +38,7 @@ export default function ShoppingCart() {
 
   //protect this page from unauthenticated users
   useEffect(() => {
-    if (!user && !isLoading) {
+    if (!isLoading && !user) {
       router.push('/');
     }
   }, [user, isLoading]);
@@ -46,19 +46,19 @@ export default function ShoppingCart() {
   //get product sanity documents
   useEffect(() => {
     if (productsInCart.length > 0) {
-      setIsFetchingSanityProducts(true);
       const productSlugs: string[] = productsInCart
-        ? productsInCart.map(
+        ? [...productsInCart].map(
             (product: ProductInShoppingCart) => product.productSlug
           )
         : [];
 
       const productCategories: Categories[] = productsInCart
-        ? productsInCart.map(
+        ? [...productsInCart].map(
             (product: ProductInShoppingCart) => product.productCategory
           )
         : [];
 
+      setIsFetchingSanityProducts(true);
       client
         .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
           slugArr: productSlugs,
@@ -126,8 +126,8 @@ export default function ShoppingCart() {
           </>
         )}
 
-        {productsWithImgUrlAndQuantity.length > 0 &&
-          !isFetchingSanityProducts && (
+        {!isFetchingSanityProducts &&
+          productsWithImgUrlAndQuantity.length > 0 && (
             <>
               <ShoppingCartList
                 productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
@@ -143,9 +143,10 @@ export default function ShoppingCart() {
           )}
 
         {/* text shown when there is not product in cart */}
-        {!isFetchingSanityProducts && sanityProductsInCart.length === 0 && (
-          <p>There are not any products in your cart</p>
-        )}
+        {!isFetchingSanityProducts &&
+          productsWithImgUrlAndQuantity.length === 0 && (
+            <p>There are not any products in your cart</p>
+          )}
       </div>
 
       {/* product you may like */}
