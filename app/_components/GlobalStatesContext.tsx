@@ -28,7 +28,7 @@ export default function GlobalStatesContext({
 
   useEffect(() => {
     //set user profile state
-    if (user) {
+    if (user && !isLoading) {
       getUserProfileFromClientSide().then(
         (userData: Omit<User, 'auth0Id'> | undefined) => {
           if (userData) {
@@ -38,10 +38,8 @@ export default function GlobalStatesContext({
           }
         }
       );
-    } else {
-      setUserProfile(null);
     }
-  }, [user]);
+  }, [user, isLoading]);
 
   //get products in shopping cart of the current user
   useEffect(() => {
@@ -51,12 +49,15 @@ export default function GlobalStatesContext({
         .then((products: ProductInShoppingCart[] | undefined) => {
           if (products) {
             setProductsInCart(products);
-          } else {
-            setProductsInCart([]);
           }
         })
+        .catch((e: any) => {
+          console.log(e.message);
+        })
         .finally(() => {
-          setChangeProductsInCart(false);
+          if (changeProductsInCart === true) {
+            setChangeProductsInCart(false);
+          }
         });
     }
   }, [userProfile, changeProductsInCart]);

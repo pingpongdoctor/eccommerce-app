@@ -53,13 +53,13 @@ export default function CheckoutPage() {
   //get product sanity documents
   useEffect(() => {
     if (productsInCart.length > 0) {
-      setIsFetchingSanityProducts(true);
       const productSlugs: string[] = productsInCart
         ? productsInCart.map(
             (product: ProductInShoppingCart) => product.productSlug
           )
         : [];
 
+      setIsFetchingSanityProducts(true);
       client
         .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
           slugArr: productSlugs,
@@ -120,31 +120,25 @@ export default function CheckoutPage() {
     }
   }, [user]);
 
-  useEffect(() => {
-    console.log(isFetchingSanityProducts);
-  }, [isFetchingSanityProducts]);
-
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
-      {clientSecret &&
-        !isFetchingSanityProducts &&
-        productsWithImgUrlAndQuantity.length > 0 && (
-          <Elements
-            stripe={stripePromise}
-            options={{
-              appearance: { theme: 'stripe' },
-              clientSecret,
-            }}
-          >
-            <PaymentForm
-              subtotal={subtotal}
-              productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-              productsInCartWithSanityProductId={
-                productsInCartWithSanityProductId
-              }
-            />
-          </Elements>
-        )}
+      {clientSecret && productsWithImgUrlAndQuantity.length > 0 && (
+        <Elements
+          stripe={stripePromise}
+          options={{
+            appearance: { theme: 'stripe' },
+            clientSecret,
+          }}
+        >
+          <PaymentForm
+            subtotal={subtotal}
+            productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+            productsInCartWithSanityProductId={
+              productsInCartWithSanityProductId
+            }
+          />
+        </Elements>
+      )}
 
       {(!clientSecret || isFetchingSanityProducts) && (
         <>
