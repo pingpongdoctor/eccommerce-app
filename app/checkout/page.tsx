@@ -15,6 +15,7 @@ import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import { useRouter } from 'next/navigation';
 import { createStripePaymentIntent } from '../_lib/createStripePaymentIntent';
 import { addSanityProductId } from '../_lib/addSanityProductId';
+import ButtonSkeleton from '../_components/ButtonSkeleton';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -45,7 +46,7 @@ export default function CheckoutPage() {
 
   //protect this page from unauthenticated users
   useEffect(() => {
-    if (!user && !isLoading) {
+    if (!isLoading && !user) {
       router.push('/');
     }
   }, [user, isLoading]);
@@ -122,37 +123,41 @@ export default function CheckoutPage() {
 
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
-      {clientSecret && productsWithImgUrlAndQuantity.length > 0 && (
-        <Elements
-          stripe={stripePromise}
-          options={{
-            appearance: { theme: 'stripe' },
-            clientSecret,
-          }}
-        >
-          <PaymentForm
-            subtotal={subtotal}
-            productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-            productsInCartWithSanityProductId={
-              productsInCartWithSanityProductId
-            }
-          />
-        </Elements>
-      )}
-
-      {(!clientSecret || isFetchingSanityProducts) && (
+      {isFetchingSanityProducts && (
         <>
-          <div className="mb-8 *:mb-8 md:w-[35%] lg:mb-12">
-            <ShoppingCartItemSkeleton />
-            <ShoppingCartItemSkeleton />
+          <div className="mb-8 *:mb-8 md:w-[35%]">
+            <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
+            <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
           </div>
-          <OrderSummarySkeleton />
+          <OrderSummarySkeleton orderSummarySkeletonClassname="lg:w-full mb-8" />
+          <ButtonSkeleton />
         </>
       )}
 
-      {!isFetchingSanityProducts && sanityProductsInCart.length === 0 && (
-        <p>No products to proceed payment</p>
-      )}
+      {!isFetchingSanityProducts &&
+        clientSecret &&
+        productsWithImgUrlAndQuantity.length > 0 && (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              appearance: { theme: 'stripe' },
+              clientSecret,
+            }}
+          >
+            <PaymentForm
+              subtotal={subtotal}
+              productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+              productsInCartWithSanityProductId={
+                productsInCartWithSanityProductId
+              }
+            />
+          </Elements>
+        )}
+
+      {!isFetchingSanityProducts &&
+        (!clientSecret || productsWithImgUrlAndQuantity.length === 0) && (
+          <p>No products to proceed payment</p>
+        )}
     </main>
   );
 }
