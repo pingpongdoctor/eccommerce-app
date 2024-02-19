@@ -150,7 +150,7 @@ export default function ShoppingCart() {
       </div>
 
       {/* product you may like */}
-      {productsAlsoBuy.length > 0 && !isFetchingSanityProducts && (
+      {!isFetchingSanityProducts && productsAlsoBuy.length > 0 && (
         <>
           <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
             <p className="text-lg font-medium text-gray-900">

@@ -4,11 +4,12 @@ import {
   useStripe,
   PaymentElement,
 } from '@stripe/react-stripe-js';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
 import { updateProductsAfterPayment } from '../_lib/updateProductsAfterPayment';
+import { globalStatesContext } from './GlobalStatesContext';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -24,6 +25,7 @@ export default function PaymentForm({
   subtotal,
   productsInCartWithSanityProductId,
 }: Props) {
+  const { setChangeProductsInCart } = useContext(globalStatesContext);
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState<string>('');
@@ -69,8 +71,9 @@ export default function PaymentForm({
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
-
-    updateProductsAfterPayment(productsInCartWithSanityProductId);
+    console.log(productsInCartWithSanityProductId);
+    // await updateProductsAfterPayment(productsInCartWithSanityProductId);
+    // setChangeProductsInCart(true);
 
     // try {
     //   if (!stripe || !elements) {

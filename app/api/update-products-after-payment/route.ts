@@ -79,7 +79,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
 
           if (!product) {
             return NextResponse.json(
-              { message: 'product not available for purchase' },
+              { message: 'product not available' },
               { status: 400 }
             );
           }
@@ -87,7 +87,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
           if (productInShoppingCart.productQuantity > product.instock) {
             return NextResponse.json(
               {
-                message: `product with ${productInShoppingCart.productSlug} has not sufficient quantity for purchasing`,
+                message: `insufficient stock`,
                 productSlug: productInShoppingCart.productSlug,
               },
               { status: 400 }
@@ -126,7 +126,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
 
           if (!product) {
             return NextResponse.json(
-              { message: 'product not available for purchase' },
+              { message: 'product not available' },
               { status: 400 }
             );
           }
@@ -139,19 +139,26 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             },
           });
 
-          await client.patch(productInShoppingCart.sanityProductId, {
-            set: {
+          await client
+            .patch(productInShoppingCart.sanityProductId)
+            .set({
               instock: product.instock - productInShoppingCart.productQuantity,
-            },
-          });
+            })
+            .commit();
         }
       )
     );
 
-    return NextResponse.json({
-      message: 'products are updated after successful payment',
-    });
+    return NextResponse.json(
+      {
+        message: 'products are updated after successful payment',
+      },
+      { status: 200 }
+    );
   } catch (e: any) {
-    return NextResponse.json({ message: e.message });
+    return NextResponse.json(
+      { message: e.message },
+      { status: e.statusCode || 500 }
+    );
   }
 });
