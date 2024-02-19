@@ -3,6 +3,7 @@ import {
   useElements,
   useStripe,
   PaymentElement,
+  AddressElement,
 } from '@stripe/react-stripe-js';
 import { useState, useEffect, useContext } from 'react';
 import ButtonComponent from './ButtonComponent';
@@ -10,6 +11,8 @@ import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
 import { updateProductsAfterPayment } from '../_lib/updateProductsAfterPayment';
 import { globalStatesContext } from './GlobalStatesContext';
+import { baseUrl } from '../utils/baseUrl';
+import { StripeError } from '@stripe/stripe-js';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -71,46 +74,47 @@ export default function PaymentForm({
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
-    console.log(productsInCartWithSanityProductId);
-    // await updateProductsAfterPayment(productsInCartWithSanityProductId);
-    // setChangeProductsInCart(true);
+    await updateProductsAfterPayment(productsInCartWithSanityProductId);
+    setChangeProductsInCart(true);
 
-    // try {
-    //   if (!stripe || !elements) {
-    //     // Stripe.js hasn't yet loaded.
-    //     // Make sure to disable form submission until Stripe.js has loaded.
-    //     return;
-    //   }
+    try {
+      if (!stripe || !elements) {
+        // Stripe.js hasn't yet loaded.
+        // Make sure to disable form submission until Stripe.js has loaded.
+        return;
+      }
 
-    //   setIsLoading(true);
+      setIsLoading(true);
 
-    //   const { error }: { error: StripeError } = await stripe.confirmPayment({
-    //     elements,
-    //     confirmParams: {
-    //       // Make sure to change this to your payment completion page
-    //       return_url: `${baseUrl}`,
-    //     },
-    //   });
+      const { error }: { error: StripeError } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          // Make sure to change this to your payment completion page
+          return_url: `${baseUrl}`,
+        },
+      });
 
-    //   if (error.type === 'card_error' || error.type === 'validation_error') {
-    //     if (!error.message) {
-    //       setMessage('An unexpected error occurred.');
-    //     } else {
-    //       setMessage(error.message);
-    //     }
-    //   } else {
-    //     setMessage('An unexpected error occurred.');
-    //   }
+      if (error.type === 'card_error' || error.type === 'validation_error') {
+        if (!error.message) {
+          setMessage('An unexpected error occurred.');
+        } else {
+          setMessage(error.message);
+        }
+      } else {
+        setMessage('An unexpected error occurred.');
+      }
 
-    //   setIsLoading(false);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <form id="payment-form" onSubmit={submitHandler}>
       <PaymentElement id="payment-element" />
+
+      <AddressElement options={{ mode: 'shipping' }} />
 
       <CheckoutList
         productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
