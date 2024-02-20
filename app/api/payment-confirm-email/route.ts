@@ -9,11 +9,18 @@ export async function POST(req: Request) {
     from,
     to,
     template,
-    subject,
     recipient_name,
-  }: { [index: string]: string } = await req.json();
+    ammount,
+  }: {
+    [index: string]: string | number;
+    from: string;
+    to: string;
+    template: string;
+    recipient_name: string;
+    ammount: number;
+  } = await req.json();
 
-  if (!from || !to || !template || !subject || !recipient_name) {
+  if (!from || !to || !template || !recipient_name || !ammount) {
     return NextResponse.json(
       { message: 'Miss required data' },
       { status: 400 }
@@ -31,8 +38,8 @@ export async function POST(req: Request) {
       templateEnvs[template as keyof TemplateEnvs]
     ] as string,
     dynamicTemplateData: {
-      subject,
       recipient_name,
+      ammount,
     },
   };
 
