@@ -152,7 +152,7 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
 
   const productSlug = context.params?.slug as string | undefined;
 
-  const { productQuantity }: { productQuantity: string } = await req.json();
+  const { productQuantity }: { productQuantity: number } = await req.json();
 
   if (!productSlug || !productQuantity) {
     return NextResponse.json(
@@ -176,9 +176,10 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
     //get product
     const product: {
       id: number;
+      instock: number;
     } | null = await prisma.product.findUnique({
       where: { sanitySlug: productSlug },
-      select: { id: true },
+      select: { id: true, instock: true },
     });
 
     if (!product) {
@@ -199,7 +200,8 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
         },
       },
       data: {
-        productQuantity: Number(productQuantity),
+        productQuantity:
+          productQuantity > product.instock ? product.instock : productQuantity,
       },
     });
 
