@@ -41,7 +41,7 @@ export default function GlobalStatesContext({
     }
   }, [user, isLoading]);
 
-  //get products in shopping cart of the current user
+  //get products in shopping cart
   useEffect(() => {
     if (userProfile) {
       //get products in user cart
@@ -53,14 +53,28 @@ export default function GlobalStatesContext({
         })
         .catch((e: any) => {
           console.log(e.message);
-        })
-        .finally(() => {
-          if (changeProductsInCart === true) {
-            setChangeProductsInCart(false);
-          }
         });
     }
-  }, [userProfile, changeProductsInCart]);
+  }, [userProfile]);
+
+  //get products in shopping cart when products change
+  useEffect(() => {
+    if (changeProductsInCart) {
+      //get products in user cart
+      getProductsInCartFromClientSide()
+        .then((products: ProductInShoppingCart[] | undefined) => {
+          if (products) {
+            setProductsInCart(products);
+          }
+        })
+        .catch((e: any) => {
+          console.log(e.message);
+        })
+        .finally(() => {
+          setChangeProductsInCart(false);
+        });
+    }
+  }, [changeProductsInCart]);
 
   return (
     <globalStatesContext.Provider
