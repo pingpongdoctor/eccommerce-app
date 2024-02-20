@@ -192,6 +192,7 @@ export const emailTemplates: EmailTemplates[] = [
 
 export const templateEnvs: TemplateEnvs = {
   welcome: 'SENGRID_TEMPLATE_ID_WELCOME',
+  'confirm-payment': 'SENGRID_TEMPLATE_CONFIRM_PAYMENT',
   'password-change': 'SENGRID_TEMPLATE_ID_PASSWORD_CHANGE',
   'reset-password': 'SENGRID_TEMPLATE_ID_WELCOME_RESET_PASSWORD',
 };

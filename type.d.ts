@@ -1,6 +1,10 @@
 type Categories = 'comestic' | 'book' | 'supplement' | 'jewelry';
 
-type EmailTemplates = 'welcome' | 'reset-password' | 'password-change';
+type EmailTemplates =
+  | 'welcome'
+  | 'reset-password'
+  | 'password-change'
+  | 'confirm-payment';
 
 type TemplateEnvs = Record<EmailTemplates, string>;
 

@@ -110,8 +110,8 @@ export default function CheckoutPage() {
 
   // Create PaymentIntent as soon as the page loads
   useEffect(() => {
-    if (user) {
-      createStripePaymentIntent(200).then(
+    if (user && subtotal !== 0) {
+      createStripePaymentIntent(subtotal).then(
         (secretString: string | undefined) => {
           if (secretString) {
             setClientSecret(secretString);
@@ -119,7 +119,7 @@ export default function CheckoutPage() {
         }
       );
     }
-  }, [user]);
+  }, [user, subtotal]);
 
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
