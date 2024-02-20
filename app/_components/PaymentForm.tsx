@@ -12,7 +12,9 @@ import CheckoutList from './CheckoutList';
 import { updateProductsAfterPayment } from '../_lib/updateProductsAfterPayment';
 import { globalStatesContext } from './GlobalStatesContext';
 import { baseUrl } from '../utils/baseUrl';
-import { StripeError } from '@stripe/stripe-js';
+import { PaymentIntent, StripeError } from '@stripe/stripe-js';
+import { notify } from './ReactToastifyProvider';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -28,10 +30,10 @@ export default function PaymentForm({
   subtotal,
   productsInCartWithSanityProductId,
 }: Props) {
-  const { setChangeProductsInCart } = useContext(globalStatesContext);
+  const router = useRouter();
+  const { setChangeProductsInCart, user } = useContext(globalStatesContext);
   const stripe = useStripe();
   const elements = useElements();
-  const [message, setMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -57,16 +59,20 @@ export default function PaymentForm({
 
       switch (paymentIntent.status) {
         case 'succeeded':
-          setMessage('Payment succeeded!');
+          notify('success', 'Payment succeeded!', 'success-payment');
           break;
         case 'processing':
-          setMessage('Your payment is processing.');
+          notify('info', 'Your payment is processing.', 'payment-in-process');
           break;
         case 'requires_payment_method':
-          setMessage('Your payment was not successful, please try again.');
+          notify(
+            'error',
+            'Your payment was not successful, please try again.',
+            'payment-error'
+          );
           break;
         default:
-          setMessage('Something went wrong.');
+          notify('error', 'Something went wrong.', 'error');
           break;
       }
     });
@@ -74,9 +80,6 @@ export default function PaymentForm({
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
-    await updateProductsAfterPayment(productsInCartWithSanityProductId);
-    setChangeProductsInCart(true);
-
     try {
       if (!stripe || !elements) {
         // Stripe.js hasn't yet loaded.
@@ -86,27 +89,63 @@ export default function PaymentForm({
 
       setIsLoading(true);
 
-      const { error }: { error: StripeError } = await stripe.confirmPayment({
+      const {
+        error,
+        paymentIntent,
+      }: {
+        error?: StripeError;
+        paymentIntent?: PaymentIntent;
+      } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           // Make sure to change this to your payment completion page
           return_url: `${baseUrl}`,
+          receipt_email: 'thanhnhantran1501@gmail.com',
         },
+        redirect: 'if_required',
       });
 
-      if (error.type === 'card_error' || error.type === 'validation_error') {
-        if (!error.message) {
-          setMessage('An unexpected error occurred.');
+      if (error) {
+        if (error.type === 'card_error' || error.type === 'validation_error') {
+          notify('error', error.message || '', 'card-validation-errors');
         } else {
-          setMessage(error.message);
+          notify('error', 'Something went wrong.', 'error');
         }
-      } else {
-        setMessage('An unexpected error occurred.');
+        return;
       }
 
-      setIsLoading(false);
+      if (!paymentIntent) {
+        console.error('payment intent not available');
+        return;
+      }
+
+      console.log(paymentIntent.status);
+
+      switch (paymentIntent.status) {
+        case 'succeeded':
+          await updateProductsAfterPayment(productsInCartWithSanityProductId);
+          setChangeProductsInCart(true);
+          notify('success', 'Payment succeeded!', 'success-payment');
+          router.push('/');
+          break;
+        case 'processing':
+          notify('info', 'Your payment is processing.', 'payment-in-process');
+          break;
+        case 'requires_payment_method':
+          notify(
+            'error',
+            'Your payment was not successful, please try again.',
+            'payment-error'
+          );
+          break;
+        default:
+          notify('error', 'Something went wrong.', 'error');
+          break;
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -114,7 +153,12 @@ export default function PaymentForm({
     <form id="payment-form" onSubmit={submitHandler}>
       <PaymentElement id="payment-element" />
 
-      <AddressElement options={{ mode: 'shipping' }} />
+      <AddressElement
+        options={{ mode: 'shipping' }}
+        onChange={(e) => {
+          console.log(e.value.address);
+        }}
+      />
 
       <CheckoutList
         productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
@@ -129,8 +173,6 @@ export default function PaymentForm({
         animate
         buttonName="Pay now"
       />
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
     </form>
   );
 }
