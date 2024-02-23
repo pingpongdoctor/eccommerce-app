@@ -26,6 +26,7 @@ model User {
   imgUrl String
   products UsersProducts[]
   reviews Review[]
+  orders Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -68,8 +69,12 @@ model Order{
   line1 String
   line2 String @default("")
   postal_code String @unique
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate:Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model UsersProducts {
