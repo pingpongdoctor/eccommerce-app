@@ -5,7 +5,7 @@ import {
   PaymentElement,
   AddressElement,
 } from '@stripe/react-stripe-js';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
@@ -31,52 +31,20 @@ export default function PaymentForm({
   productsInCartWithSanityProductId,
 }: Props) {
   const router = useRouter();
-  const { setChangeProductsInCart, user } = useContext(globalStatesContext);
+  const { setChangeProductsInCart } = useContext(globalStatesContext);
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!stripe) {
-      console.error('stripe instant not available');
-      return;
-    }
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      'payment_intent_client_secret'
-    );
-
-    if (!clientSecret) {
-      console.error('stripe client secret not available');
-      return;
-    }
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      if (!paymentIntent) {
-        console.error('payment intent not available');
-        return;
-      }
-
-      switch (paymentIntent.status) {
-        case 'succeeded':
-          notify('success', 'Payment succeeded!', 'success-payment');
-          break;
-        case 'processing':
-          notify('info', 'Your payment is processing.', 'payment-in-process');
-          break;
-        case 'requires_payment_method':
-          notify(
-            'error',
-            'Your payment was not successful, please try again.',
-            'payment-error'
-          );
-          break;
-        default:
-          notify('error', 'Something went wrong.', 'error');
-          break;
-      }
-    });
-  }, [stripe]);
+  const [fullname, setFullname] = useState<string>('');
+  const [phonenumber, setPhonenumber] = useState<string>('');
+  const [address, setAddress] = useState<Address>({
+    city: '',
+    country: '',
+    line1: '',
+    line2: '',
+    postal_code: '',
+  });
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
@@ -118,8 +86,6 @@ export default function PaymentForm({
         console.error('payment intent not available');
         return;
       }
-
-      console.log(paymentIntent.status);
 
       switch (paymentIntent.status) {
         case 'succeeded':
