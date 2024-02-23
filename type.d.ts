@@ -72,3 +72,11 @@ interface DropdownItemInfor {
   description: string;
   icon: React.FC<any>;
 }
+
+interface Address {
+  city: string;
+  country: string;
+  line1: string;
+  line2: string;
+  postal_code: string;
+}

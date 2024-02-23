@@ -59,6 +59,19 @@ model Product {
   updatedAt DateTime @updatedAt
 }
 
+model Order{
+  id        Int     @id @default(autoincrement())
+  fullname String
+  phonenumber String @unique
+  city String
+  country String
+  line1 String
+  line2 String @default("")
+  postal_code String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model UsersProducts {
   userId Int
   productId Int
