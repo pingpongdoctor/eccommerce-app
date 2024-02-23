@@ -80,3 +80,5 @@ interface Address {
   line2: string;
   postal_code: string;
 }
+
+type OrderStatus = 'prepare' | 'onTheWay' | 'done';
