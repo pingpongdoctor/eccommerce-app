@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import ListComponent from './ListComponent';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { SanityDocument } from 'next-sanity';

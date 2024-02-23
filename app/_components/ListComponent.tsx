@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
@@ -41,7 +41,7 @@ export default function ListComponent({
         </span>
       </Listbox.Button>
       <Transition
-        as={React.Fragment}
+        as={Fragment}
         enter="transition ease-out duration-100"
         enterFrom="transform opacity-0 scale-95"
         enterTo="transform opacity-100 scale-100"

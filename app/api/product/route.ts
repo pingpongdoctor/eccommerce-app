@@ -67,13 +67,11 @@ export async function POST(req: NextRequest) {
         status: 201,
       }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message: 'Internal server error' + ' ' + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 }
@@ -110,13 +108,11 @@ export async function DELETE(req: NextRequest) {
         status: 200,
       }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message: 'Internal server error' + ' ' + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 }

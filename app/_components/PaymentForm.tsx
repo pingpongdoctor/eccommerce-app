@@ -1,69 +1,53 @@
-import React from 'react';
+'use client';
 import {
   useElements,
   useStripe,
   PaymentElement,
+  AddressElement,
 } from '@stripe/react-stripe-js';
-import { baseUrl } from '../utils/baseUrl';
-import { useState, useEffect } from 'react';
-import { StripeError } from '@stripe/stripe-js';
+import { useState, useContext } from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
+import { updateProductsAfterPayment } from '../_lib/updateProductsAfterPayment';
+import { globalStatesContext } from './GlobalStatesContext';
+import { baseUrl } from '../utils/baseUrl';
+import { PaymentIntent, StripeError } from '@stripe/stripe-js';
+import { notify } from './ReactToastifyProvider';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
     SanityDocument & { productQuantity: number })[];
   subtotal: number;
+  productsInCartWithSanityProductId: (ProductInShoppingCart & {
+    sanityProductId: string;
+  })[];
 }
 
 export default function PaymentForm({
   productsWithImgUrlAndQuantity,
   subtotal,
+  productsInCartWithSanityProductId,
 }: Props) {
+  const router = useRouter();
+  const { setChangeProductsInCart } = useContext(globalStatesContext);
   const stripe = useStripe();
   const elements = useElements();
-  const [message, setMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!stripe) {
-      return;
-    }
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      'payment_intent_client_secret'
-    );
-
-    if (!clientSecret) {
-      return;
-    }
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      if (!paymentIntent) {
-        return;
-      }
-
-      switch (paymentIntent.status) {
-        case 'succeeded':
-          setMessage('Payment succeeded!');
-          break;
-        case 'processing':
-          setMessage('Your payment is processing.');
-          break;
-        case 'requires_payment_method':
-          setMessage('Your payment was not successful, please try again.');
-          break;
-        default:
-          setMessage('Something went wrong.');
-          break;
-      }
-    });
-  }, [stripe]);
+  const [fullname, setFullname] = useState<string>('');
+  const [phonenumber, setPhonenumber] = useState<string>('');
+  const [address, setAddress] = useState<Address>({
+    city: '',
+    country: '',
+    line1: '',
+    line2: '',
+    postal_code: '',
+  });
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
-
     try {
       if (!stripe || !elements) {
         // Stripe.js hasn't yet loaded.
@@ -73,33 +57,74 @@ export default function PaymentForm({
 
       setIsLoading(true);
 
-      const { error }: { error: StripeError } = await stripe.confirmPayment({
+      const {
+        error,
+        paymentIntent,
+      }: {
+        error?: StripeError;
+        paymentIntent?: PaymentIntent;
+      } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           // Make sure to change this to your payment completion page
           return_url: `${baseUrl}`,
+          receipt_email: 'thanhnhantran1501@gmail.com',
         },
+        redirect: 'if_required',
       });
 
-      if (error.type === 'card_error' || error.type === 'validation_error') {
-        if (!error.message) {
-          setMessage('An unexpected error occurred.');
+      if (error) {
+        if (error.type === 'card_error' || error.type === 'validation_error') {
+          notify('error', error.message || '', 'card-validation-errors');
         } else {
-          setMessage(error.message);
+          notify('error', 'Something went wrong.', 'error');
         }
-      } else {
-        setMessage('An unexpected error occurred.');
+        return;
       }
 
-      setIsLoading(false);
+      if (!paymentIntent) {
+        console.error('payment intent not available');
+        return;
+      }
+
+      switch (paymentIntent.status) {
+        case 'succeeded':
+          await updateProductsAfterPayment(productsInCartWithSanityProductId);
+          setChangeProductsInCart(true);
+          notify('success', 'Payment succeeded!', 'success-payment');
+          router.push('/');
+          break;
+        case 'processing':
+          notify('info', 'Your payment is processing.', 'payment-in-process');
+          break;
+        case 'requires_payment_method':
+          notify(
+            'error',
+            'Your payment was not successful, please try again.',
+            'payment-error'
+          );
+          break;
+        default:
+          notify('error', 'Something went wrong.', 'error');
+          break;
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <form id="payment-form" onSubmit={submitHandler}>
       <PaymentElement id="payment-element" />
+
+      <AddressElement
+        options={{ mode: 'shipping' }}
+        onChange={(e) => {
+          console.log(e.value.address);
+        }}
+      />
 
       <CheckoutList
         productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
@@ -114,8 +139,6 @@ export default function PaymentForm({
         animate
         buttonName="Pay now"
       />
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
     </form>
   );
 }

@@ -1,9 +1,8 @@
-"use client";
-import { useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { cn } from "../utils/cs";
+'use client';
+import { useScroll, useTransform, motion } from 'framer-motion';
+import { useRef } from 'react';
+import Image from 'next/image';
+import { cn } from '../utils/cs';
 
 export const ParallaxScroll = ({
   images,
@@ -15,7 +14,7 @@ export const ParallaxScroll = ({
   const gridRef = useRef<any>(null);
   const { scrollYProgress } = useScroll({
     container: gridRef, // remove this if your container is not fixed height
-    offset: ["start start", "end start"], // remove this if your container is not fixed height
+    offset: ['start start', 'end start'], // remove this if your container is not fixed height
   });
 
   const translateFirst = useTransform(scrollYProgress, [0, 1], [0, -200]);
@@ -30,7 +29,7 @@ export const ParallaxScroll = ({
 
   return (
     <div
-      className={cn("h-[40rem] w-full items-start overflow-y-auto", className)}
+      className={cn('h-[40rem] w-full items-start overflow-y-auto', className)}
       ref={gridRef}
     >
       <div
@@ -41,7 +40,7 @@ export const ParallaxScroll = ({
           {firstPart.map((el, idx) => (
             <motion.div
               style={{ y: translateFirst }} // Apply the translateY motion value here
-              key={"grid-1" + idx}
+              key={'grid-1' + idx}
             >
               <Image
                 src={el}
@@ -55,7 +54,7 @@ export const ParallaxScroll = ({
         </div>
         <div className="grid gap-10">
           {secondPart.map((el, idx) => (
-            <motion.div style={{ y: translateSecond }} key={"grid-2" + idx}>
+            <motion.div style={{ y: translateSecond }} key={'grid-2' + idx}>
               <Image
                 src={el}
                 className="!m-0 h-80 w-full gap-10 rounded-lg object-cover object-left-top !p-0"
@@ -68,7 +67,7 @@ export const ParallaxScroll = ({
         </div>
         <div className="grid gap-10">
           {thirdPart.map((el, idx) => (
-            <motion.div style={{ y: translateThird }} key={"grid-3" + idx}>
+            <motion.div style={{ y: translateThird }} key={'grid-3' + idx}>
               <Image
                 src={el}
                 className="!m-0 h-80 w-full gap-10 rounded-lg object-cover object-left-top !p-0"

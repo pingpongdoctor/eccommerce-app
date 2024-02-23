@@ -19,7 +19,7 @@ export const GET = withApiAuthRequired(async () => {
       include: {
         products: {
           select: {
-            product: { select: { sanitySlug: true, category: true } },
+            product: { select: { sanitySlug: true, category: true, id: true } },
             productQuantity: true,
           },
         },
@@ -37,12 +37,14 @@ export const GET = withApiAuthRequired(async () => {
         product: {
           sanitySlug: string;
           category: Categories;
+          id: number;
         };
       }) => {
         return {
           productSlug: ele.product.sanitySlug,
           productQuantity: ele.productQuantity,
           productCategory: ele.product.category,
+          productId: ele.product.id,
         };
       }
     );
@@ -53,13 +55,11 @@ export const GET = withApiAuthRequired(async () => {
       },
       { status: 200 }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message: 'Internal server error' + ' ' + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 });

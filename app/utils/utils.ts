@@ -5,7 +5,33 @@ import {
   BookOpenIcon,
 } from '@heroicons/react/24/outline';
 
-export const categories = ['comestic', 'supplement', 'book', 'jewelry'];
+export const textInfor: {
+  [index: string]: { mainText: string; text: string };
+} = {
+  comestic: {
+    mainText: 'Comestic',
+    text: 'Start finding your suitable comestic merchandise',
+  },
+  book: {
+    mainText: 'Books',
+    text: 'Here is where you start your smart journey',
+  },
+  jewelry: {
+    mainText: 'Jewelry',
+    text: 'This is the place for minimalist people',
+  },
+  supplement: {
+    mainText: 'Supplement',
+    text: 'Get healthier now with high-quality supplement',
+  },
+};
+
+export const categories: Categories[] = [
+  'comestic',
+  'supplement',
+  'book',
+  'jewelry',
+];
 export const categoryInfor: {
   id: string;
   text: string;
@@ -158,14 +184,9 @@ export const footerInfor: {
 export const solidBlureDataUrl =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPccehcPQAHSwLJQnqfnAAAAABJRU5ErkJggg==';
 
-export const emailTemplates: EmailTemplates[] = [
-  'welcome',
-  'password-change',
-  'reset-password',
-];
+export const emailTemplates: EmailTemplates[] = ['welcome', 'confirm-payment'];
 
 export const templateEnvs: TemplateEnvs = {
   welcome: 'SENGRID_TEMPLATE_ID_WELCOME',
-  'password-change': 'SENGRID_TEMPLATE_ID_PASSWORD_CHANGE',
-  'reset-password': 'SENGRID_TEMPLATE_ID_WELCOME_RESET_PASSWORD',
+  'confirm-payment': 'SENGRID_TEMPLATE_CONFIRM_PAYMENT',
 };

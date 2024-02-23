@@ -1,4 +1,3 @@
-import React from 'react';
 import RatingStar from './RatingStar';
 import { StarIcon } from '@heroicons/react/20/solid';
 import CustomerReview from './CustomerReview';

@@ -1,5 +1,5 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
-import { NextResponse, type NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
 
@@ -41,9 +41,10 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
     //get product
     const product: {
       id: number;
+      instock: number;
     } | null = await prisma.product.findUnique({
       where: { sanitySlug: productSlug },
-      select: { id: true },
+      select: { id: true, instock: true },
     });
 
     if (!product) {
@@ -55,44 +56,84 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       );
     }
 
-    await prisma.usersProducts.upsert({
+    //find userProduct document
+    const userProductDocument: {
+      productQuantity: number;
+    } | null = await prisma.usersProducts.findUnique({
       where: {
         userId_productId: {
           userId: userData.id,
           productId: product.id,
         },
       },
-      create: {
-        productQuantity,
-        user: {
-          connect: { id: userData.id },
-        },
-        product: {
-          connect: {
-            id: product.id,
-          },
-        },
-      },
-      update: {
-        productQuantity: { increment: productQuantity }, //add more product
-        createdAt: new Date(),
+      select: {
+        productQuantity: true,
       },
     });
 
+    if (!userProductDocument) {
+      //create userProduct document
+      await prisma.usersProducts.create({
+        data: {
+          productQuantity:
+            productQuantity > product.instock
+              ? product.instock
+              : productQuantity,
+          user: {
+            connect: { id: userData.id },
+          },
+          product: {
+            connect: {
+              id: product.id,
+            },
+          },
+        },
+      });
+
+      return NextResponse.json(
+        { message: 'successful creation' },
+        {
+          status: 201,
+        }
+      );
+    } else {
+      //update userProduct document
+      const currentProductQuantity = userProductDocument.productQuantity;
+      const notEnoughAvailableProduct =
+        currentProductQuantity + productQuantity > product.instock;
+      const canNotAddMore = currentProductQuantity === product.instock;
+
+      await prisma.usersProducts.update({
+        where: {
+          userId_productId: {
+            userId: userData.id,
+            productId: product.id,
+          },
+        },
+        data: {
+          productQuantity: notEnoughAvailableProduct
+            ? product.instock
+            : { increment: productQuantity }, //add more product
+          createdAt: new Date(),
+        },
+      });
+
+      return NextResponse.json(
+        {
+          message: 'successful update',
+          notEnoughAvailableProduct,
+          canNotAddMore,
+        },
+        {
+          status: 200,
+        }
+      );
+    }
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      { message: 'successful ' },
-      {
-        status: 201,
-      }
-    );
-  } catch (e) {
-    console.log('Internal server error' + e);
-    return NextResponse.json(
-      {
-        message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 });
@@ -111,7 +152,7 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
 
   const productSlug = context.params?.slug as string | undefined;
 
-  const { productQuantity }: { productQuantity: string } = await req.json();
+  const { productQuantity }: { productQuantity: number } = await req.json();
 
   if (!productSlug || !productQuantity) {
     return NextResponse.json(
@@ -135,9 +176,10 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
     //get product
     const product: {
       id: number;
+      instock: number;
     } | null = await prisma.product.findUnique({
       where: { sanitySlug: productSlug },
-      select: { id: true },
+      select: { id: true, instock: true },
     });
 
     if (!product) {
@@ -158,7 +200,8 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
         },
       },
       data: {
-        productQuantity: Number(productQuantity),
+        productQuantity:
+          productQuantity > product.instock ? product.instock : productQuantity,
       },
     });
 
@@ -168,19 +211,16 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
         status: 201,
       }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 });
 
-//disconnect the relationship a product and the current user
+//delete a product from user shopping cart
 export const DELETE = withApiAuthRequired(async (req: Request, context) => {
   const session = await getSession();
   if (!session) {
@@ -246,14 +286,11 @@ export const DELETE = withApiAuthRequired(async (req: Request, context) => {
         status: 201,
       }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 });

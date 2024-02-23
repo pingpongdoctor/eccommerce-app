@@ -1,6 +1,6 @@
 'use client';
-import React from 'react';
 import ButtonComponent from './ButtonComponent';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   subtotal: number;
@@ -17,6 +17,8 @@ export default function OrderSummaryComponent({
   tax,
   showButton = true,
 }: Props) {
+  const router = useRouter();
+
   const summaryData = [
     {
       text: 'Subtotal',
@@ -60,7 +62,13 @@ export default function OrderSummaryComponent({
         ))}
 
         {showButton && (
-          <ButtonComponent buttonName="Check out" animate={true} />
+          <ButtonComponent
+            buttonOnclickHandler={() => {
+              router.push('/checkout');
+            }}
+            buttonName="Check out"
+            animate={true}
+          />
         )}
       </div>
     </div>

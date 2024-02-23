@@ -1,5 +1,4 @@
 'use client';
-
 import { SanityDocument } from 'next-sanity';
 import ShoppingCartItem from './ShoppingCartItem';
 

@@ -2,9 +2,7 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../_components/PaymentForm';
-import React, { useState, useEffect, useContext } from 'react';
-import { baseUrl } from '../utils/baseUrl';
-import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
+import { useState, useEffect, useContext } from 'react';
 import { SanityDocument } from 'next-sanity';
 import { PRODUCTS_QUERY_BY_SLUGS } from '@/sanity/lib/queries';
 import { client } from '@/sanity/lib/client';
@@ -15,6 +13,9 @@ import { addProductImgUrls } from '../_lib/addProductImgUrls';
 import { addProductQuantity } from '../_lib/addProductQuantity';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import { useRouter } from 'next/navigation';
+import { createStripePaymentIntent } from '../_lib/createStripePaymentIntent';
+import { addSanityProductId } from '../_lib/addSanityProductId';
+import ButtonSkeleton from '../_components/ButtonSkeleton';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -23,16 +24,15 @@ const stripePromise = loadStripe(
 export default function CheckoutPage() {
   const router = useRouter();
   const [clientSecret, setClientSecret] = useState<string>('');
-  const {
-    userProfile,
-    changeProductsInCart,
-    setChangeProductsInCart,
-    user,
-    isLoading,
-  } = useContext(globalStatesContext);
-  const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
-    []
-  );
+  const { productsInCart, user, isLoading } = useContext(globalStatesContext);
+  const [
+    productsInCartWithSanityProductId,
+    setProductsInCartWithSanityProductId,
+  ] = useState<
+    (ProductInShoppingCart & {
+      sanityProductId: string;
+    })[]
+  >([]);
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
@@ -42,30 +42,14 @@ export default function CheckoutPage() {
     >([]);
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
-    useState<boolean>(true);
+    useState<boolean>(false);
 
   //protect this page from unauthenticated users
   useEffect(() => {
-    if (!user && !isLoading) {
+    if (!isLoading && !user) {
       router.push('/');
     }
   }, [user, isLoading]);
-
-  //get products in shopping cart of the current user
-  useEffect(() => {
-    if (userProfile) {
-      getProductsInCartFromClientSide()
-        .then((productsInCart: ProductInShoppingCart[] | undefined) => {
-          if (productsInCart) {
-            setProductsInCart(productsInCart);
-          }
-        })
-        .catch((e: any) => {
-          console.log(e.message);
-        })
-        .finally(setChangeProductsInCart(false));
-    }
-  }, [userProfile, changeProductsInCart]);
 
   //get product sanity documents
   useEffect(() => {
@@ -76,6 +60,7 @@ export default function CheckoutPage() {
           )
         : [];
 
+      setIsFetchingSanityProducts(true);
       client
         .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
           slugArr: productSlugs,
@@ -89,12 +74,18 @@ export default function CheckoutPage() {
         .finally(() => {
           setIsFetchingSanityProducts(false);
         });
+    } else {
+      setSanityProductsInCart([]);
+      setProductsWithImgUrlAndQuantity([]);
+      setProductsInCartWithSanityProductId([]);
+      setClientSecret('');
+      setSubtotal(0);
     }
   }, [productsInCart]);
 
   useEffect(() => {
     if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
-      // set the state for product with image url and quantity
+      // set the state of products with image url and quantity
       addProductImgUrls(sanityProductsInCart).then(
         (productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[]) => {
           const productsWithImgAndQuantity = addProductQuantity(
@@ -107,26 +98,44 @@ export default function CheckoutPage() {
 
       //set subtotal state
       setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
+
+      // set the state of products in cart with sanity product id
+      const productsInCartWithSanityId: (ProductInShoppingCart & {
+        sanityProductId: string;
+      })[] = addSanityProductId(productsInCart, sanityProductsInCart);
+
+      setProductsInCartWithSanityProductId(productsInCartWithSanityId);
     }
   }, [productsInCart, sanityProductsInCart]);
 
+  // Create PaymentIntent as soon as the page loads
   useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    fetch(`${baseUrl}/api/checkout_sessions`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount: 100 }),
-      method: 'POST',
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
-  }, []);
+    if (user && subtotal !== 0) {
+      createStripePaymentIntent(subtotal).then(
+        (secretString: string | undefined) => {
+          if (secretString) {
+            setClientSecret(secretString);
+          }
+        }
+      );
+    }
+  }, [user, subtotal]);
 
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
-      {clientSecret &&
-        !isFetchingSanityProducts &&
+      {isFetchingSanityProducts && (
+        <>
+          <div className="mb-8 *:mb-8 md:w-[35%]">
+            <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
+            <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
+          </div>
+          <OrderSummarySkeleton orderSummarySkeletonClassname="lg:w-full mb-8" />
+          <ButtonSkeleton />
+        </>
+      )}
+
+      {!isFetchingSanityProducts &&
+        clientSecret &&
         productsWithImgUrlAndQuantity.length > 0 && (
           <Elements
             stripe={stripePromise}
@@ -138,19 +147,17 @@ export default function CheckoutPage() {
             <PaymentForm
               subtotal={subtotal}
               productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+              productsInCartWithSanityProductId={
+                productsInCartWithSanityProductId
+              }
             />
           </Elements>
         )}
 
-      {(!clientSecret || isFetchingSanityProducts) && (
-        <>
-          <div className="mb-8 *:mb-8 md:w-[35%] lg:mb-12">
-            <ShoppingCartItemSkeleton />
-            <ShoppingCartItemSkeleton />
-          </div>
-          <OrderSummarySkeleton />
-        </>
-      )}
+      {!isFetchingSanityProducts &&
+        (!clientSecret || productsWithImgUrlAndQuantity.length === 0) && (
+          <p>No products to proceed payment</p>
+        )}
     </main>
   );
 }

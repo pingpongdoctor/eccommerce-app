@@ -5,8 +5,6 @@ import ListComponent from './ListComponent';
 import { useState } from 'react';
 import { addProductToCart } from '../_lib/addProductToCart';
 import { notify } from './ReactToastifyProvider';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { User } from '@prisma/client';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
 
@@ -44,14 +42,26 @@ export default function AddToBagComponent({
 
     try {
       setIsDisable(true);
-      const isSuccess = await addProductToCart(productSlug, quantity);
 
-      if (isSuccess) {
-        notify(
-          'success',
-          'Product has been added to your cart',
-          'add-product-to-cart-success'
-        );
+      const res = await addProductToCart(productSlug, quantity);
+
+      if (res.isSuccess) {
+        if (!res.canNotAddMore) {
+          notify(
+            'success',
+            'Product has been added to your cart',
+            'add-product-to-cart-success'
+          );
+        }
+
+        if (res.notEnoughAvailableProduct as boolean) {
+          notify(
+            'info',
+            `Seller only has ${productInstock} products in stock`,
+            'add-product-to-cart-info'
+          );
+        }
+
         setChangeProductsInCart(true);
       }
     } catch (e: any) {
@@ -72,6 +82,7 @@ export default function AddToBagComponent({
         selectedValue={quantity}
         listComponentChangeEventHandler={handleUpdateQuantity}
         listData={generateProductInstockList(productInstock)}
+        listClassname="max-h-[180px]"
       />
       <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
     </form>

@@ -1,4 +1,3 @@
-import React from 'react';
 import heroImage from '../../public/assets/pexels-scott-webb-403571.jpg';
 import Image from 'next/image';
 
