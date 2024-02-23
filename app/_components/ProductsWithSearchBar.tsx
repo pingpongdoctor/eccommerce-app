@@ -1,5 +1,4 @@
 'use client';
-
 import SearchBar from '@/app/_components/SearchBar';
 import ClientProductCards from '@/app/_components/ClientProductCards';
 import { QueryResponseInitial } from '@sanity/react-loader';

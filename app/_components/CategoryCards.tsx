@@ -1,4 +1,3 @@
-import React from 'react';
 import Link from 'next/link';
 import { categoryInfor } from '../utils/utils';
 import { CategoryCard } from './CategoryCard';

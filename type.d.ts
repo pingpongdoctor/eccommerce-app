@@ -1,6 +1,6 @@
 type Categories = 'comestic' | 'book' | 'supplement' | 'jewelry';
 
-type EmailTemplates = 'welcome' | 'reset-password' | 'password-change';
+type EmailTemplates = 'welcome' | 'confirm-payment';
 
 type TemplateEnvs = Record<EmailTemplates, string>;
 
@@ -22,9 +22,11 @@ interface SanityProduct {
 }
 
 interface ProductInShoppingCart {
+  [index: string]: string | number | Categories;
   productSlug: string;
   productQuantity: number;
   productCategory: Categories;
+  productId: number;
 }
 
 type ProductWithImgUrl = SanityProduct & {
@@ -70,3 +72,13 @@ interface DropdownItemInfor {
   description: string;
   icon: React.FC<any>;
 }
+
+interface Address {
+  city: string;
+  country: string;
+  line1: string;
+  line2: string;
+  postal_code: string;
+}
+
+type OrderStatus = 'prepare' | 'onTheWay' | 'done';

@@ -40,9 +40,12 @@ export const GET = withApiAuthRequired(async () => {
     }
 
     return NextResponse.json({ data: userData }, { status: 200 });
-  } catch (e: any) {
-    console.log('Internal Sever Error' + e);
-    return NextResponse.json({ message: e.message }, { status: 500 });
+  } catch (err: any) {
+    console.log('Internal server error' + err);
+    return NextResponse.json(
+      { message: err.message },
+      { status: err.statusCode || 500 }
+    );
   }
 });
 
@@ -70,14 +73,11 @@ export async function POST(req: Request) {
         status: 201,
       }
     );
-  } catch (e) {
-    console.log('Internal server error' + e);
+  } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
-      {
-        message:
-          'Internal server error' + (e as Error).name + (e as Error).message,
-      },
-      { status: 500 }
+      { message: err.message },
+      { status: err.statusCode || 500 }
     );
   }
 }

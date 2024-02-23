@@ -1,16 +1,16 @@
 'use client';
-import React from 'react';
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, ReactNode } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { User } from '@prisma/client';
 import { getUserProfileFromClientSide } from '../_lib/getUserProfileFromClientSide';
+import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 
 export const globalStatesContext = createContext<any>(null);
 
 export default function GlobalStatesContext({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const { user, isLoading } = useUser();
   const [changeProductsInCart, setChangeProductsInCart] =
@@ -22,10 +22,13 @@ export default function GlobalStatesContext({
   const [userProfile, setUserProfile] = useState<Omit<User, 'auth0Id'> | null>(
     null
   );
+  const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
+    []
+  );
 
   useEffect(() => {
     //set user profile state
-    if (user) {
+    if (user && !isLoading) {
       getUserProfileFromClientSide().then(
         (userData: Omit<User, 'auth0Id'> | undefined) => {
           if (userData) {
@@ -35,10 +38,43 @@ export default function GlobalStatesContext({
           }
         }
       );
-    } else {
-      setUserProfile(null);
     }
-  }, [user]);
+  }, [user, isLoading]);
+
+  //get products in shopping cart
+  useEffect(() => {
+    if (userProfile) {
+      //get products in user cart
+      getProductsInCartFromClientSide()
+        .then((products: ProductInShoppingCart[] | undefined) => {
+          if (products) {
+            setProductsInCart(products);
+          }
+        })
+        .catch((e: any) => {
+          console.log(e.message);
+        });
+    }
+  }, [userProfile]);
+
+  //get products in shopping cart when products change
+  useEffect(() => {
+    if (changeProductsInCart) {
+      //get products in user cart
+      getProductsInCartFromClientSide()
+        .then((products: ProductInShoppingCart[] | undefined) => {
+          if (products) {
+            setProductsInCart(products);
+          }
+        })
+        .catch((e: any) => {
+          console.log(e.message);
+        })
+        .finally(() => {
+          setChangeProductsInCart(false);
+        });
+    }
+  }, [changeProductsInCart]);
 
   return (
     <globalStatesContext.Provider
@@ -50,6 +86,7 @@ export default function GlobalStatesContext({
         isLoading,
         needToRevalidateDataForShoppingCartPage,
         setNeedToRevalidateDataForShoppingCartPage,
+        productsInCart,
       }}
     >
       {children}

@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { solidBlureDataUrl } from '../utils/utils';

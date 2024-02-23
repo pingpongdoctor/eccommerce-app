@@ -1,4 +1,3 @@
-import React from 'react';
 import Image from 'next/image';
 import truckIcon from '../../public/truck.svg';
 import medalIcon from '../../public/medal.svg';

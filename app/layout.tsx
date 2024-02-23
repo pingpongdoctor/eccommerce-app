@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ReactNode } from 'react';
 import './globals.css';
 import { roboto, dancingScript } from './_fonts/fonts';
 import ReactToastifyProvider from './_components/ReactToastifyProvider';
@@ -19,11 +20,7 @@ export const metadata: Metadata = {
   description: 'Main',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={`${roboto.className} ${dancingScript.variable}`}>

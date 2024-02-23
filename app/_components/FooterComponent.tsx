@@ -1,4 +1,3 @@
-import React from 'react';
 import Image from 'next/image';
 import glowyLab from '../../public/assets/glowy-lab.png';
 import Link from 'next/link';

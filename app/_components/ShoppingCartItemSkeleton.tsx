@@ -1,10 +1,18 @@
 'use client';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 
-export default function ShoppingCartItemSkeleton() {
+interface Props {
+  shoppingCartItemSkeletonClassname?: string;
+}
+
+export default function ShoppingCartItemSkeleton({
+  shoppingCartItemSkeletonClassname,
+}: Props) {
   return (
     <div className="flex animate-pulse gap-6 last:mb-0">
-      <div className="aspect-[1/1.2] w-48 rounded-md bg-gray-200"></div>
+      <div
+        className={`aspect-[1/1.2] w-48 rounded-md bg-gray-200 ${shoppingCartItemSkeletonClassname}`}
+      ></div>
       <div className="grow">
         <div className="flex flex-col gap-4 sm:mb-4 sm:flex-row sm:justify-between">
           <div className="flex justify-between sm:block">

@@ -1,5 +1,4 @@
 'use client';
-import { getProductsInCartFromClientSide } from '../_lib/getProductsInCartFromClientSide';
 import { SanityDocument } from 'next-sanity';
 import {
   PRODUCTS_QUERY_BY_SLUGS,
@@ -7,9 +6,8 @@ import {
 } from '@/sanity/lib/queries';
 import ShoppingCartList from '../_components/ShoppingCartList';
 import OrderSummaryComponent from '../_components/OrderSummaryComponent';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { client } from '@/sanity/lib/client';
-import { useContext } from 'react';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
 import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
 import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';
@@ -23,16 +21,7 @@ import { useRouter } from 'next/navigation';
 //get products that customers also buy
 export default function ShoppingCart() {
   const router = useRouter();
-  const {
-    userProfile,
-    changeProductsInCart,
-    setChangeProductsInCart,
-    user,
-    isLoading,
-  } = useContext(globalStatesContext);
-  const [productsInCart, setProductsInCart] = useState<ProductInShoppingCart[]>(
-    []
-  );
+  const { productsInCart, isLoading, user } = useContext(globalStatesContext);
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
@@ -45,46 +34,31 @@ export default function ShoppingCart() {
   >([]);
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
-    useState<boolean>(true);
+    useState<boolean>(false);
 
   //protect this page from unauthenticated users
   useEffect(() => {
-    if (!user && !isLoading) {
+    if (!isLoading && !user) {
       router.push('/');
     }
   }, [user, isLoading]);
-
-  //get products in shopping cart of the current user
-  useEffect(() => {
-    if (userProfile) {
-      getProductsInCartFromClientSide()
-        .then((productsInCart: ProductInShoppingCart[] | undefined) => {
-          if (productsInCart) {
-            setProductsInCart(productsInCart);
-          }
-        })
-        .catch((e: any) => {
-          console.log(e.message);
-        })
-        .finally(setChangeProductsInCart(false));
-    }
-  }, [userProfile, changeProductsInCart]);
 
   //get product sanity documents
   useEffect(() => {
     if (productsInCart.length > 0) {
       const productSlugs: string[] = productsInCart
-        ? productsInCart.map(
+        ? [...productsInCart].map(
             (product: ProductInShoppingCart) => product.productSlug
           )
         : [];
 
       const productCategories: Categories[] = productsInCart
-        ? productsInCart.map(
+        ? [...productsInCart].map(
             (product: ProductInShoppingCart) => product.productCategory
           )
         : [];
 
+      setIsFetchingSanityProducts(true);
       client
         .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
           slugArr: productSlugs,
@@ -109,6 +83,11 @@ export default function ShoppingCart() {
             setProductsAlsoBuy(products);
           }
         });
+    } else {
+      setSanityProductsInCart([]);
+      setProductsAlsoBuy([]);
+      setProductsWithImgUrlAndQuantity([]);
+      setSubtotal(0);
     }
   }, [productsInCart]);
 
@@ -147,8 +126,8 @@ export default function ShoppingCart() {
           </>
         )}
 
-        {productsWithImgUrlAndQuantity.length > 0 &&
-          !isFetchingSanityProducts && (
+        {!isFetchingSanityProducts &&
+          productsWithImgUrlAndQuantity.length > 0 && (
             <>
               <ShoppingCartList
                 productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
@@ -164,14 +143,14 @@ export default function ShoppingCart() {
           )}
 
         {/* text shown when there is not product in cart */}
-        {productsWithImgUrlAndQuantity.length == 0 &&
-          !isFetchingSanityProducts && (
-            <h2>There are not any products in your cart</h2>
+        {!isFetchingSanityProducts &&
+          productsWithImgUrlAndQuantity.length === 0 && (
+            <p>There are not any products in your cart</p>
           )}
       </div>
 
       {/* product you may like */}
-      {productsAlsoBuy.length > 0 && !isFetchingSanityProducts && (
+      {!isFetchingSanityProducts && productsAlsoBuy.length > 0 && (
         <>
           <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
             <p className="text-lg font-medium text-gray-900">
