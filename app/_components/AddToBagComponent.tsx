@@ -7,6 +7,7 @@ import { addProductToCart } from '../_lib/addProductToCart';
 import { notify } from './ReactToastifyProvider';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
+import { revalidateTag } from 'next/cache';
 
 interface Props {
   productSlug: string;
@@ -46,19 +47,25 @@ export default function AddToBagComponent({
       const res = await addProductToCart(productSlug, quantity);
 
       if (res.isSuccess) {
-        if (!res.canNotAddMore) {
+        if (res.notEnoughAvailableProduct as boolean) {
+          if (res.canNotAddMore) {
+            notify(
+              'info',
+              'products in cart reach the maximum quantity',
+              'add-product-to-cart-reach-maximum-quantity'
+            );
+          } else {
+            notify(
+              'info',
+              `Seller only has ${productInstock} products in stock`,
+              'add-product-to-cart-info'
+            );
+          }
+        } else {
           notify(
             'success',
             'Product has been added to your cart',
             'add-product-to-cart-success'
-          );
-        }
-
-        if (res.notEnoughAvailableProduct as boolean) {
-          notify(
-            'info',
-            `Seller only has ${productInstock} products in stock`,
-            'add-product-to-cart-info'
           );
         }
 
