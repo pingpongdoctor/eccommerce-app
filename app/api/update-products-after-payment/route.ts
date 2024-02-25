@@ -2,7 +2,6 @@ import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
-import { client } from '@/sanity/lib/client';
 
 //function to get product
 const getProduct = async function (
@@ -139,12 +138,52 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             },
           });
 
-          await client
-            .patch(productInShoppingCart.sanityProductId)
-            .set({
-              instock: product.instock - productInShoppingCart.productQuantity,
-            })
-            .commit();
+          //   await client
+          //     .patch(productInShoppingCart.sanityProductId)
+          //     .set({
+          //       instock: product.instock - productInShoppingCart.productQuantity,
+          //     })
+          //     .commit();
+          // }
+
+          //Use Sanity API mutate endpoint to mutate documents instead of using Sanity client
+          //If we use Sanity client to mutate Sanity documents, we need to generate Sanity client with pre-defined read-and-write token. This requires us to allow credentials transfer when fetching data or we will encounter CORS errors
+          //If we set allow credetial option in Sanity CORS cofiguration to true, it will accept everyone to access the Sanity studio using /studio endpoint. This is really dangerous.
+          const mutations = [
+            {
+              patch: {
+                id: productInShoppingCart.sanityProductId,
+                set: {
+                  instock:
+                    product.instock - productInShoppingCart.productQuantity,
+                },
+              },
+            },
+          ];
+
+          const res = await fetch(
+            `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v${process.env.NEXT_PUBLIC_SANITY_API_VERSION}/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_SANITY_API_READ_WRITE_TOKEN}`,
+              },
+              body: JSON.stringify({ mutations }),
+            }
+          );
+
+          const data = await res.json();
+
+          if (data.error) {
+            return NextResponse.json(
+              {
+                message:
+                  'error updating sanity documents' + data.error.description,
+              },
+              { status: 400 }
+            );
+          }
         }
       )
     );
