@@ -22,16 +22,12 @@ export async function updateProductsAfterPayment(
         'Error when updating products after payment' + ' ' + data.message
       );
 
-      if (data.productSlug) {
-        console.log(data.productSlug);
-      }
-
       return false;
     }
 
     return true;
   } catch (e: any) {
-    console.log('Error in updateProductsAfterPayment function');
+    console.log('Error in updateProductsAfterPayment function' + e.message);
     return false;
   }
 }
