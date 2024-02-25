@@ -1,3 +1,4 @@
+import { notify } from '../_components/ReactToastifyProvider';
 import { baseUrl } from '../utils/baseUrl';
 
 //Return true if successfully updating products
@@ -14,14 +15,23 @@ export async function updateProductQuantityForProductsInCart(
       body: JSON.stringify({ productQuantity: newQuantity }),
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const data = await res.json();
       console.log(
         'Error updating product quantity for products in cart' +
           ' ' +
           data.message
       );
       return false;
+    }
+
+    if (data.notEnoughProducts) {
+      notify(
+        'info',
+        'Someone else has purchased this product, making its quantity change',
+        'product-quantity-change'
+      );
     }
 
     return true;

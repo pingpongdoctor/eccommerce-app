@@ -49,15 +49,22 @@ export default function PaymentForm({
   const submitHandler = async (e: any) => {
     e.preventDefault();
 
-    await updateProductsAfterPayment(productsInCartWithSanityProductId);
     try {
+      setIsLoading(true);
+      const isSuccess = await updateProductsAfterPayment(
+        productsInCartWithSanityProductId
+      );
+
+      if (!isSuccess) {
+        console.log('Error when updating products during payment execution');
+        return;
+      }
+
       if (!stripe || !elements) {
         // Stripe.js hasn't yet loaded.
         // Make sure to disable form submission until Stripe.js has loaded.
         return;
       }
-
-      setIsLoading(true);
 
       const {
         error,
