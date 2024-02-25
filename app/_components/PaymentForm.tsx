@@ -48,71 +48,73 @@ export default function PaymentForm({
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
-    try {
-      if (!stripe || !elements) {
-        // Stripe.js hasn't yet loaded.
-        // Make sure to disable form submission until Stripe.js has loaded.
-        return;
-      }
 
-      setIsLoading(true);
+    await updateProductsAfterPayment(productsInCartWithSanityProductId);
+    // try {
+    //   if (!stripe || !elements) {
+    //     // Stripe.js hasn't yet loaded.
+    //     // Make sure to disable form submission until Stripe.js has loaded.
+    //     return;
+    //   }
 
-      const {
-        error,
-        paymentIntent,
-      }: {
-        error?: StripeError;
-        paymentIntent?: PaymentIntent;
-      } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          // Make sure to change this to your payment completion page
-          return_url: `${baseUrl}`,
-          receipt_email: 'thanhnhantran1501@gmail.com',
-        },
-        redirect: 'if_required',
-      });
+    //   setIsLoading(true);
 
-      if (error) {
-        if (error.type === 'card_error' || error.type === 'validation_error') {
-          notify('error', error.message || '', 'card-validation-errors');
-        } else {
-          notify('error', 'Something went wrong.', 'error');
-        }
-        return;
-      }
+    //   const {
+    //     error,
+    //     paymentIntent,
+    //   }: {
+    //     error?: StripeError;
+    //     paymentIntent?: PaymentIntent;
+    //   } = await stripe.confirmPayment({
+    //     elements,
+    //     confirmParams: {
+    //       // Make sure to change this to your payment completion page
+    //       return_url: `${baseUrl}`,
+    //       receipt_email: 'thanhnhantran1501@gmail.com',
+    //     },
+    //     redirect: 'if_required',
+    //   });
 
-      if (!paymentIntent) {
-        console.error('payment intent not available');
-        return;
-      }
+    //   if (error) {
+    //     if (error.type === 'card_error' || error.type === 'validation_error') {
+    //       notify('error', error.message || '', 'card-validation-errors');
+    //     } else {
+    //       notify('error', 'Something went wrong.', 'error');
+    //     }
+    //     return;
+    //   }
 
-      switch (paymentIntent.status) {
-        case 'succeeded':
-          await updateProductsAfterPayment(productsInCartWithSanityProductId);
-          setChangeProductsInCart(true);
-          notify('success', 'Payment succeeded!', 'success-payment');
-          router.push('/');
-          break;
-        case 'processing':
-          notify('info', 'Your payment is processing.', 'payment-in-process');
-          break;
-        case 'requires_payment_method':
-          notify(
-            'error',
-            'Your payment was not successful, please try again.',
-            'payment-error'
-          );
-          break;
-        default:
-          notify('error', 'Something went wrong.', 'error');
-          break;
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+    //   if (!paymentIntent) {
+    //     console.error('payment intent not available');
+    //     return;
+    //   }
+
+    //   switch (paymentIntent.status) {
+    //     case 'succeeded':
+    //       await updateProductsAfterPayment(productsInCartWithSanityProductId);
+    //       setChangeProductsInCart(true);
+    //       notify('success', 'Payment succeeded!', 'success-payment');
+    //       router.push('/');
+    //       break;
+    //     case 'processing':
+    //       notify('info', 'Your payment is processing.', 'payment-in-process');
+    //       break;
+    //     case 'requires_payment_method':
+    //       notify(
+    //         'error',
+    //         'Your payment was not successful, please try again.',
+    //         'payment-error'
+    //       );
+    //       break;
+    //     default:
+    //       notify('error', 'Something went wrong.', 'error');
+    //       break;
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (
