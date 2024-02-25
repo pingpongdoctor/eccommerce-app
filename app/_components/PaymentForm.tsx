@@ -50,71 +50,71 @@ export default function PaymentForm({
     e.preventDefault();
 
     await updateProductsAfterPayment(productsInCartWithSanityProductId);
-    // try {
-    //   if (!stripe || !elements) {
-    //     // Stripe.js hasn't yet loaded.
-    //     // Make sure to disable form submission until Stripe.js has loaded.
-    //     return;
-    //   }
+    try {
+      if (!stripe || !elements) {
+        // Stripe.js hasn't yet loaded.
+        // Make sure to disable form submission until Stripe.js has loaded.
+        return;
+      }
 
-    //   setIsLoading(true);
+      setIsLoading(true);
 
-    //   const {
-    //     error,
-    //     paymentIntent,
-    //   }: {
-    //     error?: StripeError;
-    //     paymentIntent?: PaymentIntent;
-    //   } = await stripe.confirmPayment({
-    //     elements,
-    //     confirmParams: {
-    //       // Make sure to change this to your payment completion page
-    //       return_url: `${baseUrl}`,
-    //       receipt_email: 'thanhnhantran1501@gmail.com',
-    //     },
-    //     redirect: 'if_required',
-    //   });
+      const {
+        error,
+        paymentIntent,
+      }: {
+        error?: StripeError;
+        paymentIntent?: PaymentIntent;
+      } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          // Make sure to change this to your payment completion page
+          return_url: `${baseUrl}`,
+          receipt_email: 'thanhnhantran1501@gmail.com',
+        },
+        redirect: 'if_required',
+      });
 
-    //   if (error) {
-    //     if (error.type === 'card_error' || error.type === 'validation_error') {
-    //       notify('error', error.message || '', 'card-validation-errors');
-    //     } else {
-    //       notify('error', 'Something went wrong.', 'error');
-    //     }
-    //     return;
-    //   }
+      if (error) {
+        if (error.type === 'card_error' || error.type === 'validation_error') {
+          notify('error', error.message || '', 'card-validation-errors');
+        } else {
+          notify('error', 'Something went wrong.', 'error');
+        }
+        return;
+      }
 
-    //   if (!paymentIntent) {
-    //     console.error('payment intent not available');
-    //     return;
-    //   }
+      if (!paymentIntent) {
+        console.error('payment intent not available');
+        return;
+      }
 
-    //   switch (paymentIntent.status) {
-    //     case 'succeeded':
-    //       await updateProductsAfterPayment(productsInCartWithSanityProductId);
-    //       setChangeProductsInCart(true);
-    //       notify('success', 'Payment succeeded!', 'success-payment');
-    //       router.push('/');
-    //       break;
-    //     case 'processing':
-    //       notify('info', 'Your payment is processing.', 'payment-in-process');
-    //       break;
-    //     case 'requires_payment_method':
-    //       notify(
-    //         'error',
-    //         'Your payment was not successful, please try again.',
-    //         'payment-error'
-    //       );
-    //       break;
-    //     default:
-    //       notify('error', 'Something went wrong.', 'error');
-    //       break;
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      switch (paymentIntent.status) {
+        case 'succeeded':
+          await updateProductsAfterPayment(productsInCartWithSanityProductId);
+          setChangeProductsInCart(true);
+          notify('success', 'Payment succeeded!', 'success-payment');
+          router.push('/');
+          break;
+        case 'processing':
+          notify('info', 'Your payment is processing.', 'payment-in-process');
+          break;
+        case 'requires_payment_method':
+          notify(
+            'error',
+            'Your payment was not successful, please try again.',
+            'payment-error'
+          );
+          break;
+        default:
+          notify('error', 'Something went wrong.', 'error');
+          break;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
