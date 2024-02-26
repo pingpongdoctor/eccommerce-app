@@ -146,7 +146,7 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
       {
         message: 'user is not found on Auth0 cloud database',
       },
-      { status: 400 }
+      { status: 500 }
     );
   }
 
@@ -168,8 +168,8 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
 
     if (!userData) {
       return NextResponse.json(
-        { message: 'user is not found in app database' },
-        { status: 400 }
+        { message: 'user is not found' },
+        { status: 500 }
       );
     }
 
@@ -186,7 +186,7 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
       return NextResponse.json(
         { message: 'product not found' },
         {
-          status: 201,
+          status: 500,
         }
       );
     }
@@ -206,9 +206,12 @@ export const PUT = withApiAuthRequired(async (req: Request, context) => {
     });
 
     return NextResponse.json(
-      { message: 'product quantity is updated' },
       {
-        status: 201,
+        message: 'product quantity is updated',
+        notEnoughProducts: productQuantity > product.instock,
+      },
+      {
+        status: 200,
       }
     );
   } catch (err: any) {

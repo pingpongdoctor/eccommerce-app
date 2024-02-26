@@ -1,4 +1,3 @@
-import { notify } from '../_components/ReactToastifyProvider';
 import { baseUrl } from '../utils/baseUrl';
 
 //return true if product is successfully updated
