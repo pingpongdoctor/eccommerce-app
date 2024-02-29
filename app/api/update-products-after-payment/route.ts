@@ -135,13 +135,15 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             );
           }
 
-          await prisma.product.update({
+          const updatedProduct = await prisma.product.update({
             where: { id: productInShoppingCart.productId },
             data: {
               instock: product.instock - productInShoppingCart.productQuantity,
               updatedAt: new Date(),
             },
           });
+
+          console.log('updatedProduct', updatedProduct);
 
           //   await client
           //     .patch(productInShoppingCart.sanityProductId)
@@ -189,10 +191,6 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
               { status: 400 }
             );
           }
-
-          //save data to redis if there are not errors
-          // const { productId, sanityProductId, productQuantity } =
-          //   productInShoppingCart;
         }
       )
     );

@@ -25,7 +25,7 @@ const getProduct = async function (
 };
 
 //update product that are in stock in our database and on sanity database, and clear products in shopping cart after successful payment
-export const GET = async (req: Request) => {
+export const GET = withApiAuthRequired(async (_req: Request) => {
   const session = await getSession();
   if (!session) {
     return NextResponse.json(
@@ -52,6 +52,7 @@ export const GET = async (req: Request) => {
       );
     }
 
+    //get rollback data from Redis
     const rollbackData:
       | (ProductInShoppingCart & {
           sanityProductId: string;
@@ -59,11 +60,16 @@ export const GET = async (req: Request) => {
       | null = await redis.hget(`${user.id}-rollback-data`, 'data');
 
     if (!rollbackData) {
-      return;
+      return NextResponse.json(
+        { message: 'rollback data not available' },
+        { status: 400 }
+      );
     }
+
+    //delete rollback data from Redis
     await redis.hdel(`${user.id}-rollback-data`, 'data');
 
-    //update product instock on our database and on sanity database
+    //roll back product data on Sanity database and app database
     await Promise.all(
       rollbackData.map(
         async (
@@ -82,13 +88,15 @@ export const GET = async (req: Request) => {
             );
           }
 
-          await prisma.product.update({
+          const rollbackProduct = await prisma.product.update({
             where: { id: productInShoppingCart.productId },
             data: {
-              instock: product.instock - productInShoppingCart.productQuantity,
+              instock: product.instock + productInShoppingCart.productQuantity,
               updatedAt: new Date(),
             },
           });
+
+          console.log('rollbackProduct', rollbackProduct);
 
           const mutations = [
             {
@@ -96,7 +104,7 @@ export const GET = async (req: Request) => {
                 id: productInShoppingCart.sanityProductId,
                 set: {
                   instock:
-                    product.instock - productInShoppingCart.productQuantity,
+                    product.instock + productInShoppingCart.productQuantity,
                 },
               },
             },
@@ -141,4 +149,4 @@ export const GET = async (req: Request) => {
       { status: e.statusCode || 500 }
     );
   }
-};
+});
