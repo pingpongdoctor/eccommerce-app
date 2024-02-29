@@ -89,7 +89,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
           if (productInShoppingCart.productQuantity > product.instock) {
             return NextResponse.json(
               {
-                message: `insufficient stock`,
+                message: `insufficient product`,
                 productSlug: productInShoppingCart.productSlug,
               },
               { status: 400 }
@@ -113,6 +113,8 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
         productId: { in: productIds },
       },
     });
+
+    // const generatedKey = uuidv4();
 
     //update product instock on our database and on sanity database
     await Promise.all(
@@ -187,9 +189,25 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
               { status: 400 }
             );
           }
+
+          //save data to redis if there are not errors
+          // const { productId, sanityProductId, productQuantity } =
+          //   productInShoppingCart;
         }
       )
     );
+
+    //create a redis transaction that includes 2 operations
+    const tx = redis.multi();
+
+    //set data in redis database
+    tx.hset(`${user.id}-rollback-data`, { data: productsInShoppingCart });
+
+    //set expiry time to 5 minutes
+    tx.expire(`${user.id}-rollback-data`, 3000);
+
+    //execute the transaction
+    await tx.exec();
 
     return NextResponse.json(
       {

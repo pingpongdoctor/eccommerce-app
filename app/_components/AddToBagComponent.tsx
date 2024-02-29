@@ -7,7 +7,6 @@ import { addProductToCart } from '../_lib/addProductToCart';
 import { notify } from './ReactToastifyProvider';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
-import { revalidateTag } from 'next/cache';
 
 interface Props {
   productSlug: string;
