@@ -33,7 +33,6 @@ export default function GlobalStatesContext({
       getUserProfileFromClientSide().then(
         (userData: Omit<User, 'auth0Id' | 'id'> | undefined) => {
           if (userData) {
-            console.log(userData);
             setUserProfile(userData);
           } else {
             setUserProfile(null);
