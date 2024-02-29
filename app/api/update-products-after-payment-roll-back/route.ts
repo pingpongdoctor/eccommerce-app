@@ -2,9 +2,6 @@ import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
-import { Redis } from '@upstash/redis';
-
-const redis = Redis.fromEnv();
 
 //function to get product
 const getProduct = async function (
@@ -67,39 +64,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
       );
     }
 
-    // check if any products do not have enough quantity for purchasing
-    await Promise.all(
-      productsInShoppingCart.map(
-        async (
-          productInShoppingCart: ProductInShoppingCart & {
-            sanityProductId: string;
-          }
-        ) => {
-          const product: {
-            instock: number;
-          } | null = await getProduct(productInShoppingCart);
-
-          if (!product) {
-            return NextResponse.json(
-              { message: 'product not available' },
-              { status: 400 }
-            );
-          }
-
-          if (productInShoppingCart.productQuantity > product.instock) {
-            return NextResponse.json(
-              {
-                message: `insufficient stock`,
-                productSlug: productInShoppingCart.productSlug,
-              },
-              { status: 400 }
-            );
-          }
-        }
-      )
-    );
-
-    //clear products in shopping cart
+    //add products back to shopping cart
     const productIds: number[] = productsInShoppingCart.map(
       (
         productInShoppingCart: ProductInShoppingCart & {

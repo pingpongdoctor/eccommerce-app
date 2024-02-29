@@ -28,6 +28,7 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.10",
     "@types/react-slick": "^0.23.13",
+    "@upstash/redis": "^1.28.4",
     "clsx": "^2.0.0",
     "flowbite": "^2.2.1",
     "flowbite-react": "^0.7.2",
