@@ -114,8 +114,6 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
       },
     });
 
-    // const generatedKey = uuidv4();
-
     //update product instock on our database and on sanity database
     await Promise.all(
       productsInShoppingCart.map(
@@ -135,7 +133,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             );
           }
 
-          const updatedProduct = await prisma.product.update({
+          await prisma.product.update({
             where: { id: productInShoppingCart.productId },
             data: {
               instock: product.instock - productInShoppingCart.productQuantity,
@@ -186,7 +184,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
                 message:
                   'error updating sanity documents' + data.error.description,
               },
-              { status: 400 }
+              { status: 500 }
             );
           }
         }

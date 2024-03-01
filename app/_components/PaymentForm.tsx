@@ -21,6 +21,7 @@ import { notify } from './ReactToastifyProvider';
 import { useRouter } from 'next/navigation';
 import { rollbackData } from '../_lib/rollbackData';
 import { createOrder } from '../_lib/createOrder';
+import { clearRollbackData } from '../_lib/clearRollbackData';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -124,6 +125,7 @@ export default function PaymentForm({
           //do not worry if fields below are empty string when creating order records since there are always errors shown up if some of these fields are not filled correctly
           //this is ensured by handling the error object above
           await createOrder(fullname, 'prepare', address);
+          await clearRollbackData();
           // router.push('/');
           break;
         case 'processing':
