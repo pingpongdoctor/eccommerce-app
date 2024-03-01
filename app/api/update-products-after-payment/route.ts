@@ -133,14 +133,6 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             );
           }
 
-          await prisma.product.update({
-            where: { id: productInShoppingCart.productId },
-            data: {
-              instock: product.instock - productInShoppingCart.productQuantity,
-              updatedAt: new Date(),
-            },
-          });
-
           //   await client
           //     .patch(productInShoppingCart.sanityProductId)
           //     .set({
@@ -164,6 +156,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             },
           ];
 
+          //when the product quantity is updated on Sanity database, it will trigger Sanity webhook to make an API call to update product document on app database
           const res = await fetch(
             `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v${process.env.NEXT_PUBLIC_SANITY_API_VERSION}/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
             {
