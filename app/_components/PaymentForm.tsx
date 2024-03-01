@@ -43,7 +43,6 @@ export default function PaymentForm({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [fullname, setFullname] = useState<string>('');
-  const [phonenumber, setPhonenumber] = useState<string | null>(null);
   const [address, setAddress] = useState<Address>({
     city: '',
     country: '',
@@ -55,12 +54,6 @@ export default function PaymentForm({
 
   const handleUpdateFullname = function (e: StripeAddressElementChangeEvent) {
     setFullname(e.value.name);
-  };
-
-  const handleUpdatePhonenumber = function (
-    e: StripeAddressElementChangeEvent
-  ) {
-    setPhonenumber(e.value.phone ? e.value.phone : null);
   };
 
   const handleUpdateAddress = function (e: StripeAddressElementChangeEvent) {
@@ -99,6 +92,7 @@ export default function PaymentForm({
           // Make sure to change this to your payment completion page
           return_url: `${baseUrl}`,
         },
+        //this ensures that redirection is implemented on demand
         redirect: 'if_required',
       });
 
@@ -129,7 +123,7 @@ export default function PaymentForm({
           notify('success', 'Payment succeeded!', 'success-payment');
           //do not worry if fields below are empty string when creating order records since there are always errors shown up if some of these fields are not filled correctly
           //this is ensured by handling the error object above
-          await createOrder(fullname, phonenumber, 'prepare', address);
+          await createOrder(fullname, 'prepare', address);
           // router.push('/');
           break;
         case 'processing':
@@ -165,7 +159,6 @@ export default function PaymentForm({
         onChange={(e) => {
           handleUpdateAddress(e);
           handleUpdateFullname(e);
-          handleUpdatePhonenumber(e);
         }}
       />
 
