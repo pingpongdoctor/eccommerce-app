@@ -17,12 +17,10 @@ export const POST = withApiAuthRequired(async (req: Request) => {
 
   const {
     fullname,
-    phonenumber,
     address,
     status,
   }: {
     fullname: string;
-    phonenumber: string | null;
     status: OrderStatus;
     address: Address;
   } = await req.json();
@@ -57,7 +55,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     await prisma.order.create({
       data: {
         fullname,
-        phonenumber,
+        email: userData.email,
         city,
         country,
         line1,
