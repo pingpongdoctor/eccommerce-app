@@ -2,7 +2,7 @@ import { baseUrl } from '../utils/baseUrl';
 
 export async function createOrder(
   fullname: string,
-  phonenumber: string,
+  phonenumber: string | null,
   status: OrderStatus,
   address: Address
 ): Promise<boolean> {
