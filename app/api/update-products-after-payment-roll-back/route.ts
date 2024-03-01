@@ -88,15 +88,13 @@ export const GET = withApiAuthRequired(async (_req: Request) => {
             );
           }
 
-          const rollbackProduct = await prisma.product.update({
+          await prisma.product.update({
             where: { id: productInShoppingCart.productId },
             data: {
               instock: product.instock + productInShoppingCart.productQuantity,
               updatedAt: new Date(),
             },
           });
-
-          console.log('rollbackProduct', rollbackProduct);
 
           const mutations = [
             {

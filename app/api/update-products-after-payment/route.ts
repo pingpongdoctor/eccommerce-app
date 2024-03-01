@@ -143,8 +143,6 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             },
           });
 
-          console.log('updatedProduct', updatedProduct);
-
           //   await client
           //     .patch(productInShoppingCart.sanityProductId)
           //     .set({

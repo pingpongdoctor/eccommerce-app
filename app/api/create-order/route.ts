@@ -22,18 +22,16 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     status,
   }: {
     fullname: string;
-    phonenumber: string;
+    phonenumber: string | null;
     status: OrderStatus;
     address: Address;
   } = await req.json();
 
   if (
     !fullname ||
-    !phonenumber ||
     !address?.city ||
-    !address.country ||
+    !address?.country ||
     !address?.line1 ||
-    !address?.line2 ||
     !address?.postal_code ||
     !status
   ) {

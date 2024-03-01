@@ -69,12 +69,12 @@ model Product {
 model Order{
   id        Int     @id @default(autoincrement())
   fullname String
-  phonenumber String @unique
+  phonenumber String? //phone number can be null
   city String
   country String
   line1 String
-  line2 String @default("")
-  postal_code String @unique
+  line2 String? //line2 can be null
+  postal_code String
   status Status
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate:Cascade)

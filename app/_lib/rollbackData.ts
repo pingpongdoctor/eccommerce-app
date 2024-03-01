@@ -4,7 +4,12 @@ import { baseUrl } from '../utils/baseUrl';
 export async function rollbackData(): Promise<boolean> {
   try {
     const res = await fetch(
-      `${baseUrl}/api/update-products-after-payment-roll-back`
+      `${baseUrl}/api/update-products-after-payment-roll-back`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
 
     const data = await res.json();

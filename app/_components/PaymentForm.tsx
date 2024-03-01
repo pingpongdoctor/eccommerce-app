@@ -5,16 +5,22 @@ import {
   PaymentElement,
   AddressElement,
 } from '@stripe/react-stripe-js';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
 import { updateProductsAfterPayment } from '../_lib/updateProductsAfterPayment';
 import { globalStatesContext } from './GlobalStatesContext';
 import { baseUrl } from '../utils/baseUrl';
-import { PaymentIntent, StripeError } from '@stripe/stripe-js';
+import {
+  PaymentIntent,
+  StripeAddressElementChangeEvent,
+  StripeError,
+} from '@stripe/stripe-js';
 import { notify } from './ReactToastifyProvider';
 import { useRouter } from 'next/navigation';
+import { rollbackData } from '../_lib/rollbackData';
+import { createOrder } from '../_lib/createOrder';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -37,20 +43,35 @@ export default function PaymentForm({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [fullname, setFullname] = useState<string>('');
-  const [phonenumber, setPhonenumber] = useState<string>('');
+  const [phonenumber, setPhonenumber] = useState<string | null>(null);
   const [address, setAddress] = useState<Address>({
     city: '',
     country: '',
+    state: '',
     line1: '',
-    line2: '',
+    line2: null,
     postal_code: '',
   });
+
+  const handleUpdateFullname = function (e: StripeAddressElementChangeEvent) {
+    setFullname(e.value.name);
+  };
+
+  const handleUpdatePhonenumber = function (
+    e: StripeAddressElementChangeEvent
+  ) {
+    setPhonenumber(e.value.phone ? e.value.phone : null);
+  };
+
+  const handleUpdateAddress = function (e: StripeAddressElementChangeEvent) {
+    setAddress(e.value.address);
+  };
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
 
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       const isSuccess = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
@@ -60,66 +81,78 @@ export default function PaymentForm({
         return;
       }
 
-      // if (!stripe || !elements) {
-      //   // Stripe.js hasn't yet loaded.
-      //   // Make sure to disable form submission until Stripe.js has loaded.
-      //   return;
-      // }
+      if (!stripe || !elements) {
+        // Stripe.js hasn't yet loaded.
+        // Make sure to disable form submission until Stripe.js has loaded.
+        return;
+      }
 
-      // const {
-      //   error,
-      //   paymentIntent,
-      // }: {
-      //   error?: StripeError;
-      //   paymentIntent?: PaymentIntent;
-      // } = await stripe.confirmPayment({
-      //   elements,
-      //   confirmParams: {
-      //     // Make sure to change this to your payment completion page
-      //     return_url: `${baseUrl}`,
-      //     receipt_email: 'thanhnhantran1501@gmail.com',
-      //   },
-      //   redirect: 'if_required',
-      // });
+      const {
+        error,
+        paymentIntent,
+      }: {
+        error?: StripeError;
+        paymentIntent?: PaymentIntent;
+      } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          // Make sure to change this to your payment completion page
+          return_url: `${baseUrl}`,
+        },
+        redirect: 'if_required',
+      });
 
-      // if (error) {
-      //   if (error.type === 'card_error' || error.type === 'validation_error') {
-      //     notify('error', error.message || '', 'card-validation-errors');
-      //   } else {
-      //     notify('error', 'Something went wrong.', 'error');
-      //   }
-      //   return;
-      // }
+      if (error) {
+        if (error.type === 'card_error' || error.type === 'validation_error') {
+          notify(
+            'error',
+            error.message || 'Something went wrong.',
+            'card-validation-errors'
+          );
+        } else {
+          notify('error', 'Something went wrong.', 'error');
+        }
+        await rollbackData();
+        return;
+      }
 
-      // if (!paymentIntent) {
-      //   console.error('payment intent not available');
-      //   return;
-      // }
+      if (!paymentIntent) {
+        console.error('payment intent not available');
+        notify('error', 'Something went wrong.', 'payment-intent-error');
+        await rollbackData();
+        return;
+      }
 
-      // switch (paymentIntent.status) {
-      //   case 'succeeded':
-      //     setChangeProductsInCart(true);
-      //     notify('success', 'Payment succeeded!', 'success-payment');
-      //     router.push('/');
-      //     break;
-      //   case 'processing':
-      //     notify('info', 'Your payment is processing.', 'payment-in-process');
-      //     break;
-      //   case 'requires_payment_method':
-      //     notify(
-      //       'error',
-      //       'Your payment was not successful, please try again.',
-      //       'payment-error'
-      //     );
-      //     break;
-      //   default:
-      //     notify('error', 'Something went wrong.', 'error');
-      //     break;
-      // }
-    } catch (error) {
-      console.log(error);
+      switch (paymentIntent.status) {
+        case 'succeeded':
+          setChangeProductsInCart(true);
+          notify('success', 'Payment succeeded!', 'success-payment');
+          //do not worry if fields below are empty string when creating order records since there are always errors shown up if some of these fields are not filled correctly
+          //this is ensured by handling the error object above
+          await createOrder(fullname, phonenumber, 'prepare', address);
+          // router.push('/');
+          break;
+        case 'processing':
+          notify('info', 'Your payment is processing.', 'payment-in-process');
+          break;
+        case 'requires_payment_method':
+          notify(
+            'error',
+            'Your payment was not successful, please try again.',
+            'payment-error'
+          );
+          await rollbackData();
+          break;
+        default:
+          notify('error', 'Something went wrong.', 'error');
+          await rollbackData();
+          break;
+      }
+    } catch (error: any) {
+      console.log(error.message);
+      await rollbackData();
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -130,7 +163,9 @@ export default function PaymentForm({
       <AddressElement
         options={{ mode: 'shipping' }}
         onChange={(e) => {
-          console.log(e.value.address);
+          handleUpdateAddress(e);
+          handleUpdateFullname(e);
+          handleUpdatePhonenumber(e);
         }}
       />
 
