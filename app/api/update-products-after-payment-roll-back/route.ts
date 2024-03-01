@@ -24,7 +24,7 @@ const getProduct = async function (
   return product;
 };
 
-//update product that are in stock in our database and on sanity database, and clear products in shopping cart after successful payment
+//roll back product data after failed payment
 export const GET = withApiAuthRequired(async (_req: Request) => {
   const session = await getSession();
   if (!session) {
