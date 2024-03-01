@@ -75,6 +75,7 @@ model Order{
   line1 String
   line2 String? //line2 can be null
   postal_code String
+  state String
   status Status
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate:Cascade)
