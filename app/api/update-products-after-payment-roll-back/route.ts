@@ -88,14 +88,6 @@ export const GET = withApiAuthRequired(async (_req: Request) => {
             );
           }
 
-          await prisma.product.update({
-            where: { id: productInShoppingCart.productId },
-            data: {
-              instock: product.instock + productInShoppingCart.productQuantity,
-              updatedAt: new Date(),
-            },
-          });
-
           const mutations = [
             {
               patch: {
