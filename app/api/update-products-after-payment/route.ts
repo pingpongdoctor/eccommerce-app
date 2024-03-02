@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 import { Redis } from '@upstash/redis';
+import { v4 as uuidv4 } from 'uuid';
 
 const redis = Redis.fromEnv();
 
@@ -30,7 +31,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
   if (!session) {
     return NextResponse.json(
       { message: 'User not found in auth0 database' },
-      { status: 400 }
+      { status: 500 }
     );
   }
 
@@ -63,7 +64,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
     if (!user) {
       return NextResponse.json(
         { message: 'user not found in database' },
-        { status: 400 }
+        { status: 500 }
       );
     }
 
@@ -82,7 +83,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
           if (!product) {
             return NextResponse.json(
               { message: 'product not available' },
-              { status: 400 }
+              { status: 500 }
             );
           }
 
@@ -92,7 +93,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
                 message: `insufficient product`,
                 productSlug: productInShoppingCart.productSlug,
               },
-              { status: 400 }
+              { status: 500 }
             );
           }
         }
@@ -129,7 +130,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
           if (!product) {
             return NextResponse.json(
               { message: 'product not available' },
-              { status: 400 }
+              { status: 500 }
             );
           }
 
@@ -184,21 +185,17 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
       )
     );
 
-    //create a redis transaction that includes 2 operations
-    const tx = redis.multi();
-
     //set data in redis database
-    tx.hset(`${user.id}-rollback-data`, { data: productsInShoppingCart });
+    const rollbackDataKey = uuidv4();
 
-    //set expiry time to 5 minutes
-    tx.expire(`${user.id}-rollback-data`, 3000);
-
-    //execute the transaction
-    await tx.exec();
+    await redis.hset(`${rollbackDataKey}-rollback-data`, {
+      data: productsInShoppingCart,
+    });
 
     return NextResponse.json(
       {
         message: 'products are updated after successful payment',
+        rollbackDataKey,
       },
       { status: 200 }
     );
