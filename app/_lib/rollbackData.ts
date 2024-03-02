@@ -2,6 +2,11 @@ import { baseUrl } from '../utils/baseUrl';
 
 //return true if data is successfully rolled back
 export async function rollbackData(rollbackDataKey: string): Promise<boolean> {
+  if (!rollbackDataKey?.trim()) {
+    console.log('Error rolling back data not provided');
+    return false;
+  }
+
   try {
     const res = await fetch(
       `${baseUrl}/api/update-products-after-payment-roll-back`,
@@ -9,6 +14,8 @@ export async function rollbackData(rollbackDataKey: string): Promise<boolean> {
         headers: {
           'Content-Type': 'application/json',
         },
+        method: 'POST',
+        body: JSON.stringify({ rollbackDataKey }),
       }
     );
 
