@@ -25,49 +25,33 @@ const getProduct = async function (
 };
 
 //roll back product data after failed payment
-export const GET = withApiAuthRequired(async (_req: Request) => {
-  const session = await getSession();
-  if (!session) {
+export const POST = withApiAuthRequired(async (req: Request) => {
+  const { rollbackDataKey }: { rollbackDataKey: string } = await req.json();
+
+  if (!rollbackDataKey) {
     return NextResponse.json(
-      { message: 'User not found in auth0 database' },
+      { message: 'miss required data' },
       { status: 400 }
     );
   }
 
   try {
-    //get user
-    const user = await prisma.user.findUnique({
-      where: {
-        auth0Id: session.user.sub,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: 'user not found in database' },
-        { status: 400 }
-      );
-    }
-
     //get rollback data from Redis
     const rollbackData:
       | (ProductInShoppingCart & {
           sanityProductId: string;
         })[]
-      | null = await redis.hget(`${user.id}-rollback-data`, 'data');
+      | null = await redis.hget(`${rollbackDataKey}-rollback-data`, 'data');
 
     if (!rollbackData) {
       return NextResponse.json(
         { message: 'rollback data not available' },
-        { status: 400 }
+        { status: 500 }
       );
     }
 
     //delete rollback data from Redis
-    await redis.hdel(`${user.id}-rollback-data`, 'data');
+    await redis.hdel(`${rollbackDataKey}-rollback-data`, 'data');
 
     //roll back product data on Sanity database and app database
     await Promise.all(
