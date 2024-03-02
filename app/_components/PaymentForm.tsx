@@ -5,7 +5,7 @@ import {
   PaymentElement,
   AddressElement,
 } from '@stripe/react-stripe-js';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
@@ -43,7 +43,6 @@ export default function PaymentForm({
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [fullname, setFullname] = useState<string>('');
   const [address, setAddress] = useState<Address>({
     city: '',
@@ -53,6 +52,7 @@ export default function PaymentForm({
     line2: null,
     postal_code: '',
   });
+  const [rollbackDataKey, setRollbackDataKey] = useState<string>('');
 
   const handleUpdateFullname = function (e: StripeAddressElementChangeEvent) {
     setFullname(e.value.name);
@@ -67,20 +67,23 @@ export default function PaymentForm({
 
     try {
       setIsLoading(true);
-      const isSuccess = await updateProductsAfterPayment(
+      const returnedData = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
 
       await revalidateWithTag('post');
 
-      if (!isSuccess) {
+      if (!returnedData.result) {
         console.log('Error when updating products during payment execution');
         return;
       }
 
+      setRollbackDataKey(returnedData.rollbackDataKey as string);
+
       if (!stripe || !elements) {
         // Stripe.js hasn't yet loaded.
         // Make sure to disable form submission until Stripe.js has loaded.
+        await rollbackData(rollbackDataKey);
         return;
       }
 
@@ -110,14 +113,14 @@ export default function PaymentForm({
         } else {
           notify('error', 'Something went wrong.', 'error');
         }
-        await rollbackData();
+        await rollbackData(rollbackDataKey);
         return;
       }
 
       if (!paymentIntent) {
         console.error('payment intent not available');
         notify('error', 'Something went wrong.', 'payment-intent-error');
-        await rollbackData();
+        await rollbackData(rollbackDataKey);
         return;
       }
 
@@ -141,19 +144,20 @@ export default function PaymentForm({
             'Your payment was not successful, please try again.',
             'payment-error'
           );
-          await rollbackData();
+          await rollbackData(rollbackDataKey);
           break;
         default:
           notify('error', 'Something went wrong.', 'error');
-          await rollbackData();
+          await rollbackData(rollbackDataKey);
           break;
       }
     } catch (error: any) {
       console.log(error.message);
-      await rollbackData();
+      await rollbackData(rollbackDataKey);
     } finally {
       setIsLoading(false);
       await revalidateWithTag('post');
+      setRollbackDataKey('');
     }
   };
 

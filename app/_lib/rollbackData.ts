@@ -1,7 +1,7 @@
 import { baseUrl } from '../utils/baseUrl';
 
 //return true if data is successfully rolled back
-export async function rollbackData(): Promise<boolean> {
+export async function rollbackData(rollbackDataKey: string): Promise<boolean> {
   try {
     const res = await fetch(
       `${baseUrl}/api/update-products-after-payment-roll-back`,
