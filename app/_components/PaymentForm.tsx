@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation';
 import { rollbackData } from '../_lib/rollbackData';
 import { createOrder } from '../_lib/createOrder';
 import { clearRollbackData } from '../_lib/clearRollbackData';
+import { revalidateWithTag } from '../_lib/revalidateWithTag';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -69,6 +70,8 @@ export default function PaymentForm({
       const isSuccess = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
+
+      await revalidateWithTag('post');
 
       if (!isSuccess) {
         console.log('Error when updating products during payment execution');
@@ -126,6 +129,7 @@ export default function PaymentForm({
           //this is ensured by handling the error object above
           await createOrder(fullname, 'prepare', address);
           await clearRollbackData();
+          await revalidateWithTag('post');
           // router.push('/');
           break;
         case 'processing':
@@ -149,6 +153,7 @@ export default function PaymentForm({
       await rollbackData();
     } finally {
       setIsLoading(false);
+      await revalidateWithTag('post');
     }
   };
 
