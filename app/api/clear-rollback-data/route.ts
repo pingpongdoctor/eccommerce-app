@@ -7,35 +7,19 @@ import { Redis } from '@upstash/redis';
 const redis = Redis.fromEnv();
 
 //clear rollback data after successful payment
-export const GET = withApiAuthRequired(async (_req: Request) => {
-  const session = await getSession();
-  if (!session) {
+export const POST = withApiAuthRequired(async (req: Request) => {
+  const { rollbackDataKey }: { rollbackDataKey: string } = await req.json();
+
+  if (!rollbackDataKey) {
     return NextResponse.json(
-      { message: 'user not found in auth0 database' },
+      { message: 'miss required data' },
       { status: 400 }
     );
   }
 
   try {
-    //get user
-    const user = await prisma.user.findUnique({
-      where: {
-        auth0Id: session.user.sub,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: 'user not found in database' },
-        { status: 400 }
-      );
-    }
-
     //clear rollback data from Redis database
-    await redis.hdel(`${user.id}-rollback-data`, 'data');
+    await redis.hdel(`${rollbackDataKey}-rollback-data`, 'data');
 
     return NextResponse.json(
       {

@@ -67,26 +67,30 @@ export default function PaymentForm({
 
     try {
       setIsLoading(true);
+      //update product data first before executing payment
       const returnedData = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
 
+      //revalidate data for SSG pages after updating database
       await revalidateWithTag('post');
 
+      //check if product data update process is failed or succeeded
       if (!returnedData.result) {
         console.log('Error when updating products during payment execution');
         return;
       }
 
+      //if not failed, set rollbackDataKey state
       setRollbackDataKey(returnedData.rollbackDataKey as string);
 
+      //roll back product data if stripe or elements instances are not available
       if (!stripe || !elements) {
-        // Stripe.js hasn't yet loaded.
-        // Make sure to disable form submission until Stripe.js has loaded.
         await rollbackData(rollbackDataKey);
         return;
       }
 
+      //execute payment
       const {
         error,
         paymentIntent,
@@ -103,6 +107,7 @@ export default function PaymentForm({
         redirect: 'if_required',
       });
 
+      //check payment error
       if (error) {
         if (error.type === 'card_error' || error.type === 'validation_error') {
           notify(
@@ -124,15 +129,16 @@ export default function PaymentForm({
         return;
       }
 
+      //check payment status after payment execution
       switch (paymentIntent.status) {
         case 'succeeded':
           setChangeProductsInCart(true);
           notify('success', 'Payment succeeded!', 'success-payment');
-          //do not worry if fields below are empty string when creating order records since there are always errors shown up if some of these fields are not filled correctly
-          //this is ensured by handling the error object above
+          //create new order document, clear rollback data in Redis database and revalidate data for SSG pages after after successful payment
           await createOrder(fullname, 'prepare', address);
-          await clearRollbackData();
-          await revalidateWithTag('post');
+          await clearRollbackData(rollbackDataKey);
+
+          //navigate user to order summary page
           // router.push('/');
           break;
         case 'processing':
@@ -152,7 +158,10 @@ export default function PaymentForm({
           break;
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.log(
+        'Error in submitHandler function in PaymentForm component' +
+          error.message
+      );
       await rollbackData(rollbackDataKey);
     } finally {
       setIsLoading(false);
@@ -167,7 +176,7 @@ export default function PaymentForm({
 
       <AddressElement
         options={{ mode: 'shipping' }}
-        onChange={(e) => {
+        onChange={(e: StripeAddressElementChangeEvent) => {
           handleUpdateAddress(e);
           handleUpdateFullname(e);
         }}
