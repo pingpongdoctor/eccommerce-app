@@ -18,7 +18,7 @@ export async function deleteProductFromCart(
     }
     return true;
   } catch (e: any) {
-    console.log('Error in addProductToCart function' + ' ' + e.message);
+    console.log('Error in deleteProductFromCart function' + ' ' + e.message);
     return false;
   }
 }

@@ -71,6 +71,28 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       },
     });
 
+    //check if product is sold out
+    const isProductSoldOut = product.instock === 0;
+
+    if (isProductSoldOut) {
+      //if product is sold out and product is now in cart, clear it from the cart
+      if (userProductDocument) {
+        await prisma.usersProducts.delete({
+          where: {
+            userId_productId: {
+              userId: userData.id,
+              productId: product.id,
+            },
+          },
+        });
+      }
+
+      return NextResponse.json(
+        { message: 'product is sold out' },
+        { status: 204 }
+      );
+    }
+
     if (!userProductDocument) {
       //create userProduct document
       await prisma.usersProducts.create({
@@ -91,7 +113,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       });
 
       return NextResponse.json(
-        { message: 'successful creation' },
+        { message: 'successful adding new product to cart' },
         {
           status: 201,
         }
@@ -103,24 +125,26 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
         currentProductQuantity + productQuantity > product.instock;
       const canNotAddMore = currentProductQuantity === product.instock;
 
-      await prisma.usersProducts.update({
-        where: {
-          userId_productId: {
-            userId: userData.id,
-            productId: product.id,
+      if (!canNotAddMore) {
+        await prisma.usersProducts.update({
+          where: {
+            userId_productId: {
+              userId: userData.id,
+              productId: product.id,
+            },
           },
-        },
-        data: {
-          productQuantity: notEnoughAvailableProduct
-            ? product.instock
-            : { increment: productQuantity }, //add more product
-          createdAt: new Date(),
-        },
-      });
+          data: {
+            productQuantity: notEnoughAvailableProduct
+              ? product.instock
+              : { increment: productQuantity },
+            createdAt: new Date(),
+          },
+        });
+      }
 
       return NextResponse.json(
         {
-          message: 'successful update',
+          message: 'successful adding new product to cart',
           notEnoughAvailableProduct,
           canNotAddMore,
         },
