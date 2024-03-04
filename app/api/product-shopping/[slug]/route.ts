@@ -11,7 +11,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       {
         message: 'user is not found on Auth0 cloud database',
       },
-      { status: 400 }
+      { status: 500 }
     );
   }
 
@@ -34,7 +34,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
     if (!userData) {
       return NextResponse.json(
         { message: 'user is not found in app database' },
-        { status: 400 }
+        { status: 500 }
       );
     }
 
@@ -73,6 +73,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
 
     //check if product is sold out
     const isProductSoldOut = product.instock === 0;
+    console.log(product.instock);
 
     if (isProductSoldOut) {
       //if product is sold out and product is now in cart, clear it from the cart

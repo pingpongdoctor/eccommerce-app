@@ -52,6 +52,7 @@ export default function AddToBagComponent({
         if (res.isProductSoldOut) {
           notify('info', 'product is sold out', 'product-sold-out');
           await revalidatePath('post');
+          router.refresh();
         }
 
         if (res.notEnoughAvailableProduct) {
@@ -87,18 +88,26 @@ export default function AddToBagComponent({
     }
   };
 
-  return (
-    <form
-      onSubmit={handleSubmitProductForUser}
-      className="flex flex-col gap-52"
-    >
-      <ListComponent
-        selectedValue={quantity}
-        listComponentChangeEventHandler={handleUpdateQuantity}
-        listData={generateProductInstockList(productInstock)}
-        listClassname="max-h-[180px]"
-      />
-      <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
-    </form>
-  );
+  if (productInstock === 0) {
+    return <p className="text-red-500">Product is sold out</p>;
+  } else {
+    return (
+      <form
+        onSubmit={handleSubmitProductForUser}
+        className="flex flex-col gap-52"
+      >
+        <ListComponent
+          selectedValue={quantity}
+          listComponentChangeEventHandler={handleUpdateQuantity}
+          listData={generateProductInstockList(productInstock)}
+          listClassname="max-h-[180px]"
+        />
+        <ButtonComponent
+          isDisabled={isDisable}
+          buttonName="Add to bag"
+          animate
+        />
+      </form>
+    );
+  }
 }
