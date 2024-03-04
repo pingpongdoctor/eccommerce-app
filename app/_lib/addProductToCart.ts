@@ -8,6 +8,7 @@ export async function addProductToCart(
   isSuccess: boolean;
   notEnoughAvailableProduct?: boolean;
   canNotAddMore?: boolean;
+  isProductSoldOut?: boolean;
 }> {
   try {
     const res = await fetch(`${baseUrl}/api/product-shopping/${productSlug}`, {
@@ -23,6 +24,13 @@ export async function addProductToCart(
     if (!res.ok) {
       console.log('Error adding product to cart' + ' ' + data.message);
       return { isSuccess: false };
+    }
+
+    if (data.message === 'product is sold out') {
+      return {
+        isSuccess: true,
+        isProductSoldOut: true,
+      };
     }
 
     return {
