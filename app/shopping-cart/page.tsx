@@ -112,6 +112,7 @@ export default function ShoppingCart() {
     }
   }, [productsInCart, sanityProductsInCart]);
 
+  //check if any product in cart is sold out
   useEffect(() => {
     if (sanityProductsInCart.length > 0) {
       sanityProductsInCart.map((product: SanityProduct & SanityDocument) => {
@@ -151,6 +152,7 @@ export default function ShoppingCart() {
                 tax={Math.round((subtotal * 12) / 100)}
                 shipping={Math.round((subtotal * 2) / 100)}
                 orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
+                isAnyProductSoldOut={isAnyProductSoldOut}
               />
             </>
           )}
@@ -167,7 +169,7 @@ export default function ShoppingCart() {
         {isFetchingSanityProducts && <ProductCardsSkeleton />}
 
         {!isFetchingSanityProducts && productsAlsoBuy.length > 0 && (
-          <div>
+          <>
             <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
               <p className="text-lg font-medium text-gray-900">
                 You may also like
@@ -178,7 +180,7 @@ export default function ShoppingCart() {
             </div>
 
             <ClientProductCards products={productsAlsoBuy} />
-          </div>
+          </>
         )}
       </div>
     </main>
