@@ -8,7 +8,6 @@ import { globalStatesContext } from './GlobalStatesContext';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { deleteProductFromCart } from '../_lib/deleteProductFromCart';
 import { notify } from './ReactToastifyProvider';
-import { useRouter } from 'next/navigation';
 
 interface Props {
   product: ProductWithImgUrl & SanityDocument & { productQuantity: number };
@@ -44,13 +43,12 @@ export default function ChangeItemQuatityComponent({
     const isSuccess = await deleteProductFromCart(product.slug.current);
 
     if (isSuccess) {
-      setChangeProductsInCart(true);
       notify(
         'success',
         'Product is deleted from your cart',
         'success-delete-product-from-cart'
       );
-      setChangeProductsInCart(false);
+      setChangeProductsInCart(true);
     }
   };
 

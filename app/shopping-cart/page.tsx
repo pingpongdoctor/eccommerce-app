@@ -114,14 +114,16 @@ export default function ShoppingCart() {
 
   //check if any product in cart is sold out
   useEffect(() => {
-    if (sanityProductsInCart.length > 0) {
-      sanityProductsInCart.map((product: SanityProduct & SanityDocument) => {
-        if (product.instock === 0) {
-          setIsAnyProductSoldOut(true);
-        }
-      });
+    //set the state back to false before checking it
+    setIsAnyProductSoldOut(false);
+
+    if (productsWithImgUrlAndQuantity.length > 0) {
+      const noSoldOutProduct = productsWithImgUrlAndQuantity.every(
+        (product: SanityProduct & SanityDocument) => product.instock > 0
+      );
+      setIsAnyProductSoldOut(!noSoldOutProduct);
     }
-  }, [sanityProductsInCart]);
+  }, [productsWithImgUrlAndQuantity]);
 
   return (
     <main className="min-h-[600px]">
