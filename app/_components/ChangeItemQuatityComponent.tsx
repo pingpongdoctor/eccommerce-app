@@ -24,8 +24,6 @@ export default function ChangeItemQuatityComponent({
   );
   const { setChangeProductsInCart } = useContext(globalStatesContext);
 
-  const router = useRouter();
-
   const handleUpdateQuantityState = async function (value: number) {
     if (value !== currentQuantity) {
       setCurrentQuantity(value);
@@ -52,7 +50,7 @@ export default function ChangeItemQuatityComponent({
         'Product is deleted from your cart',
         'success-delete-product-from-cart'
       );
-      router.refresh();
+      setChangeProductsInCart(false);
     }
   };
 
