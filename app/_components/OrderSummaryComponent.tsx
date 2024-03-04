@@ -1,6 +1,7 @@
 'use client';
 import ButtonComponent from './ButtonComponent';
 import { useRouter } from 'next/navigation';
+import { notify } from './ReactToastifyProvider';
 
 interface Props {
   subtotal: number;
@@ -8,6 +9,7 @@ interface Props {
   tax: number;
   orderSummaryComponentClassname?: string;
   showButton?: boolean;
+  isAnyProductSoldOut: boolean;
 }
 
 export default function OrderSummaryComponent({
@@ -15,6 +17,7 @@ export default function OrderSummaryComponent({
   subtotal,
   shipping,
   tax,
+  isAnyProductSoldOut,
   showButton = true,
 }: Props) {
   const router = useRouter();
@@ -64,7 +67,15 @@ export default function OrderSummaryComponent({
         {showButton && (
           <ButtonComponent
             buttonOnclickHandler={() => {
-              router.push('/checkout');
+              if (!isAnyProductSoldOut) {
+                router.push('/checkout');
+              } else {
+                notify(
+                  'info',
+                  'please delete all sold out products from your cart',
+                  'inform-about-sold-out-product'
+                );
+              }
             }}
             buttonName="Check out"
             animate={true}
