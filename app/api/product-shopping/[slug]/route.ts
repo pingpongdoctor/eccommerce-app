@@ -75,18 +75,6 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
     const isProductSoldOut = product.instock === 0;
 
     if (isProductSoldOut) {
-      //if product is sold out and product is now in cart, clear it from the cart
-      if (userProductDocument) {
-        await prisma.usersProducts.delete({
-          where: {
-            userId_productId: {
-              userId: userData.id,
-              productId: product.id,
-            },
-          },
-        });
-      }
-
       return NextResponse.json(
         { message: 'product is sold out' },
         { status: 200 }
