@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     !body?.category ||
     !body?.hasOwnProperty('featured') ||
     !body?._type ||
-    !body?.instock
+    !body?.hasOwnProperty('instock')
   ) {
     return NextResponse.json(
       { message: 'Missed required data' },
