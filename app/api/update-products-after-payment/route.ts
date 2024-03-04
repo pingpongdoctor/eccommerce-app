@@ -2,6 +2,10 @@ import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
+import { Redis } from '@upstash/redis';
+import { v4 as uuidv4 } from 'uuid';
+
+const redis = Redis.fromEnv();
 
 //function to get product
 const getProduct = async function (
@@ -27,7 +31,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
   if (!session) {
     return NextResponse.json(
       { message: 'User not found in auth0 database' },
-      { status: 400 }
+      { status: 500 }
     );
   }
 
@@ -60,7 +64,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
     if (!user) {
       return NextResponse.json(
         { message: 'user not found in database' },
-        { status: 400 }
+        { status: 500 }
       );
     }
 
@@ -79,17 +83,17 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
           if (!product) {
             return NextResponse.json(
               { message: 'product not available' },
-              { status: 400 }
+              { status: 500 }
             );
           }
 
           if (productInShoppingCart.productQuantity > product.instock) {
             return NextResponse.json(
               {
-                message: `insufficient stock`,
+                message: `insufficient product`,
                 productSlug: productInShoppingCart.productSlug,
               },
-              { status: 400 }
+              { status: 500 }
             );
           }
         }
@@ -126,17 +130,9 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
           if (!product) {
             return NextResponse.json(
               { message: 'product not available' },
-              { status: 400 }
+              { status: 500 }
             );
           }
-
-          await prisma.product.update({
-            where: { id: productInShoppingCart.productId },
-            data: {
-              instock: product.instock - productInShoppingCart.productQuantity,
-              updatedAt: new Date(),
-            },
-          });
 
           //   await client
           //     .patch(productInShoppingCart.sanityProductId)
@@ -161,6 +157,7 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             },
           ];
 
+          //when the product quantity is updated on Sanity database, it will trigger Sanity webhook to make an API call to update product document on app database
           const res = await fetch(
             `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v${process.env.NEXT_PUBLIC_SANITY_API_VERSION}/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
             {
@@ -181,16 +178,24 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
                 message:
                   'error updating sanity documents' + data.error.description,
               },
-              { status: 400 }
+              { status: 500 }
             );
           }
         }
       )
     );
 
+    //set data in redis database
+    const rollbackDataKey = uuidv4();
+
+    await redis.hset(`${rollbackDataKey}-rollback-data`, {
+      data: productsInShoppingCart,
+    });
+
     return NextResponse.json(
       {
         message: 'products are updated after successful payment',
+        rollbackDataKey,
       },
       { status: 200 }
     );

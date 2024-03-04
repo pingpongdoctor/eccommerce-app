@@ -17,24 +17,21 @@ export const POST = withApiAuthRequired(async (req: Request) => {
 
   const {
     fullname,
-    phonenumber,
     address,
     status,
   }: {
     fullname: string;
-    phonenumber: string;
     status: OrderStatus;
     address: Address;
   } = await req.json();
 
   if (
     !fullname ||
-    !phonenumber ||
     !address?.city ||
-    !address.country ||
+    !address?.country ||
     !address?.line1 ||
-    !address?.line2 ||
     !address?.postal_code ||
+    !address?.state ||
     !status
   ) {
     return NextResponse.json(
@@ -55,13 +52,14 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     }
 
     //add order for the current user
-    const { city, country, line1, line2, postal_code } = address;
+    const { city, country, line1, line2, postal_code, state } = address;
     await prisma.order.create({
       data: {
         fullname,
-        phonenumber,
+        email: userData.email,
         city,
         country,
+        state,
         line1,
         line2,
         postal_code,

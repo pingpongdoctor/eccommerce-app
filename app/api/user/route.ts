@@ -18,19 +18,17 @@ export const GET = withApiAuthRequired(async () => {
   try {
     const auth0Id: string = session.user.sub;
 
-    const userData: Omit<User, 'auth0Id'> | null = await prisma.user.findUnique(
-      {
+    const userData: Omit<User, 'auth0Id' | 'id'> | null =
+      await prisma.user.findUnique({
         where: { auth0Id },
         select: {
-          id: true,
           email: true,
           name: true,
           imgUrl: true,
           createdAt: true,
           updatedAt: true,
         },
-      }
-    );
+      });
 
     if (!userData) {
       return NextResponse.json(

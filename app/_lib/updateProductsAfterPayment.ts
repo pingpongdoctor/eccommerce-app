@@ -5,7 +5,7 @@ export async function updateProductsAfterPayment(
   products: (ProductInShoppingCart & {
     sanityProductId: string;
   })[]
-): Promise<boolean> {
+): Promise<{ result: boolean; rollbackDataKey?: string }> {
   try {
     const res = await fetch(`${baseUrl}/api/update-products-after-payment`, {
       headers: {
@@ -22,12 +22,12 @@ export async function updateProductsAfterPayment(
         'Error when updating products after payment' + ' ' + data.message
       );
 
-      return false;
+      return { result: false };
     }
 
-    return true;
+    return { result: true, rollbackDataKey: data.rollbackDataKey };
   } catch (e: any) {
     console.log('Error in updateProductsAfterPayment function' + e.message);
-    return false;
+    return { result: false };
   }
 }

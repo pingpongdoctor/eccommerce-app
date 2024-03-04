@@ -12,9 +12,17 @@ import CheckoutList from './CheckoutList';
 import { updateProductsAfterPayment } from '../_lib/updateProductsAfterPayment';
 import { globalStatesContext } from './GlobalStatesContext';
 import { baseUrl } from '../utils/baseUrl';
-import { PaymentIntent, StripeError } from '@stripe/stripe-js';
+import {
+  PaymentIntent,
+  StripeAddressElementChangeEvent,
+  StripeError,
+} from '@stripe/stripe-js';
 import { notify } from './ReactToastifyProvider';
 import { useRouter } from 'next/navigation';
+import { rollbackData } from '../_lib/rollbackData';
+import { createOrder } from '../_lib/createOrder';
+import { clearRollbackData } from '../_lib/clearRollbackData';
+import { revalidateWithTag } from '../_lib/revalidateWithTag';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -35,37 +43,54 @@ export default function PaymentForm({
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [fullname, setFullname] = useState<string>('');
-  const [phonenumber, setPhonenumber] = useState<string>('');
   const [address, setAddress] = useState<Address>({
     city: '',
     country: '',
+    state: '',
     line1: '',
-    line2: '',
+    line2: null,
     postal_code: '',
   });
+  const [rollbackDataKey, setRollbackDataKey] = useState<string>('');
+
+  const handleUpdateFullname = function (e: StripeAddressElementChangeEvent) {
+    setFullname(e.value.name);
+  };
+
+  const handleUpdateAddress = function (e: StripeAddressElementChangeEvent) {
+    setAddress(e.value.address);
+  };
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
 
     try {
       setIsLoading(true);
-      const isSuccess = await updateProductsAfterPayment(
+      //update product data first before executing payment
+      const returnedData = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
 
-      if (!isSuccess) {
+      //revalidate data for SSG pages after updating database
+      await revalidateWithTag('post');
+
+      //check if product data update process is failed or succeeded
+      if (!returnedData.result) {
         console.log('Error when updating products during payment execution');
         return;
       }
 
+      //if not failed, set rollbackDataKey state
+      setRollbackDataKey(returnedData.rollbackDataKey as string);
+
+      //roll back product data if stripe or elements instances are not available
       if (!stripe || !elements) {
-        // Stripe.js hasn't yet loaded.
-        // Make sure to disable form submission until Stripe.js has loaded.
+        await rollbackData(rollbackDataKey);
         return;
       }
 
+      //execute payment
       const {
         error,
         paymentIntent,
@@ -77,31 +102,44 @@ export default function PaymentForm({
         confirmParams: {
           // Make sure to change this to your payment completion page
           return_url: `${baseUrl}`,
-          receipt_email: 'thanhnhantran1501@gmail.com',
         },
+        //this ensures that redirection is implemented on demand
         redirect: 'if_required',
       });
 
+      //check payment error
       if (error) {
         if (error.type === 'card_error' || error.type === 'validation_error') {
-          notify('error', error.message || '', 'card-validation-errors');
+          notify(
+            'error',
+            error.message || 'Something went wrong.',
+            'card-validation-errors'
+          );
         } else {
           notify('error', 'Something went wrong.', 'error');
         }
+        await rollbackData(rollbackDataKey);
         return;
       }
 
       if (!paymentIntent) {
         console.error('payment intent not available');
+        notify('error', 'Something went wrong.', 'payment-intent-error');
+        await rollbackData(rollbackDataKey);
         return;
       }
 
+      //check payment status after payment execution
       switch (paymentIntent.status) {
         case 'succeeded':
-          await updateProductsAfterPayment(productsInCartWithSanityProductId);
           setChangeProductsInCart(true);
           notify('success', 'Payment succeeded!', 'success-payment');
-          router.push('/');
+          //create new order document, clear rollback data in Redis database and revalidate data for SSG pages after after successful payment
+          await createOrder(fullname, 'prepare', address);
+          await clearRollbackData(rollbackDataKey);
+
+          //navigate user to order summary page
+          // router.push('/');
           break;
         case 'processing':
           notify('info', 'Your payment is processing.', 'payment-in-process');
@@ -112,15 +150,23 @@ export default function PaymentForm({
             'Your payment was not successful, please try again.',
             'payment-error'
           );
+          await rollbackData(rollbackDataKey);
           break;
         default:
           notify('error', 'Something went wrong.', 'error');
+          await rollbackData(rollbackDataKey);
           break;
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log(
+        'Error in submitHandler function in PaymentForm component' +
+          error.message
+      );
+      await rollbackData(rollbackDataKey);
     } finally {
       setIsLoading(false);
+      await revalidateWithTag('post');
+      setRollbackDataKey('');
     }
   };
 
@@ -130,8 +176,9 @@ export default function PaymentForm({
 
       <AddressElement
         options={{ mode: 'shipping' }}
-        onChange={(e) => {
-          console.log(e.value.address);
+        onChange={(e: StripeAddressElementChangeEvent) => {
+          handleUpdateAddress(e);
+          handleUpdateFullname(e);
         }}
       />
 

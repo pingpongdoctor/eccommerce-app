@@ -2,7 +2,6 @@ import { baseUrl } from '../utils/baseUrl';
 
 export async function createOrder(
   fullname: string,
-  phonenumber: string,
   status: OrderStatus,
   address: Address
 ): Promise<boolean> {
@@ -12,7 +11,7 @@ export async function createOrder(
         'Content-Type': 'application/json',
       },
       method: 'POST',
-      body: JSON.stringify({ fullname, phonenumber, status, address }),
+      body: JSON.stringify({ fullname, status, address }),
     });
 
     const data = await res.json();

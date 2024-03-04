@@ -7,7 +7,8 @@ import { addProductToCart } from '../_lib/addProductToCart';
 import { notify } from './ReactToastifyProvider';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   productSlug: string;
@@ -18,6 +19,7 @@ export default function AddToBagComponent({
   productSlug,
   productInstock,
 }: Props) {
+  const router = useRouter();
   const { userProfile } = useContext(globalStatesContext);
   const [quantity, setQuantity] = useState<number>(1);
   const [isDisable, setIsDisable] = useState<boolean>(false);
@@ -47,18 +49,24 @@ export default function AddToBagComponent({
       const res = await addProductToCart(productSlug, quantity);
 
       if (res.isSuccess) {
-        if (res.notEnoughAvailableProduct as boolean) {
+        if (res.isProductSoldOut) {
+          notify('info', 'product is sold out', 'product-sold-out');
+          await revalidatePath('post');
+          router.refresh();
+        }
+
+        if (res.notEnoughAvailableProduct) {
           if (res.canNotAddMore) {
             notify(
               'info',
               'products in cart reach the maximum quantity',
-              'add-product-to-cart-reach-maximum-quantity'
+              'product-reach-maximum-quantity'
             );
           } else {
             notify(
               'info',
               `Seller only has ${productInstock} products in stock`,
-              'add-product-to-cart-info'
+              'insufficient-product'
             );
           }
         } else {
@@ -80,18 +88,26 @@ export default function AddToBagComponent({
     }
   };
 
-  return (
-    <form
-      onSubmit={handleSubmitProductForUser}
-      className="flex flex-col gap-52"
-    >
-      <ListComponent
-        selectedValue={quantity}
-        listComponentChangeEventHandler={handleUpdateQuantity}
-        listData={generateProductInstockList(productInstock)}
-        listClassname="max-h-[180px]"
-      />
-      <ButtonComponent isDisabled={isDisable} buttonName="Add to bag" animate />
-    </form>
-  );
+  if (productInstock === 0) {
+    return <p className="text-red-500">Product is sold out</p>;
+  } else {
+    return (
+      <form
+        onSubmit={handleSubmitProductForUser}
+        className="flex flex-col gap-52"
+      >
+        <ListComponent
+          selectedValue={quantity}
+          listComponentChangeEventHandler={handleUpdateQuantity}
+          listData={generateProductInstockList(productInstock)}
+          listClassname="max-h-[180px]"
+        />
+        <ButtonComponent
+          isDisabled={isDisable}
+          buttonName="Add to bag"
+          animate
+        />
+      </form>
+    );
+  }
 }

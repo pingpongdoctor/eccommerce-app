@@ -74,11 +74,11 @@ interface DropdownItemInfor {
 }
 
 interface Address {
-  city: string;
-  country: string;
   line1: string;
-  line2: string;
+  line2: string | null;
+  city: string;
+  state: string;
   postal_code: string;
+  country: string;
 }
-
 type OrderStatus = 'prepare' | 'onTheWay' | 'done';
