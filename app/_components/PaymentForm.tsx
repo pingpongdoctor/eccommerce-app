@@ -38,7 +38,6 @@ export default function PaymentForm({
   subtotal,
   productsInCartWithSanityProductId,
 }: Props) {
-  const router = useRouter();
   const { setChangeProductsInCart } = useContext(globalStatesContext);
   const stripe = useStripe();
   const elements = useElements();
