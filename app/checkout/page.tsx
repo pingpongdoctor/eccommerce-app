@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { createStripePaymentIntent } from '../_lib/createStripePaymentIntent';
 import { addSanityProductId } from '../_lib/addSanityProductId';
 import ButtonSkeleton from '../_components/ButtonSkeleton';
+import { notify } from '../_components/ReactToastifyProvider';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -118,6 +119,22 @@ export default function CheckoutPage() {
       );
     }
   }, [user, subtotal]);
+
+  //check if any product in cart is sold out
+  useEffect(() => {
+    if (sanityProductsInCart.length > 0) {
+      sanityProductsInCart.map((product: SanityProduct & SanityDocument) => {
+        if (product.instock === 0) {
+          notify(
+            'info',
+            'your cart includes sold out products',
+            'cart-include-sold-out-products'
+          );
+          router.back();
+        }
+      });
+    }
+  }, [sanityProductsInCart]);
 
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">

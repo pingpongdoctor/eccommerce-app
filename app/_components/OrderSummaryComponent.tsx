@@ -40,6 +40,18 @@ export default function OrderSummaryComponent({
       ammount: subtotal + shipping + tax,
     },
   ];
+
+  const handleCheckout = function () {
+    if (!isAnyProductSoldOut) {
+      router.push('/checkout');
+    } else {
+      notify(
+        'info',
+        'please delete all sold out products from your cart',
+        'inform-about-sold-out-product'
+      );
+    }
+  };
   return (
     <div className={`${orderSummaryComponentClassname}`}>
       <div className="rounded-md bg-gray-100/85 p-4">
@@ -67,15 +79,7 @@ export default function OrderSummaryComponent({
         {showButton && (
           <ButtonComponent
             buttonOnclickHandler={() => {
-              if (!isAnyProductSoldOut) {
-                router.push('/checkout');
-              } else {
-                notify(
-                  'info',
-                  'please delete all sold out products from your cart',
-                  'inform-about-sold-out-product'
-                );
-              }
+              handleCheckout();
             }}
             buttonName="Check out"
             animate={true}
