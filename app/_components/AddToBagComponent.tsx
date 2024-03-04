@@ -9,6 +9,7 @@ import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
 import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
+import { revalidateWithTag } from '../_lib/revalidateWithTag';
 
 interface Props {
   productSlug: string;
@@ -51,11 +52,9 @@ export default function AddToBagComponent({
       if (res.isSuccess) {
         if (res.isProductSoldOut) {
           notify('info', 'product is sold out', 'product-sold-out');
-          await revalidatePath('post');
+          await revalidateWithTag('post');
           router.refresh();
-        }
-
-        if (res.notEnoughAvailableProduct) {
+        } else if (res.notEnoughAvailableProduct) {
           if (res.canNotAddMore) {
             notify(
               'info',

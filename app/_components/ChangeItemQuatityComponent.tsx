@@ -58,14 +58,18 @@ export default function ChangeItemQuatityComponent({
 
   return (
     <>
-      <ListComponent
-        selectedValue={currentQuantity}
-        listData={generateProductInstockList(product.instock)}
-        listComponentChangeEventHandler={handleUpdateQuantityState}
-        listComponentClickEventHandler={handleSubmitNewProductQuantity}
-        listClassname="max-h-[200px]"
-        listButtonClassname="w-[100px]"
-      />
+      {product.instock === 0 ? (
+        <p className="text-red-500">Product is sold out</p>
+      ) : (
+        <ListComponent
+          selectedValue={currentQuantity}
+          listData={generateProductInstockList(product.instock)}
+          listComponentChangeEventHandler={handleUpdateQuantityState}
+          listComponentClickEventHandler={handleSubmitNewProductQuantity}
+          listClassname="max-h-[200px]"
+          listButtonClassname="w-[100px]"
+        />
+      )}
       {showIcon && (
         <XMarkIcon
           className="hidden h-6 text-gray-400 sm:block"

@@ -30,6 +30,7 @@ export default function ShoppingCartItem({ product }: Props) {
             <XMarkIcon className="block h-6 text-gray-400 sm:hidden" />
           </div>
           <p className="block sm:hidden">${product.price}</p>
+
           <ChangeItemQuatityComponent product={product} />
         </div>
         <p className="hidden text-gray-900 sm:block">${product.price}</p>

@@ -86,15 +86,13 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
       // set the state of products with image url and quantity
-      addProductImgUrls(sanityProductsInCart).then(
-        (productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[]) => {
-          const productsWithImgAndQuantity = addProductQuantity(
-            productsWithImgUrl,
-            productsInCart
-          );
-          setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
-        }
+      const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
+        addProductImgUrls(sanityProductsInCart);
+      const productsWithImgAndQuantity = addProductQuantity(
+        productsWithImgUrl,
+        productsInCart
       );
+      setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
 
       //set subtotal state
       setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
