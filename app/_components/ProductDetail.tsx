@@ -15,7 +15,6 @@ interface Props {
 
 export default function ProductDetail({ product, productReviews }: Props) {
   const { title, detail, price, images } = product;
-  console.log(product);
 
   return (
     <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">

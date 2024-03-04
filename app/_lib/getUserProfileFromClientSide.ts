@@ -2,7 +2,7 @@ import { User } from '@prisma/client';
 import { baseUrl } from '../utils/baseUrl';
 
 export async function getUserProfileFromClientSide(): Promise<
-  Omit<User, 'auth0Id'> | undefined
+  Omit<User, 'auth0Id' | 'id'> | undefined
 > {
   try {
     const res = await fetch(`${baseUrl}/api/user`, {
