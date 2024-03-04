@@ -73,7 +73,6 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
 
     //check if product is sold out
     const isProductSoldOut = product.instock === 0;
-    console.log(product.instock);
 
     if (isProductSoldOut) {
       //if product is sold out and product is now in cart, clear it from the cart
@@ -90,7 +89,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
 
       return NextResponse.json(
         { message: 'product is sold out' },
-        { status: 204 }
+        { status: 200 }
       );
     }
 
