@@ -23,6 +23,7 @@ import { rollbackData } from '../_lib/rollbackData';
 import { createOrder } from '../_lib/createOrder';
 import { clearRollbackData } from '../_lib/clearRollbackData';
 import { revalidateWithTag } from '../_lib/revalidateWithTag';
+import { checkProductQuantity } from '../_lib/checkProductQuantity';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -38,6 +39,7 @@ export default function PaymentForm({
   subtotal,
   productsInCartWithSanityProductId,
 }: Props) {
+  const router = useRouter();
   const { setChangeProductsInCart } = useContext(globalStatesContext);
   const stripe = useStripe();
   const elements = useElements();
@@ -66,6 +68,34 @@ export default function PaymentForm({
 
     try {
       setIsLoading(true);
+
+      //check if there is any sold out product
+      const productData: {
+        productSlug: string;
+        productQuantity: number;
+      }[] = productsWithImgUrlAndQuantity.map(
+        (
+          product: ProductWithImgUrl &
+            SanityDocument & { productQuantity: number }
+        ) => {
+          return {
+            productSlug: product.slug.current,
+            productQuantity: product.productQuantity,
+          };
+        }
+      );
+      const noProductSoldOut = await checkProductQuantity(productData);
+
+      //if there are sold out products, navigat users back to shopping cart page
+      if (!noProductSoldOut) {
+        notify(
+          'info',
+          'some products in your cart are sold out',
+          'product-sold-out'
+        );
+        router.push('/shopping-cart');
+      }
+
       //update product data first before executing payment
       const returnedData = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
