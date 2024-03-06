@@ -1,6 +1,5 @@
 import { notify } from '../_components/ReactToastifyProvider';
 import { baseUrl } from '../utils/baseUrl';
-import { revalidateWithTag } from './revalidateWithTag';
 
 export async function checkProductQuantity(
   products: {
