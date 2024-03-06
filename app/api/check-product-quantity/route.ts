@@ -69,6 +69,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       );
     }
 
+    //check product quantity
     const results: {
       haveProductSoldOut: boolean;
       notSufficientProduct: boolean;
@@ -112,6 +113,8 @@ export const POST = withApiAuthRequired(async (req: Request) => {
         }
       )
     );
+
+    console.log('results', results);
 
     //check results
     const noProductsSoldOut = results.every(
