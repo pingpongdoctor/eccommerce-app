@@ -84,16 +84,22 @@ export default function PaymentForm({
           };
         }
       );
-      const noProductSoldOut = await checkProductQuantity(productData);
+      const result: {
+        isSuccess: boolean;
+        noProductsSoldOut?: boolean;
+        sufficientProduct?: boolean;
+      } = await checkProductQuantity(productData);
 
-      //if there are sold out products, navigat users back to shopping cart page
-      if (!noProductSoldOut) {
-        notify(
-          'info',
-          'some products in your cart are sold out',
-          'product-sold-out'
-        );
-        router.push('/shopping-cart');
+      if (!result.isSuccess) {
+        console.log('Error when checking product quantity');
+        return;
+      }
+
+      //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
+      if (!result.noProductsSoldOut || !result.sufficientProduct) {
+        await revalidateWithTag('post');
+        setChangeProductsInCart(true);
+        return;
       }
 
       //update product data first before executing payment
@@ -115,6 +121,7 @@ export default function PaymentForm({
 
       //roll back product data if stripe or elements instances are not available
       if (!stripe || !elements) {
+        console.log('stripe or elements instances not available');
         await rollbackData(rollbackDataKey);
         return;
       }
