@@ -2,22 +2,29 @@ import { notify } from '../_components/ReactToastifyProvider';
 import { baseUrl } from '../utils/baseUrl';
 
 export async function checkProductQuantity(
-  products: {
-    productSlug: string;
-    productQuantity: number;
-  }[]
+  productsInCart: ProductInShoppingCart[]
 ): Promise<{
   isSuccess: boolean;
   noProductsSoldOut?: boolean;
   sufficientProduct?: boolean;
 }> {
+  const productData: {
+    productSlug: string;
+    productQuantity: number;
+  }[] = productsInCart.map((product: ProductInShoppingCart) => {
+    return {
+      productSlug: product.productSlug,
+      productQuantity: product.productQuantity,
+    };
+  });
+
   try {
     const res = await fetch(`${baseUrl}/api/check-product-quantity`, {
       headers: {
         'Content-Type': 'application/json',
       },
       method: 'PUT',
-      body: JSON.stringify({ products }),
+      body: JSON.stringify({ products: productData }),
     });
 
     const data = await res.json();
