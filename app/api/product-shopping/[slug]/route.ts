@@ -80,7 +80,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
 
       return NextResponse.json(
         { message: 'product is sold out' },
-        { status: 200 }
+        { status: 500 }
       );
     }
 
@@ -136,7 +136,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
           notEnoughAvailableProduct,
         },
         {
-          status: 201,
+          status: 200,
         }
       );
     }

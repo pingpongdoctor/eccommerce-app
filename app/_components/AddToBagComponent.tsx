@@ -47,7 +47,15 @@ export default function AddToBagComponent({
 
       const result = await addProductToCart(productSlug, quantity);
 
-      if (result.isSuccess && result.isProductSoldOut) {
+      //set this state to true to update data in the nav bar
+      if (result.isSuccess) {
+        setChangeProductsInCart(true);
+        return;
+      }
+
+      //if adding product to cart action fails since product is sold out, this SSG page will be revalidated with new data
+      //refresh the page to update the UI
+      if (result.isProductSoldOut) {
         setChangeProductsInCart(true);
         router.refresh();
       }
