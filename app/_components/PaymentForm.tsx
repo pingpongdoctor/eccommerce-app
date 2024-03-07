@@ -39,8 +39,8 @@ export default function PaymentForm({
   subtotal,
   productsInCartWithSanityProductId,
 }: Props) {
-  const router = useRouter();
-  const { setChangeProductsInCart } = useContext(globalStatesContext);
+  const { setChangeProductsInCart, productsInCart } =
+    useContext(globalStatesContext);
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -70,25 +70,11 @@ export default function PaymentForm({
       setIsLoading(true);
 
       //check if there is any sold out product
-      const productData: {
-        productSlug: string;
-        productQuantity: number;
-      }[] = productsWithImgUrlAndQuantity.map(
-        (
-          product: ProductWithImgUrl &
-            SanityDocument & { productQuantity: number }
-        ) => {
-          return {
-            productSlug: product.slug.current,
-            productQuantity: product.productQuantity,
-          };
-        }
-      );
       const result: {
         isSuccess: boolean;
         noProductsSoldOut?: boolean;
         sufficientProduct?: boolean;
-      } = await checkProductQuantity(productData);
+      } = await checkProductQuantity(productsInCart);
 
       if (!result.isSuccess) {
         console.log('Error when checking product quantity');
