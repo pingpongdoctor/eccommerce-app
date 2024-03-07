@@ -35,8 +35,6 @@ export default function ShoppingCart() {
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
     useState<boolean>(false);
-  const [isAnyProductSoldOut, setIsAnyProductSoldOut] =
-    useState<boolean>(false);
 
   //protect this page from unauthenticated users
   useEffect(() => {
@@ -112,19 +110,6 @@ export default function ShoppingCart() {
     }
   }, [productsInCart, sanityProductsInCart]);
 
-  //check if any product in cart is sold out
-  useEffect(() => {
-    //set the state back to false before checking it
-    setIsAnyProductSoldOut(false);
-
-    if (productsWithImgUrlAndQuantity.length > 0) {
-      const noSoldOutProduct = productsWithImgUrlAndQuantity.every(
-        (product: SanityProduct & SanityDocument) => product.instock > 0
-      );
-      setIsAnyProductSoldOut(!noSoldOutProduct);
-    }
-  }, [productsWithImgUrlAndQuantity]);
-
   return (
     <main className="min-h-[600px]">
       <h2 className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">Shopping Cart</h2>
@@ -154,7 +139,6 @@ export default function ShoppingCart() {
                 tax={Math.round((subtotal * 12) / 100)}
                 shipping={Math.round((subtotal * 2) / 100)}
                 orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
-                isAnyProductSoldOut={isAnyProductSoldOut}
               />
             </>
           )}
