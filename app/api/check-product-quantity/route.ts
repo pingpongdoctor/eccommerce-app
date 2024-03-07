@@ -114,8 +114,6 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       )
     );
 
-    console.log('results', results);
-
     //check results
     const noProductsSoldOut = results.every(
       (result) => result.haveProductSoldOut === false

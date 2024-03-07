@@ -11,10 +11,31 @@ import { ThreeDots } from 'react-loader-spinner';
 import { globalStatesContext } from './GlobalStatesContext';
 import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
 import { useContext } from 'react';
+import { client } from '@/sanity/lib/client';
+import { PRODUCT_QUERY } from '@/sanity/lib/queries';
+import { SanityDocument } from 'next-sanity';
 
 export default function Navbar() {
   const { userProfile, isLoading, productsInCart } =
     useContext(globalStatesContext);
+
+  const filterOutSoldOutProducts = function (
+    products: ProductInShoppingCart[]
+  ) {
+    const notSoldOutProducts = Promise.all(
+      products.map(async (product: ProductInShoppingCart) => {
+        const sanityProductDocument = await client.fetch<
+          SanityProduct & SanityDocument
+        >(
+          PRODUCT_QUERY,
+          { slug: product.productSlug },
+          {
+            next: { tags: ['post'], revalidate: 3600 },
+          }
+        );
+      })
+    );
+  };
 
   return (
     <div className="mb-8 flex flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12 xl:mx-auto xl:max-w-7xl">

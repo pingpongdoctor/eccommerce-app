@@ -19,12 +19,14 @@ export async function addProductToCart(
 
     if (!res.ok) {
       console.log('Error adding product to cart' + ' ' + data.message);
+      if (data.message === 'product is sold out') {
+        notify('info', 'product is sold out', 'product-sold-out');
+        return { isSuccess: false, isProductSoldOut: true };
+      }
       return { isSuccess: false, isProductSoldOut: false };
     }
 
-    if (data.message === 'product is sold out') {
-      notify('info', 'product is sold out', 'product-sold-out');
-    } else if (data.notEnoughAvailableProduct) {
+    if (data.notEnoughAvailableProduct) {
       notify(
         'info',
         `Not sufficient products to add to cart`,
