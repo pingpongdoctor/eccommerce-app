@@ -1,7 +1,7 @@
 'use client';
 import ButtonComponent from './ButtonComponent';
 import { useRouter } from 'next/navigation';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { globalStatesContext } from './GlobalStatesContext';
 import { checkProductQuantity } from '../_lib/checkProductQuantity';
 import { revalidateWithTag } from '../_lib/revalidateWithTag';
@@ -24,6 +24,7 @@ export default function OrderSummaryComponent({
   const router = useRouter();
   const { productsInCart, setChangeProductsInCart } =
     useContext(globalStatesContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const summaryData = [
     {
       text: 'Subtotal',
@@ -44,21 +45,30 @@ export default function OrderSummaryComponent({
   ];
 
   const handleCheckout = async function () {
-    const result = await checkProductQuantity(productsInCart);
-    if (!result.isSuccess) {
-      console.log('Error when checking product quantity');
-      return;
-    }
+    try {
+      setIsLoading(true);
+      const result = await checkProductQuantity(productsInCart);
+      if (!result.isSuccess) {
+        console.log('Error when checking product quantity');
+        return;
+      }
 
-    //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
-    if (!result.noProductsSoldOut || !result.sufficientProduct) {
-      await revalidateWithTag('post');
-      setChangeProductsInCart(true);
-      return;
-    }
+      //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
+      if (!result.noProductsSoldOut || !result.sufficientProduct) {
+        await revalidateWithTag('post');
+        setChangeProductsInCart(true);
+        return;
+      }
 
-    //if checking process succeeds
-    router.push('/checkout');
+      //if checking process succeeds
+      router.push('/checkout');
+    } catch (e: any) {
+      console.log('Error in handleCheckout function' + e.message);
+    } finally {
+      () => {
+        setIsLoading(false);
+      };
+    }
   };
 
   return (
@@ -87,11 +97,12 @@ export default function OrderSummaryComponent({
 
         {showButton && (
           <ButtonComponent
-            buttonOnclickHandler={() => {
-              handleCheckout();
+            buttonOnclickHandler={async () => {
+              await handleCheckout();
             }}
             buttonName="Check out"
             animate={true}
+            isDisabled={isLoading}
           />
         )}
       </div>
