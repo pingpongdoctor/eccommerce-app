@@ -1,7 +1,10 @@
 'use client';
 import ButtonComponent from './ButtonComponent';
 import { useRouter } from 'next/navigation';
-import { notify } from './ReactToastifyProvider';
+import { useContext } from 'react';
+import { globalStatesContext } from './GlobalStatesContext';
+import { checkProductQuantity } from '../_lib/checkProductQuantity';
+import { revalidateWithTag } from '../_lib/revalidateWithTag';
 
 interface Props {
   subtotal: number;
@@ -9,7 +12,6 @@ interface Props {
   tax: number;
   orderSummaryComponentClassname?: string;
   showButton?: boolean;
-  isAnyProductSoldOut: boolean;
 }
 
 export default function OrderSummaryComponent({
@@ -17,11 +19,11 @@ export default function OrderSummaryComponent({
   subtotal,
   shipping,
   tax,
-  isAnyProductSoldOut,
   showButton = true,
 }: Props) {
   const router = useRouter();
-
+  const { productsInCart, setChangeProductsInCart } =
+    useContext(globalStatesContext);
   const summaryData = [
     {
       text: 'Subtotal',
@@ -41,17 +43,24 @@ export default function OrderSummaryComponent({
     },
   ];
 
-  const handleCheckout = function () {
-    if (!isAnyProductSoldOut) {
-      router.push('/checkout');
-    } else {
-      notify(
-        'info',
-        'please delete all sold out products from your cart',
-        'inform-about-sold-out-product'
-      );
+  const handleCheckout = async function () {
+    const result = await checkProductQuantity(productsInCart);
+    if (!result.isSuccess) {
+      console.log('Error when checking product quantity');
+      return;
     }
+
+    //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
+    if (!result.noProductsSoldOut || !result.sufficientProduct) {
+      await revalidateWithTag('post');
+      setChangeProductsInCart(true);
+      return;
+    }
+
+    //if checking process succeeds
+    router.push('/checkout');
   };
+
   return (
     <div className={`${orderSummaryComponentClassname}`}>
       <div className="rounded-md bg-gray-100/85 p-4">
