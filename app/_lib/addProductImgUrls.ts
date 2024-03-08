@@ -1,9 +1,9 @@
 import { builder } from '../utils/imageBuilder';
 import { SanityDocument } from 'next-sanity';
 
-export async function addProductImgUrls(
+export function addProductImgUrls(
   products: (SanityProduct & SanityDocument)[]
-): Promise<(ProductWithImgUrl & SanityDocument)[]> {
+): (ProductWithImgUrl & SanityDocument)[] {
   try {
     const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] = [
       ...products,

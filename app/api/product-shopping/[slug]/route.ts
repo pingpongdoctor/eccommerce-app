@@ -2,6 +2,7 @@ import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
+import { revalidateTag } from 'next/cache';
 
 //create or update an userproduct record (if update, we add more product quantity to the current quantity)
 export const POST = withApiAuthRequired(async (req: Request, context) => {
@@ -51,7 +52,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       return NextResponse.json(
         { message: 'product not found' },
         {
-          status: 201,
+          status: 500,
         }
       );
     }
@@ -73,24 +74,13 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
 
     //check if product is sold out
     const isProductSoldOut = product.instock === 0;
-    console.log(product.instock);
 
     if (isProductSoldOut) {
-      //if product is sold out and product is now in cart, clear it from the cart
-      if (userProductDocument) {
-        await prisma.usersProducts.delete({
-          where: {
-            userId_productId: {
-              userId: userData.id,
-              productId: product.id,
-            },
-          },
-        });
-      }
+      revalidateTag('post');
 
       return NextResponse.json(
         { message: 'product is sold out' },
-        { status: 204 }
+        { status: 500 }
       );
     }
 
@@ -124,30 +114,26 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       const currentProductQuantity = userProductDocument.productQuantity;
       const notEnoughAvailableProduct =
         currentProductQuantity + productQuantity > product.instock;
-      const canNotAddMore = currentProductQuantity === product.instock;
 
-      if (!canNotAddMore) {
-        await prisma.usersProducts.update({
-          where: {
-            userId_productId: {
-              userId: userData.id,
-              productId: product.id,
-            },
+      await prisma.usersProducts.update({
+        where: {
+          userId_productId: {
+            userId: userData.id,
+            productId: product.id,
           },
-          data: {
-            productQuantity: notEnoughAvailableProduct
-              ? product.instock
-              : { increment: productQuantity },
-            createdAt: new Date(),
-          },
-        });
-      }
+        },
+        data: {
+          productQuantity: notEnoughAvailableProduct
+            ? product.instock
+            : { increment: productQuantity },
+          createdAt: new Date(),
+        },
+      });
 
       return NextResponse.json(
         {
           message: 'successful adding new product to cart',
           notEnoughAvailableProduct,
-          canNotAddMore,
         },
         {
           status: 200,

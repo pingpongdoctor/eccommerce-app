@@ -20,7 +20,7 @@ export const calculateAverageStar = function (
         accumulator + currentValue * (starCounts.indexOf(currentValue) + 1)
     );
 
-    return sum / totalReviews;
+    return Math.round(sum / totalReviews);
   } catch (e: any) {
     console.log('Error calculating average star' + ' ' + e.message);
     return undefined;

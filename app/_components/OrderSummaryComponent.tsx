@@ -1,6 +1,10 @@
 'use client';
 import ButtonComponent from './ButtonComponent';
 import { useRouter } from 'next/navigation';
+import { useContext, useState } from 'react';
+import { globalStatesContext } from './GlobalStatesContext';
+import { checkProductQuantity } from '../_lib/checkProductQuantity';
+import { revalidateWithTag } from '../_lib/revalidateWithTag';
 
 interface Props {
   subtotal: number;
@@ -18,7 +22,9 @@ export default function OrderSummaryComponent({
   showButton = true,
 }: Props) {
   const router = useRouter();
-
+  const { productsInCart, setChangeProductsInCart } =
+    useContext(globalStatesContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const summaryData = [
     {
       text: 'Subtotal',
@@ -37,6 +43,34 @@ export default function OrderSummaryComponent({
       ammount: subtotal + shipping + tax,
     },
   ];
+
+  const handleCheckout = async function () {
+    try {
+      setIsLoading(true);
+      const result = await checkProductQuantity(productsInCart);
+      if (!result.isSuccess) {
+        console.log('Error when checking product quantity');
+        return;
+      }
+
+      //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
+      if (!result.noProductsSoldOut || !result.sufficientProducts) {
+        await revalidateWithTag('post');
+        setChangeProductsInCart(true);
+        return;
+      }
+
+      //if checking process succeeds
+      router.push('/checkout');
+    } catch (e: any) {
+      console.log('Error in handleCheckout function' + e.message);
+    } finally {
+      () => {
+        setIsLoading(false);
+      };
+    }
+  };
+
   return (
     <div className={`${orderSummaryComponentClassname}`}>
       <div className="rounded-md bg-gray-100/85 p-4">
@@ -63,11 +97,12 @@ export default function OrderSummaryComponent({
 
         {showButton && (
           <ButtonComponent
-            buttonOnclickHandler={() => {
-              router.push('/checkout');
+            buttonOnclickHandler={async (e) => {
+              await handleCheckout();
             }}
             buttonName="Check out"
             animate={true}
+            isDisabled={isLoading}
           />
         )}
       </div>

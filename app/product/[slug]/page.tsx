@@ -86,11 +86,6 @@ export default async function DetailedProduct({
     }
   );
 
-  //get reviews
-  const productReviews:
-    | (Review & { user: { name: string; imgUrl: string } })[]
-    | undefined = await getProductReviews(params.slug);
-
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
       {/* product detail */}
@@ -99,23 +94,12 @@ export default async function DetailedProduct({
       ) : (
         <ProductDetail
           product={initialData.data}
-          productReviews={productReviews || []}
+          // productReviews={productReviews || []}
         />
       )}
 
       {/* customer reviews */}
-      <CustomerReviews
-        productReviews={
-          productReviews?.sort(
-            (
-              a: Review & { user: { name: string; imgUrl: string } },
-              b: Review & { user: { name: string; imgUrl: string } }
-            ) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          ) || []
-        }
-        productSlug={params.slug}
-      />
+      <CustomerReviews productSlug={params.slug} />
 
       {/* product you may like */}
       <div>
