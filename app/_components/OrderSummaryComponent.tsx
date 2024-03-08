@@ -54,7 +54,7 @@ export default function OrderSummaryComponent({
       }
 
       //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
-      if (!result.noProductsSoldOut || !result.sufficientProduct) {
+      if (!result.noProductsSoldOut || !result.sufficientProducts) {
         await revalidateWithTag('post');
         setChangeProductsInCart(true);
         return;
@@ -97,7 +97,7 @@ export default function OrderSummaryComponent({
 
         {showButton && (
           <ButtonComponent
-            buttonOnclickHandler={async () => {
+            buttonOnclickHandler={async (e) => {
               await handleCheckout();
             }}
             buttonName="Check out"

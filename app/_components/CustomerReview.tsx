@@ -1,4 +1,5 @@
-import Avatar from './Avatar';
+'use client';
+import AvatarClientComponent from './AvatarClientComponent';
 import RatingStar from './RatingStar';
 import { Review } from '@prisma/client';
 
@@ -10,7 +11,7 @@ export default function CustomerReview({ productReview }: Props) {
   return (
     <div className="flex flex-col gap-4 px-4 py-8 last:border-none last:pb-0 lg:first:pt-0">
       <div className="flex items-center gap-4">
-        <Avatar
+        <AvatarClientComponent
           avatarClassname="size-11"
           avatarSrc={productReview.user.imgUrl}
         />

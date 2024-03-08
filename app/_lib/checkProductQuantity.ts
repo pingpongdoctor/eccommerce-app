@@ -6,7 +6,7 @@ export async function checkProductQuantity(
 ): Promise<{
   isSuccess: boolean;
   noProductsSoldOut?: boolean;
-  sufficientProduct?: boolean;
+  sufficientProducts?: boolean;
 }> {
   const productData: {
     productSlug: string;
@@ -58,10 +58,12 @@ export async function checkProductQuantity(
       );
     }
 
+    console.log(data.noProductsSoldOut, data.sufficientProducts);
+
     return {
       isSuccess: true,
       noProductsSoldOut: data.noProductsSoldOut,
-      sufficientProduct: data.sufficientProduct,
+      sufficientProducts: data.sufficientProducts,
     };
   } catch (e: any) {
     console.log('Error in checkAnyProductSoldOut function' + e.message);

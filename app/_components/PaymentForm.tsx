@@ -70,11 +70,7 @@ export default function PaymentForm({
       setIsLoading(true);
 
       //check if there is any sold out product
-      const result: {
-        isSuccess: boolean;
-        noProductsSoldOut?: boolean;
-        sufficientProduct?: boolean;
-      } = await checkProductQuantity(productsInCart);
+      const result = await checkProductQuantity(productsInCart);
 
       if (!result.isSuccess) {
         console.log('Error when checking product quantity');
@@ -82,7 +78,7 @@ export default function PaymentForm({
       }
 
       //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
-      if (!result.noProductsSoldOut || !result.sufficientProduct) {
+      if (!result.noProductsSoldOut || !result.sufficientProducts) {
         await revalidateWithTag('post');
         setChangeProductsInCart(true);
         return;
