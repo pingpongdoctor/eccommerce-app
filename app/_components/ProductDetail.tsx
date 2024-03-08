@@ -3,17 +3,13 @@ import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
 import { solidBlureDataUrl } from '../utils/utils';
-import RatingStar from './RatingStar';
-import { Review } from '@prisma/client';
-import { calculateAverageStar } from '../_lib/calculateAverageStar';
 import AddToBagComponent from './AddToBagComponent';
 
 interface Props {
   product: SanityProduct & SanityDocument;
-  productReviews: (Review & { user: { name: string; imgUrl: string } })[];
 }
 
-export default function ProductDetail({ product, productReviews }: Props) {
+export default function ProductDetail({ product }: Props) {
   const { title, detail, price, images } = product;
 
   return (
@@ -71,15 +67,7 @@ export default function ProductDetail({ product, productReviews }: Props) {
         </div>
 
         <div className="mb-8 w-auto lg:w-[350px] lg:pl-12 xl:w-[400px]">
-          <p className="mb-4 text-2xl text-gray-900">${price}</p>
-
-          <div className="mb-8 flex items-center gap-4">
-            <RatingStar starValue={calculateAverageStar(productReviews)} />
-            <p className="pb-1">
-              {productReviews.length}{' '}
-              {productReviews.length < 2 ? 'review' : 'reviews'}
-            </p>
-          </div>
+          <p className="mb-8 text-2xl text-gray-900">Price: ${price}</p>
 
           <AddToBagComponent
             productInstock={product.instock}

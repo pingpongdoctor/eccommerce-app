@@ -8,7 +8,6 @@ import { globalStatesContext } from './GlobalStatesContext';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { deleteProductFromCart } from '../_lib/deleteProductFromCart';
 import { notify } from './ReactToastifyProvider';
-import { useRouter } from 'next/navigation';
 
 interface Props {
   product: ProductWithImgUrl & SanityDocument & { productQuantity: number };
@@ -23,8 +22,6 @@ export default function ChangeItemQuatityComponent({
     product.productQuantity
   );
   const { setChangeProductsInCart } = useContext(globalStatesContext);
-
-  const router = useRouter();
 
   const handleUpdateQuantityState = async function (value: number) {
     if (value !== currentQuantity) {
@@ -46,26 +43,29 @@ export default function ChangeItemQuatityComponent({
     const isSuccess = await deleteProductFromCart(product.slug.current);
 
     if (isSuccess) {
-      setChangeProductsInCart(true);
       notify(
         'success',
         'Product is deleted from your cart',
         'success-delete-product-from-cart'
       );
-      router.refresh();
+      setChangeProductsInCart(true);
     }
   };
 
   return (
     <>
-      <ListComponent
-        selectedValue={currentQuantity}
-        listData={generateProductInstockList(product.instock)}
-        listComponentChangeEventHandler={handleUpdateQuantityState}
-        listComponentClickEventHandler={handleSubmitNewProductQuantity}
-        listClassname="max-h-[200px]"
-        listButtonClassname="w-[100px]"
-      />
+      {product.instock === 0 ? (
+        <p className="text-red-500">Product is sold out</p>
+      ) : (
+        <ListComponent
+          selectedValue={currentQuantity}
+          listData={generateProductInstockList(product.instock)}
+          listComponentChangeEventHandler={handleUpdateQuantityState}
+          listComponentClickEventHandler={handleSubmitNewProductQuantity}
+          listClassname="max-h-[200px]"
+          listButtonClassname="w-[100px]"
+        />
+      )}
       {showIcon && (
         <XMarkIcon
           className="hidden h-6 text-gray-400 sm:block"

@@ -16,11 +16,8 @@ export default function ClientProductCards({
 
   // use promise all to handle all promises at the same time to avoid waterfalls in data fetching
   useEffect(() => {
-    addProductImgUrls(products).then(
-      (data: (ProductWithImgUrl & SanityDocument)[]) => {
-        setProductsWithImgUrl(data);
-      }
-    );
+    const data = addProductImgUrls(products);
+    setProductsWithImgUrl(data);
   }, [products]);
 
   return (

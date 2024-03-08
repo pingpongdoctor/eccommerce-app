@@ -6,6 +6,7 @@ interface Props {
   starValue?: number;
   starReadonly?: boolean;
   starChangeEventHandler?: (value: number) => void;
+  id?: string;
 }
 
 export default function RatingStar({
@@ -13,14 +14,16 @@ export default function RatingStar({
   starValue,
   starReadonly = true,
   starChangeEventHandler,
+  id,
 }: Props) {
   return (
     <div
       className={`[&>div_span_svg]:cursor-default [&>div_span_svg]:text-gray-900 ${ratingClassname}`}
     >
       <Rating
+        id={id}
         readonly={starReadonly}
-        value={Math.round(starValue || 0)}
+        value={starValue}
         placeholder="rating-star"
         onChange={starChangeEventHandler}
       />

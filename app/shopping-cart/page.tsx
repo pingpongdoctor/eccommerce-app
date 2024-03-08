@@ -43,13 +43,12 @@ export default function ShoppingCart() {
     }
   }, [user, isLoading]);
 
-  //get product sanity documents
   useEffect(() => {
     if (productsInCart.length > 0) {
       const productSlugs: string[] = productsInCart
-        ? [...productsInCart].map(
-            (product: ProductInShoppingCart) => product.productSlug
-          )
+        ? [...productsInCart].map((product: ProductInShoppingCart) => {
+            return product.productSlug;
+          })
         : [];
 
       const productCategories: Categories[] = productsInCart
@@ -59,6 +58,8 @@ export default function ShoppingCart() {
         : [];
 
       setIsFetchingSanityProducts(true);
+
+      //fetch product sanity documents
       client
         .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
           slugArr: productSlugs,
@@ -73,6 +74,7 @@ export default function ShoppingCart() {
           setIsFetchingSanityProducts(false);
         });
 
+      //fetch product sanity documents that users might also like
       client
         .fetch<(SanityProduct & SanityDocument)[]>(
           PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
@@ -93,17 +95,15 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
-      console.log(sanityProductsInCart);
       // set the state for product with image url and quantity
-      addProductImgUrls(sanityProductsInCart).then(
-        (productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[]) => {
-          const productsWithImgAndQuantity = addProductQuantity(
-            productsWithImgUrl,
-            productsInCart
-          );
-          setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
-        }
+
+      const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
+        addProductImgUrls(sanityProductsInCart);
+      const productsWithImgAndQuantity = addProductQuantity(
+        productsWithImgUrl,
+        productsInCart
       );
+      setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
 
       //set subtotal state
       setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
@@ -115,7 +115,7 @@ export default function ShoppingCart() {
       <h2 className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">Shopping Cart</h2>
 
       {/* products in cart */}
-      <div className="flex flex-col px-4 md:px-8 lg:flex-row lg:justify-between lg:px-12 xl:mx-auto xl:max-w-7xl">
+      <div className="mb-8 flex flex-col px-4 md:px-8 lg:mb-12 lg:flex-row lg:justify-between lg:px-12 xl:mx-auto xl:max-w-7xl">
         {/* skeleton components */}
         {isFetchingSanityProducts && (
           <>
@@ -151,23 +151,24 @@ export default function ShoppingCart() {
       </div>
 
       {/* product you may like */}
-      {!isFetchingSanityProducts && productsAlsoBuy.length > 0 && (
-        <>
-          <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-            <p className="text-lg font-medium text-gray-900">
-              You may also like
-            </p>
-            <p className="font-medium text-gray-900">
-              See all <span>&rarr;</span>
-            </p>
-          </div>
-          <ClientProductCards products={productsAlsoBuy} />
-        </>
-      )}
+      <div>
+        {isFetchingSanityProducts && <ProductCardsSkeleton />}
 
-      {productsAlsoBuy.length === 0 && isFetchingSanityProducts && (
-        <ProductCardsSkeleton />
-      )}
+        {!isFetchingSanityProducts && productsAlsoBuy.length > 0 && (
+          <>
+            <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+              <p className="text-lg font-medium text-gray-900">
+                You may also like
+              </p>
+              <p className="font-medium text-gray-900">
+                See all <span>&rarr;</span>
+              </p>
+            </div>
+
+            <ClientProductCards products={productsAlsoBuy} />
+          </>
+        )}
+      </div>
     </main>
   );
 }

@@ -53,7 +53,11 @@ export default function CheckoutItem({ product }: Props) {
         </div>
         <div className="flex items-center justify-between">
           <p>${product.price}</p>
-          <ChangeItemQuatityComponent showIcon={false} product={product} />
+          {product.instock === 0 ? (
+            <p className="text-red-500">Product is sold out</p>
+          ) : (
+            <ChangeItemQuatityComponent showIcon={false} product={product} />
+          )}
         </div>
       </div>
     </div>

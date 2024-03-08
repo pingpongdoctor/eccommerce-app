@@ -7,7 +7,6 @@ import { addProductToCart } from '../_lib/addProductToCart';
 import { notify } from './ReactToastifyProvider';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
-import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
 
 interface Props {
@@ -46,38 +45,19 @@ export default function AddToBagComponent({
     try {
       setIsDisable(true);
 
-      const res = await addProductToCart(productSlug, quantity);
+      const result = await addProductToCart(productSlug, quantity);
 
-      if (res.isSuccess) {
-        if (res.isProductSoldOut) {
-          notify('info', 'product is sold out', 'product-sold-out');
-          await revalidatePath('post');
-          router.refresh();
-        }
-
-        if (res.notEnoughAvailableProduct) {
-          if (res.canNotAddMore) {
-            notify(
-              'info',
-              'products in cart reach the maximum quantity',
-              'product-reach-maximum-quantity'
-            );
-          } else {
-            notify(
-              'info',
-              `Seller only has ${productInstock} products in stock`,
-              'insufficient-product'
-            );
-          }
-        } else {
-          notify(
-            'success',
-            'Product has been added to your cart',
-            'add-product-to-cart-success'
-          );
-        }
-
+      //set this state to true to update data in the nav bar
+      if (result.isSuccess) {
         setChangeProductsInCart(true);
+        return;
+      }
+
+      //if adding product to cart action fails since product is sold out, this SSG page will be revalidated with new data
+      //refresh the page to update the UI
+      if (result.isProductSoldOut) {
+        setChangeProductsInCart(true);
+        router.refresh();
       }
     } catch (e: any) {
       console.log(
