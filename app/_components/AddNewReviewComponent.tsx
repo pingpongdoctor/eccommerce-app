@@ -5,8 +5,8 @@ import ButtonComponent from './ButtonComponent';
 import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { postNewReview } from '../_lib/postNewReview';
 import { notify } from './ReactToastifyProvider';
-import { useRouter } from 'next/navigation';
 import { globalStatesContext } from './GlobalStatesContext';
+import { triggerNewReviewsEventSocketIo } from '../_lib/triggerNewReviewsEventSocketIo';
 
 interface Props {
   productSlug: string;
@@ -16,9 +16,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
   const { userProfile } = useContext(globalStatesContext);
   const [review, setReview] = useState<string>('');
   const [star, setStar] = useState<number | null>(null);
-  null;
   const [isDisable, setIsDisable] = useState<boolean>(false);
-  const router = useRouter();
 
   const handleReviewContentUpdate = function (
     e: ChangeEvent<HTMLTextAreaElement>
@@ -53,7 +51,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
 
       if (isSuccess) {
         notify('success', 'Thank your for your review', 'review-success');
-        router.refresh();
+        await triggerNewReviewsEventSocketIo(productSlug);
       }
     } catch (e: any) {
       console.log(

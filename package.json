@@ -37,6 +37,8 @@
     "next": "14.0.4",
     "next-sanity": "^7.0.5",
     "path": "^0.12.7",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0-rc2",
     "react": "^18",
     "react-dom": "^18",
     "react-loader-spinner": "^6.1.4",

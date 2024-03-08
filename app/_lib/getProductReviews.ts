@@ -10,11 +10,7 @@ export async function getProductReviews(
     const res = await fetch(`${baseUrl}/api/product-review/${productSlug}`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.ROUTE_API_KEY}`,
-      },
-      next: {
-        revalidate: 3600,
-        tags: ['review'],
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_ROUTE_API_KEY}`,
       },
     });
 

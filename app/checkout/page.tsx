@@ -131,6 +131,7 @@ export default function CheckoutPage() {
             'cart-include-sold-out-products'
           );
           router.back();
+          return;
         }
       });
     }

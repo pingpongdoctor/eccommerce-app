@@ -1,3 +1,5 @@
+'use client';
+
 import RatingStar from './RatingStar';
 import { StarIcon } from '@heroicons/react/20/solid';
 import CustomerReview from './CustomerReview';
@@ -5,19 +7,108 @@ import { Review } from '@prisma/client';
 import { calculateRatingBarWidth } from '../_lib/calculateRatingBarWidth';
 import { calculateAverageStar } from '../_lib/calculateAverageStar';
 import AddNewReviewComponent from './AddNewReviewComponent';
+import { useEffect, useState } from 'react';
+import { getProductReviews } from '../_lib/getProductReviews';
+import Pusher from 'pusher-js';
+import { sortReviews } from './sortReviews';
 
 interface Props {
   customerReviewsClassname?: string;
-  productReviews: (Review & { user: { name: string; imgUrl: string } })[];
-
   productSlug: string;
 }
 
-export default async function CustomerReviews({
+export default function CustomerReviews({
   customerReviewsClassname,
-  productReviews,
   productSlug,
 }: Props) {
+  const [productReviews, setProductReviews] = useState<
+    (Review & { user: { name: string; imgUrl: string } })[]
+  >([]);
+  const [averageStar, setAverageStar] = useState<number>(
+    productReviews.length > 0 ? calculateAverageStar(productReviews) || 0 : 0
+  );
+
+  //function to update rating star value
+  const updateRatingStarValue = function (averageStarNum: number) {
+    try {
+      if (averageStarNum > 0) {
+        const ratingElement = document.getElementById('main-rating');
+        if (!ratingElement) {
+          setAverageStar(0);
+          return;
+        }
+        const svgElements = ratingElement.getElementsByTagName('svg');
+
+        for (let i = 1; i <= 5; i++) {
+          const curSvgElement = svgElements[i - 1];
+          if (i <= averageStarNum) {
+            curSvgElement.setAttribute('fill', 'currentColor');
+          } else {
+            curSvgElement.setAttribute('fill', 'none');
+          }
+        }
+      } else {
+        setAverageStar(0);
+      }
+    } catch (e: any) {
+      console.log('Error in updateRatingStarValue' + e);
+    }
+  };
+
+  //update value of rating star element using document object since Material-Tailwind Rating element does not absorb new updated state value
+  useEffect(() => {
+    const averageStarNum =
+      productReviews.length > 0 ? calculateAverageStar(productReviews) || 0 : 0;
+
+    updateRatingStarValue(averageStarNum);
+  }, [productReviews]);
+
+  //bind a function to new-reviews channel to listen to the new-reviews event
+  //when there are new reviews, set productReview state with new value to update the UI
+  useEffect(() => {
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER as string,
+    });
+
+    const channel = pusher.subscribe('new-reviews');
+
+    channel.bind(
+      `new-reviews-${productSlug}-event`,
+      function (data: {
+        reviews: (Review & { user: { name: string; imgUrl: string } })[];
+      }) {
+        setProductReviews(sortReviews(data.reviews));
+      }
+    );
+
+    return () => {
+      pusher.unsubscribe('new-reviews');
+    };
+  }, []);
+
+  //get product reviews when page is initially loaded
+  useEffect(() => {
+    getProductReviews(productSlug)
+      .then(
+        (
+          reviews:
+            | (Review & { user: { name: string; imgUrl: string } })[]
+            | undefined
+        ) => {
+          if (!reviews) {
+            setProductReviews([]);
+            return;
+          }
+
+          setProductReviews(sortReviews(reviews));
+        }
+      )
+      .catch((e: any) => {
+        console.log(e);
+        setProductReviews([]);
+      });
+  }, []);
+
   return (
     <div
       className={`mx-auto px-4 md:px-8 lg:flex lg:justify-between lg:gap-16 lg:px-12 xl:max-w-7xl ${customerReviewsClassname}`}
@@ -25,7 +116,7 @@ export default async function CustomerReviews({
       <div>
         <h3 className="mb-4">Customer Reiview</h3>
         <div className="mb-6 flex gap-4">
-          <RatingStar starValue={calculateAverageStar(productReviews)} />
+          {<RatingStar starValue={0} id="main-rating" />}
           <p className="pb-1">
             {productReviews.length}{' '}
             {productReviews.length < 2 ? 'review' : 'reviews'}
