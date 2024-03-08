@@ -18,12 +18,12 @@ import {
   StripeError,
 } from '@stripe/stripe-js';
 import { notify } from './ReactToastifyProvider';
-import { useRouter } from 'next/navigation';
 import { rollbackData } from '../_lib/rollbackData';
 import { createOrder } from '../_lib/createOrder';
 import { clearRollbackData } from '../_lib/clearRollbackData';
 import { revalidateWithTag } from '../_lib/revalidateWithTag';
 import { checkProductQuantity } from '../_lib/checkProductQuantity';
+import { handleStripeError } from '../_lib/handleStripeError';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -61,6 +61,36 @@ export default function PaymentForm({
 
   const handleUpdateAddress = function (e: StripeAddressElementChangeEvent) {
     setAddress(e.value.address);
+  };
+
+  const checkPaymentStatus = async function (paymentIntent: PaymentIntent) {
+    switch (paymentIntent.status) {
+      case 'succeeded':
+        setChangeProductsInCart(true);
+        notify('success', 'Payment succeeded!', 'success-payment');
+        //create new order document, clear rollback data in Redis database and revalidate data for SSG pages after after successful payment
+        await createOrder(fullname, 'prepare', address);
+        await clearRollbackData(rollbackDataKey);
+
+        //navigate user to order summary page
+        // router.push('/');
+        break;
+      case 'processing':
+        notify('info', 'Your payment is processing.', 'payment-in-process');
+        break;
+      case 'requires_payment_method':
+        notify(
+          'error',
+          'Your payment was not successful, please try again.',
+          'payment-error'
+        );
+        await rollbackData(rollbackDataKey);
+        break;
+      default:
+        notify('error', 'Something went wrong.', 'error');
+        await rollbackData(rollbackDataKey);
+        break;
+    }
   };
 
   const submitHandler = async (e: any) => {
@@ -127,15 +157,7 @@ export default function PaymentForm({
 
       //check payment error
       if (error) {
-        if (error.type === 'card_error' || error.type === 'validation_error') {
-          notify(
-            'error',
-            error.message || 'Something went wrong.',
-            'card-validation-errors'
-          );
-        } else {
-          notify('error', 'Something went wrong.', 'error');
-        }
+        handleStripeError(error);
         await rollbackData(rollbackDataKey);
         return;
       }
@@ -148,33 +170,7 @@ export default function PaymentForm({
       }
 
       //check payment status after payment execution
-      switch (paymentIntent.status) {
-        case 'succeeded':
-          setChangeProductsInCart(true);
-          notify('success', 'Payment succeeded!', 'success-payment');
-          //create new order document, clear rollback data in Redis database and revalidate data for SSG pages after after successful payment
-          await createOrder(fullname, 'prepare', address);
-          await clearRollbackData(rollbackDataKey);
-
-          //navigate user to order summary page
-          // router.push('/');
-          break;
-        case 'processing':
-          notify('info', 'Your payment is processing.', 'payment-in-process');
-          break;
-        case 'requires_payment_method':
-          notify(
-            'error',
-            'Your payment was not successful, please try again.',
-            'payment-error'
-          );
-          await rollbackData(rollbackDataKey);
-          break;
-        default:
-          notify('error', 'Something went wrong.', 'error');
-          await rollbackData(rollbackDataKey);
-          break;
-      }
+      await checkPaymentStatus(paymentIntent);
     } catch (error: any) {
       console.log(
         'Error in submitHandler function in PaymentForm component' +
