@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function ProductDetail({ product }: Props) {
-  const { title, detail, price, images } = product;
+  const { title, detail, price, images, slug } = product;
 
   return (
     <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
@@ -69,10 +69,7 @@ export default function ProductDetail({ product }: Props) {
         <div className="mb-8 w-auto lg:w-[350px] lg:pl-12 xl:w-[400px]">
           <p className="mb-8 text-2xl text-gray-900">Price: ${price}</p>
 
-          <AddToBagComponent
-            productInstock={product.instock}
-            productSlug={product.slug.current}
-          />
+          <AddToBagComponent productSlug={slug.current} />
         </div>
 
         {detail && (

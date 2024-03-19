@@ -58,8 +58,6 @@ export async function checkProductQuantity(
       );
     }
 
-    console.log(data.noProductsSoldOut, data.sufficientProducts);
-
     return {
       isSuccess: true,
       noProductsSoldOut: data.noProductsSoldOut,

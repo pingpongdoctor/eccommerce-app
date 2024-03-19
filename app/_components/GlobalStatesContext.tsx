@@ -15,10 +15,6 @@ export default function GlobalStatesContext({
   const { user, isLoading } = useUser();
   const [changeProductsInCart, setChangeProductsInCart] =
     useState<boolean>(false);
-  const [
-    needToRevalidateDataForShoppingCartPage,
-    setNeedToRevalidateDataForShoppingCartPage,
-  ] = useState<boolean>(false);
   const [userProfile, setUserProfile] = useState<Omit<
     User,
     'auth0Id' | 'id'
@@ -85,8 +81,6 @@ export default function GlobalStatesContext({
         userProfile,
         user,
         isLoading,
-        needToRevalidateDataForShoppingCartPage,
-        setNeedToRevalidateDataForShoppingCartPage,
         productsInCart,
       }}
     >
