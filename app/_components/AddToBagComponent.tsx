@@ -17,10 +17,10 @@ interface Props {
 
 export default function AddToBagComponent({ productSlug }: Props) {
   const router = useRouter();
-  const { userProfile } = useContext(globalStatesContext);
+  const { userProfile, setChangeProductsInCart } =
+    useContext(globalStatesContext);
   const [quantity, setQuantity] = useState<number>(1);
   const [isDisable, setIsDisable] = useState<boolean>(false);
-  const { setChangeProductsInCart } = useContext(globalStatesContext);
   const [productInstock, setProductInstock] = useState<number | null>(null);
 
   //bind a function to new-product-quantity channel to listen to the new-product-quantity event
@@ -41,6 +41,8 @@ export default function AddToBagComponent({ productSlug }: Props) {
 
     return () => {
       pusher.unsubscribe('new-product-quantity');
+      channel.unbind_all();
+      pusher.disconnect();
     };
   }, []);
 
@@ -90,8 +92,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
         return;
       }
 
-      //if adding product to cart action fails since product is sold out, this SSG page will be revalidated with new data
-      //refresh the page to update the UI
+      //check if any product is sold out
       if (result.isProductSoldOut) {
         setChangeProductsInCart(true);
         router.refresh();
