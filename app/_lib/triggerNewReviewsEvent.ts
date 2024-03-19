@@ -1,9 +1,9 @@
 import { baseUrl } from '../utils/baseUrl';
 
 //return true if successfully triggering socket.io event
-export async function triggerNewReviewsEventSocketIo(productSlug: string) {
+export async function triggerNewReviewsEvent(productSlug: string) {
   try {
-    const res = await fetch(`${baseUrl}/api/socket-io-new-reviews`, {
+    const res = await fetch(`${baseUrl}/api/trigger-new-reviews-event`, {
       headers: {
         'Content-Type': 'application/json',
       },
