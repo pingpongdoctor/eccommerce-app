@@ -21,9 +21,9 @@ import { notify } from './ReactToastifyProvider';
 import { rollbackData } from '../_lib/rollbackData';
 import { createOrder } from '../_lib/createOrder';
 import { clearRollbackData } from '../_lib/clearRollbackData';
-import { revalidateWithTag } from '../_lib/revalidateWithTag';
 import { checkProductQuantity } from '../_lib/checkProductQuantity';
 import { handleStripeError } from '../_lib/handleStripeError';
+import { triggerProductQuantityEvent } from '../_lib/triggerNewProductQuantityEvent';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -63,14 +63,29 @@ export default function PaymentForm({
     setAddress(e.value.address);
   };
 
+  const triggerProductEvents = async function (): Promise<void> {
+    await Promise.all(
+      productsWithImgUrlAndQuantity.map(
+        async (
+          product: ProductWithImgUrl &
+            SanityDocument & { productQuantity: number }
+        ) => {
+          await triggerProductQuantityEvent(product.slug.current);
+        }
+      )
+    );
+  };
+
   const checkPaymentStatus = async function (paymentIntent: PaymentIntent) {
     switch (paymentIntent.status) {
       case 'succeeded':
-        setChangeProductsInCart(true);
-        notify('success', 'Payment succeeded!', 'success-payment');
-        //create new order document, clear rollback data in Redis database and revalidate data for SSG pages after after successful payment
+        //create new order document
         await createOrder(fullname, 'prepare', address);
+        //trigger events to update product quantity in realtime
+        await triggerProductEvents();
+        //clear rollback data in Redis database
         await clearRollbackData(rollbackDataKey);
+        notify('success', 'Payment succeeded!', 'success-payment');
 
         //navigate user to order summary page
         // router.push('/');
@@ -109,8 +124,11 @@ export default function PaymentForm({
 
       //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
       if (!result.noProductsSoldOut || !result.sufficientProducts) {
-        await revalidateWithTag('post');
-        setChangeProductsInCart(true);
+        notify(
+          'info',
+          'some products are sold out or not sufficient to purchase',
+          'product-sold-out-or-not-sufficient'
+        );
         return;
       }
 
@@ -118,9 +136,6 @@ export default function PaymentForm({
       const returnedData = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
-
-      //revalidate data for SSG pages after updating database
-      await revalidateWithTag('post');
 
       //check if product data update process is failed or succeeded
       if (!returnedData.result) {
@@ -176,10 +191,8 @@ export default function PaymentForm({
         'Error in submitHandler function in PaymentForm component' +
           error.message
       );
-      await rollbackData(rollbackDataKey);
     } finally {
       setIsLoading(false);
-      await revalidateWithTag('post');
       setRollbackDataKey('');
     }
   };
