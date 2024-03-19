@@ -21,7 +21,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
   const [quantity, setQuantity] = useState<number>(1);
   const [isDisable, setIsDisable] = useState<boolean>(false);
   const { setChangeProductsInCart } = useContext(globalStatesContext);
-  const [productInstock, setProductInstock] = useState<number>(0);
+  const [productInstock, setProductInstock] = useState<number | null>(null);
 
   //bind a function to new-product-quantity channel to listen to the new-product-quantity event
   //when there are new product quantity that is in stock, set productInstock state with new value to update the UI
@@ -105,7 +105,24 @@ export default function AddToBagComponent({ productSlug }: Props) {
     }
   };
 
-  if (productInstock === 0) {
+  //when productInstock has not been loaded, we disable the list and the button
+  if (productInstock === null) {
+    return (
+      <form
+        onSubmit={handleSubmitNewProductToCart}
+        className="flex flex-col gap-52"
+      >
+        <ListComponent
+          selectedValue={quantity}
+          listComponentChangeEventHandler={handleUpdateQuantity}
+          listData={generateProductInstockList(1)}
+          listButtonDisabled={true}
+          listClassname="max-h-[180px]"
+        />
+        <ButtonComponent isDisabled={true} buttonName="Add to bag" animate />
+      </form>
+    );
+  } else if (productInstock === 0) {
     return <p className="text-red-500">Product is sold out</p>;
   } else {
     return (
