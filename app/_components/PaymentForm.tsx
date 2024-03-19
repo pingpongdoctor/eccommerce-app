@@ -24,6 +24,7 @@ import { clearRollbackData } from '../_lib/clearRollbackData';
 import { checkProductQuantity } from '../_lib/checkProductQuantity';
 import { handleStripeError } from '../_lib/handleStripeError';
 import { triggerProductQuantityEvent } from '../_lib/triggerNewProductQuantityEvent';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -41,6 +42,7 @@ export default function PaymentForm({
 }: Props) {
   const { setChangeProductsInCart, productsInCart } =
     useContext(globalStatesContext);
+  const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -88,7 +90,7 @@ export default function PaymentForm({
         notify('success', 'Payment succeeded!', 'success-payment');
 
         //navigate user to order summary page
-        // router.push('/');
+        router.push('/');
         break;
       case 'processing':
         notify('info', 'Your payment is processing.', 'payment-in-process');
@@ -194,6 +196,7 @@ export default function PaymentForm({
     } finally {
       setIsLoading(false);
       setRollbackDataKey('');
+      setChangeProductsInCart(true);
     }
   };
 

@@ -76,6 +76,8 @@ export default function CustomerReviews({
 
     return () => {
       pusher.unsubscribe('new-reviews');
+      channel.unbind_all();
+      pusher.disconnect();
     };
   }, []);
 
