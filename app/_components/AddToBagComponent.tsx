@@ -6,7 +6,6 @@ import { addProductToCart } from '../_lib/addProductToCart';
 import { notify } from './ReactToastifyProvider';
 import { generateProductInstockList } from '../_lib/generateProductInstockList';
 import { globalStatesContext } from './GlobalStatesContext';
-import { useRouter } from 'next/navigation';
 import Pusher from 'pusher-js';
 import { getProduct } from '../_lib/getProduct';
 import { Product } from '@prisma/client';
@@ -16,7 +15,6 @@ interface Props {
 }
 
 export default function AddToBagComponent({ productSlug }: Props) {
-  const router = useRouter();
   const { userProfile, setChangeProductsInCart } =
     useContext(globalStatesContext);
   const [quantity, setQuantity] = useState<number>(1);
@@ -72,7 +70,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
   ) {
     e.preventDefault();
     if (!userProfile) {
-      notify('info', 'Please log in to write a review', 'login-info');
+      notify('info', 'Please log in to start shopping', 'login-info');
       return;
     }
 
@@ -84,25 +82,14 @@ export default function AddToBagComponent({ productSlug }: Props) {
     try {
       setIsDisable(true);
 
-      const result = await addProductToCart(productSlug, quantity);
-
-      //set this state to true to update data in the nav bar
-      if (result.isSuccess) {
-        setChangeProductsInCart(true);
-        return;
-      }
-
-      //check if any product is sold out
-      if (result.isProductSoldOut) {
-        setChangeProductsInCart(true);
-        router.refresh();
-      }
+      await addProductToCart(productSlug, quantity);
     } catch (e: any) {
       console.log(
         'Error submiting products for the current user' + ' ' + e.message
       );
     } finally {
       setIsDisable(false);
+      setChangeProductsInCart(true);
     }
   };
 

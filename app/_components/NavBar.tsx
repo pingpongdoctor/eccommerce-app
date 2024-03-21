@@ -10,7 +10,7 @@ import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
 import { globalStatesContext } from './GlobalStatesContext';
 import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 
 export default function Navbar() {
   const { userProfile, isLoading, productsInCart } =
