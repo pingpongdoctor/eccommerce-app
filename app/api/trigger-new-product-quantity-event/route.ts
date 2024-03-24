@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import Pusher from 'pusher';
 import prisma from '@/lib/prisma';
-import { Product } from '@prisma/client';
 
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID as string,
