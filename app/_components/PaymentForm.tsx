@@ -5,7 +5,7 @@ import {
   PaymentElement,
   AddressElement,
 } from '@stripe/react-stripe-js';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
@@ -25,6 +25,7 @@ import { checkProductQuantity } from '../_lib/checkProductQuantity';
 import { handleStripeError } from '../_lib/handleStripeError';
 import { triggerProductQuantityEvent } from '../_lib/triggerNewProductQuantityEvent';
 import { useRouter } from 'next/navigation';
+import { sendEmailPaymentConfirm } from '../_lib/sendEmailPaymentConfirm';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -40,11 +41,14 @@ export default function PaymentForm({
   subtotal,
   productsInCartWithSanityProductId,
 }: Props) {
-  const { setChangeProductsInCart, productsInCart } =
+  const { setChangeProductsInCart, productsInCart, userProfile } =
     useContext(globalStatesContext);
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
+  const [tax, setTax] = useState<number>(0);
+  const [shipping, setShipping] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fullname, setFullname] = useState<string>('');
   const [address, setAddress] = useState<Address>({
@@ -78,19 +82,45 @@ export default function PaymentForm({
     );
   };
 
+  useEffect(() => {
+    setTax(Math.round((subtotal * 12) / 100));
+    setShipping(Math.round((subtotal * 2) / 100));
+    setTotal(
+      Math.round((subtotal * 12) / 100) +
+        Math.round((subtotal * 2) / 100) +
+        subtotal
+    );
+  }, [subtotal]);
+
   const checkPaymentStatus = async function (paymentIntent: PaymentIntent) {
     switch (paymentIntent.status) {
       case 'succeeded':
         //create new order document
-        await createOrder(fullname, 'prepare', address);
+        await createOrder(fullname, 'prepare', address); //create order and return expectedDeliveryTime and transactionNumber
+        //send email payment confirmation
+        await sendEmailPaymentConfirm(
+          'thanhnhantran1501@gmail.com',
+          userProfile.email as string,
+          subtotal,
+          tax,
+          shipping,
+          total,
+          '123',
+          '123',
+          productsWithImgUrlAndQuantity
+        );
         //trigger events to update product quantity in realtime
         await triggerProductEvents();
         //clear rollback data in Redis database
         await clearRollbackData(rollbackDataKey);
-        notify('success', 'Payment succeeded!', 'success-payment');
+        notify(
+          'success',
+          'Thank you for your purchase at Glowy Lab!',
+          'success-payment'
+        );
 
-        //navigate user to order summary page
-        router.push('/');
+        // //navigate user to order summary page
+        // router.push('/');
         break;
       case 'processing':
         notify('info', 'Your payment is processing.', 'payment-in-process');
@@ -216,8 +246,8 @@ export default function PaymentForm({
         productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
         checkoutListClassname="border-t mt-8 lg:mt-12 bg-white rounded-md p-6"
         subtotal={subtotal}
-        tax={Math.round((subtotal * 12) / 100)}
-        shipping={Math.round((subtotal * 2) / 100)}
+        tax={tax}
+        shipping={shipping}
       />
 
       <ButtonComponent
