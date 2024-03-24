@@ -75,7 +75,11 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     });
 
     return NextResponse.json(
-      { message: 'new order is created' },
+      {
+        message: 'new order is created',
+        transactionNumber,
+        expectedDeliveryDate,
+      },
       { status: 201 }
     );
   } catch (err: any) {
