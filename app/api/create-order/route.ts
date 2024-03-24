@@ -59,6 +59,8 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     const { city, country, line1, line2, postal_code, state } = address;
     await prisma.order.create({
       data: {
+        transactionNumber,
+        expectedDeliveryDate,
         fullname,
         email: userData.email,
         city,

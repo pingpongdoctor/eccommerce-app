@@ -8,6 +8,6 @@ export const sortReviews = function (
     (
       a: Review & { user: { name: string; imgUrl: string } },
       b: Review & { user: { name: string; imgUrl: string } }
-    ) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    ) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   );
 };

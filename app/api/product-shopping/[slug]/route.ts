@@ -126,7 +126,7 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
           productQuantity: notEnoughAvailableProduct
             ? product.instock
             : { increment: productQuantity },
-          createdAt: new Date(),
+          updatedAt: new Date(),
         },
       });
 

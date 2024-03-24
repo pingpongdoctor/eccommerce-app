@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       },
       update: {
         ...productData,
-        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     });
 
