@@ -190,3 +190,18 @@ export const templateEnvs: TemplateEnvs = {
   welcome: 'SENGRID_TEMPLATE_ID_WELCOME',
   'confirm-payment': 'SENGRID_TEMPLATE_CONFIRM_PAYMENT',
 };
+
+export const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];

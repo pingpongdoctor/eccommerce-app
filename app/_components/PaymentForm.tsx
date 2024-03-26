@@ -26,6 +26,7 @@ import { handleStripeError } from '../_lib/handleStripeError';
 import { triggerProductQuantityEvent } from '../_lib/triggerNewProductQuantityEvent';
 import { useRouter } from 'next/navigation';
 import { sendEmailPaymentConfirm } from '../_lib/sendEmailPaymentConfirm';
+import { formatDateToWords } from '../_lib/formatDateToWords';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -69,17 +70,22 @@ export default function PaymentForm({
     setAddress(e.value.address);
   };
 
-  const triggerProductEvents = async function (): Promise<void> {
-    await Promise.all(
-      productsWithImgUrlAndQuantity.map(
-        async (
-          product: ProductWithImgUrl &
-            SanityDocument & { productQuantity: number }
-        ) => {
-          await triggerProductQuantityEvent(product.slug.current);
-        }
-      )
-    );
+  const updateProductQuantityInRealtime = async function (): Promise<void> {
+    try {
+      await Promise.all(
+        productsWithImgUrlAndQuantity.map(
+          async (
+            product: ProductWithImgUrl &
+              SanityDocument & { productQuantity: number }
+          ) => {
+            //trigger product quantity event to let product data updated in realtime using realtime communication that is managed by Pusher service
+            await triggerProductQuantityEvent(product.slug.current);
+          }
+        )
+      );
+    } catch (e: any) {
+      console.log('Error when udapting product quantity' + e);
+    }
   };
 
   useEffect(() => {
@@ -93,67 +99,85 @@ export default function PaymentForm({
   }, [subtotal]);
 
   const checkPaymentStatus = async function (paymentIntent: PaymentIntent) {
-    switch (paymentIntent.status) {
-      case 'succeeded':
-        //create new order document
-        await createOrder(fullname, 'prepare', address); //create order and return expectedDeliveryTime and transactionNumber
-        //send email payment confirmation
-        await sendEmailPaymentConfirm(
-          'thanhnhantran1501@gmail.com',
-          userProfile.email as string,
-          subtotal,
-          tax,
-          shipping,
-          total,
-          '123',
-          '123',
-          productsWithImgUrlAndQuantity
-        );
-        //trigger events to update product quantity in realtime
-        await triggerProductEvents();
-        //clear rollback data in Redis database
-        await clearRollbackData(rollbackDataKey);
-        notify(
-          'success',
-          'Thank you for your purchase at Glowy Lab!',
-          'success-payment'
-        );
+    try {
+      switch (paymentIntent.status) {
+        case 'succeeded':
+          //create new order document
+          const data: {
+            isSuccess: boolean;
+            transactionNumber?: string | undefined;
+            expectedDeliveryDate?: Date | undefined;
+          } = await createOrder(fullname, 'prepare', address); //create order and return expectedDeliveryTime and transactionNumber
+          //trigger events to update product quantity in realtime
+          await updateProductQuantityInRealtime();
+          //clear rollback data in Redis database
+          await clearRollbackData(rollbackDataKey);
 
-        // //navigate user to order summary page
-        // router.push('/');
-        break;
-      case 'processing':
-        notify('info', 'Your payment is processing.', 'payment-in-process');
-        break;
-      case 'requires_payment_method':
-        notify(
-          'error',
-          'Your payment was not successful, please try again.',
-          'payment-error'
-        );
-        await rollbackData(rollbackDataKey);
-        break;
-      default:
-        notify('error', 'Something went wrong.', 'error');
-        await rollbackData(rollbackDataKey);
-        break;
+          //check if order is successfully created on database
+          if (!data.isSuccess) {
+            notify(
+              'error',
+              'There is a problem taking place when creating your order. Please contact our team for support if your payment is executed',
+              'error-creating-order'
+            );
+          } else {
+            const expectedTimeToDelivery = formatDateToWords(
+              data.expectedDeliveryDate as Date
+            );
+            //send email payment confirmation
+            await sendEmailPaymentConfirm(
+              'thanhnhantran1501@gmail.com', //will change this later on
+              userProfile.email as string,
+              subtotal,
+              tax,
+              shipping,
+              total,
+              expectedTimeToDelivery,
+              data.transactionNumber as string,
+              productsWithImgUrlAndQuantity
+            );
+
+            notify(
+              'success',
+              'Thank you for your purchase at Glowy Lab!',
+              'success-payment'
+            );
+          }
+
+          // //navigate user to order summary page
+          // router.push('/');
+          break;
+        case 'processing':
+          notify('info', 'Your payment is processing.', 'payment-in-process');
+          break;
+        case 'requires_payment_method':
+          notify(
+            'error',
+            'Your payment was not successful, please try again.',
+            'payment-error'
+          );
+          await rollbackData(rollbackDataKey);
+          break;
+        default:
+          notify('error', 'Something went wrong.', 'error');
+          await rollbackData(rollbackDataKey);
+          break;
+      }
+    } catch (e: any) {
+      console.log('Error when checking payment status' + e);
     }
   };
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
-
     try {
       setIsLoading(true);
-
       //check if there is any sold out product
       const result = await checkProductQuantity(productsInCart);
-
       if (!result.isSuccess) {
         console.log('Error when checking product quantity');
         return;
       }
-
       //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
       if (!result.noProductsSoldOut || !result.sufficientProducts) {
         notify(
@@ -163,28 +187,23 @@ export default function PaymentForm({
         );
         return;
       }
-
       //update product data first before executing payment
       const returnedData = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
-
       //check if product data update process is failed or succeeded
       if (!returnedData.result) {
         console.log('Error when updating products during payment execution');
         return;
       }
-
       //if not failed, set rollbackDataKey state
       setRollbackDataKey(returnedData.rollbackDataKey as string);
-
       //roll back product data if stripe or elements instances are not available
       if (!stripe || !elements) {
         console.log('stripe or elements instances not available');
         await rollbackData(rollbackDataKey);
         return;
       }
-
       //execute payment
       const {
         error,
@@ -201,27 +220,23 @@ export default function PaymentForm({
         //this ensures that redirection is implemented on demand
         redirect: 'if_required',
       });
-
       //check payment error
       if (error) {
         handleStripeError(error);
         await rollbackData(rollbackDataKey);
         return;
       }
-
       if (!paymentIntent) {
         console.error('payment intent not available');
         notify('error', 'Something went wrong.', 'payment-intent-error');
         await rollbackData(rollbackDataKey);
         return;
       }
-
       //check payment status after payment execution
       await checkPaymentStatus(paymentIntent);
     } catch (error: any) {
       console.log(
-        'Error in submitHandler function in PaymentForm component' +
-          error.message
+        'Error in submitHandler function in PaymentForm component' + error
       );
     } finally {
       setIsLoading(false);

@@ -1,5 +1,6 @@
 import { baseUrl } from '../utils/baseUrl';
 
+//trigger product quantity event to let product data updated in realtime using realtime communication that is managed by Pusher service
 export async function triggerProductQuantityEvent(productSlug: string) {
   try {
     const res = await fetch(
