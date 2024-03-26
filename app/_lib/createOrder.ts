@@ -7,7 +7,7 @@ export async function createOrder(
 ): Promise<{
   isSuccess: boolean;
   transactionNumber?: string;
-  expectedDeliveryDate?: string;
+  expectedDeliveryDate?: Date;
 }> {
   try {
     const res = await fetch(`${baseUrl}/api/create-order`, {

@@ -1,5 +1,6 @@
 import { baseUrl } from '../utils/baseUrl';
 
+//trigger review event to let review data updated in realtime using realtime communication that is managed by Pusher service
 export async function triggerNewReviewsEvent(productSlug: string) {
   try {
     const res = await fetch(`${baseUrl}/api/trigger-new-reviews-event`, {
