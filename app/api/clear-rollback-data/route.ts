@@ -1,7 +1,5 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
-import { getSession } from '@auth0/nextjs-auth0';
-import prisma from '@/lib/prisma';
 import { Redis } from '@upstash/redis';
 
 const redis = Redis.fromEnv();

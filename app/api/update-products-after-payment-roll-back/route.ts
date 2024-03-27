@@ -54,6 +54,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     await redis.hdel(`${rollbackDataKey}-rollback-data`, 'data');
 
     //roll back product data on Sanity database and app database
+    //when product data on Sanity database is mutated, Sanity webhook will be triggered to make an API call, updating product data on app database
     await Promise.all(
       rollbackData.map(
         async (
