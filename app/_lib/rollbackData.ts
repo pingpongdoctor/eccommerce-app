@@ -19,8 +19,6 @@ export async function rollbackData(rollbackDataKey: string): Promise<boolean> {
       }
     );
 
-    console.log('data is rolled back');
-
     const data = await res.json();
 
     if (!res.ok) {

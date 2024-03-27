@@ -1,28 +1,11 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
-import { getSession } from '@auth0/nextjs-auth0';
-import prisma from '@/lib/prisma';
 import { Redis } from '@upstash/redis';
+import { client } from '@/sanity/lib/client';
+import { SanityDocument } from 'next-sanity';
+import { PRODUCT_QUERY } from '@/sanity/lib/queries';
 
 const redis = Redis.fromEnv();
-
-//function to get product
-const getProduct = async function (
-  productInShoppingCart: ProductInShoppingCart & {
-    sanityProductId: string;
-  }
-): Promise<{
-  instock: number;
-} | null> {
-  const product: {
-    instock: number;
-  } | null = await prisma.product.findUnique({
-    where: { id: productInShoppingCart.productId },
-    select: { instock: true },
-  });
-
-  return product;
-};
 
 //roll back product data after failed payment
 export const POST = withApiAuthRequired(async (req: Request) => {
@@ -62,9 +45,9 @@ export const POST = withApiAuthRequired(async (req: Request) => {
             sanityProductId: string;
           }
         ) => {
-          const product: {
-            instock: number;
-          } | null = await getProduct(productInShoppingCart);
+          const product: SanityProduct & SanityDocument = await client.fetch<
+            SanityProduct & SanityDocument
+          >(PRODUCT_QUERY, { slug: productInShoppingCart.productSlug }, {});
 
           if (!product) {
             return NextResponse.json(
@@ -72,13 +55,6 @@ export const POST = withApiAuthRequired(async (req: Request) => {
               { status: 400 }
             );
           }
-
-          console.log('current product before roll back', product.instock);
-
-          console.log(
-            'data that is added to roll back',
-            productInShoppingCart.productQuantity
-          );
 
           const mutations = [
             {
