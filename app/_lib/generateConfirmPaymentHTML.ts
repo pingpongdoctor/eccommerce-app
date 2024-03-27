@@ -10,8 +10,6 @@ export const generateConfirmPaymentHTML = function (
   shipping: string,
   total: string
 ) {
-  console.log(products);
-
   let htmlElements = '';
   products.map(
     (

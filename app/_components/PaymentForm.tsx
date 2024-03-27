@@ -60,7 +60,6 @@ export default function PaymentForm({
     line2: null,
     postal_code: '',
   });
-  const [rollbackDataKey, setRollbackDataKey] = useState<string>('');
 
   const handleUpdateFullname = function (e: StripeAddressElementChangeEvent) {
     setFullname(e.value.name);
@@ -98,7 +97,10 @@ export default function PaymentForm({
     );
   }, [subtotal]);
 
-  const checkPaymentStatus = async function (paymentIntent: PaymentIntent) {
+  const checkPaymentStatus = async function (
+    paymentIntent: PaymentIntent,
+    rollbackDataKey: string
+  ) {
     try {
       switch (paymentIntent.status) {
         case 'succeeded':
@@ -106,7 +108,7 @@ export default function PaymentForm({
           const data: {
             isSuccess: boolean;
             transactionNumber?: string | undefined;
-            expectedDeliveryDate?: Date | undefined;
+            expectedDeliveryDate?: string | undefined;
           } = await createOrder(fullname, 'prepare', address); //create order and return expectedDeliveryTime and transactionNumber
           //trigger events to update product quantity in realtime
           await updateProductQuantityInRealtime();
@@ -122,7 +124,7 @@ export default function PaymentForm({
             );
           } else {
             const expectedTimeToDelivery = formatDateToWords(
-              data.expectedDeliveryDate as Date
+              data.expectedDeliveryDate as string
             );
             //send email payment confirmation
             await sendEmailPaymentConfirm(
@@ -147,19 +149,8 @@ export default function PaymentForm({
           // //navigate user to order summary page
           // router.push('/');
           break;
-        case 'processing':
-          notify('info', 'Your payment is processing.', 'payment-in-process');
-          break;
-        case 'requires_payment_method':
-          notify(
-            'error',
-            'Your payment was not successful, please try again.',
-            'payment-error'
-          );
-          await rollbackData(rollbackDataKey);
-          break;
         default:
-          notify('error', 'Something went wrong.', 'error');
+          notify('error', 'Something went wrong.', 'payment-error');
           await rollbackData(rollbackDataKey);
           break;
       }
@@ -173,13 +164,14 @@ export default function PaymentForm({
     try {
       setIsLoading(true);
       //check if there is any sold out product
-      const result = await checkProductQuantity(productsInCart);
-      if (!result.isSuccess) {
+      const { isSuccess, noProductsSoldOut, sufficientProducts } =
+        await checkProductQuantity(productsInCart);
+      if (!isSuccess) {
         console.log('Error when checking product quantity');
         return;
       }
       //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
-      if (!result.noProductsSoldOut || !result.sufficientProducts) {
+      if (!noProductsSoldOut || !sufficientProducts) {
         notify(
           'info',
           'some products are sold out or not sufficient to purchase',
@@ -188,20 +180,19 @@ export default function PaymentForm({
         return;
       }
       //update product data first before executing payment
-      const returnedData = await updateProductsAfterPayment(
+      const { result, rollbackDataKey } = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
       //check if product data update process is failed or succeeded
-      if (!returnedData.result) {
+      if (!result) {
         console.log('Error when updating products during payment execution');
         return;
       }
-      //if not failed, set rollbackDataKey state
-      setRollbackDataKey(returnedData.rollbackDataKey as string);
+
       //roll back product data if stripe or elements instances are not available
       if (!stripe || !elements) {
         console.log('stripe or elements instances not available');
-        await rollbackData(rollbackDataKey);
+        await rollbackData(rollbackDataKey as string);
         return;
       }
       //execute payment
@@ -223,24 +214,22 @@ export default function PaymentForm({
       //check payment error
       if (error) {
         handleStripeError(error);
-        await rollbackData(rollbackDataKey);
+        await rollbackData(rollbackDataKey as string);
         return;
       }
       if (!paymentIntent) {
         console.error('payment intent not available');
-        notify('error', 'Something went wrong.', 'payment-intent-error');
-        await rollbackData(rollbackDataKey);
+        await rollbackData(rollbackDataKey as string);
         return;
       }
       //check payment status after payment execution
-      await checkPaymentStatus(paymentIntent);
+      await checkPaymentStatus(paymentIntent, rollbackDataKey as string);
     } catch (error: any) {
       console.log(
         'Error in submitHandler function in PaymentForm component' + error
       );
     } finally {
       setIsLoading(false);
-      setRollbackDataKey('');
       setChangeProductsInCart(true);
     }
   };
