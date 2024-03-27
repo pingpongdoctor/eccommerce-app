@@ -54,6 +54,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
 
     const transactionNumber = 'TS' + uuidv4();
     const expectedDeliveryDate = new Date();
+    expectedDeliveryDate.setDate(expectedDeliveryDate.getDate() + 7);
 
     //add order for the current user
     const { city, country, line1, line2, postal_code, state } = address;
