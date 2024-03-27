@@ -27,6 +27,7 @@ import { triggerProductQuantityEvent } from '../_lib/triggerNewProductQuantityEv
 import { useRouter } from 'next/navigation';
 import { sendEmailPaymentConfirm } from '../_lib/sendEmailPaymentConfirm';
 import { formatDateToWords } from '../_lib/formatDateToWords';
+import { deleteProductsInCartAfterPayment } from '../_lib/deleteProductsInCartAfterPayment';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -101,9 +102,19 @@ export default function PaymentForm({
     paymentIntent: PaymentIntent,
     rollbackDataKey: string
   ) {
+    console.log('running check payment status');
     try {
       switch (paymentIntent.status) {
         case 'succeeded':
+          //delete products in cart
+          const productIds: number[] = productsInCartWithSanityProductId.map(
+            (
+              productInShoppingCart: ProductInShoppingCart & {
+                sanityProductId: string;
+              }
+            ) => productInShoppingCart.productId
+          );
+          await deleteProductsInCartAfterPayment(productIds);
           //create new order document
           const data: {
             isSuccess: boolean;
@@ -183,6 +194,7 @@ export default function PaymentForm({
       const { result, rollbackDataKey } = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
+
       //check if product data update process is failed or succeeded
       if (!result) {
         console.log('Error when updating products during payment execution');
@@ -211,12 +223,24 @@ export default function PaymentForm({
         //this ensures that redirection is implemented on demand
         redirect: 'if_required',
       });
+
       //check payment error
       if (error) {
+        console.log('running1');
         handleStripeError(error);
-        await rollbackData(rollbackDataKey as string);
+        const rs = await new Promise((resolve, reject) =>
+          setTimeout(() => {
+            rollbackData(rollbackDataKey as string); //get product instock to roll back data from sanity database since it takes time for webhook to be triggered to update app database
+            //we only clear products in shopping cart when payment is executed successfully
+            resolve('success');
+          }, 5000)
+        );
+
+        console.log(rs);
         return;
       }
+
+      console.log('running2');
       if (!paymentIntent) {
         console.error('payment intent not available');
         await rollbackData(rollbackDataKey as string);

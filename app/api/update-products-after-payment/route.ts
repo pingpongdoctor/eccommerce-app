@@ -100,21 +100,6 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
       )
     );
 
-    //clear products in shopping cart
-    const productIds: number[] = productsInShoppingCart.map(
-      (
-        productInShoppingCart: ProductInShoppingCart & {
-          sanityProductId: string;
-        }
-      ) => productInShoppingCart.productId
-    );
-    await prisma.usersProducts.deleteMany({
-      where: {
-        userId: user.id,
-        productId: { in: productIds },
-      },
-    });
-
     //update product instock on our database and on sanity database
     await Promise.all(
       productsInShoppingCart.map(
@@ -157,6 +142,13 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
             },
           ];
 
+          console.log(
+            'product instock after payment',
+            product.instock,
+            '-',
+            productInShoppingCart.productQuantity
+          );
+
           //when the product quantity is updated on Sanity database, it will trigger Sanity webhook to make an API call to update product document on app database
           const res = await fetch(
             `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v${process.env.NEXT_PUBLIC_SANITY_API_VERSION}/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`,
@@ -171,6 +163,8 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
           );
 
           const data = await res.json();
+
+          console.log(data);
 
           if (data.error) {
             return NextResponse.json(

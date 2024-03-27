@@ -73,6 +73,13 @@ export const POST = withApiAuthRequired(async (req: Request) => {
             );
           }
 
+          console.log('current product before roll back', product.instock);
+
+          console.log(
+            'data that is added to roll back',
+            productInShoppingCart.productQuantity
+          );
+
           const mutations = [
             {
               patch: {

@@ -25,7 +25,8 @@ export const generateConfirmPaymentHTML = function (
      margin-bottom: 1rem;
    "
  >
-   <img src="${product.imgUrl}" alt="img-1" />
+   <img src="${product.imgUrl}" alt="img-1" style="width: 140px;
+   height: auto;" />
    <div style="margin-left:1rem">
      <p style="margin-bottom: 1rem">${product.title}</p>
      <p>Price: $${product.price}</p>
