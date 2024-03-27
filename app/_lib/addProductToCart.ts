@@ -5,7 +5,7 @@ import { baseUrl } from '../utils/baseUrl';
 export async function addProductToCart(
   productSlug: string,
   productQuantity: number
-): Promise<{ isSuccess: boolean; isProductSoldOut: boolean }> {
+): Promise<{ isSuccess: boolean }> {
   try {
     const res = await fetch(`${baseUrl}/api/product-shopping/${productSlug}`, {
       headers: {
@@ -21,9 +21,9 @@ export async function addProductToCart(
       console.log('Error adding product to cart' + ' ' + data.message);
       if (data.message === 'product is sold out') {
         notify('info', 'product is sold out', 'product-sold-out');
-        return { isSuccess: false, isProductSoldOut: true };
+        return { isSuccess: false };
       }
-      return { isSuccess: false, isProductSoldOut: false };
+      return { isSuccess: false };
     }
 
     if (data.notEnoughAvailableProduct) {
@@ -41,10 +41,9 @@ export async function addProductToCart(
     }
     return {
       isSuccess: true,
-      isProductSoldOut: data.message === 'product is sold out',
     };
   } catch (e: any) {
     console.log('Error in addProductToCart function' + ' ' + e.message);
-    return { isSuccess: false, isProductSoldOut: false };
+    return { isSuccess: false };
   }
 }

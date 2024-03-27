@@ -4,7 +4,11 @@ export async function createOrder(
   fullname: string,
   status: OrderStatus,
   address: Address
-): Promise<boolean> {
+): Promise<{
+  isSuccess: boolean;
+  transactionNumber?: string;
+  expectedDeliveryDate?: string;
+}> {
   try {
     const res = await fetch(`${baseUrl}/api/create-order`, {
       headers: {
@@ -18,12 +22,14 @@ export async function createOrder(
 
     if (!res.ok) {
       console.log('Error when creating order' + data.message);
-      return false;
+      return { isSuccess: false };
     }
 
-    return true;
+    const { transactionNumber, expectedDeliveryDate } = data;
+
+    return { isSuccess: true, transactionNumber, expectedDeliveryDate };
   } catch (e: any) {
     console.log('Error in createOrder function' + e.message);
-    return false;
+    return { isSuccess: false };
   }
 }

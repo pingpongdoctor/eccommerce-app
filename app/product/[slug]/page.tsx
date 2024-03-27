@@ -14,8 +14,6 @@ import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import CustomerReviews from '@/app/_components/CustomerReviews';
-import { getProductReviews } from '@/app/_lib/getProductReviews';
-import { Review } from '@prisma/client';
 
 export async function generateMetadata({
   params,
@@ -92,10 +90,7 @@ export default async function DetailedProduct({
       {draftMode().isEnabled ? (
         <ProductDetailPreview initial={initialData} params={params} />
       ) : (
-        <ProductDetail
-          product={initialData.data}
-          // productReviews={productReviews || []}
-        />
+        <ProductDetail product={initialData.data} />
       )}
 
       {/* customer reviews */}

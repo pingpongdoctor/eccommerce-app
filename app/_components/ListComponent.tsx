@@ -10,6 +10,7 @@ interface Props {
   listData: { id: number; value: number }[];
   listClassname?: string;
   listButtonClassname?: string;
+  listButtonDisabled?: boolean;
 }
 
 export default function ListComponent({
@@ -19,6 +20,7 @@ export default function ListComponent({
   listData,
   listClassname,
   listButtonClassname,
+  listButtonDisabled = false,
 }: Props) {
   return (
     <Listbox
@@ -26,6 +28,7 @@ export default function ListComponent({
       as="div"
       className="relative"
       onChange={listComponentChangeEventHandler}
+      disabled={listButtonDisabled}
     >
       <Listbox.Button
         className={`focus:outline-non relative w-full min-w-[75px] cursor-default rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-10 text-left ${listButtonClassname}`}

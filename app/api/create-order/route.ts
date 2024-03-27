@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
+import { v4 as uuidv4 } from 'uuid';
 
 //create order
 export const POST = withApiAuthRequired(async (req: Request) => {
@@ -51,10 +52,16 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       );
     }
 
+    const transactionNumber = 'TS' + uuidv4();
+    const expectedDeliveryDate = new Date();
+    expectedDeliveryDate.setDate(expectedDeliveryDate.getDate() + 7);
+
     //add order for the current user
     const { city, country, line1, line2, postal_code, state } = address;
     await prisma.order.create({
       data: {
+        transactionNumber,
+        expectedDeliveryDate,
         fullname,
         email: userData.email,
         city,
@@ -69,7 +76,11 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     });
 
     return NextResponse.json(
-      { message: 'new order is created' },
+      {
+        message: 'new order is created',
+        transactionNumber,
+        expectedDeliveryDate,
+      },
       { status: 201 }
     );
   } catch (err: any) {

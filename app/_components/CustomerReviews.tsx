@@ -1,5 +1,4 @@
 'use client';
-
 import RatingStar from './RatingStar';
 import { StarIcon } from '@heroicons/react/20/solid';
 import CustomerReview from './CustomerReview';
@@ -24,9 +23,6 @@ export default function CustomerReviews({
   const [productReviews, setProductReviews] = useState<
     (Review & { user: { name: string; imgUrl: string } })[]
   >([]);
-  const [averageStar, setAverageStar] = useState<number>(
-    productReviews.length > 0 ? calculateAverageStar(productReviews) || 0 : 0
-  );
 
   //function to update rating star value
   const updateRatingStarValue = function (averageStarNum: number) {
@@ -34,7 +30,6 @@ export default function CustomerReviews({
       if (averageStarNum > 0) {
         const ratingElement = document.getElementById('main-rating');
         if (!ratingElement) {
-          setAverageStar(0);
           return;
         }
         const svgElements = ratingElement.getElementsByTagName('svg');
@@ -47,8 +42,6 @@ export default function CustomerReviews({
             curSvgElement.setAttribute('fill', 'none');
           }
         }
-      } else {
-        setAverageStar(0);
       }
     } catch (e: any) {
       console.log('Error in updateRatingStarValue' + e);
@@ -83,6 +76,8 @@ export default function CustomerReviews({
 
     return () => {
       pusher.unsubscribe('new-reviews');
+      channel.unbind_all();
+      pusher.disconnect();
     };
   }, []);
 
