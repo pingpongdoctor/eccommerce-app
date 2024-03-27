@@ -226,12 +226,10 @@ export default function PaymentForm({
 
       //check payment error
       if (error) {
-        console.log('running1');
         handleStripeError(error);
         const rs = await new Promise((resolve, reject) =>
           setTimeout(() => {
             rollbackData(rollbackDataKey as string); //get product instock to roll back data from sanity database since it takes time for webhook to be triggered to update app database
-            //we only clear products in shopping cart when payment is executed successfully
             resolve('success');
           }, 5000)
         );
