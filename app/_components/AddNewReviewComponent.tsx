@@ -6,7 +6,7 @@ import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { postNewReview } from '../_lib/postNewReview';
 import { notify } from './ReactToastifyProvider';
 import { globalStatesContext } from './GlobalStatesContext';
-import { triggerNewReviewsEventSocketIo } from '../_lib/triggerNewReviewsEventSocketIo';
+import { triggerNewReviewsEvent } from '../_lib/triggerNewReviewsEvent';
 
 interface Props {
   productSlug: string;
@@ -51,7 +51,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
 
       if (isSuccess) {
         notify('success', 'Thank your for your review', 'review-success');
-        await triggerNewReviewsEventSocketIo(productSlug);
+        await triggerNewReviewsEvent(productSlug);
       }
     } catch (e: any) {
       console.log(

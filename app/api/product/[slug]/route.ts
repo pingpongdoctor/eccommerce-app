@@ -1,12 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-//endpoint used for creating and updating products, that is triggered by Sanity webhook
-export const GET = withApiAuthRequired(async (_req: NextRequest, context) => {
-  const productSlug = context?.params?.slug;
-
-  if (!productSlug) {
+export const GET = async (
+  _req: NextRequest,
+  { params }: { params: { slug: string } }
+) => {
+  if (!params?.slug) {
     return NextResponse.json(
       { message: 'Miss required data' },
       {
@@ -17,7 +16,7 @@ export const GET = withApiAuthRequired(async (_req: NextRequest, context) => {
 
   try {
     const product = await prisma.product.findUnique({
-      where: { sanitySlug: productSlug as string },
+      where: { sanitySlug: params.slug as string },
     });
 
     if (!product) {
@@ -42,4 +41,4 @@ export const GET = withApiAuthRequired(async (_req: NextRequest, context) => {
       { status: err.statusCode || 500 }
     );
   }
-});
+};

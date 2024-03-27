@@ -10,43 +10,11 @@ import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
 import { globalStatesContext } from './GlobalStatesContext';
 import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
-import { useContext, useState, useEffect } from 'react';
-import { getProduct } from '../_lib/getProduct';
-import { Product } from '@prisma/client';
+import { useContext } from 'react';
 
 export default function Navbar() {
   const { userProfile, isLoading, productsInCart } =
     useContext(globalStatesContext);
-  const [noSoldOutProducts, setNoSoldOutProducts] = useState<
-    ProductInShoppingCart[]
-  >([]);
-
-  const checkSoldOutProducts = async function (
-    products: ProductInShoppingCart[]
-  ): Promise<boolean[]> {
-    const result = await Promise.all(
-      productsInCart.map(async (productInCart: ProductInShoppingCart) => {
-        const product: Product | undefined = await getProduct(
-          productInCart.productSlug
-        );
-        return product?.instock == 0;
-      })
-    );
-
-    return result;
-  };
-
-  //filter sold out products
-  useEffect(() => {
-    checkSoldOutProducts(productsInCart).then((result: boolean[]) => {
-      const noSoldOutProductsArr: ProductInShoppingCart[] =
-        productsInCart.filter((product: ProductInShoppingCart) => {
-          return result[productsInCart.indexOf(product)];
-        });
-
-      setNoSoldOutProducts(noSoldOutProductsArr);
-    });
-  }, [productsInCart]);
 
   return (
     <div className="mb-8 flex flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12 xl:mx-auto xl:max-w-7xl">
@@ -98,8 +66,8 @@ export default function Navbar() {
               >
                 <ShoppingBagIcon className="h-7 text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600" />
                 <p className="text-lg font-medium text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600">
-                  {noSoldOutProducts.length > 0
-                    ? calculateTotalProducts(noSoldOutProducts)
+                  {productsInCart.length > 0
+                    ? calculateTotalProducts(productsInCart)
                     : 0}
                 </p>
               </Link>

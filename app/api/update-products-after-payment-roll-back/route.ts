@@ -1,28 +1,11 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
-import { getSession } from '@auth0/nextjs-auth0';
-import prisma from '@/lib/prisma';
 import { Redis } from '@upstash/redis';
+import { client } from '@/sanity/lib/client';
+import { SanityDocument } from 'next-sanity';
+import { PRODUCT_QUERY } from '@/sanity/lib/queries';
 
 const redis = Redis.fromEnv();
-
-//function to get product
-const getProduct = async function (
-  productInShoppingCart: ProductInShoppingCart & {
-    sanityProductId: string;
-  }
-): Promise<{
-  instock: number;
-} | null> {
-  const product: {
-    instock: number;
-  } | null = await prisma.product.findUnique({
-    where: { id: productInShoppingCart.productId },
-    select: { instock: true },
-  });
-
-  return product;
-};
 
 //roll back product data after failed payment
 export const POST = withApiAuthRequired(async (req: Request) => {
@@ -54,6 +37,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     await redis.hdel(`${rollbackDataKey}-rollback-data`, 'data');
 
     //roll back product data on Sanity database and app database
+    //when product data on Sanity database is mutated, Sanity webhook will be triggered to make an API call, updating product data on app database
     await Promise.all(
       rollbackData.map(
         async (
@@ -61,9 +45,11 @@ export const POST = withApiAuthRequired(async (req: Request) => {
             sanityProductId: string;
           }
         ) => {
-          const product: {
-            instock: number;
-          } | null = await getProduct(productInShoppingCart);
+          //get product data on sanity database instead of app database
+          //because product data on app database can be stale as data is updated first on sanity database and it takes time for sanity webhook to be triggered to update product data on app database
+          const product: SanityProduct & SanityDocument = await client.fetch<
+            SanityProduct & SanityDocument
+          >(PRODUCT_QUERY, { slug: productInShoppingCart.productSlug }, {});
 
           if (!product) {
             return NextResponse.json(

@@ -1,10 +1,8 @@
 import { baseUrl } from '../utils/baseUrl';
 
-//return true if data is successfully rolled back
-export async function rollbackData(rollbackDataKey: string): Promise<boolean> {
+export async function rollbackData(rollbackDataKey: string) {
   if (!rollbackDataKey?.trim()) {
     console.log('Error rolling back data not provided');
-    return false;
   }
 
   try {
@@ -23,13 +21,8 @@ export async function rollbackData(rollbackDataKey: string): Promise<boolean> {
 
     if (!res.ok) {
       console.log('Error when rolling back product data' + ' ' + data.message);
-
-      return false;
     }
-
-    return true;
   } catch (e: any) {
     console.log('Error in updateProductsAfterPayment function' + e.message);
-    return false;
   }
 }

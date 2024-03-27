@@ -100,21 +100,6 @@ export const PUT = withApiAuthRequired(async (req: Request) => {
       )
     );
 
-    //clear products in shopping cart
-    const productIds: number[] = productsInShoppingCart.map(
-      (
-        productInShoppingCart: ProductInShoppingCart & {
-          sanityProductId: string;
-        }
-      ) => productInShoppingCart.productId
-    );
-    await prisma.usersProducts.deleteMany({
-      where: {
-        userId: user.id,
-        productId: { in: productIds },
-      },
-    });
-
     //update product instock on our database and on sanity database
     await Promise.all(
       productsInShoppingCart.map(

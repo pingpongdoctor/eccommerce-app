@@ -5,7 +5,7 @@ import {
   PaymentElement,
   AddressElement,
 } from '@stripe/react-stripe-js';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import ButtonComponent from './ButtonComponent';
 import { SanityDocument } from 'next-sanity';
 import CheckoutList from './CheckoutList';
@@ -18,12 +18,16 @@ import {
   StripeError,
 } from '@stripe/stripe-js';
 import { notify } from './ReactToastifyProvider';
-import { useRouter } from 'next/navigation';
 import { rollbackData } from '../_lib/rollbackData';
 import { createOrder } from '../_lib/createOrder';
 import { clearRollbackData } from '../_lib/clearRollbackData';
-import { revalidateWithTag } from '../_lib/revalidateWithTag';
 import { checkProductQuantity } from '../_lib/checkProductQuantity';
+import { handleStripeError } from '../_lib/handleStripeError';
+import { triggerProductQuantityEvent } from '../_lib/triggerNewProductQuantityEvent';
+import { useRouter } from 'next/navigation';
+import { sendEmailPaymentConfirm } from '../_lib/sendEmailPaymentConfirm';
+import { formatDateToWords } from '../_lib/formatDateToWords';
+import { deleteProductsInCartAfterPayment } from '../_lib/deleteProductsInCartAfterPayment';
 
 interface Props {
   productsWithImgUrlAndQuantity: (ProductWithImgUrl &
@@ -39,10 +43,14 @@ export default function PaymentForm({
   subtotal,
   productsInCartWithSanityProductId,
 }: Props) {
-  const { setChangeProductsInCart, productsInCart } =
+  const { setChangeProductsInCart, productsInCart, userProfile } =
     useContext(globalStatesContext);
+  const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
+  const [tax, setTax] = useState<number>(0);
+  const [shipping, setShipping] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fullname, setFullname] = useState<string>('');
   const [address, setAddress] = useState<Address>({
@@ -53,7 +61,6 @@ export default function PaymentForm({
     line2: null,
     postal_code: '',
   });
-  const [rollbackDataKey, setRollbackDataKey] = useState<string>('');
 
   const handleUpdateFullname = function (e: StripeAddressElementChangeEvent) {
     setFullname(e.value.name);
@@ -63,51 +70,143 @@ export default function PaymentForm({
     setAddress(e.value.address);
   };
 
+  const updateProductQuantityInRealtime = async function (): Promise<void> {
+    try {
+      await Promise.all(
+        productsWithImgUrlAndQuantity.map(
+          async (
+            product: ProductWithImgUrl &
+              SanityDocument & { productQuantity: number }
+          ) => {
+            //trigger product quantity event to let product data updated in realtime using realtime communication that is managed by Pusher service
+            await triggerProductQuantityEvent(product.slug.current);
+          }
+        )
+      );
+    } catch (e: any) {
+      console.log('Error when udapting product quantity' + e);
+    }
+  };
+
+  useEffect(() => {
+    setTax(Math.round((subtotal * 12) / 100));
+    setShipping(Math.round((subtotal * 2) / 100));
+    setTotal(
+      Math.round((subtotal * 12) / 100) +
+        Math.round((subtotal * 2) / 100) +
+        subtotal
+    );
+  }, [subtotal]);
+
+  const checkPaymentStatus = async function (
+    paymentIntent: PaymentIntent,
+    rollbackDataKey: string
+  ) {
+    console.log('running check payment status');
+    try {
+      switch (paymentIntent.status) {
+        case 'succeeded':
+          //delete products in cart
+          const productIds: number[] = productsInCartWithSanityProductId.map(
+            (
+              productInShoppingCart: ProductInShoppingCart & {
+                sanityProductId: string;
+              }
+            ) => productInShoppingCart.productId
+          );
+          await deleteProductsInCartAfterPayment(productIds);
+          //create new order document
+          const data: {
+            isSuccess: boolean;
+            transactionNumber?: string | undefined;
+            expectedDeliveryDate?: string | undefined;
+          } = await createOrder(fullname, 'prepare', address); //create order and return expectedDeliveryTime and transactionNumber
+          //trigger events to update product quantity in realtime
+          await updateProductQuantityInRealtime();
+          //clear rollback data in Redis database
+          await clearRollbackData(rollbackDataKey);
+
+          //check if order is successfully created on database
+          if (!data.isSuccess) {
+            notify(
+              'error',
+              'There is a problem taking place when creating your order. Please contact our team for support if your payment is executed',
+              'error-creating-order'
+            );
+          } else {
+            const expectedTimeToDelivery = formatDateToWords(
+              data.expectedDeliveryDate as string
+            );
+            //send email payment confirmation
+            await sendEmailPaymentConfirm(
+              'thanhnhantran1501@gmail.com', //will change this later on
+              userProfile.email as string,
+              subtotal,
+              tax,
+              shipping,
+              total,
+              expectedTimeToDelivery,
+              data.transactionNumber as string,
+              productsWithImgUrlAndQuantity
+            );
+
+            notify(
+              'success',
+              'Thank you for your purchase at Glowy Lab!',
+              'success-payment'
+            );
+          }
+
+          // //navigate user to order summary page
+          // router.push('/');
+          break;
+        default:
+          notify('error', 'Something went wrong.', 'payment-error');
+          await rollbackData(rollbackDataKey);
+          break;
+      }
+    } catch (e: any) {
+      console.log('Error when checking payment status' + e);
+    }
+  };
+
   const submitHandler = async (e: any) => {
     e.preventDefault();
-
     try {
       setIsLoading(true);
-
       //check if there is any sold out product
-      const result = await checkProductQuantity(productsInCart);
-
-      if (!result.isSuccess) {
+      const { isSuccess, noProductsSoldOut, sufficientProducts } =
+        await checkProductQuantity(productsInCart);
+      if (!isSuccess) {
         console.log('Error when checking product quantity');
         return;
       }
-
       //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
-      if (!result.noProductsSoldOut || !result.sufficientProducts) {
-        await revalidateWithTag('post');
-        setChangeProductsInCart(true);
+      if (!noProductsSoldOut || !sufficientProducts) {
+        notify(
+          'info',
+          'some products are sold out or not sufficient to purchase',
+          'product-sold-out-or-not-sufficient'
+        );
         return;
       }
-
       //update product data first before executing payment
-      const returnedData = await updateProductsAfterPayment(
+      const { result, rollbackDataKey } = await updateProductsAfterPayment(
         productsInCartWithSanityProductId
       );
 
-      //revalidate data for SSG pages after updating database
-      await revalidateWithTag('post');
-
       //check if product data update process is failed or succeeded
-      if (!returnedData.result) {
+      if (!result) {
         console.log('Error when updating products during payment execution');
         return;
       }
 
-      //if not failed, set rollbackDataKey state
-      setRollbackDataKey(returnedData.rollbackDataKey as string);
-
       //roll back product data if stripe or elements instances are not available
       if (!stripe || !elements) {
         console.log('stripe or elements instances not available');
-        await rollbackData(rollbackDataKey);
+        await rollbackData(rollbackDataKey as string);
         return;
       }
-
       //execute payment
       const {
         error,
@@ -127,64 +226,24 @@ export default function PaymentForm({
 
       //check payment error
       if (error) {
-        if (error.type === 'card_error' || error.type === 'validation_error') {
-          notify(
-            'error',
-            error.message || 'Something went wrong.',
-            'card-validation-errors'
-          );
-        } else {
-          notify('error', 'Something went wrong.', 'error');
-        }
-        await rollbackData(rollbackDataKey);
+        handleStripeError(error);
+        await rollbackData(rollbackDataKey as string);
         return;
       }
-
       if (!paymentIntent) {
         console.error('payment intent not available');
-        notify('error', 'Something went wrong.', 'payment-intent-error');
-        await rollbackData(rollbackDataKey);
+        await rollbackData(rollbackDataKey as string);
         return;
       }
-
       //check payment status after payment execution
-      switch (paymentIntent.status) {
-        case 'succeeded':
-          setChangeProductsInCart(true);
-          notify('success', 'Payment succeeded!', 'success-payment');
-          //create new order document, clear rollback data in Redis database and revalidate data for SSG pages after after successful payment
-          await createOrder(fullname, 'prepare', address);
-          await clearRollbackData(rollbackDataKey);
-
-          //navigate user to order summary page
-          // router.push('/');
-          break;
-        case 'processing':
-          notify('info', 'Your payment is processing.', 'payment-in-process');
-          break;
-        case 'requires_payment_method':
-          notify(
-            'error',
-            'Your payment was not successful, please try again.',
-            'payment-error'
-          );
-          await rollbackData(rollbackDataKey);
-          break;
-        default:
-          notify('error', 'Something went wrong.', 'error');
-          await rollbackData(rollbackDataKey);
-          break;
-      }
+      await checkPaymentStatus(paymentIntent, rollbackDataKey as string);
     } catch (error: any) {
       console.log(
-        'Error in submitHandler function in PaymentForm component' +
-          error.message
+        'Error in submitHandler function in PaymentForm component' + error
       );
-      await rollbackData(rollbackDataKey);
     } finally {
       setIsLoading(false);
-      await revalidateWithTag('post');
-      setRollbackDataKey('');
+      setChangeProductsInCart(true);
     }
   };
 
@@ -204,8 +263,8 @@ export default function PaymentForm({
         productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
         checkoutListClassname="border-t mt-8 lg:mt-12 bg-white rounded-md p-6"
         subtotal={subtotal}
-        tax={Math.round((subtotal * 12) / 100)}
-        shipping={Math.round((subtotal * 2) / 100)}
+        tax={tax}
+        shipping={shipping}
       />
 
       <ButtonComponent

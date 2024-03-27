@@ -1,9 +1,7 @@
 import { baseUrl } from '../utils/baseUrl';
 
 //return true if rollback data is cleared
-export async function clearRollbackData(
-  rollbackDataKey: string
-): Promise<boolean> {
+export async function clearRollbackData(rollbackDataKey: string) {
   try {
     const res = await fetch(`${baseUrl}/api/clear-rollback-data`, {
       headers: {
@@ -17,13 +15,8 @@ export async function clearRollbackData(
 
     if (!res.ok) {
       console.log('Error when clearing rollback data' + ' ' + data.message);
-
-      return false;
     }
-
-    return true;
   } catch (e: any) {
     console.log('Error in clearRollbackData function' + e.message);
-    return false;
   }
 }
