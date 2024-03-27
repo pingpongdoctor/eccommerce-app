@@ -45,6 +45,8 @@ export const POST = withApiAuthRequired(async (req: Request) => {
             sanityProductId: string;
           }
         ) => {
+          //get product data on sanity database instead of app database
+          //because product data on app database can be stale as data is updated first on sanity database and it takes time for sanity webhook to be triggered to update product data on app database
           const product: SanityProduct & SanityDocument = await client.fetch<
             SanityProduct & SanityDocument
           >(PRODUCT_QUERY, { slug: productInShoppingCart.productSlug }, {});

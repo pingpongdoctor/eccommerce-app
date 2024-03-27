@@ -227,18 +227,9 @@ export default function PaymentForm({
       //check payment error
       if (error) {
         handleStripeError(error);
-        const rs = await new Promise((resolve, reject) =>
-          setTimeout(() => {
-            rollbackData(rollbackDataKey as string); //get product instock to roll back data from sanity database since it takes time for webhook to be triggered to update app database
-            resolve('success');
-          }, 5000)
-        );
-
-        console.log(rs);
+        await rollbackData(rollbackDataKey as string);
         return;
       }
-
-      console.log('running2');
       if (!paymentIntent) {
         console.error('payment intent not available');
         await rollbackData(rollbackDataKey as string);
