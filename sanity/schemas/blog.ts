@@ -1,8 +1,8 @@
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'post',
-  title: 'Post',
+  name: 'blog',
+  title: 'Blog',
   type: 'document',
   fields: [
     defineField({
@@ -10,11 +10,12 @@ export default defineType({
       title: 'Title',
       type: 'string',
     }),
-    defineField({
-      name: 'featured',
-      title: 'Featured Product',
-      type: 'boolean',
-    }),
+    {
+      name: 'author',
+      title: 'Author',
+      type: 'reference',
+      to: [{ type: 'author' }],
+    },
     defineField({
       name: 'slug',
       title: 'Slug',
@@ -23,16 +24,6 @@ export default defineType({
         source: 'title',
         maxLength: 96,
       },
-    }),
-    defineField({
-      name: 'instock',
-      title: 'In Stock',
-      type: 'number',
-    }),
-    defineField({
-      name: 'price',
-      title: 'Price',
-      type: 'string',
     }),
     defineField({
       name: 'images',
@@ -47,16 +38,16 @@ export default defineType({
           fields: [
             {
               name: 'alt',
-              type: 'string',
               title: 'Alternative Text',
+              type: 'string',
             },
           ],
         },
       ],
     }),
     defineField({
-      name: 'category',
-      title: 'Category',
+      name: 'blogcategory',
+      title: 'Blog Category',
       type: 'string',
       options: {
         list: [
@@ -69,8 +60,18 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'detail',
-      title: 'Detail',
+      name: 'introparagraph',
+      title: 'Introduction Paragraph',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'mainparagraph',
+      title: 'Main Paragraph',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'conclusionparagraph',
+      title: 'Conclusion Paragraph',
       type: 'blockContent',
     }),
   ],
