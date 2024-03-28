@@ -2,6 +2,15 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 import prisma from '@/lib/prisma';
 import { revalidateTag } from 'next/cache';
+import Pusher from 'pusher';
+
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID as string,
+  key: process.env.PUSHER_KEY as string,
+  secret: process.env.PUSHER_SECRET as string,
+  cluster: process.env.PUSHER_CLUSTER as string,
+  useTLS: true,
+});
 
 //endpoint used for creating and updating products, that is triggered by Sanity webhook
 export async function POST(req: NextRequest) {
@@ -60,6 +69,15 @@ export async function POST(req: NextRequest) {
 
     //revalidate product data in SSG pages
     revalidateTag(body._type);
+
+    //trigger product event to update product quantity in realtime using Pusher severless service
+    await pusher.trigger(
+      'new-product-quantity',
+      `new-product-quantity-${body.sanitySlug}-event`,
+      {
+        newProductQuantity: body.instock,
+      }
+    );
 
     return NextResponse.json(
       { message: 'New product is created', revalidate: true },
