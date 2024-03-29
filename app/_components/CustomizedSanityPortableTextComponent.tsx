@@ -77,7 +77,9 @@ const myPortableTextComponents: PortableTextComponents | undefined = {
   },
 };
 
-export default function SanityPortableTextComponent(props: { value: any }) {
+export default function CustomizedSanityPortableTextComponent(props: {
+  value: any;
+}) {
   return (
     <PortableText value={props.value} components={myPortableTextComponents} />
   );

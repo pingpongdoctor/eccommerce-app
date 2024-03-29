@@ -46,8 +46,8 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'blogcategory',
-      title: 'Blog Category',
+      name: 'category',
+      title: 'Category',
       type: 'string',
       options: {
         list: [
