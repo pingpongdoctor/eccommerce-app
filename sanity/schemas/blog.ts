@@ -60,18 +60,8 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'introparagraph',
-      title: 'Introduction Paragraph',
-      type: 'blockContent',
-    }),
-    defineField({
-      name: 'mainparagraph',
-      title: 'Main Paragraph',
-      type: 'blockContent',
-    }),
-    defineField({
-      name: 'conclusionparagraph',
-      title: 'Conclusion Paragraph',
+      name: 'content',
+      title: 'Content',
       type: 'blockContent',
     }),
   ],
