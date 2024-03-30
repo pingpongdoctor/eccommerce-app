@@ -5,6 +5,9 @@ import {
   PRODUCT_QUERY,
   PRODUCTS_QUERY,
   PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
+  BLOGS_QUERY,
+  BLOG_QUERY,
+  BLOGS_QUERY_CUSTOMER_ALSO_READ,
 } from '@/sanity/lib/queries';
 import { draftMode } from 'next/headers';
 import ProductDetailPreview from '@/app/_components/ProductDetailPreview';
@@ -14,57 +17,58 @@ import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import CustomerReviews from '@/app/_components/CustomerReviews';
+import BlogComponent from '@/app/_components/BlogComponent';
 
 export async function generateMetadata({
   params,
 }: {
   params: QueryParams;
 }): Promise<Metadata> {
-  const product = await client.fetch<SanityProduct & SanityDocument>(
-    PRODUCT_QUERY,
+  const blog = await client.fetch<SanityBlog & SanityDocument>(
+    BLOG_QUERY,
     params,
     {
-      next: { tags: ['post'], revalidate: 3600 },
+      next: { tags: ['blog'], revalidate: 3600 },
     }
   );
 
-  if (!product) {
+  if (!blog) {
     return {
       title: 'wrong product id',
     };
   }
 
   return {
-    title: product.title,
+    title: blog.title,
   };
 }
 
 export async function generateStaticParams() {
-  const products = await client.fetch<(SanityProduct & SanityDocument)[]>(
-    PRODUCTS_QUERY,
+  const blogs = await client.fetch<(SanityBlog & SanityDocument)[]>(
+    BLOGS_QUERY,
     {},
     {
-      next: { tags: ['post'], revalidate: 3600 },
+      next: { tags: ['blog'], revalidate: 3600 },
     }
   );
 
-  return products.map((product) => ({
-    slug: product.slug.current,
+  return blogs.map((blog) => ({
+    slug: blog.slug.current,
   }));
 }
 
-export default async function DetailedProduct({
+export default async function DetailedBlog({
   params,
 }: {
   params: QueryParams;
 }) {
-  //get data for a specific product
-  const initialData = await loadQuery<SanityProduct & SanityDocument>(
-    PRODUCT_QUERY,
+  //get data for a specific blog
+  const initialData = await loadQuery<SanityBlog & SanityDocument>(
+    BLOG_QUERY,
     params,
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      next: { tags: ['post'], revalidate: 3600 },
+      next: { tags: ['blog'], revalidate: 3600 },
     }
   );
 
@@ -72,32 +76,31 @@ export default async function DetailedProduct({
     notFound();
   }
 
-  //get products that customers also buy
-  const customerAlsoBuyInitialData = await loadQuery<
-    (SanityProduct & SanityDocument)[]
+  //get blogs that customers also read
+  const customerAlsoReadInitialData = await loadQuery<
+    (SanityBlog & SanityDocument)[]
   >(
-    PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
+    BLOGS_QUERY_CUSTOMER_ALSO_READ,
     { category: initialData.data.category, slug: params.slug },
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      next: { tags: ['post'], revalidate: 3600 },
+      next: { tags: ['blog'], revalidate: 3600 },
     }
   );
 
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
+      <BlogComponent blog={initialData.data} />
+
       {/* product detail */}
-      {draftMode().isEnabled ? (
+      {/* {draftMode().isEnabled ? (
         <ProductDetailPreview initial={initialData} params={params} />
       ) : (
         <ProductDetail product={initialData.data} />
-      )}
-
-      {/* customer reviews */}
-      <CustomerReviews productSlug={params.slug} />
+      )} */}
 
       {/* product you may like */}
-      <div>
+      {/* <div>
         {customerAlsoBuyInitialData?.data?.length > 0 && (
           <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
             <h3 className="mb-0">Products you may like</h3>
@@ -112,7 +115,7 @@ export default async function DetailedProduct({
         ) : (
           <ProductCards products={customerAlsoBuyInitialData.data} />
         )}
-      </div>
+      </div> */}
     </main>
   );
 }

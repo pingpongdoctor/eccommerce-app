@@ -12,13 +12,27 @@ interface HomePageData {
 
 interface SanityProduct {
   slug: { _type: string; current: string };
-  title: 'string';
+  title: string;
   images: any;
   detail: any;
   featured: boolean;
   price: string;
   category: Categories;
   instock: number;
+}
+
+interface SanityAuthor {
+  slug: { _type: string; current: string };
+  name: string;
+  image: any;
+}
+
+interface SanityBlog {
+  slug: { _type: string; current: string };
+  title: string;
+  author: any;
+  category: Categories;
+  content: any;
 }
 
 interface ProductInShoppingCart {

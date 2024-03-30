@@ -10,6 +10,8 @@ export const PRODUCTS_QUERY_CUSTOMER_ALSO_BUY = groq`*[_type == "post" && count(
 export const PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE = groq`*[_type == "post" && count(images)>0 && category in $categoryArr && !(slug.current in $slugArr)] | order(_updatedAt desc)[0...4]`;
 export const HOMEPAGE_QUERY = groq`*[_type == "homepage"][0]`;
 
-export const BLOG_QUERY = groq`*[_type == "blog" && defined(slug) && defined(category) && count(images)>0 && slug.current == $slug][0]`;
-export const BLOGS_QUERY = groq`*[_type == "blog" && defined(slug) && defined(category) && count(images)>0] | order(_updatedAt desc)`;
-export const BLOGS_QUERY_CUSTOMER_ALSO_READ = groq`*[_type == "blog" && count(images)>0 && category == $category && slug.current != $slug] | order(_updatedAt desc)[0...10]`;
+export const BLOG_QUERY = groq`*[_type == "blog" && defined(slug) && defined(category) && slug.current == $slug][0]`;
+export const BLOGS_QUERY = groq`*[_type == "blog" && defined(slug) && defined(category)] | order(_updatedAt desc)`;
+export const BLOGS_QUERY_CUSTOMER_ALSO_READ = groq`*[_type == "blog" && category == $category && slug.current != $slug] | order(_updatedAt desc)[0...10]`;
+
+export const AUTHOR_QUERY = groq`*[_type == "author" && defined(slug) && _id == $id][0]`;

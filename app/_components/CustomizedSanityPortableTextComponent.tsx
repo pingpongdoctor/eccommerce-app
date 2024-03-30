@@ -13,11 +13,12 @@ const PortableTextImage = ({
   isInline: boolean;
 }) => {
   const { width, height } = getImageDimensions(value);
-  console.log(value);
   return (
     <Image
       src={builder.image(value).quality(80).url()}
-      className={`${isInline ? 'inline-block' : 'block'}`}
+      className={`${
+        isInline ? 'inline-block' : 'block'
+      } my-8 aspect-video w-full rounded-md object-cover object-center md:my-10`}
       width={width}
       height={height}
       placeholder="blur"
@@ -37,43 +38,33 @@ const myPortableTextComponents: PortableTextComponents | undefined = {
       <blockquote className="border-l-purple-500">{children}</blockquote>
     ),
 
-    h1: ({ children }) => (
-      <h1 className="mb-8 text-4xl font-bold text-gray-900 md:mb-10">
-        {children}
-      </h1>
-    ),
-
-    h2: ({ children }) => (
-      <h2 className="mb-6 text-3xl font-bold text-gray-900 md:mb-8">
-        {children}
-      </h2>
-    ),
-
-    h3: ({ children }) => (
-      <h3 className="mb-4 text-2xl font-semibold text-gray-900 md:mb-6">
-        {children}
-      </h3>
-    ),
-
     h4: ({ children }) => (
-      <h4 className="mb-4 text-2xl font-semibold text-gray-900 md:mb-6">
-        {children}
-      </h4>
-    ),
-
-    p: ({ children }) => (
-      <p className="text-gray-600 antialiased">{children}</p>
+      <div>
+        <div className="mb-8 mt-8 h-[1px] w-full bg-gray-200 md:mb-12 md:mt-12"></div>
+        <h4>{children}</h4>
+      </div>
     ),
   },
 
   list: {
     // Ex. 1: customizing common list types
     bullet: ({ children }) => (
-      <ul className="marker:text-gray-900">{children}</ul>
+      <ul className="ml-4 list-disc marker:text-gray-400">{children}</ul>
     ),
-    number: ({ children }) => (
-      <ol className="marker:text-gray-900">{children}</ol>
+    number: ({ children }) => <ol className="ml-4 list-decimal">{children}</ol>,
+
+    // Ex. 2: rendering custom lists
+    checkmarks: ({ children }) => (
+      <ol className="m-auto text-lg">{children}</ol>
     ),
+  },
+
+  listItem: {
+    // Ex. 1: customizing common list types
+    bullet: ({ children }) => <li className="mb-2 last:mb-0">{children}</li>,
+    number: ({ children }) => <li className="mb-2 last:mb-0">{children}</li>,
+    // Ex. 2: rendering custom list items
+    checkmarks: ({ children }) => <li>✅ {children}</li>,
   },
 };
 
