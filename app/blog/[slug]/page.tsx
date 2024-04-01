@@ -11,6 +11,9 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import BlogComponent from '@/app/_components/BlogComponent';
 import BlogPreviewComponent from '@/app/_components/BlogPreviewComponent';
+import BlogCard from '@/app/_components/BlogCard';
+import { addDetailedAuthorDataToBlogs } from '@/app/_lib/addDetailedAuthorToBlogs';
+import Link from 'next/link';
 
 export async function generateMetadata({
   params,
@@ -65,12 +68,12 @@ export default async function DetailedBlog({
     }
   );
 
-  if (!initialData.data) {
+  if (!initialData?.data) {
     notFound();
   }
 
   //get blogs that customers also read
-  const customerAlsoReadInitialData = await loadQuery<
+  const blogsCustomerAlsoReadInitialData = await loadQuery<
     (SanityBlog & SanityDocument)[]
   >(
     BLOGS_QUERY_CUSTOMER_ALSO_READ,
@@ -81,6 +84,10 @@ export default async function DetailedBlog({
     }
   );
 
+  //add detailed author data to blogs that customers also read
+  const blogsCustomerAlsoReadWithDetailedAuthorData =
+    await addDetailedAuthorDataToBlogs(blogsCustomerAlsoReadInitialData.data);
+
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
       {/* blog content */}
@@ -90,23 +97,41 @@ export default async function DetailedBlog({
         <BlogComponent blog={initialData.data} />
       )}
 
-      {/* blogs you may read */}
-      {/* <div>
-        {customerAlsoBuyInitialData?.data?.length > 0 && (
+      {/* blogs you may also read */}
+      <div>
+        {blogsCustomerAlsoReadWithDetailedAuthorData.length > 0 && (
           <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-            <h3 className="mb-0">Products you may like</h3>
+            <h3 className="mb-0">Blogs you may read</h3>
             <p className="font-semibold text-gray-900">
               See all <span>&rarr;</span>
             </p>
           </div>
         )}
 
-        {draftMode().isEnabled ? (
-          <ProductCardsPreview initial={customerAlsoBuyInitialData} />
-        ) : (
-          <ProductCards products={customerAlsoBuyInitialData.data} />
-        )}
-      </div> */}
+        <div className="flex gap-4 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+          {blogsCustomerAlsoReadWithDetailedAuthorData.length > 0 &&
+            blogsCustomerAlsoReadWithDetailedAuthorData.map(
+              (
+                blog: SanityBlog &
+                  SanityDocument & {
+                    authorData: SanityAuthor & SanityDocument;
+                  } & { imageUrl: string }
+              ) => (
+                <Link
+                  className="block w-[calc((100%-6rem)/4)]"
+                  key={blog._id}
+                  href={`/blog/${blog.slug.current}`}
+                >
+                  {' '}
+                  <BlogCard
+                    blog={blog}
+                    blogCardClassname="w-full sm:w-full md:w-full lg:w-full xl:w-full"
+                  />
+                </Link>
+              )
+            )}
+        </div>
+      </div>
     </main>
   );
 }
