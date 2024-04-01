@@ -10,6 +10,7 @@ import { client } from '@/sanity/lib/client';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import BlogComponent from '@/app/_components/BlogComponent';
+import BlogPreviewComponent from '@/app/_components/BlogPreviewComponent';
 
 export async function generateMetadata({
   params,
@@ -26,7 +27,7 @@ export async function generateMetadata({
 
   if (!blog) {
     return {
-      title: 'wrong product id',
+      title: 'wrong blog id',
     };
   }
 
@@ -82,16 +83,14 @@ export default async function DetailedBlog({
 
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
-      <BlogComponent blog={initialData.data} />
-
-      {/* product detail */}
-      {/* {draftMode().isEnabled ? (
-        <ProductDetailPreview initial={initialData} params={params} />
+      {/* blog content */}
+      {draftMode().isEnabled ? (
+        <BlogPreviewComponent initial={initialData} params={params} />
       ) : (
-        <ProductDetail product={initialData.data} />
-      )} */}
+        <BlogComponent blog={initialData.data} />
+      )}
 
-      {/* product you may like */}
+      {/* blogs you may read */}
       {/* <div>
         {customerAlsoBuyInitialData?.data?.length > 0 && (
           <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
