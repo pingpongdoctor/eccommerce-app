@@ -4,6 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { SanityDocument } from 'next-sanity';
 import BlogCard from './BlogCard';
+import Link from 'next/link';
 
 interface Props {
   carouselAutoPlay: boolean;
@@ -40,7 +41,11 @@ export default function CarouselComponent({
     <div className="xl:mx-auto xl:max-w-7xl [&>div>div>div]:flex [&>div>div>div]:gap-8 [&>div>div>div]:bg-white">
       <Slider {...settings}>
         {blogs?.length > 0 &&
-          blogs.map((blog) => <BlogCard key={blog._id} blog={blog} />)}
+          blogs.map((blog) => (
+            <Link key={blog._id} href={`/blog/${blog.slug.current}`}>
+              <BlogCard blog={blog} />
+            </Link>
+          ))}
       </Slider>
     </div>
   );
