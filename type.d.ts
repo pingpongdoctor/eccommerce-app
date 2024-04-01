@@ -29,6 +29,7 @@ interface SanityAuthor {
 
 interface SanityBlog {
   slug: { _type: string; current: string };
+  image: any;
   title: string;
   author: any;
   category: Categories;

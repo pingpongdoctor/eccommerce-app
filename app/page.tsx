@@ -6,6 +6,8 @@ import {
   FEATURED_PRODUCTS_QUERY,
   NEW_PRODUCTS_QUERY,
   HOMEPAGE_QUERY,
+  BLOGS_QUERY,
+  AUTHOR_QUERY,
 } from '@/sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
 import { draftMode } from 'next/headers';
@@ -16,6 +18,8 @@ import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 import CategoryCards from './_components/CategoryCards';
 import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
+import { client } from '@/sanity/lib/client';
+import { builder } from './utils/imageBuilder';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
@@ -42,13 +46,43 @@ export default async function Home() {
     }
   );
 
+  const blogsPromise = loadQuery<(SanityBlog & SanityDocument)[]>(
+    BLOGS_QUERY,
+    {},
+    {
+      perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+    }
+  );
+
   // handle promises at the same time to avoid waterfall when fetching data
-  const [featuredProductData, trendingProductData, homePageData] =
+  const [featuredProductData, trendingProductData, homePageData, blogsData] =
     await Promise.all([
       featuredProductPromise,
       trendingProductPromise,
       homepageContentPromise,
+      blogsPromise,
     ]);
+
+  const blogsDataWithDetailedAuthor: (SanityBlog &
+    SanityDocument & {
+      authorData: SanityAuthor & SanityDocument;
+    } & { imageUrl: string })[] = await Promise.all(
+    blogsData.data.map(async (blog: SanityBlog & SanityDocument) => {
+      const authorData: SanityAuthor & SanityDocument = await client.fetch<
+        SanityAuthor & SanityDocument
+      >(AUTHOR_QUERY, {
+        id: blog.author._ref,
+      });
+
+      blog.authorData = authorData;
+      blog.imageUrl = builder.image(blog.image).quality(80).url();
+
+      return blog as SanityBlog &
+        SanityDocument & {
+          authorData: SanityAuthor & SanityDocument;
+        } & { imageUrl: string };
+    })
+  );
 
   const dataArr = [
     {
@@ -74,7 +108,11 @@ export default async function Home() {
         </Suspense>
       ),
     },
-    { id: '3', type: 'From Blogs', component: <BlogCards /> },
+    {
+      id: '3',
+      type: 'From Blogs',
+      component: <BlogCards blogs={blogsDataWithDetailedAuthor} />,
+    },
   ];
 
   return (

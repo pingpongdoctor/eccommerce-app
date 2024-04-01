@@ -1,7 +1,7 @@
 import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
 import Image from 'next/image';
-import { solidBlureDataUrl } from '../utils/utils';
+import { solidBlurDataUrl } from '../utils/utils';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { PortableTextComponents } from '@portabletext/react';
 
@@ -22,7 +22,7 @@ const PortableTextImage = ({
       width={width}
       height={height}
       placeholder="blur"
-      blurDataURL={solidBlureDataUrl}
+      blurDataURL={solidBlurDataUrl}
       alt="blog-image"
     />
   );

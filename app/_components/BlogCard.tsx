@@ -1,23 +1,51 @@
 'use client';
+import { SanityDocument } from 'next-sanity';
 import Avatar from './Avatar';
+import { formatDateToWords } from '../_lib/formatDateToWords';
+import { builder } from '../utils/imageBuilder';
+import Image from 'next/image';
+import { solidBlurDataUrl } from '../utils/utils';
 
-export default function BlogCard() {
+interface Props {
+  blog: SanityBlog &
+    SanityDocument & {
+      authorData: SanityAuthor & SanityDocument;
+    } & { imageUrl: string };
+}
+
+export default function BlogCard({ blog }: Props) {
   return (
-    <div className="aspect-[2/1] w-full rounded-2xl bg-[url('/assets/abc.avif')] bg-cover bg-center bg-no-repeat text-sm lg:aspect-[1/1.15]">
-      <div className="flex h-full w-full items-end rounded-2xl bg-gradient-to-t from-gray-900">
-        <div className="flex w-full flex-col gap-3 p-8 lg:gap-2 lg:p-4">
-          <div className="flex items-center gap-4 text-gray-300 lg:gap-3">
-            <p>Mar 16,2020</p>
-            <div className="h-1 w-1 rounded-full bg-gray-400"></div>
-            <div className="flex items-center gap-3 lg:gap-2">
-              <Avatar avatarSrc="/assets/abc.avif" avatarPriority={false} />
-              <p>Ashley</p>
-            </div>
+    <div
+      className={`relative aspect-[3/1] w-[600px] rounded-2xl lg:aspect-[1/1.15] lg:w-[300px] xl:w-[400px]`}
+    >
+      <div className="absolute left-0 top-0 z-[1] h-full w-full rounded-2xl bg-gradient-to-t from-gray-800"></div>
+      <Image
+        src={blog.imageUrl}
+        width={300}
+        height={450}
+        alt="blog-image"
+        placeholder="blur"
+        blurDataURL={solidBlurDataUrl}
+        className="absolute left-0 top-0 z-0 h-full w-full rounded-2xl object-cover"
+      />
+      <div className="absolute bottom-0 left-0 z-[2] w-full rounded-2xl p-8 lg:p-4 lg:pb-6">
+        <div className="mb-4 flex items-center gap-4 text-xs text-gray-300">
+          <p>{new Date(blog._updatedAt).toLocaleDateString()}</p>
+          <div className="h-1 w-1 rounded-full bg-gray-400"></div>
+          <div className="flex items-center gap-3 lg:gap-2">
+            <Avatar
+              avatarSrc={builder.image(blog.authorData.image).quality(80).url()}
+              avatarPriority={false}
+              avatarClassname="w-[35px] h-[35px]"
+            />
+            <p className="lg:line-clamp-1 lg:max-w-[130px]">
+              {blog.authorData.name}
+            </p>
           </div>
-          <p className="text-pretty text-base font-semibold text-gray-200">
-            This is the blog that you can click to see
-          </p>
         </div>
+        <p className="h-12 text-pretty font-semibold text-gray-200 lg:line-clamp-2">
+          {blog.title}
+        </p>
       </div>
     </div>
   );
