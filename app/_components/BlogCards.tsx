@@ -21,7 +21,7 @@ export default function BlogCards({ blogs }: Props) {
       </div>
       <div className="flex flex-col gap-4 bg-white px-4 md:px-8 lg:hidden">
         {blogs.length > 0 &&
-          blogs.map(
+          blogs.slice(0, 4).map(
             (
               blog: SanityBlog &
                 SanityDocument & {
