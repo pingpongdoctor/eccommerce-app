@@ -160,8 +160,11 @@ export default function ShoppingCart() {
               <p className="text-lg font-medium text-gray-900">
                 You may also like
               </p>
-              <p className="font-medium text-gray-900">
-                See all <span>&rarr;</span>
+              <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
+                <span> See all </span>
+                <span className="transition-all duration-500 group-hover:translate-x-2">
+                  &rarr;
+                </span>
               </p>
             </div>
 

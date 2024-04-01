@@ -38,7 +38,7 @@ export default function BlogCard({ blog, blogCardClassname }: Props) {
               avatarPriority={false}
               avatarClassname="w-[35px] h-[35px]"
             />
-            <p className="line-clamp-1 lg:max-w-[100px] xl:max-w-[120px]">
+            <p className="line-clamp-1 lg:max-w-[90px] xl:max-w-[110px]">
               {blog.authorData.name}
             </p>
           </div>

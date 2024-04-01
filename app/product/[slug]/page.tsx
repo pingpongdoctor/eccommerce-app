@@ -72,16 +72,16 @@ export default async function DetailedProduct({
   }
 
   //get products that customers also buy
-  const customerAlsoBuyInitialData = await loadQuery<
-    (SanityProduct & SanityDocument)[]
-  >(
-    PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
-    { category: initialData.data.category, slug: params.slug },
-    {
-      perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      next: { tags: ['post'], revalidate: 3600 },
-    }
-  );
+  const customerAlsoBuyInitialData = draftMode().isEnabled
+    ? []
+    : await client.fetch<(SanityProduct & SanityDocument)[]>(
+        PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
+        { category: initialData.data.category, slug: params.slug },
+        {
+          perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+          next: { tags: ['post'], revalidate: 3600 },
+        }
+      );
 
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
@@ -97,16 +97,19 @@ export default async function DetailedProduct({
 
       {/* product you may like */}
       <div>
-        {customerAlsoBuyInitialData?.data?.length > 0 && (
+        {customerAlsoBuyInitialData?.length > 0 && (
           <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
             <h3 className="mb-0">Products you may like</h3>
-            <p className="font-semibold text-gray-900">
-              See all <span>&rarr;</span>
+            <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
+              <span> See all </span>
+              <span className="transition-all duration-500 group-hover:translate-x-2">
+                &rarr;
+              </span>
             </p>
           </div>
         )}
 
-        <ProductCards products={customerAlsoBuyInitialData.data} />
+        <ProductCards products={customerAlsoBuyInitialData} />
       </div>
     </main>
   );

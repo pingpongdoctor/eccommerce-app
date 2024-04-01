@@ -85,8 +85,9 @@ export default async function DetailedBlog({
   );
 
   //add detailed author data to blogs that customers also read
-  const blogsCustomerAlsoReadWithDetailedAuthorData =
-    await addDetailedAuthorDataToBlogs(blogsCustomerAlsoReadInitialData.data);
+  const blogsCustomerAlsoReadWithDetailedAuthorData = draftMode().isEnabled
+    ? []
+    : await addDetailedAuthorDataToBlogs(blogsCustomerAlsoReadInitialData.data);
 
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
@@ -102,13 +103,16 @@ export default async function DetailedBlog({
         {blogsCustomerAlsoReadWithDetailedAuthorData.length > 0 && (
           <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
             <h3 className="mb-0">Blogs you may read</h3>
-            <p className="font-semibold text-gray-900">
-              See all <span>&rarr;</span>
+            <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
+              <span> See all </span>
+              <span className="transition-all duration-500 group-hover:translate-x-2">
+                &rarr;
+              </span>
             </p>
           </div>
         )}
 
-        <div className="flex gap-4 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+        <div className="flex flex-wrap justify-between gap-y-4 px-4 sm:gap-y-8 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
           {blogsCustomerAlsoReadWithDetailedAuthorData.length > 0 &&
             blogsCustomerAlsoReadWithDetailedAuthorData.map(
               (
@@ -118,14 +122,14 @@ export default async function DetailedBlog({
                   } & { imageUrl: string }
               ) => (
                 <Link
-                  className="block w-[calc((100%-6rem)/4)]"
+                  className="block w-full md:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] xl:w-[calc((100%-6rem)/4)]"
                   key={blog._id}
                   href={`/blog/${blog.slug.current}`}
                 >
                   {' '}
                   <BlogCard
                     blog={blog}
-                    blogCardClassname="w-full sm:w-full md:w-full lg:w-full xl:w-full"
+                    blogCardClassname="w-full sm:w-full md:w-full lg:w-full xl:w-full md:aspect-[1/1.15]"
                   />
                 </Link>
               )
