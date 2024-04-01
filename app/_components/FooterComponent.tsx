@@ -31,7 +31,7 @@ export default function FooterComponent() {
         </div>
       </div>
 
-      <ul className="flex list-none flex-wrap justify-between gap-4 gap-y-10 md:flex-row md:gap-8 lg:grow lg:gap-10">
+      <ul className="flex list-none flex-wrap justify-between gap-4 gap-y-10 md:flex-row md:gap-8 lg:grow lg:gap-10 xl:flex-nowrap">
         {footerInfor.map((infor) => (
           <li
             key={infor.id}

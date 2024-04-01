@@ -25,26 +25,21 @@ export default defineType({
         maxLength: 96,
       },
     }),
-    // defineField({
-    //   name: 'images',
-    //   title: 'Images',
-    //   type: 'array',
-    //   of: [
-    //     {
-    //       type: 'image',
-    //       options: {
-    //         hotspot: true,
-    //       },
-    //       fields: [
-    //         {
-    //           name: 'alt',
-    //           title: 'Alternative Text',
-    //           type: 'string',
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // }),
+    defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+        },
+      ],
+    }),
     defineField({
       name: 'category',
       title: 'Category',

@@ -1,22 +1,14 @@
 import { SanityDocument, QueryParams } from 'next-sanity';
-import ProductDetail from '@/app/_components/ProductDetail';
 import { loadQuery } from '@/sanity/lib/store';
 import {
-  PRODUCT_QUERY,
-  PRODUCTS_QUERY,
-  PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
   BLOGS_QUERY,
   BLOG_QUERY,
   BLOGS_QUERY_CUSTOMER_ALSO_READ,
 } from '@/sanity/lib/queries';
 import { draftMode } from 'next/headers';
-import ProductDetailPreview from '@/app/_components/ProductDetailPreview';
 import { client } from '@/sanity/lib/client';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import ProductCards from '@/app/_components/ProductCards';
-import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
-import CustomerReviews from '@/app/_components/CustomerReviews';
 import BlogComponent from '@/app/_components/BlogComponent';
 
 export async function generateMetadata({

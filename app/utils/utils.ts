@@ -181,7 +181,7 @@ export const footerInfor: {
   },
 ];
 
-export const solidBlureDataUrl =
+export const solidBlurDataUrl =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPccehcPQAHSwLJQnqfnAAAAABJRU5ErkJggg==';
 
 export const emailTemplates: EmailTemplates[] = ['welcome', 'confirm-payment'];

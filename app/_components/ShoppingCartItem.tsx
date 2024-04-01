@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { solidBlureDataUrl } from '../utils/utils';
+import { solidBlurDataUrl } from '../utils/utils';
 import { SanityDocument } from 'next-sanity';
 import ChangeItemQuatityComponent from './ChangeItemQuatityComponent';
 import { XMarkIcon } from '@heroicons/react/20/solid';
@@ -15,7 +15,7 @@ export default function ShoppingCartItem({ product }: Props) {
       <Image
         src={product.imgUrl}
         placeholder="blur"
-        blurDataURL={solidBlureDataUrl}
+        blurDataURL={solidBlurDataUrl}
         priority
         alt="product-img-shopping-cart"
         width={300}
