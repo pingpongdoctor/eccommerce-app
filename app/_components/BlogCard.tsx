@@ -10,12 +10,13 @@ interface Props {
     SanityDocument & {
       authorData: SanityAuthor & SanityDocument;
     } & { imageUrl: string };
+  blogCardClassname?: string;
 }
 
-export default function BlogCard({ blog }: Props) {
+export default function BlogCard({ blog, blogCardClassname }: Props) {
   return (
     <div
-      className={`relative aspect-[3/1] w-full rounded-2xl sm:w-[80%] lg:aspect-[1/1.15] lg:w-full`}
+      className={`relative aspect-[3/1] w-full rounded-2xl sm:w-[80%] lg:aspect-[1/1.15] lg:w-full ${blogCardClassname}`}
     >
       <div className="absolute left-0 top-0 z-[1] h-full w-full rounded-2xl bg-gradient-to-t from-gray-800"></div>
       <Image

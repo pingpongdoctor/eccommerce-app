@@ -20,6 +20,7 @@ import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
 import { client } from '@/sanity/lib/client';
 import { builder } from './utils/imageBuilder';
+import { addDetailedAuthorDataToBlogs } from './_lib/addDetailedAuthorToBlogs';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
@@ -63,25 +64,11 @@ export default async function Home() {
       blogsPromise,
     ]);
 
-  const blogsDataWithDetailedAuthor: (SanityBlog &
+  const blogsDataWithDetailedAuthorData: (SanityBlog &
     SanityDocument & {
       authorData: SanityAuthor & SanityDocument;
-    } & { imageUrl: string })[] = await Promise.all(
-    blogsData.data.map(async (blog: SanityBlog & SanityDocument) => {
-      const authorData: SanityAuthor & SanityDocument = await client.fetch<
-        SanityAuthor & SanityDocument
-      >(AUTHOR_QUERY, {
-        id: blog.author._ref,
-      });
-
-      blog.authorData = authorData;
-      blog.imageUrl = builder.image(blog.image).quality(80).url();
-
-      return blog as SanityBlog &
-        SanityDocument & {
-          authorData: SanityAuthor & SanityDocument;
-        } & { imageUrl: string };
-    })
+    } & { imageUrl: string })[] = await addDetailedAuthorDataToBlogs(
+    blogsData.data
   );
 
   const dataArr = [
@@ -111,7 +98,7 @@ export default async function Home() {
     {
       id: '3',
       type: 'From Blogs',
-      component: <BlogCards blogs={blogsDataWithDetailedAuthor} />,
+      component: <BlogCards blogs={blogsDataWithDetailedAuthorData} />,
     },
   ];
 
