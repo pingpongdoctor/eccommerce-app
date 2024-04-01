@@ -12,7 +12,6 @@ import { client } from '@/sanity/lib/client';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
-import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import CustomerReviews from '@/app/_components/CustomerReviews';
 
 export async function generateMetadata({
@@ -107,11 +106,7 @@ export default async function DetailedProduct({
           </div>
         )}
 
-        {draftMode().isEnabled ? (
-          <ProductCardsPreview initial={customerAlsoBuyInitialData} />
-        ) : (
-          <ProductCards products={customerAlsoBuyInitialData.data} />
-        )}
+        <ProductCards products={customerAlsoBuyInitialData.data} />
       </div>
     </main>
   );
