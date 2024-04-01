@@ -1,7 +1,6 @@
 'use client';
 import { SanityDocument } from 'next-sanity';
 import Avatar from './Avatar';
-import { formatDateToWords } from '../_lib/formatDateToWords';
 import { builder } from '../utils/imageBuilder';
 import Image from 'next/image';
 import { solidBlurDataUrl } from '../utils/utils';
@@ -16,7 +15,7 @@ interface Props {
 export default function BlogCard({ blog }: Props) {
   return (
     <div
-      className={`relative aspect-[3/1] w-[600px] rounded-2xl lg:aspect-[1/1.15] lg:w-[300px] xl:w-[400px]`}
+      className={`relative aspect-[3/1] w-[80%] rounded-2xl lg:aspect-[1/1.15] lg:w-full`}
     >
       <div className="absolute left-0 top-0 z-[1] h-full w-full rounded-2xl bg-gradient-to-t from-gray-800"></div>
       <Image
@@ -28,8 +27,8 @@ export default function BlogCard({ blog }: Props) {
         blurDataURL={solidBlurDataUrl}
         className="absolute left-0 top-0 z-0 h-full w-full rounded-2xl object-cover"
       />
-      <div className="absolute bottom-0 left-0 z-[2] w-full rounded-2xl p-8 lg:p-4 lg:pb-6">
-        <div className="mb-4 flex items-center gap-4 text-xs text-gray-300">
+      <div className="absolute bottom-0 left-0 z-[2] w-full rounded-2xl p-4 pb-2 sm:p-8 sm:pb-4 md:pb-8  lg:p-4 lg:pb-6">
+        <div className="mb-3 flex items-center gap-4 text-xs text-gray-300 md:mb-4 lg:gap-2 xl:gap-4">
           <p>{new Date(blog._updatedAt).toLocaleDateString()}</p>
           <div className="h-1 w-1 rounded-full bg-gray-400"></div>
           <div className="flex items-center gap-3 lg:gap-2">
@@ -38,12 +37,12 @@ export default function BlogCard({ blog }: Props) {
               avatarPriority={false}
               avatarClassname="w-[35px] h-[35px]"
             />
-            <p className="lg:line-clamp-1 lg:max-w-[130px]">
+            <p className="line-clamp-1 lg:max-w-[100px] xl:max-w-[120px]">
               {blog.authorData.name}
             </p>
           </div>
         </div>
-        <p className="h-12 text-pretty font-semibold text-gray-200 lg:line-clamp-2">
+        <p className="line-clamp-1 text-pretty font-semibold text-gray-200 lg:line-clamp-2 lg:h-12">
           {blog.title}
         </p>
       </div>

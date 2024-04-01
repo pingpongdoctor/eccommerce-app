@@ -31,7 +31,3 @@
     @apply text-gray-700;
   }
 }
-
-.slick-track {
-  @apply flex gap-8;
-}
