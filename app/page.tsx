@@ -7,7 +7,6 @@ import {
   NEW_PRODUCTS_QUERY,
   HOMEPAGE_QUERY,
   BLOGS_QUERY,
-  AUTHOR_QUERY,
 } from '@/sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
 import { draftMode } from 'next/headers';
@@ -18,8 +17,6 @@ import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 import CategoryCards from './_components/CategoryCards';
 import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
-import { client } from '@/sanity/lib/client';
-import { builder } from './utils/imageBuilder';
 import { addDetailedAuthorDataToBlogs } from './_lib/addDetailedAuthorToBlogs';
 
 export default async function Home() {
@@ -67,16 +64,20 @@ export default async function Home() {
   const blogsDataWithDetailedAuthorData: (SanityBlog &
     SanityDocument & {
       authorData: SanityAuthor & SanityDocument;
-    } & { imageUrl: string })[] = await addDetailedAuthorDataToBlogs(
-    blogsData.data
-  );
+    } & { imageUrl: string })[] = draftMode().isEnabled
+    ? []
+    : await addDetailedAuthorDataToBlogs(blogsData.data);
 
   const dataArr = [
     {
       id: '1',
       type: 'Featured Products',
       component: draftMode().isEnabled ? (
-        <ProductCardsPreview initial={featuredProductData} />
+        <ProductCardsPreview
+          initial={featuredProductData}
+          params={{ featured: true }}
+          query={FEATURED_PRODUCTS_QUERY}
+        />
       ) : (
         // use suspense to allow next.js to progressively send chunks of this page to the client side
         <Suspense fallback={<ProductCardsSkeleton />}>
@@ -88,7 +89,10 @@ export default async function Home() {
       id: '2',
       type: 'New Products',
       component: draftMode().isEnabled ? (
-        <ProductCardsPreview initial={trendingProductData} />
+        <ProductCardsPreview
+          initial={trendingProductData}
+          query={NEW_PRODUCTS_QUERY}
+        />
       ) : (
         <Suspense fallback={<ProductCardsSkeleton />}>
           <ProductCards products={trendingProductData.data} />
@@ -125,8 +129,11 @@ export default async function Home() {
             <div>
               <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
                 <h3>{data.type}</h3>
-                <p className="font-semibold text-gray-900">
-                  See all <span>&rarr;</span>
+                <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
+                  <span> See all </span>
+                  <span className="transition-all duration-500 group-hover:translate-x-2">
+                    &rarr;
+                  </span>
                 </p>
               </div>
               {data.component}
