@@ -32,17 +32,15 @@ export default function CarouselComponent({
     swipeToSlide: carouselSwipeToSlide,
     slidesToShow: 4,
     slidesToScroll: 1,
-    centerMode: true,
+    centerMode: false,
     row: 1,
   };
 
   return (
-    <div className="[&>div>div>div]:flex [&>div>div>div]:gap-8 [&>div>div>div]:bg-white">
+    <div className="xl:mx-auto xl:max-w-7xl [&>div>div>div]:flex [&>div>div>div]:gap-8 [&>div>div>div]:bg-white">
       <Slider {...settings}>
         {blogs?.length > 0 &&
-          [...blogs, ...blogs].map((blog) => (
-            <BlogCard key={blog._id} blog={blog} />
-          ))}
+          blogs.map((blog) => <BlogCard key={blog._id} blog={blog} />)}
       </Slider>
     </div>
   );
