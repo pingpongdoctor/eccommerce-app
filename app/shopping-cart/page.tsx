@@ -41,7 +41,7 @@ export default function ShoppingCart() {
     if (!isLoading && !user) {
       router.push('/');
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     if (productsInCart.length > 0) {
@@ -68,7 +68,7 @@ export default function ShoppingCart() {
           setSanityProductsInCart(products);
         })
         .catch((e: any) => {
-          console.log(e.message);
+          console.log(e);
         })
         .finally(() => {
           setIsFetchingSanityProducts(false);
