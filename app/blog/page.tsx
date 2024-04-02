@@ -4,7 +4,7 @@ import { BLOGS_QUERY } from '@/sanity/lib/queries';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { addDetailedAuthorDataToBlogs } from '../_lib/addDetailedAuthorToBlogs';
-import BlogCardsComponent from '../_components/BlogCardsComponent';
+import BlogCardsWithSearchBar from '../_components/BlogCardsWithSearchBar';
 
 export default async function BlogsPage() {
   const initial = await loadQuery<(SanityBlog & SanityDocument)[]>(
@@ -29,6 +29,10 @@ export default async function BlogsPage() {
         <h1 className="mb-6 text-center">Search blogs you wanna read</h1>
         <div className="mb-8 h-[2px] w-full rounded-xl bg-gray-200 lg:mb-12"></div>
       </div>
+
+      {blogsWithDetailedAuthorData.length > 0 && (
+        <BlogCardsWithSearchBar blogs={blogsWithDetailedAuthorData} />
+      )}
     </main>
   );
 }

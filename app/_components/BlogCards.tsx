@@ -3,10 +3,7 @@ import CarouselComponent from './CarouselComponent';
 import { SanityDocument } from 'next-sanity';
 
 interface Props {
-  blogs: (SanityBlog &
-    SanityDocument & {
-      authorData: SanityAuthor & SanityDocument;
-    } & { imageUrl: string })[];
+  blogs: BlogsWithDetailedAuthorData[];
 }
 
 export default function BlogCards({ blogs }: Props) {

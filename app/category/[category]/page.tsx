@@ -78,7 +78,7 @@ export default async function Category({ params }: { params: QueryParams }) {
           params={params}
         />
       ) : (
-        <ProductsWithSearchBar initial={initial} />
+        <ProductsWithSearchBar products={initial.data} />
       )}
     </main>
   );

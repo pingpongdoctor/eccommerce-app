@@ -61,12 +61,10 @@ export default async function Home() {
       blogsPromise,
     ]);
 
-  const blogsDataWithDetailedAuthorData: (SanityBlog &
-    SanityDocument & {
-      authorData: SanityAuthor & SanityDocument;
-    } & { imageUrl: string })[] = draftMode().isEnabled
-    ? []
-    : await addDetailedAuthorDataToBlogs(blogsData.data);
+  const blogsDataWithDetailedAuthorData: BlogsWithDetailedAuthorData[] =
+    draftMode().isEnabled
+      ? []
+      : await addDetailedAuthorDataToBlogs(blogsData.data);
 
   const dataArr = [
     {
