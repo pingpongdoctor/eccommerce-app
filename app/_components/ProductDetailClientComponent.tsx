@@ -11,7 +11,7 @@ interface Props {
   product: SanityProduct & SanityDocument;
 }
 
-export default function ClientProductDetail({ product }: Props) {
+export default function ProductDetailClientComponent({ product }: Props) {
   const { title, detail, price, images } = product;
 
   return (

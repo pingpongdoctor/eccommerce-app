@@ -1,6 +1,6 @@
 'use client';
 import SearchBar from '@/app/_components/SearchBar';
-import ClientProductCards from '@/app/_components/ClientProductCards';
+import ProductCardsClientComponent from '@/app/_components/ProductCardsClientComponent';
 import { SanityDocument } from 'next-sanity';
 import { useState, ChangeEvent } from 'react';
 
@@ -18,7 +18,7 @@ export default function ProductsWithSearchBar({
     <>
       <SearchBar changeEventHanlder={handleUpdateSearchResult} />
 
-      <ClientProductCards
+      <ProductCardsClientComponent
         products={products.filter((product) => {
           return product.title
             .toLowerCase()

@@ -1,9 +1,8 @@
 'use client';
-
 import { SanityDocument } from 'next-sanity';
 import { QueryResponseInitial, useQuery } from '@sanity/react-loader';
 import { HOMEPAGE_QUERY } from '@/sanity/lib/queries';
-import ClientIntroduceComponent from './ClientIntroduceComponent';
+import IntroduceClientComponent from './IntroduceClientComponent';
 
 export default function PreviewIntroduceComponent({
   initial,
@@ -19,7 +18,7 @@ export default function PreviewIntroduceComponent({
   );
 
   return data ? (
-    <ClientIntroduceComponent homePageData={data} />
+    <IntroduceClientComponent homePageData={data} />
   ) : (
     <div>No introduce component is found</div>
   );
