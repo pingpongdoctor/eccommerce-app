@@ -2,7 +2,7 @@
 import { PRODUCT_QUERY } from '@/sanity/lib/queries';
 import { QueryResponseInitial, useQuery } from '@sanity/react-loader';
 import { QueryParams, SanityDocument } from 'next-sanity';
-import ClientProductDetail from './ClientProductDetail';
+import ProductDetailClientComponent from './ProductDetailClientComponent';
 
 export default function ProductPreview({
   initial,
@@ -19,5 +19,5 @@ export default function ProductPreview({
     }
   );
 
-  return data && <ClientProductDetail product={data} />;
+  return data && <ProductDetailClientComponent product={data} />;
 }
