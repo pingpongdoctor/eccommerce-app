@@ -11,10 +11,7 @@ interface Props {
   carouselAutoPlaySpeed: number;
   carouselPauseOnHover?: boolean;
   carouselSwipeToSlide?: boolean;
-  blogs: (SanityBlog &
-    SanityDocument & { authorData: SanityAuthor & SanityDocument } & {
-      imageUrl: string;
-    })[];
+  blogs: BlogsWithDetailedAuthorData[];
 }
 
 export default function CarouselComponent({

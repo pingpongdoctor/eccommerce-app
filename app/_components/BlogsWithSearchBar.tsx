@@ -8,10 +8,7 @@ import Link from 'next/link';
 export default function ProductsWithSearchBar({
   blogs,
 }: {
-  blogs: (SanityBlog &
-    SanityDocument & {
-      authorData: SanityAuthor & SanityDocument;
-    } & { imageUrl: string })[];
+  blogs: BlogsWithDetailedAuthorData[];
 }) {
   const [searchResult, setSearchResult] = useState<string>('');
   const handleUpdateSearchResult = function (e: ChangeEvent<HTMLInputElement>) {

@@ -113,13 +113,11 @@ export default async function DetailedBlog({
           </div>
         )}
 
-        <div className="flex flex-wrap justify-between gap-y-4 px-4 sm:gap-y-8 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-          {blogsCustomerAlsoReadWithDetailedAuthorData.length > 0 && (
-            <BlogCardsComponent
-              blogs={blogsCustomerAlsoReadWithDetailedAuthorData}
-            />
-          )}
-        </div>
+        {blogsCustomerAlsoReadWithDetailedAuthorData.length > 0 && (
+          <BlogCardsComponent
+            blogs={blogsCustomerAlsoReadWithDetailedAuthorData}
+          />
+        )}
       </div>
     </main>
   );

@@ -5,12 +5,7 @@ import { client } from '@/sanity/lib/client';
 
 export async function addDetailedAuthorDataToBlogs(
   blogs: (SanityBlog & SanityDocument)[]
-): Promise<
-  (SanityBlog &
-    SanityDocument & {
-      authorData: SanityAuthor & SanityDocument;
-    } & { imageUrl: string })[]
-> {
+): Promise<BlogsWithDetailedAuthorData[]> {
   try {
     const blogsDataWithDetailedAuthor: (SanityBlog &
       SanityDocument & {
@@ -26,10 +21,7 @@ export async function addDetailedAuthorDataToBlogs(
         blog.authorData = authorData;
         blog.imageUrl = builder.image(blog.image).quality(80).url();
 
-        return blog as SanityBlog &
-          SanityDocument & {
-            authorData: SanityAuthor & SanityDocument;
-          } & { imageUrl: string };
+        return blog as BlogsWithDetailedAuthorData;
       })
     );
 

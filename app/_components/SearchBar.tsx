@@ -24,7 +24,7 @@ export default function SearchBar({ changeEventHanlder }: Props) {
         <MagnifyingGlassIcon className="absolute start-3 top-3 h-auto w-6 " />
 
         <span className="pointer-events-none absolute start-12 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-500 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-gray-700">
-          Search Products
+          Search Here
         </span>
       </label>
     </div>

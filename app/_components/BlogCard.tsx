@@ -1,15 +1,11 @@
 'use client';
-import { SanityDocument } from 'next-sanity';
 import Avatar from './Avatar';
 import { builder } from '../utils/imageBuilder';
 import Image from 'next/image';
 import { solidBlurDataUrl } from '../utils/utils';
 
 interface Props {
-  blog: SanityBlog &
-    SanityDocument & {
-      authorData: SanityAuthor & SanityDocument;
-    } & { imageUrl: string };
+  blog: BlogsWithDetailedAuthorData;
   blogCardClassname?: string;
 }
 

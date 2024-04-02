@@ -4,6 +4,11 @@ type EmailTemplates = 'welcome' | 'confirm-payment';
 
 type TemplateEnvs = Record<EmailTemplates, string>;
 
+type BlogsWithDetailedAuthorData = SanityBlog &
+  SanityDocument & {
+    authorData: SanityAuthor & SanityDocument;
+  } & { imageUrl: string };
+
 interface HomePageData {
   herotext: string;
   introheading: string;

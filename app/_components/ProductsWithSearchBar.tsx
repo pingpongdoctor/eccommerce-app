@@ -1,14 +1,13 @@
 'use client';
 import SearchBar from '@/app/_components/SearchBar';
 import ClientProductCards from '@/app/_components/ClientProductCards';
-import { QueryResponseInitial } from '@sanity/react-loader';
 import { SanityDocument } from 'next-sanity';
 import { useState, ChangeEvent } from 'react';
 
 export default function ProductsWithSearchBar({
-  initial,
+  products,
 }: {
-  initial: QueryResponseInitial<(SanityProduct & SanityDocument)[]>;
+  products: (SanityProduct & SanityDocument)[];
 }) {
   const [searchResult, setSearchResult] = useState<string>('');
   const handleUpdateSearchResult = function (e: ChangeEvent<HTMLInputElement>) {
@@ -20,7 +19,7 @@ export default function ProductsWithSearchBar({
       <SearchBar changeEventHanlder={handleUpdateSearchResult} />
 
       <ClientProductCards
-        products={initial.data.filter((product) => {
+        products={products.filter((product) => {
           return product.title
             .toLowerCase()
             .includes(searchResult.toLowerCase());

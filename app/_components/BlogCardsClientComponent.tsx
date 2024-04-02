@@ -1,3 +1,4 @@
+'use client';
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
 import BlogCard from './BlogCard';
@@ -6,9 +7,9 @@ interface Props {
   blogs: BlogsWithDetailedAuthorData[];
 }
 
-export default function BlogCardsComponent({ blogs }: Props) {
+export default function BlogCardsClientComponent({ blogs }: Props) {
   return (
-    <div className="flex flex-wrap justify-between gap-y-4 px-4 sm:gap-y-8 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+    <div className="flex flex-wrap justify-start gap-8 gap-y-4 px-4 sm:gap-y-8 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       {blogs.length > 0 &&
         blogs.map(
           (
