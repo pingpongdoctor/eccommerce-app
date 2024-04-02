@@ -1,7 +1,7 @@
 'use client';
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
-import { solidBlureDataUrl } from '../utils/utils';
+import { solidBlurDataUrl } from '../utils/utils';
 
 export default function ClientProductCard({
   product,
@@ -17,7 +17,7 @@ export default function ClientProductCard({
         width={300}
         height={300}
         placeholder="blur"
-        blurDataURL={solidBlureDataUrl}
+        blurDataURL={solidBlurDataUrl}
       />
 
       <p>{product.title ? product.title : 'No Title'}</p>

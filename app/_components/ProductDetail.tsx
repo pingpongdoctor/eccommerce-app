@@ -2,7 +2,7 @@ import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
-import { solidBlureDataUrl } from '../utils/utils';
+import { solidBlurDataUrl } from '../utils/utils';
 import AddToBagComponent from './AddToBagComponent';
 
 interface Props {
@@ -25,7 +25,7 @@ export default function ProductDetail({ product }: Props) {
             alt={images[0].alt || 'product-image'}
             priority
             placeholder="blur"
-            blurDataURL={solidBlureDataUrl}
+            blurDataURL={solidBlurDataUrl}
           />
           <div className="hidden md:flex md:flex-col md:gap-4 lg:gap-8">
             <Image
@@ -36,7 +36,7 @@ export default function ProductDetail({ product }: Props) {
               alt={images[0].alt || 'product-image'}
               priority
               placeholder="blur"
-              blurDataURL={solidBlureDataUrl}
+              blurDataURL={solidBlurDataUrl}
             />
 
             <Image
@@ -47,7 +47,7 @@ export default function ProductDetail({ product }: Props) {
               alt={images[0].alt || 'product-image'}
               priority
               placeholder="blur"
-              blurDataURL={solidBlureDataUrl}
+              blurDataURL={solidBlurDataUrl}
             />
           </div>
         </div>

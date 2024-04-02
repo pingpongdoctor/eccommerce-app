@@ -42,7 +42,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
       channel.unbind_all();
       pusher.disconnect();
     };
-  }, []);
+  }, [productSlug]);
 
   //get product quantity when this client component is initially loaded
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
         console.log(e);
         setProductInstock(0);
       });
-  }, []);
+  }, [productSlug]);
 
   const handleUpdateQuantity = function (value: number) {
     setQuantity(value);

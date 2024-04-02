@@ -1,8 +1,8 @@
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'post',
-  title: 'Post',
+  name: 'blog',
+  title: 'Blog',
   type: 'document',
   fields: [
     defineField({
@@ -10,11 +10,12 @@ export default defineType({
       title: 'Title',
       type: 'string',
     }),
-    defineField({
-      name: 'featured',
-      title: 'Featured Product',
-      type: 'boolean',
-    }),
+    {
+      name: 'author',
+      title: 'Author',
+      type: 'reference',
+      to: [{ type: 'author' }],
+    },
     defineField({
       name: 'slug',
       title: 'Slug',
@@ -25,32 +26,17 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'instock',
-      title: 'In Stock',
-      type: 'number',
-    }),
-    defineField({
-      name: 'price',
-      title: 'Price',
-      type: 'string',
-    }),
-    defineField({
-      name: 'images',
-      title: 'Images',
-      type: 'array',
-      of: [
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
         {
-          type: 'image',
-          options: {
-            hotspot: true,
-          },
-          fields: [
-            {
-              name: 'alt',
-              type: 'string',
-              title: 'Alternative Text',
-            },
-          ],
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
         },
       ],
     }),
@@ -69,8 +55,8 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'detail',
-      title: 'Detail',
+      name: 'content',
+      title: 'Content',
       type: 'blockContent',
     }),
   ],

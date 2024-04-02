@@ -14,9 +14,12 @@
     @apply mb-6 text-3xl font-bold text-gray-900 md:mb-8;
   }
 
-  h3,
-  h4 {
+  h3 {
     @apply mb-4 text-2xl font-semibold text-gray-900 md:mb-6;
+  }
+
+  h4 {
+    @apply mb-4 text-xl font-semibold text-gray-900 md:mb-6;
   }
 
   a,
@@ -27,8 +30,4 @@
   button {
     @apply text-gray-700;
   }
-}
-
-.slick-track {
-  @apply flex gap-8;
 }

@@ -1,13 +1,14 @@
 'use client';
 import SearchBar from '@/app/_components/SearchBar';
-import ClientProductCards from '@/app/_components/ClientProductCards';
 import { SanityDocument } from 'next-sanity';
 import { useState, ChangeEvent } from 'react';
+import BlogCard from './BlogCard';
+import Link from 'next/link';
 
 export default function ProductsWithSearchBar({
-  products,
+  blogs,
 }: {
-  products: (SanityProduct & SanityDocument)[];
+  blogs: BlogsWithDetailedAuthorData[];
 }) {
   const [searchResult, setSearchResult] = useState<string>('');
   const handleUpdateSearchResult = function (e: ChangeEvent<HTMLInputElement>) {
@@ -18,13 +19,18 @@ export default function ProductsWithSearchBar({
     <>
       <SearchBar changeEventHanlder={handleUpdateSearchResult} />
 
-      <ClientProductCards
-        products={products.filter((product) => {
-          return product.title
-            .toLowerCase()
-            .includes(searchResult.toLowerCase());
-        })}
-      />
+      {blogs.length > 0 &&
+        blogs
+          .filter((blog) => {
+            return blog.title
+              .toLowerCase()
+              .includes(searchResult.toLowerCase());
+          })
+          .map((blog) => (
+            <Link key={blog._id} href={`/blog/${blog.slug.current}`}>
+              <BlogCard blog={blog} />
+            </Link>
+          ))}
     </>
   );
 }

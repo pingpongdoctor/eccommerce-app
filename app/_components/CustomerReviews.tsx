@@ -79,7 +79,7 @@ export default function CustomerReviews({
       channel.unbind_all();
       pusher.disconnect();
     };
-  }, []);
+  }, [productSlug]);
 
   //get product reviews when page is initially loaded
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function CustomerReviews({
         console.log(e);
         setProductReviews([]);
       });
-  }, []);
+  }, [productSlug]);
 
   return (
     <div
