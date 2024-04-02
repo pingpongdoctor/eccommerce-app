@@ -1,24 +1,21 @@
 'use client';
-import {
-  PRODUCTS_QUERY,
-  PRODUCTS_QUERY_CUSTOMER_ALSO_BUY,
-} from '@/sanity/lib/queries';
+import { PRODUCTS_QUERY } from '@/sanity/lib/queries';
 import { QueryResponseInitial, useQuery } from '@sanity/react-loader';
-import { SanityDocument } from 'next-sanity';
 import ClientProductCards from './ClientProductCards';
+import { QueryParams, SanityDocument } from 'next-sanity';
 
 export default function ProductCardsPreview({
   initial,
-  isCustomerAlsoBuyData = false,
-  customerAlsoBuyCategory = 'comestic',
+  params,
+  query,
 }: {
   initial: QueryResponseInitial<(SanityProduct & SanityDocument)[]>;
-  isCustomerAlsoBuyData?: boolean;
-  customerAlsoBuyCategory?: Categories;
+  params?: QueryParams;
+  query?: string;
 }) {
   const { data } = useQuery<(SanityProduct & SanityDocument)[] | null>(
-    isCustomerAlsoBuyData ? PRODUCTS_QUERY_CUSTOMER_ALSO_BUY : PRODUCTS_QUERY,
-    isCustomerAlsoBuyData ? { category: customerAlsoBuyCategory } : {},
+    query || PRODUCTS_QUERY,
+    params,
     { initial }
   );
 

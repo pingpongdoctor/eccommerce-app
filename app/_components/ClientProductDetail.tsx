@@ -3,7 +3,7 @@ import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
-import { solidBlureDataUrl } from '../utils/utils';
+import { solidBlurDataUrl } from '../utils/utils';
 import RatingStar from './RatingStar';
 import ButtonComponent from './ButtonComponent';
 
@@ -27,7 +27,7 @@ export default function ClientProductDetail({ product }: Props) {
             alt={images[0].alt}
             priority
             placeholder="blur"
-            blurDataURL={solidBlureDataUrl}
+            blurDataURL={solidBlurDataUrl}
           />
           <div className="hidden md:flex md:flex-col md:gap-4 lg:gap-8">
             <Image
@@ -38,7 +38,7 @@ export default function ClientProductDetail({ product }: Props) {
               alt={images[0].alt}
               priority
               placeholder="blur"
-              blurDataURL={solidBlureDataUrl}
+              blurDataURL={solidBlurDataUrl}
             />
 
             <Image
@@ -49,7 +49,7 @@ export default function ClientProductDetail({ product }: Props) {
               alt={images[0].alt}
               priority
               placeholder="blur"
-              blurDataURL={solidBlureDataUrl}
+              blurDataURL={solidBlurDataUrl}
             />
           </div>
         </div>

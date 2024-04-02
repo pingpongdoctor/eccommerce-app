@@ -1,23 +1,25 @@
 'use client';
-import { FC } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { SanityDocument } from 'next-sanity';
+import BlogCard from './BlogCard';
+import Link from 'next/link';
 
 interface Props {
-  CarouselFC: FC<any>[];
   carouselAutoPlay: boolean;
   carouselAutoPlaySpeed: number;
   carouselPauseOnHover?: boolean;
   carouselSwipeToSlide?: boolean;
+  blogs: BlogsWithDetailedAuthorData[];
 }
 
 export default function CarouselComponent({
-  CarouselFC,
   carouselAutoPlay,
   carouselAutoPlaySpeed,
   carouselPauseOnHover = true,
   carouselSwipeToSlide = true,
+  blogs,
 }: Props) {
   var settings = {
     dots: false,
@@ -28,15 +30,19 @@ export default function CarouselComponent({
     swipeToSlide: carouselSwipeToSlide,
     slidesToShow: 4,
     slidesToScroll: 1,
-    centerMode: true,
+    centerMode: false,
     row: 1,
   };
 
   return (
-    <div className="[&>div>div>div]:flex [&>div>div>div]:gap-8 [&>div>div>div]:bg-white">
+    <div className="xl:mx-auto xl:max-w-7xl [&>div>div>div]:flex [&>div>div>div]:gap-8 [&>div>div>div]:bg-white">
       <Slider {...settings}>
-        {CarouselFC?.length > 0 &&
-          CarouselFC.map((CarouselItem, index) => <CarouselItem key={index} />)}
+        {blogs?.length > 0 &&
+          blogs.map((blog) => (
+            <Link key={blog._id} href={`/blog/${blog.slug.current}`}>
+              <BlogCard blog={blog} />
+            </Link>
+          ))}
       </Slider>
     </div>
   );
