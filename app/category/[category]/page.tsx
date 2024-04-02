@@ -68,7 +68,15 @@ export default async function Category({ params }: { params: QueryParams }) {
       </div>
 
       {draftMode().isEnabled ? (
-        <ProductCardsPreview initial={initial} />
+        <ProductCardsPreview
+          initial={initial}
+          query={
+            categories.includes(params.category)
+              ? PRODUCTS_QUERY_BY_CATEGORY
+              : PRODUCTS_QUERY
+          }
+          params={params}
+        />
       ) : (
         <ProductsWithSearchBar initial={initial} />
       )}
