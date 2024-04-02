@@ -9,7 +9,7 @@ export function calculateTotalProducts(
 
     return totalNumber;
   } catch (e: any) {
-    console.log(e.message);
+    console.log('Error in calculateTotalProducts function' + e);
     return 0;
   }
 }

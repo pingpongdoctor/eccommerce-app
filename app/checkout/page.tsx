@@ -50,7 +50,7 @@ export default function CheckoutPage() {
     if (!isLoading && !user) {
       router.push('/');
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, router]);
 
   //get product sanity documents
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function CheckoutPage() {
           setSanityProductsInCart(products);
         })
         .catch((e: any) => {
-          console.log(e.message);
+          console.log(e);
         })
         .finally(() => {
           setIsFetchingSanityProducts(false);
@@ -135,7 +135,7 @@ export default function CheckoutPage() {
         }
       });
     }
-  }, [sanityProductsInCart]);
+  }, [sanityProductsInCart, router]);
 
   return (
     <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
