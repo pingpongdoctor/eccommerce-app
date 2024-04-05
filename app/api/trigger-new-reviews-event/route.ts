@@ -51,7 +51,7 @@ export const POST = async (req: Request) => {
       },
     });
 
-    //trigger an event that has the name including productSlug in new-reviews channel
+    //trigger an event to update reviews in realtime
     await pusher.trigger('new-reviews', `new-reviews-${productSlug}-event`, {
       reviews,
     });

@@ -1,11 +1,11 @@
 'use client';
 import { SanityDocument } from 'next-sanity';
 import Link from 'next/link';
-import ClientProductCard from './ClientProductCard';
+import ProductCardClientComponent from './ProductCardClientComponent';
 import { useEffect, useState } from 'react';
 import { addProductImgUrls } from '../_lib/addProductImgUrls';
 
-export default function ClientProductCards({
+export default function ProductCardsClientComponent({
   products,
 }: {
   products: (SanityProduct & SanityDocument)[];
@@ -31,7 +31,7 @@ export default function ClientProductCards({
                 key={product._id}
                 href={`/product/${product.slug.current}`}
               >
-                <ClientProductCard product={product} />
+                <ProductCardClientComponent product={product} />
               </Link>
             )
           )}

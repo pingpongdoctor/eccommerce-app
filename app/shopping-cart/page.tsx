@@ -13,7 +13,7 @@ import ShoppingCartItemSkeleton from '../_components/ShoppingCartItemSkeleton';
 import OrderSummarySkeleton from '../_components/OrderSummarySkeleton';
 import { addProductImgUrls } from '../_lib/addProductImgUrls';
 import { addProductQuantity } from '../_lib/addProductQuantity';
-import ClientProductCards from '../_components/ClientProductCards';
+import ProductCardsClientComponent from '../_components/ProductCardsClientComponent';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import ProductCardsSkeleton from '../_components/ProductCardsSkeleton';
 import { useRouter } from 'next/navigation';
@@ -168,7 +168,7 @@ export default function ShoppingCart() {
               </p>
             </div>
 
-            <ClientProductCards products={productsAlsoBuy} />
+            <ProductCardsClientComponent products={productsAlsoBuy} />
           </>
         )}
       </div>

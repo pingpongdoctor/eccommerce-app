@@ -2,6 +2,8 @@ type Categories = 'comestic' | 'book' | 'supplement' | 'jewelry';
 
 type EmailTemplates = 'welcome' | 'confirm-payment';
 
+type OrderStatus = 'prepare' | 'onTheWay' | 'done';
+
 type TemplateEnvs = Record<EmailTemplates, string>;
 
 type BlogsWithDetailedAuthorData = SanityBlog &
@@ -101,4 +103,10 @@ interface Address {
   postal_code: string;
   country: string;
 }
-type OrderStatus = 'prepare' | 'onTheWay' | 'done';
+
+interface PurchasedProduct {
+  productId: number;
+  priceAtTheOrderTime: number;
+  productQuantity: number;
+}
+[];

@@ -7,7 +7,7 @@ import comesticImg from '../../public/assets/comestic.jpg';
 import jewelryImg from '../../public/assets/jewelry.jpg';
 import bookImg from '../../public/assets/books.jpg';
 
-export default function ClientIntroduceComponent({
+export default function IntroduceClientComponent({
   homePageData,
 }: {
   homePageData: HomePageData & SanityDocument;

@@ -1,7 +1,7 @@
 'use client';
 import { PRODUCTS_QUERY } from '@/sanity/lib/queries';
 import { QueryResponseInitial, useQuery } from '@sanity/react-loader';
-import ClientProductCards from './ClientProductCards';
+import ProductCardsClientComponent from './ProductCardsClientComponent';
 import { QueryParams, SanityDocument } from 'next-sanity';
 
 export default function ProductCardsPreview({
@@ -19,5 +19,5 @@ export default function ProductCardsPreview({
     { initial }
   );
 
-  return data && <ClientProductCards products={data} />;
+  return data && <ProductCardsClientComponent products={data} />;
 }

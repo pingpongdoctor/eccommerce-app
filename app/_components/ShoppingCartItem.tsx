@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { solidBlurDataUrl } from '../utils/utils';
 import { SanityDocument } from 'next-sanity';
-import ChangeItemQuatityComponent from './ChangeItemQuatityComponent';
+import ChangeItemQuantityComponent from './ChangeItemQuantityComponent';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 
 interface Props {
@@ -31,7 +31,7 @@ export default function ShoppingCartItem({ product }: Props) {
           </div>
           <p className="block sm:hidden">${product.price}</p>
 
-          <ChangeItemQuatityComponent product={product} />
+          <ChangeItemQuantityComponent product={product} />
         </div>
         <p className="hidden text-gray-900 sm:block">${product.price}</p>
       </div>
