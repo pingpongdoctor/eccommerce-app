@@ -3,6 +3,8 @@ import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
 import { v4 as uuidv4 } from 'uuid';
+import { Order } from '@prisma/client';
+import product from '@/sanity/schemas/product';
 
 //create order
 export const POST = withApiAuthRequired(async (req: Request) => {
@@ -20,10 +22,12 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     fullname,
     address,
     status,
+    purchasedProducts,
   }: {
     fullname: string;
     status: OrderStatus;
     address: Address;
+    purchasedProducts: PurchasedProduct[];
   } = await req.json();
 
   if (
@@ -56,9 +60,9 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     const expectedDeliveryDate = new Date();
     expectedDeliveryDate.setDate(expectedDeliveryDate.getDate() + 7);
 
-    //add order for the current user
+    //create new order
     const { city, country, line1, line2, postal_code, state } = address;
-    await prisma.order.create({
+    const order: Order = await prisma.order.create({
       data: {
         transactionNumber,
         expectedDeliveryDate,
@@ -74,6 +78,28 @@ export const POST = withApiAuthRequired(async (req: Request) => {
         user: { connect: { id: userData.id } },
       },
     });
+
+    //create a record for the OrdersProducts table for each product
+    await Promise.all(
+      purchasedProducts.map(async (product: PurchasedProduct) => {
+        await prisma.ordersProducts.create({
+          data: {
+            priceAtTheOrderTime: product.priceAtTheOrderTime,
+            quantity: product.productQuantity,
+            order: {
+              connect: {
+                id: userData.id,
+              },
+            },
+            product: {
+              connect: {
+                id: product.productId,
+              },
+            },
+          },
+        });
+      })
+    );
 
     return NextResponse.json(
       {

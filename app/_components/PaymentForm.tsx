@@ -89,13 +89,11 @@ export default function PaymentForm({
   };
 
   useEffect(() => {
-    setTax(Math.round((subtotal * 12) / 100));
-    setShipping(Math.round((subtotal * 2) / 100));
-    setTotal(
-      Math.round((subtotal * 12) / 100) +
-        Math.round((subtotal * 2) / 100) +
-        subtotal
-    );
+    const tax = Math.round((subtotal * 12) / 100);
+    setTax(tax);
+    //assume that tax is equal to shipping fee
+    setShipping(tax);
+    setTotal(tax * 2 + subtotal);
   }, [subtotal]);
 
   const checkPaymentStatus = async function (
@@ -115,7 +113,7 @@ export default function PaymentForm({
             ) => productInShoppingCart.productId
           );
           await deleteProductsInCartAfterPayment(productIds);
-          //create new order document
+          //create new order
           const data: {
             isSuccess: boolean;
             transactionNumber?: string | undefined;
