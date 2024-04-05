@@ -38,7 +38,7 @@ export const POST = async (req: Request) => {
       );
     }
 
-    //trigger an event that has the name including productSlug in new-product-quantity channel
+    //trigger an event to update product quantity in realtime
     await pusher.trigger(
       'new-product-quantity',
       `new-product-quantity-${productSlug}-event`,

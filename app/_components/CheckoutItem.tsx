@@ -3,7 +3,7 @@ import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { solidBlurDataUrl } from '../utils/utils';
 import { XMarkIcon } from '@heroicons/react/20/solid';
-import ChangeItemQuatityComponent from './ChangeItemQuatityComponent';
+import ChangeItemQuantityComponent from './ChangeItemQuantityComponent';
 import { deleteProductFromCart } from '../_lib/deleteProductFromCart';
 import { useContext } from 'react';
 import { globalStatesContext } from './GlobalStatesContext';
@@ -56,7 +56,7 @@ export default function CheckoutItem({ product }: Props) {
           {product.instock === 0 ? (
             <p className="text-red-500">Product is sold out</p>
           ) : (
-            <ChangeItemQuatityComponent showIcon={false} product={product} />
+            <ChangeItemQuantityComponent showIcon={false} product={product} />
           )}
         </div>
       </div>

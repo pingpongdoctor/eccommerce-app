@@ -14,7 +14,7 @@ interface Props {
   showIcon?: boolean;
 }
 
-export default function ChangeItemQuatityComponent({
+export default function ChangeItemQuantityComponent({
   product,
   showIcon = true,
 }: Props) {
