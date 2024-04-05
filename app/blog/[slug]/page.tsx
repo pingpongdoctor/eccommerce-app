@@ -11,9 +11,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import BlogComponent from '@/app/_components/BlogComponent';
 import BlogPreviewComponent from '@/app/_components/BlogPreviewComponent';
-import BlogCard from '@/app/_components/BlogCard';
 import { addDetailedAuthorDataToBlogs } from '@/app/_lib/addDetailedAuthorToBlogs';
-import Link from 'next/link';
 import BlogCardsComponent from '@/app/_components/BlogCardsComponent';
 
 export async function generateMetadata({

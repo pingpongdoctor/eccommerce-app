@@ -9,7 +9,7 @@ import AddNewReviewComponent from './AddNewReviewComponent';
 import { useEffect, useState } from 'react';
 import { getProductReviews } from '../_lib/getProductReviews';
 import Pusher from 'pusher-js';
-import { sortReviews } from './sortReviews';
+import { sortReviews } from '../_lib/sortReviews';
 
 interface Props {
   customerReviewsClassname?: string;

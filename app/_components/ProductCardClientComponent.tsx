@@ -3,7 +3,7 @@ import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import { solidBlurDataUrl } from '../utils/utils';
 
-export default function ClientProductCard({
+export default function ProductCardClientComponent({
   product,
 }: {
   product: ProductWithImgUrl & SanityDocument;
