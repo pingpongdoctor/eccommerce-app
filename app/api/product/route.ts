@@ -3,6 +3,7 @@ import { parseBody } from 'next-sanity/webhook';
 import prisma from '@/lib/prisma';
 import { revalidateTag } from 'next/cache';
 import Pusher from 'pusher';
+import { Decimal } from 'decimal.js';
 
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID as string,
@@ -49,14 +50,14 @@ export async function POST(req: NextRequest) {
 
   const productData = {
     title: body.title,
-    price: body.price,
+    price: new Decimal(body.price),
     category: body.category,
     featured: body.featured,
     instock: body.instock,
   };
 
   try {
-    const res = await prisma.product.upsert({
+    await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,

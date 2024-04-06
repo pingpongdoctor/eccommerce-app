@@ -44,7 +44,7 @@ export const GET = withApiAuthRequired(async () => {
         productQuantity: ele.productQuantity,
         productCategory: ele.product.category,
         productId: ele.product.id,
-        productPrice: ele.product.price,
+        productPrice: ele.product.price.toString(),
       };
     });
 
