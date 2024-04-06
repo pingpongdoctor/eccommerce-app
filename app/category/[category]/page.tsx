@@ -42,6 +42,7 @@ export default async function Category({ params }: { params: QueryParams }) {
     params,
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      cache: 'force-cache',
       next: { tags: ['post'], revalidate: 3600 },
     }
   );
