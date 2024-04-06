@@ -79,8 +79,6 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       },
     });
 
-    console.log(order);
-
     //create a record for the OrdersProducts table for each product
     await Promise.all(
       purchasedProducts.map(async (product: PurchasedProduct) => {

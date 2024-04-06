@@ -8,7 +8,10 @@ export const GET = withApiAuthRequired(async () => {
   const session = await getSession();
 
   if (!session) {
-    return NextResponse.json({ message: 'Please log in' }, { status: 400 });
+    return NextResponse.json(
+      { message: 'user data is not available on auth0 cloud database' },
+      { status: 500 }
+    );
   }
 
   try {
