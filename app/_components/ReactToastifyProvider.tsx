@@ -11,7 +11,7 @@ export const notify = (
   toast[option](message, {
     position: toast.POSITION.BOTTOM_RIGHT,
     toastId,
-    autoClose: 2000,
+    autoClose: 3000,
     theme: 'dark',
   });
 };

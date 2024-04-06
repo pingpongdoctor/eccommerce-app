@@ -43,6 +43,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       { status: 400 }
     );
   }
+
   try {
     //get user
     const auth0Id: string = session.user.sub;
@@ -78,6 +79,8 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       },
     });
 
+    console.log(order);
+
     //create a record for the OrdersProducts table for each product
     await Promise.all(
       purchasedProducts.map(async (product: PurchasedProduct) => {
@@ -87,7 +90,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
             quantity: product.productQuantity,
             order: {
               connect: {
-                id: userData.id,
+                id: order.id,
               },
             },
             product: {

@@ -88,8 +88,9 @@ export default function PaymentForm({
     }
   };
 
+  //set tax, shipping and subtotal
   useEffect(() => {
-    const tax = Math.round((subtotal * 12) / 100);
+    const tax = Math.round((subtotal * 10) / 100);
     setTax(tax);
     //assume that tax is equal to shipping fee
     setShipping(tax);
@@ -118,7 +119,12 @@ export default function PaymentForm({
             isSuccess: boolean;
             transactionNumber?: string | undefined;
             expectedDeliveryDate?: string | undefined;
-          } = await createOrder(fullname, 'prepare', address); //create order and return expectedDeliveryTime and transactionNumber
+          } = await createOrder(
+            fullname,
+            'prepare',
+            address,
+            purchasedProducts
+          ); //create order and return expectedDeliveryTime and transactionNumber
           //trigger events to update product quantity in realtime
           await updateProductQuantityInRealtime();
           //clear rollback data in Redis database
@@ -135,6 +141,7 @@ export default function PaymentForm({
             const expectedTimeToDelivery = formatDateToWords(
               data.expectedDeliveryDate as string
             );
+
             //send email payment confirmation
             await sendEmailPaymentConfirm(
               'thanhnhantran1501@gmail.com', //will change this later on
