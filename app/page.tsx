@@ -25,6 +25,8 @@ export default async function Home() {
     { featured: true },
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      cache: 'force-cache',
+      next: {},
     }
   );
 
@@ -33,6 +35,8 @@ export default async function Home() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      cache: 'force-cache',
+      next: {},
     }
   );
 
@@ -41,6 +45,8 @@ export default async function Home() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      cache: 'force-cache',
+      next: {},
     }
   );
 
@@ -49,6 +55,8 @@ export default async function Home() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      cache: 'force-cache',
+      next: {},
     }
   );
 

@@ -38,7 +38,8 @@ export async function POST(req: NextRequest) {
     !body?.category ||
     !body?.hasOwnProperty('featured') ||
     !body?._type ||
-    !body?.hasOwnProperty('instock')
+    !body?.hasOwnProperty('instock') ||
+    body?.instock === null
   ) {
     return NextResponse.json(
       { message: 'Missed required data' },
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
   };
 
   try {
-    await prisma.product.upsert({
+    const res = await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,

@@ -12,6 +12,8 @@ export default async function BlogsPage() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
+      cache: 'force-cache',
+      next: {},
     }
   );
 
