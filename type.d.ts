@@ -44,12 +44,12 @@ interface SanityBlog {
 }
 
 interface ProductInShoppingCart {
-  [index: string]: string | number | Categories | Decimal;
+  [index: string]: string | number | Categories;
   productSlug: string;
   productQuantity: number;
   productCategory: Categories;
   productId: number;
-  productPrice: Decimal;
+  productPrice: string;
 }
 
 type ProductWithImgUrl = SanityProduct & {
@@ -107,7 +107,7 @@ interface Address {
 
 interface PurchasedProduct {
   productId: number;
-  priceAtTheOrderTime: number;
+  priceAtTheOrderTime: string;
   productQuantity: number;
 }
 [];
