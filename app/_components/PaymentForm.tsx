@@ -101,7 +101,6 @@ export default function PaymentForm({
     paymentIntent: PaymentIntent,
     rollbackDataKey: string
   ) {
-    console.log('running check payment status');
     try {
       switch (paymentIntent.status) {
         case 'succeeded':
@@ -114,6 +113,7 @@ export default function PaymentForm({
             ) => productInShoppingCart.productId
           );
           await deleteProductsInCartAfterPayment(productIds);
+
           //create new order
           const purchasedProducts: PurchasedProduct[] = productsInCart.map(
             (product: ProductInShoppingCart) => {
@@ -124,6 +124,8 @@ export default function PaymentForm({
               };
             }
           );
+
+          //create order and return expectedDeliveryTime and transactionNumber
           const data: {
             isSuccess: boolean;
             transactionNumber?: string | undefined;
@@ -133,7 +135,8 @@ export default function PaymentForm({
             'prepare',
             address,
             purchasedProducts
-          ); //create order and return expectedDeliveryTime and transactionNumber
+          );
+
           //trigger events to update product quantity in realtime
           await updateProductQuantityInRealtime();
           //clear rollback data in Redis database
