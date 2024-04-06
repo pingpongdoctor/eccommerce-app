@@ -136,8 +136,8 @@ export default function ShoppingCart() {
               />
               <OrderSummaryComponent
                 subtotal={subtotal}
-                tax={Math.round((subtotal * 12) / 100)}
-                shipping={Math.round((subtotal * 2) / 100)}
+                tax={Math.round((subtotal * 10) / 100)}
+                shipping={Math.round((subtotal * 10) / 100)}
                 orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
               />
             </>

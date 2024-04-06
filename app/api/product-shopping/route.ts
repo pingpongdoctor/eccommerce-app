@@ -19,7 +19,14 @@ export const GET = withApiAuthRequired(async () => {
       include: {
         products: {
           select: {
-            product: { select: { sanitySlug: true, category: true, id: true } },
+            product: {
+              select: {
+                sanitySlug: true,
+                category: true,
+                id: true,
+                price: true,
+              },
+            },
             productQuantity: true,
           },
         },
@@ -31,23 +38,15 @@ export const GET = withApiAuthRequired(async () => {
     }
 
     //get products records containing product slugs and product quantity
-    const products: ProductInShoppingCart[] = user.products.map(
-      (ele: {
-        productQuantity: number;
-        product: {
-          sanitySlug: string;
-          category: Categories;
-          id: number;
-        };
-      }) => {
-        return {
-          productSlug: ele.product.sanitySlug,
-          productQuantity: ele.productQuantity,
-          productCategory: ele.product.category,
-          productId: ele.product.id,
-        };
-      }
-    );
+    const products: ProductInShoppingCart[] = user.products.map((ele) => {
+      return {
+        productSlug: ele.product.sanitySlug,
+        productQuantity: ele.productQuantity,
+        productCategory: ele.product.category,
+        productId: ele.product.id,
+        productPrice: ele.product.price,
+      };
+    });
 
     return NextResponse.json(
       {

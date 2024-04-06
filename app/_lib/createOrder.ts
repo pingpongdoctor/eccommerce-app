@@ -3,7 +3,8 @@ import { baseUrl } from '../utils/baseUrl';
 export async function createOrder(
   fullname: string,
   status: OrderStatus,
-  address: Address
+  address: Address,
+  purchasedProducts: PurchasedProduct[]
 ): Promise<{
   isSuccess: boolean;
   transactionNumber?: string;
@@ -15,7 +16,7 @@ export async function createOrder(
         'Content-Type': 'application/json',
       },
       method: 'POST',
-      body: JSON.stringify({ fullname, status, address }),
+      body: JSON.stringify({ fullname, status, address, purchasedProducts }),
     });
 
     const data = await res.json();
