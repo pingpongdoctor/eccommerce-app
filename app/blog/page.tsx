@@ -12,9 +12,7 @@ export default async function BlogsPage() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      cache: 'force-cache',
-      next: {},
-    }
+    } as Pick<any, 'next' | 'cache' | 'perspective'>
   );
 
   if (!initial.data) {
