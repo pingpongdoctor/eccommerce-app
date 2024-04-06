@@ -115,6 +115,15 @@ export default function PaymentForm({
           );
           await deleteProductsInCartAfterPayment(productIds);
           //create new order
+          const purchasedProducts: PurchasedProduct[] = productsInCart.map(
+            (product: ProductInShoppingCart) => {
+              return {
+                productId: product.productId,
+                priceAtTheOrderTime: product.productPrice,
+                productQuantity: product.productQuantity,
+              };
+            }
+          );
           const data: {
             isSuccess: boolean;
             transactionNumber?: string | undefined;
