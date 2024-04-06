@@ -64,7 +64,7 @@ export default async function DetailedBlog({
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
       next: { tags: ['blog'], revalidate: 3600 },
-    }
+    } as Pick<any, 'next' | 'perspective' | 'cache'>
   );
 
   if (!initialData?.data) {
@@ -80,7 +80,7 @@ export default async function DetailedBlog({
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
       next: { tags: ['blog'], revalidate: 3600 },
-    }
+    } as Pick<any, 'next' | 'perspective' | 'cache'>
   );
 
   //add detailed author data to blogs that customers also read
