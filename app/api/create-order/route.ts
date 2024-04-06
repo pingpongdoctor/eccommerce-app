@@ -4,7 +4,6 @@ import prisma from '@/lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
 import { v4 as uuidv4 } from 'uuid';
 import { Order } from '@prisma/client';
-import product from '@/sanity/schemas/product';
 
 //create order
 export const POST = withApiAuthRequired(async (req: Request) => {
