@@ -57,6 +57,9 @@ export const GET = withApiAuthRequired(async () => {
       postal_code: string;
       transactionNumber: string;
       expectedDeliveryDate: Date;
+      tax: Decimal | string;
+      shipping: Decimal | string;
+      subtotal: Decimal | string;
       updatedAt: Date;
       products: {
         priceAtTheOrderTime: Decimal | string;
@@ -67,7 +70,11 @@ export const GET = withApiAuthRequired(async () => {
       }[];
     }[];
 
+    //convert decimal to string
     const returnedOrders = [...orders].map((order) => {
+      order.tax = order.tax.toString();
+      order.shipping = order.shipping.toString();
+      order.subtotal = order.subtotal.toString();
       const products = order.products;
       for (let i = 0; i < products.length; i++) {
         products[i].priceAtTheOrderTime =

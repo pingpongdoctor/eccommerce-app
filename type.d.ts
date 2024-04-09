@@ -111,3 +111,23 @@ interface PurchasedProduct {
   productQuantity: number;
 }
 [];
+
+interface OrderWithDetailedProducts {
+  city: string;
+  country: string;
+  line1: string;
+  postal_code: string;
+  transactionNumber: string;
+  expectedDeliveryDate: Date;
+  updatedAt: Date;
+  tax: string;
+  shipping: string;
+  subtotal: string;
+  products: {
+    priceAtTheOrderTime: string;
+    quantity: number;
+    product: {
+      sanitySlug: string;
+    };
+  }[];
+}

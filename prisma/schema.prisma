@@ -80,6 +80,9 @@ model Order {
   status Status
   transactionNumber String
   expectedDeliveryDate DateTime
+  subtotal Decimal
+  shipping Decimal
+  tax Decimal
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   products OrdersProducts[]
