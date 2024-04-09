@@ -84,7 +84,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       purchasedProducts.map(async (product: PurchasedProduct) => {
         await prisma.ordersProducts.create({
           data: {
-            priceAtTheOrderTime: +product.priceAtTheOrderTime,
+            priceAtTheOrderTime: product.priceAtTheOrderTime,
             quantity: product.productQuantity,
             order: {
               connect: {
