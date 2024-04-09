@@ -3,6 +3,8 @@ import { getAllOrdersOnServerSide } from '../_lib/getAllOrdersOnServerSide';
 import { getUserProfileFromServer } from '../_lib/getUserProfileFromServer';
 import { notify } from '../_components/ReactToastifyProvider';
 
+export const dynamic = 'force-dynamic';
+
 export default async function OrderHistoryPage() {
   const userData = await getUserProfileFromServer();
 
@@ -17,5 +19,5 @@ export default async function OrderHistoryPage() {
 
   const data = await getAllOrdersOnServerSide();
 
-  return <div></div>;
+  return <div>{/* <p>{data[0].city}</p> */}</div>;
 }
