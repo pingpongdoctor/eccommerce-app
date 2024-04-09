@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   };
 
   try {
-    const res = await prisma.product.upsert({
+    await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,

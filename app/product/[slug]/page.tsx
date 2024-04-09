@@ -63,9 +63,9 @@ export default async function DetailedProduct({
     params,
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      cache: 'force-cache',
+
       next: { tags: ['post'], revalidate: 3600 },
-    }
+    } as Pick<any, 'next' | 'cache' | 'perspective'>
   );
 
   if (!initialData.data) {

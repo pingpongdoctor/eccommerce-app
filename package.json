@@ -20,7 +20,7 @@
     "@sanity/client": "^6.10.0",
     "@sanity/image-url": "^1.0.2",
     "@sanity/overlays": "^2.3.0",
-    "@sanity/react-loader": "^1.6.4",
+    "@sanity/react-loader": "^1.9.9",
     "@sanity/vision": "^3.23.4",
     "@sendgrid/mail": "^8.1.0",
     "@stripe/react-stripe-js": "^2.4.0",

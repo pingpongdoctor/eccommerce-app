@@ -43,6 +43,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       { status: 400 }
     );
   }
+
   try {
     //get user
     const auth0Id: string = session.user.sub;
@@ -83,11 +84,11 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       purchasedProducts.map(async (product: PurchasedProduct) => {
         await prisma.ordersProducts.create({
           data: {
-            priceAtTheOrderTime: product.priceAtTheOrderTime,
+            priceAtTheOrderTime: +product.priceAtTheOrderTime,
             quantity: product.productQuantity,
             order: {
               connect: {
-                id: userData.id,
+                id: order.id,
               },
             },
             product: {
@@ -109,6 +110,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       { status: 201 }
     );
   } catch (err: any) {
+    console.log('Internal server error' + err);
     return NextResponse.json(
       { message: err.message },
       { status: err.statusCode || 500 }
