@@ -49,6 +49,7 @@ interface ProductInShoppingCart {
   productQuantity: number;
   productCategory: Categories;
   productId: number;
+  productPrice: string;
 }
 
 type ProductWithImgUrl = SanityProduct & {
@@ -106,7 +107,7 @@ interface Address {
 
 interface PurchasedProduct {
   productId: number;
-  priceAtTheOrderTime: number;
+  priceAtTheOrderTime: string;
   productQuantity: number;
 }
 [];

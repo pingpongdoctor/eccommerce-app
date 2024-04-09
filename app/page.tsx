@@ -25,9 +25,7 @@ export default async function Home() {
     { featured: true },
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      cache: 'force-cache',
-      next: {},
-    }
+    } as Pick<any, 'next' | 'cache' | 'perspective'>
   );
 
   const trendingProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
@@ -35,9 +33,7 @@ export default async function Home() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      cache: 'force-cache',
-      next: {},
-    }
+    } as Pick<any, 'next' | 'cache' | 'perspective'>
   );
 
   const homepageContentPromise = loadQuery<HomePageData & SanityDocument>(
@@ -45,9 +41,7 @@ export default async function Home() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      cache: 'force-cache',
-      next: {},
-    }
+    } as Pick<any, 'next' | 'cache' | 'perspective'>
   );
 
   const blogsPromise = loadQuery<(SanityBlog & SanityDocument)[]>(
@@ -55,9 +49,7 @@ export default async function Home() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-      cache: 'force-cache',
-      next: {},
-    }
+    } as Pick<any, 'next' | 'cache' | 'perspective'>
   );
 
   // handle promises at the same time to avoid waterfall when fetching data
