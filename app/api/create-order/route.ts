@@ -22,21 +22,30 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     address,
     status,
     purchasedProducts,
+    subtotal,
+    shipping,
+    tax,
   }: {
     fullname: string;
     status: OrderStatus;
     address: Address;
     purchasedProducts: PurchasedProduct[];
+    subtotal: string;
+    shipping: string;
+    tax: string;
   } = await req.json();
 
   if (
     !fullname ||
+    !status ||
+    !subtotal ||
+    !shipping ||
+    !tax ||
     !address?.city ||
     !address?.country ||
     !address?.line1 ||
     !address?.postal_code ||
-    !address?.state ||
-    !status
+    !address?.state
   ) {
     return NextResponse.json(
       { message: 'miss required data' },
@@ -75,6 +84,9 @@ export const POST = withApiAuthRequired(async (req: Request) => {
         line2,
         postal_code,
         status,
+        shipping,
+        tax,
+        subtotal,
         user: { connect: { id: userData.id } },
       },
     });
