@@ -17,7 +17,7 @@ export default async function OrderHistoryPage() {
     redirect('/');
   }
 
-  const data: OrderWithDetailedProducts[] = await getAllOrdersOnServerSide();
+  const data: OrderWithProductSlugs[] = await getAllOrdersOnServerSide();
 
   return (
     <div>
@@ -34,7 +34,7 @@ export default async function OrderHistoryPage() {
         </div>
         <div>
           <p>Total amount</p>
-          <p></p>
+          <p>{data[0].subtotal + data[0].shipping + data[0].tax}</p>
         </div>
       </div>
     </div>

@@ -112,22 +112,21 @@ interface PurchasedProduct {
 }
 [];
 
-interface OrderWithDetailedProducts {
-  city: string;
-  country: string;
-  line1: string;
-  postal_code: string;
+interface OrderWithProductSlugs {
   transactionNumber: string;
-  expectedDeliveryDate: Date;
-  updatedAt: Date;
+  expectedDeliveryDate: string;
+  updatedAt: string;
   tax: string;
   shipping: string;
   subtotal: string;
+  status: OrderStatus;
   products: {
     priceAtTheOrderTime: string;
     quantity: number;
     product: {
       sanitySlug: string;
+      title?: string;
+      image?: any;
     };
   }[];
 }
