@@ -17,6 +17,6 @@ export async function clearRollbackData(rollbackDataKey: string) {
       console.log('Error when clearing rollback data' + ' ' + data.message);
     }
   } catch (e: any) {
-    console.log('Error in clearRollbackData function' + e.message);
+    console.log('Error in clearRollbackData function' + e);
   }
 }

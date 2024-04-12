@@ -22,7 +22,7 @@ export const calculateAverageStar = function (
 
     return Math.round(sum / totalReviews);
   } catch (e: any) {
-    console.log('Error calculating average star' + ' ' + e.message);
+    console.log('Error calculating average star' + ' ' + e);
     return undefined;
   }
 };

@@ -21,9 +21,7 @@ export async function getProductsInCartFromClientSide(): Promise<
 
     return products;
   } catch (e: any) {
-    console.log(
-      'Error in getProductsInCartFromClientSide function' + ' ' + e.message
-    );
+    console.log('Error in getProductsInCartFromClientSide function' + ' ' + e);
     return undefined;
   }
 }

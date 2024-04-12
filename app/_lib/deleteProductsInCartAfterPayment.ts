@@ -20,9 +20,7 @@ export async function deleteProductsInCartAfterPayment(productIds: number[]) {
 
     return true;
   } catch (e: any) {
-    console.log(
-      'Error in deleteProductsInCartAfterPayment function' + e.message
-    );
+    console.log('Error in deleteProductsInCartAfterPayment function' + e);
     return false;
   }
 }

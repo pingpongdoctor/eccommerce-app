@@ -128,6 +128,6 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       { status: 200 }
     );
   } catch (e: any) {
-    return NextResponse.json({ message: 'Server error' + e.message });
+    return NextResponse.json({ message: 'Server error' + e });
   }
 });

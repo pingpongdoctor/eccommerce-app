@@ -9,7 +9,7 @@ export function generateProductInstockList(instockValue: number): {
     }
     return instockList;
   } catch (e: any) {
-    console.log('Error in generateProductInstockList' + ' ' + e.message);
+    console.log('Error in generateProductInstockList' + ' ' + e);
     return [];
   }
 }

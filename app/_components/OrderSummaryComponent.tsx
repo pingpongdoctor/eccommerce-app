@@ -63,7 +63,7 @@ export default function OrderSummaryComponent({
       //if checking process succeeds
       router.push('/checkout');
     } catch (e: any) {
-      console.log('Error in handleCheckout function' + e.message);
+      console.log('Error in handleCheckout function' + e);
     } finally {
       () => {
         setIsLoading(false);

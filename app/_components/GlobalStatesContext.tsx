@@ -49,7 +49,7 @@ export default function GlobalStatesContext({
           }
         })
         .catch((e: any) => {
-          console.log(e.message);
+          console.log(e);
         });
     }
   }, [userProfile]);
@@ -65,7 +65,7 @@ export default function GlobalStatesContext({
           }
         })
         .catch((e: any) => {
-          console.log(e.message);
+          console.log(e);
         })
         .finally(() => {
           setChangeProductsInCart(false);
