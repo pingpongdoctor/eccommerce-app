@@ -84,9 +84,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
 
       await addProductToCart(productSlug, quantity);
     } catch (e: any) {
-      console.log(
-        'Error submiting products for the current user' + ' ' + e.message
-      );
+      console.log('Error submiting products for the current user' + ' ' + e);
     } finally {
       setIsDisable(false);
       setChangeProductsInCart(true);

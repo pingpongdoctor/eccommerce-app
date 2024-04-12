@@ -22,9 +22,7 @@ export async function createStripePaymentIntent(
 
     return data.clientSecret;
   } catch (e: any) {
-    console.log(
-      'Error in createStripePaymentIntent function' + ' ' + e.message
-    );
+    console.log('Error in createStripePaymentIntent function' + ' ' + e);
     return undefined;
   }
 }

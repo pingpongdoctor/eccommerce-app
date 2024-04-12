@@ -43,7 +43,7 @@ export async function addProductToCart(
       isSuccess: true,
     };
   } catch (e: any) {
-    console.log('Error in addProductToCart function' + ' ' + e.message);
+    console.log('Error in addProductToCart function' + ' ' + e);
     return { isSuccess: false };
   }
 }

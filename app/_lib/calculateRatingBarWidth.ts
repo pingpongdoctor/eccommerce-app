@@ -32,7 +32,7 @@ export const calculateRatingBarWidth = function (
       }))
       .reverse();
   } catch (e: any) {
-    console.log('Error calculating rating bar width' + ' ' + e.message);
+    console.log('Error calculating rating bar width' + ' ' + e);
     return [];
   }
 };

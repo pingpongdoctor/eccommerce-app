@@ -4,7 +4,10 @@ export async function createOrder(
   fullname: string,
   status: OrderStatus,
   address: Address,
-  purchasedProducts: PurchasedProduct[]
+  purchasedProducts: PurchasedProduct[],
+  subtotal: string,
+  shipping: string,
+  tax: string
 ): Promise<{
   isSuccess: boolean;
   transactionNumber?: string;
@@ -16,7 +19,15 @@ export async function createOrder(
         'Content-Type': 'application/json',
       },
       method: 'POST',
-      body: JSON.stringify({ fullname, status, address, purchasedProducts }),
+      body: JSON.stringify({
+        fullname,
+        status,
+        address,
+        purchasedProducts,
+        subtotal,
+        shipping,
+        tax,
+      }),
     });
 
     const data = await res.json();
@@ -30,7 +41,7 @@ export async function createOrder(
 
     return { isSuccess: true, transactionNumber, expectedDeliveryDate };
   } catch (e: any) {
-    console.log('Error in createOrder function' + e.message);
+    console.log('Error in createOrder function' + e);
     return { isSuccess: false };
   }
 }

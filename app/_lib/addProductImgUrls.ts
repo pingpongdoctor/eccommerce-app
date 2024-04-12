@@ -14,7 +14,7 @@ export function addProductImgUrls(
 
     return productsWithImgUrl;
   } catch (e: any) {
-    console.log('Error in addProductImgUrls function' + ' ' + e.message);
+    console.log('Error in addProductImgUrls function' + ' ' + e);
     return [];
   }
 }

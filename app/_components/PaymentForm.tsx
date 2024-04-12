@@ -134,7 +134,10 @@ export default function PaymentForm({
             fullname,
             'prepare',
             address,
-            purchasedProducts
+            purchasedProducts,
+            subtotal.toString(),
+            shipping.toString(),
+            tax.toString()
           );
 
           //trigger events to update product quantity in realtime

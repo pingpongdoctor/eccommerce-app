@@ -19,7 +19,7 @@ export function addProductQuantity(
 
     return productsWithImgAndQuantity;
   } catch (e: any) {
-    console.log('Error in addProductQuality function' + ' ' + e.message);
+    console.log('Error in addProductQuality function' + ' ' + e);
     return [];
   }
 }

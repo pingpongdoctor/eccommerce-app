@@ -27,7 +27,7 @@ export async function updateProductsAfterPayment(
 
     return { result: true, rollbackDataKey: data.rollbackDataKey };
   } catch (e: any) {
-    console.log('Error in updateProductsAfterPayment function' + e.message);
+    console.log('Error in updateProductsAfterPayment function' + e);
     return { result: false };
   }
 }

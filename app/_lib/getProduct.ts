@@ -20,7 +20,7 @@ export async function getProduct(
 
     return data.data;
   } catch (e: any) {
-    console.log(`Error in getProduct function` + e.message);
+    console.log(`Error in getProduct function` + e);
     return undefined;
   }
 }
