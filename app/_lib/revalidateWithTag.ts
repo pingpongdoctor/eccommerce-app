@@ -18,7 +18,7 @@ export async function revalidateWithTag(tag: string): Promise<boolean> {
 
     return true;
   } catch (e: any) {
-    console.log('Error in updateProductsAfterPayment function' + e.message);
+    console.log('Error in updateProductsAfterPayment function' + e);
     return false;
   }
 }

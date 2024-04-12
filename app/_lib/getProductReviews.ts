@@ -22,7 +22,7 @@ export async function getProductReviews(
     }
     return data.data;
   } catch (e: any) {
-    console.log('Error in getProductReviews function' + ' ' + e.message);
+    console.log('Error in getProductReviews function' + ' ' + e);
     return undefined;
   }
 }

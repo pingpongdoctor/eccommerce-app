@@ -37,9 +37,7 @@ export async function updateProductQuantityForProductsInCart(
     return true;
   } catch (e: any) {
     console.log(
-      'Error in updateProductQuantityForProductsInCart function' +
-        ' ' +
-        e.message
+      'Error in updateProductQuantityForProductsInCart function' + ' ' + e
     );
     return false;
   }
