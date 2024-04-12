@@ -54,9 +54,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
         await triggerNewReviewsEvent(productSlug);
       }
     } catch (e: any) {
-      console.log(
-        'Error in handleReviewContentUpdate function' + ' ' + e.message
-      );
+      console.log('Error in handleReviewContentUpdate function' + ' ' + e);
     } finally {
       setIsDisable(false);
     }

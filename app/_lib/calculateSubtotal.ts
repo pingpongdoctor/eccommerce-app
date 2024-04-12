@@ -18,7 +18,7 @@ export function calculateSubtotal(
 
     return subtotal;
   } catch (e: any) {
-    console.log('Error in calculateSubtotal function' + ' ' + e.message);
+    console.log('Error in calculateSubtotal function' + ' ' + e);
     return 0;
   }
 }

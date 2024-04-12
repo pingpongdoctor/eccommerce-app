@@ -19,7 +19,7 @@ export async function getUserProfileFromServer(): Promise<
 
     return data.data;
   } catch (e: any) {
-    console.log('Error in getUserProfile function' + ' ' + e.message);
+    console.log('Error in getUserProfile function' + ' ' + e);
     return undefined;
   }
 }

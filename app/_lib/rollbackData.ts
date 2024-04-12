@@ -23,6 +23,6 @@ export async function rollbackData(rollbackDataKey: string) {
       console.log('Error when rolling back product data' + ' ' + data.message);
     }
   } catch (e: any) {
-    console.log('Error in updateProductsAfterPayment function' + e.message);
+    console.log('Error in updateProductsAfterPayment function' + e);
   }
 }

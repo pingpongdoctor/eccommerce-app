@@ -23,7 +23,7 @@ export async function postNewReview(
 
     return true;
   } catch (e: any) {
-    console.log('Error in postNewRiew function' + ' ' + e.message);
+    console.log('Error in postNewRiew function' + ' ' + e);
     return false;
   }
 }

@@ -64,7 +64,7 @@ export async function checkProductQuantity(
       sufficientProducts: data.sufficientProducts,
     };
   } catch (e: any) {
-    console.log('Error in checkAnyProductSoldOut function' + e.message);
+    console.log('Error in checkAnyProductSoldOut function' + e);
     return { isSuccess: false };
   }
 }
