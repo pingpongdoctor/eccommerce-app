@@ -1,9 +1,8 @@
 import { headers } from 'next/headers';
 import { baseUrl } from '../utils/baseUrl';
-import { Decimal } from '@prisma/client/runtime/library';
 
 export async function getAllOrdersOnServerSide(): Promise<
-  OrderWithDetailedProducts[]
+  OrderWithProductSlugs[]
 > {
   try {
     const res = await fetch(`${baseUrl}/api/orders`, {
@@ -17,7 +16,7 @@ export async function getAllOrdersOnServerSide(): Promise<
       return [];
     }
 
-    return data.data as OrderWithDetailedProducts[];
+    return data.data as OrderWithProductSlugs[];
   } catch (e: any) {
     console.log('Error in getAllOrdersOnServerSide function' + e);
     return [];
