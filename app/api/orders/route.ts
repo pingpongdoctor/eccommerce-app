@@ -1,7 +1,6 @@
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { Order } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
 //get all orders
@@ -42,22 +41,19 @@ export const GET = withApiAuthRequired(async () => {
             },
           },
         },
-        city: true,
-        country: true,
-        line1: true,
-        postal_code: true,
         transactionNumber: true,
         expectedDeliveryDate: true,
+        status: true,
         updatedAt: true,
       },
     })) as {
-      city: string;
-      country: string;
-      line1: string;
-      postal_code: string;
       transactionNumber: string;
       expectedDeliveryDate: Date;
+      tax: Decimal | string;
+      shipping: Decimal | string;
+      subtotal: Decimal | string;
       updatedAt: Date;
+      status: OrderStatus;
       products: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;
@@ -67,13 +63,47 @@ export const GET = withApiAuthRequired(async () => {
       }[];
     }[];
 
-    const returnedOrders = [...orders].map((order) => {
+    //convert decimal to string
+    const returnedOrders: {
+      transactionNumber: string;
+      expectedDeliveryDate: Date;
+      tax: Decimal | string;
+      shipping: Decimal | string;
+      subtotal: Decimal | string;
+      updatedAt: Date;
+      status: OrderStatus;
+      products: {
+        priceAtTheOrderTime: Decimal | string;
+        quantity: number;
+        product: {
+          sanitySlug: string;
+        };
+      }[];
+    }[] = [...orders].map((order) => {
+      order.tax = order.tax.toString();
+      order.shipping = order.shipping.toString();
+      order.subtotal = order.subtotal.toString();
       const products = order.products;
       for (let i = 0; i < products.length; i++) {
         products[i].priceAtTheOrderTime =
           products[i].priceAtTheOrderTime.toString();
       }
-      return order;
+      return order as {
+        transactionNumber: string;
+        expectedDeliveryDate: Date;
+        tax: Decimal | string;
+        shipping: Decimal | string;
+        subtotal: Decimal | string;
+        updatedAt: Date;
+        status: OrderStatus;
+        products: {
+          priceAtTheOrderTime: Decimal | string;
+          quantity: number;
+          product: {
+            sanitySlug: string;
+          };
+        }[];
+      };
     });
     return NextResponse.json({ data: returnedOrders }, { status: 200 });
   } catch (e: any) {

@@ -111,3 +111,22 @@ interface PurchasedProduct {
   productQuantity: number;
 }
 [];
+
+interface OrderWithProductSlugs {
+  transactionNumber: string;
+  expectedDeliveryDate: string;
+  updatedAt: string;
+  tax: string;
+  shipping: string;
+  subtotal: string;
+  status: OrderStatus;
+  products: {
+    priceAtTheOrderTime: string;
+    quantity: number;
+    product: {
+      sanitySlug: string;
+      title?: string;
+      image?: any;
+    };
+  }[];
+}

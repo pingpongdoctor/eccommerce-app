@@ -17,7 +17,26 @@ export default async function OrderHistoryPage() {
     redirect('/');
   }
 
-  const data = await getAllOrdersOnServerSide();
+  const data: OrderWithProductSlugs[] = await getAllOrdersOnServerSide();
 
-  return <div>{/* <p>{data[0].city}</p> */}</div>;
+  return (
+    <div>
+      <h2>Order history</h2>
+      <p>
+        Check the status of recent orders, manage returns, and discover similar
+        products.
+      </p>
+
+      <div>
+        <div>
+          <p>Transaction number</p>
+          <p>{data[0].transactionNumber}</p>
+        </div>
+        <div>
+          <p>Total amount</p>
+          <p>{data[0].subtotal + data[0].shipping + data[0].tax}</p>
+        </div>
+      </div>
+    </div>
+  );
 }

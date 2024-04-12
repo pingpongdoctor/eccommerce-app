@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  directUrl         = env("DIRECT_URL")
 }
 
 enum Category{
@@ -80,6 +80,9 @@ model Order {
   status Status
   transactionNumber String
   expectedDeliveryDate DateTime
+  subtotal Decimal
+  shipping Decimal
+  tax Decimal
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   products OrdersProducts[]
