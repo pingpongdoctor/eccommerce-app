@@ -118,9 +118,10 @@ export default function PaymentForm({
           const purchasedProducts: PurchasedProduct[] = productsInCart.map(
             (product: ProductInShoppingCart) => {
               return {
-                productId: product.productId,
                 priceAtTheOrderTime: product.productPrice,
                 productQuantity: product.productQuantity,
+                sanitySlug: product.productSlug,
+                titleAtTheOrderTime: product.title,
               };
             }
           );

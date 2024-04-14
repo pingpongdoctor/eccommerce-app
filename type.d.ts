@@ -50,6 +50,7 @@ interface ProductInShoppingCart {
   productCategory: Categories;
   productId: number;
   productPrice: string;
+  productTitle: string;
 }
 
 type ProductWithImgUrl = SanityProduct & {
