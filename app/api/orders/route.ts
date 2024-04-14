@@ -45,6 +45,9 @@ export const GET = withApiAuthRequired(async () => {
         expectedDeliveryDate: true,
         status: true,
         updatedAt: true,
+        shipping: true,
+        subtotal: true,
+        tax: true,
       },
     })) as {
       transactionNumber: string;
@@ -80,7 +83,7 @@ export const GET = withApiAuthRequired(async () => {
         };
       }[];
     }[] = [...orders].map((order) => {
-      order.tax = order.tax.toString();
+      order.tax = order.tax;
       order.shipping = order.shipping.toString();
       order.subtotal = order.subtotal.toString();
       const products = order.products;
@@ -105,6 +108,7 @@ export const GET = withApiAuthRequired(async () => {
         }[];
       };
     });
+
     return NextResponse.json({ data: returnedOrders }, { status: 200 });
   } catch (e: any) {
     console.log('Internal server error' + e);

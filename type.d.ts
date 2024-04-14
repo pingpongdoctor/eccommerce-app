@@ -112,7 +112,7 @@ interface PurchasedProduct {
 }
 [];
 
-interface OrderWithProductSlugs {
+interface Order {
   transactionNumber: string;
   expectedDeliveryDate: string;
   updatedAt: string;
