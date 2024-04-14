@@ -1,5 +1,17 @@
-import React from 'react';
+// import HistoryOrderItemComponent from './HistoryOrderItemComponent';
 
-export default function OrderListComponent() {
-  return <div>OrderListComponent</div>;
-}
+// interface Props {
+//   ordersWithDetailedProducts: Order[];
+// }
+
+// export default function HistoryOrderListComponent({
+//   ordersWithDetailedProducts,
+// }: Props) {
+//   return (
+//     <ul>
+//       {ordersWithDetailedProducts.map((order: Order) => (
+//         <HistoryOrderItemComponent order={order} />
+//       ))}
+//     </ul>
+//   );
+// }

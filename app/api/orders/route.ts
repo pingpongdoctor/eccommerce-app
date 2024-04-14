@@ -37,12 +37,14 @@ export const GET = withApiAuthRequired(async () => {
             product: {
               select: {
                 sanitySlug: true,
+                title: true,
               },
             },
           },
         },
         transactionNumber: true,
         expectedDeliveryDate: true,
+        placedDate: true,
         status: true,
         updatedAt: true,
         shipping: true,
@@ -52,6 +54,7 @@ export const GET = withApiAuthRequired(async () => {
     })) as {
       transactionNumber: string;
       expectedDeliveryDate: Date;
+      placedDate: Date;
       tax: Decimal | string;
       shipping: Decimal | string;
       subtotal: Decimal | string;
@@ -62,6 +65,7 @@ export const GET = withApiAuthRequired(async () => {
         quantity: number;
         product: {
           sanitySlug: string;
+          title: string;
         };
       }[];
     }[];
@@ -70,6 +74,7 @@ export const GET = withApiAuthRequired(async () => {
     const returnedOrders: {
       transactionNumber: string;
       expectedDeliveryDate: Date;
+      placedDate: Date;
       tax: Decimal | string;
       shipping: Decimal | string;
       subtotal: Decimal | string;
@@ -80,6 +85,7 @@ export const GET = withApiAuthRequired(async () => {
         quantity: number;
         product: {
           sanitySlug: string;
+          title: string;
         };
       }[];
     }[] = [...orders].map((order) => {
@@ -94,6 +100,7 @@ export const GET = withApiAuthRequired(async () => {
       return order as {
         transactionNumber: string;
         expectedDeliveryDate: Date;
+        placedDate: Date;
         tax: Decimal | string;
         shipping: Decimal | string;
         subtotal: Decimal | string;
@@ -104,6 +111,7 @@ export const GET = withApiAuthRequired(async () => {
           quantity: number;
           product: {
             sanitySlug: string;
+            title: string;
           };
         }[];
       };

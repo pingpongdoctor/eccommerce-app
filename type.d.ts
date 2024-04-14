@@ -106,15 +106,17 @@ interface Address {
 }
 
 interface PurchasedProduct {
-  productId: number;
+  sanitySlug: string;
   priceAtTheOrderTime: string;
   productQuantity: number;
+  titleAtTheOrderTime: string;
 }
 [];
 
 interface Order {
   transactionNumber: string;
   expectedDeliveryDate: string;
+  placedDate: string;
   updatedAt: string;
   tax: string;
   shipping: string;
@@ -125,8 +127,30 @@ interface Order {
     quantity: number;
     product: {
       sanitySlug: string;
-      title?: string;
-      image?: any;
+      title: string;
+      imgUrl?: string;
+      description?: string;
+    };
+  }[];
+}
+
+interface OrderWithDetailedProducts {
+  transactionNumber: string;
+  expectedDeliveryDate: string;
+  placedDate: string;
+  updatedAt: string;
+  tax: string;
+  shipping: string;
+  subtotal: string;
+  status: OrderStatus;
+  products: {
+    priceAtTheOrderTime: string;
+    quantity: number;
+    product: {
+      sanitySlug: string;
+      title: string;
+      imgUrl: string;
+      description: string;
     };
   }[];
 }
