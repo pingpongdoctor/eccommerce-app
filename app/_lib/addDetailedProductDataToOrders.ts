@@ -1,10 +1,12 @@
 import { client } from '@/sanity/lib/client';
 import { PRODUCT_QUERY } from '@/sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
+import { builder } from '../utils/imageBuilder';
+import { notify } from '../_components/ReactToastifyProvider';
 
 export async function addDetailedProductDataToOrders(
-  orders: OrderWithProductSlugs[]
-): Promise<OrderWithProductSlugs[]> {
+  orders: Order[]
+): Promise<OrderWithDetailedProducts[]> {
   try {
     const ordersWithDetailedProducts = await Promise.all(
       [...orders].map(async (order) => {
@@ -14,22 +16,31 @@ export async function addDetailedProductDataToOrders(
               slug: order.products[i].product.sanitySlug,
             });
 
-          //notify if there is not title or image available data for a product
-          if (!sanityProduct?.title || !sanityProduct?.images[0]) {
-            console.log('image or title not found for' + sanityProduct.title);
-            continue;
+          //notify if there is not image or description available data for a product
+          if (!sanityProduct?.images[0] || !sanityProduct.detail) {
+            notify(
+              'error',
+              'image or title or description not found for' +
+                sanityProduct.title,
+              'missing-data'
+            );
+            order.products = [];
+            break;
           }
 
-          //add new fields if title and image are available
-          order.products[i].product.title = sanityProduct.title;
-          order.products[i].product.image = sanityProduct.images[0];
+          //add image url and description
+          order.products[i].product.description = sanityProduct.detail;
+          order.products[i].product.imgUrl = builder
+            .image(sanityProduct.images[0])
+            .quality(80)
+            .url();
         }
 
         return order;
       })
     );
 
-    return ordersWithDetailedProducts;
+    return ordersWithDetailedProducts as OrderWithDetailedProducts[];
   } catch (e: any) {
     console.log('Error in addDetailedProductDataToOrders' + e);
     return [];
