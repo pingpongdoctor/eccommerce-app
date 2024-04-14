@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply text-gray-600 antialiased;
+    @apply text-gray-500 antialiased;
   }
   h1 {
     @apply mb-8 text-4xl font-bold text-gray-900 md:mb-10;
