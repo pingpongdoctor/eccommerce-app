@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getAllOrdersOnServerSide } from '../_lib/getAllOrdersOnServerSide';
 import { getUserProfileFromServer } from '../_lib/getUserProfileFromServer';
-import { addDetailedProductDataToOrders } from '../_lib/addDetailedProductDataToOrders';
+import { addImgUrlsToOrders } from '../_lib/addImgUrlsToOrders';
 
 //force page to be dynamically rendered (SSR page)
 //next.js renders pages statically by default so whenever we use dynamic functions like next.js header(), we need to force it rendered dynamically. Otherwise, it will throw erros.
@@ -17,8 +17,9 @@ export default async function OrderHistoryPage() {
   const ordersWithoutDetailedProducts: Order[] =
     await getAllOrdersOnServerSide();
 
-  const ordersWithDetailedProducts: Order[] =
-    await addDetailedProductDataToOrders(ordersWithoutDetailedProducts);
+  const ordersWithDetailedProducts: Order[] = await addImgUrlsToOrders(
+    ordersWithoutDetailedProducts
+  );
 
   if (ordersWithDetailedProducts.length > 0) {
     return (
