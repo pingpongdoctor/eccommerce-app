@@ -1,42 +1,41 @@
 import { redirect } from 'next/navigation';
 import { getAllOrdersOnServerSide } from '../_lib/getAllOrdersOnServerSide';
 import { getUserProfileFromServer } from '../_lib/getUserProfileFromServer';
-import { notify } from '../_components/ReactToastifyProvider';
 
+import HistoryOrderListComponent from '../_components/HistoryOrderListComponent';
+import { addImgUrlsAndDescriptionToOrders } from '../_lib/addImgUrlsToOrders';
+
+//force page to be dynamically rendered (SSR page)
+//next.js renders pages statically by default so whenever we use dynamic functions like next.js header(), we need to force it rendered dynamically. Otherwise, it will throw erros.
 export const dynamic = 'force-dynamic';
 
 export default async function OrderHistoryPage() {
   const userData = await getUserProfileFromServer();
 
   if (!userData) {
-    notify(
-      'info',
-      'can not access the order history page unless you log in',
-      'not-authenticated'
-    );
     redirect('/');
   }
 
-  const data: OrderWithProductSlugs[] = await getAllOrdersOnServerSide();
+  const ordersWithoutDetailedProducts: Order[] =
+    await getAllOrdersOnServerSide();
 
-  return (
-    <div>
-      <h2>Order history</h2>
-      <p>
-        Check the status of recent orders, manage returns, and discover similar
-        products.
-      </p>
+  const ordersWithDetailedProducts: Order[] =
+    await addImgUrlsAndDescriptionToOrders(ordersWithoutDetailedProducts);
 
-      <div>
-        <div>
-          <p>Transaction number</p>
-          <p>{data[0].transactionNumber}</p>
-        </div>
-        <div>
-          <p>Total amount</p>
-          <p>{data[0].subtotal + data[0].shipping + data[0].tax}</p>
-        </div>
+  if (ordersWithDetailedProducts.length > 0) {
+    return (
+      <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+        <h2 className="mb-4">Order history</h2>
+        <p className="mb-8">
+          Check the status of recent orders, manage returns, and discover
+          similar products.
+        </p>
+        <HistoryOrderListComponent
+          ordersWithDetailedProducts={ordersWithDetailedProducts}
+        />
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <h2>You have not had any orders yet</h2>;
+  }
 }

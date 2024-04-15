@@ -50,6 +50,7 @@ interface ProductInShoppingCart {
   productCategory: Categories;
   productId: number;
   productPrice: string;
+  productTitle: string;
 }
 
 type ProductWithImgUrl = SanityProduct & {
@@ -106,27 +107,27 @@ interface Address {
 }
 
 interface PurchasedProduct {
-  productId: number;
+  sanitySlug: string;
   priceAtTheOrderTime: string;
   productQuantity: number;
+  titleAtTheOrderTime: string;
 }
-[];
 
-interface OrderWithProductSlugs {
+interface Order {
   transactionNumber: string;
   expectedDeliveryDate: string;
+  placedDate: string;
   updatedAt: string;
   tax: string;
   shipping: string;
   subtotal: string;
   status: OrderStatus;
-  products: {
+  purchasedProducts: {
     priceAtTheOrderTime: string;
     quantity: number;
-    product: {
-      sanitySlug: string;
-      title?: string;
-      image?: any;
-    };
+    sanitySlug: string;
+    titleAtTheOrderTime: string;
+    imgUrl?: string;
+    detail: any;
   }[];
 }
