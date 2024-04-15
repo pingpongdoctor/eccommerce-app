@@ -30,36 +30,37 @@ export const GET = withApiAuthRequired(async () => {
     const orders = (await prisma.order.findMany({
       where: { userId: userData.id },
       select: {
-        products: {
+        purchasedProducts: {
           select: {
+            sanitySlug: true,
             priceAtTheOrderTime: true,
+            titleAtTheOrderTime: true,
             quantity: true,
-            product: {
-              select: {
-                sanitySlug: true,
-              },
-            },
           },
         },
         transactionNumber: true,
         expectedDeliveryDate: true,
+        placedDate: true,
         status: true,
         updatedAt: true,
+        shipping: true,
+        subtotal: true,
+        tax: true,
       },
     })) as {
       transactionNumber: string;
       expectedDeliveryDate: Date;
+      placedDate: Date;
       tax: Decimal | string;
       shipping: Decimal | string;
       subtotal: Decimal | string;
       updatedAt: Date;
       status: OrderStatus;
-      products: {
+      purchasedProducts: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;
-        product: {
-          sanitySlug: string;
-        };
+        sanitySlug: string;
+        titleAtTheOrderTime: string;
       }[];
     }[];
 
@@ -67,44 +68,30 @@ export const GET = withApiAuthRequired(async () => {
     const returnedOrders: {
       transactionNumber: string;
       expectedDeliveryDate: Date;
+      placedDate: Date;
       tax: Decimal | string;
       shipping: Decimal | string;
       subtotal: Decimal | string;
       updatedAt: Date;
       status: OrderStatus;
-      products: {
+      purchasedProducts: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;
-        product: {
-          sanitySlug: string;
-        };
+        sanitySlug: string;
+        titleAtTheOrderTime: string;
       }[];
     }[] = [...orders].map((order) => {
-      order.tax = order.tax.toString();
+      order.tax = order.tax;
       order.shipping = order.shipping.toString();
       order.subtotal = order.subtotal.toString();
-      const products = order.products;
+      const products = order.purchasedProducts;
       for (let i = 0; i < products.length; i++) {
         products[i].priceAtTheOrderTime =
           products[i].priceAtTheOrderTime.toString();
       }
-      return order as {
-        transactionNumber: string;
-        expectedDeliveryDate: Date;
-        tax: Decimal | string;
-        shipping: Decimal | string;
-        subtotal: Decimal | string;
-        updatedAt: Date;
-        status: OrderStatus;
-        products: {
-          priceAtTheOrderTime: Decimal | string;
-          quantity: number;
-          product: {
-            sanitySlug: string;
-          };
-        }[];
-      };
+      return order;
     });
+
     return NextResponse.json({ data: returnedOrders }, { status: 200 });
   } catch (e: any) {
     console.log('Internal server error' + e);

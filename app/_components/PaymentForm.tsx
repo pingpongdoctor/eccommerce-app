@@ -117,10 +117,17 @@ export default function PaymentForm({
           //create new order
           const purchasedProducts: PurchasedProduct[] = productsInCart.map(
             (product: ProductInShoppingCart) => {
+              const {
+                productPrice,
+                productQuantity,
+                productSlug,
+                productTitle,
+              } = product;
               return {
-                productId: product.productId,
-                priceAtTheOrderTime: product.productPrice,
-                productQuantity: product.productQuantity,
+                priceAtTheOrderTime: productPrice,
+                productQuantity,
+                sanitySlug: productSlug,
+                titleAtTheOrderTime: productTitle,
               };
             }
           );

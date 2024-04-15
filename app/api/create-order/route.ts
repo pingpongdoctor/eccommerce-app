@@ -66,6 +66,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     }
 
     const transactionNumber = 'TS' + uuidv4();
+    const placedDate = new Date();
     const expectedDeliveryDate = new Date();
     expectedDeliveryDate.setDate(expectedDeliveryDate.getDate() + 7);
 
@@ -74,6 +75,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
     const order: Order = await prisma.order.create({
       data: {
         transactionNumber,
+        placedDate,
         expectedDeliveryDate,
         fullname,
         email: userData.email,
@@ -91,21 +93,24 @@ export const POST = withApiAuthRequired(async (req: Request) => {
       },
     });
 
-    //create a record for the OrdersProducts table for each product
+    //create purchasedProducts records and connect them to their order
     await Promise.all(
       purchasedProducts.map(async (product: PurchasedProduct) => {
-        await prisma.ordersProducts.create({
+        const {
+          priceAtTheOrderTime,
+          titleAtTheOrderTime,
+          productQuantity,
+          sanitySlug,
+        } = product;
+        await prisma.purchasedProduct.create({
           data: {
-            priceAtTheOrderTime: product.priceAtTheOrderTime,
-            quantity: product.productQuantity,
+            sanitySlug,
+            priceAtTheOrderTime,
+            titleAtTheOrderTime,
+            quantity: productQuantity,
             order: {
               connect: {
                 id: order.id,
-              },
-            },
-            product: {
-              connect: {
-                id: product.productId,
               },
             },
           },

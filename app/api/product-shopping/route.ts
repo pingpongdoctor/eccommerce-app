@@ -28,6 +28,7 @@ export const GET = withApiAuthRequired(async () => {
                 category: true,
                 id: true,
                 price: true,
+                title: true,
               },
             },
             productQuantity: true,
@@ -48,6 +49,7 @@ export const GET = withApiAuthRequired(async () => {
         productCategory: ele.product.category,
         productId: ele.product.id,
         productPrice: ele.product.price.toString(),
+        productTitle: ele.product.title,
       };
     });
 
