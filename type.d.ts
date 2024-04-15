@@ -128,5 +128,6 @@ interface Order {
     sanitySlug: string;
     titleAtTheOrderTime: string;
     imgUrl?: string;
+    detail: any;
   }[];
 }
