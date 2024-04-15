@@ -92,7 +92,7 @@ export const GET = withApiAuthRequired(async () => {
       return order;
     });
 
-    // return NextResponse.json({ data: returnedOrders }, { status: 200 });
+    return NextResponse.json({ data: returnedOrders }, { status: 200 });
   } catch (e: any) {
     console.log('Internal server error' + e);
     return NextResponse.json(

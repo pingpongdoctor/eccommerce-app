@@ -112,7 +112,6 @@ interface PurchasedProduct {
   productQuantity: number;
   titleAtTheOrderTime: string;
 }
-[];
 
 interface Order {
   transactionNumber: string;
@@ -123,35 +122,11 @@ interface Order {
   shipping: string;
   subtotal: string;
   status: OrderStatus;
-  products: {
+  purchasedProducts: {
     priceAtTheOrderTime: string;
     quantity: number;
-    product: {
-      sanitySlug: string;
-      title: string;
-      imgUrl?: string;
-      description?: string;
-    };
-  }[];
-}
-
-interface OrderWithDetailedProducts {
-  transactionNumber: string;
-  expectedDeliveryDate: string;
-  placedDate: string;
-  updatedAt: string;
-  tax: string;
-  shipping: string;
-  subtotal: string;
-  status: OrderStatus;
-  products: {
-    priceAtTheOrderTime: string;
-    quantity: number;
-    product: {
-      sanitySlug: string;
-      title: string;
-      imgUrl: string;
-      description: string;
-    };
+    sanitySlug: string;
+    titleAtTheOrderTime: string;
+    imgUrl?: string;
   }[];
 }
