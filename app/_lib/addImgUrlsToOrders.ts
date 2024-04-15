@@ -4,7 +4,9 @@ import { SanityDocument } from 'next-sanity';
 import { builder } from '../utils/imageBuilder';
 import { notify } from '../_components/ReactToastifyProvider';
 
-export async function addImgUrlsToOrders(orders: Order[]): Promise<Order[]> {
+export async function addImgUrlsAndDescriptionToOrders(
+  orders: Order[]
+): Promise<Order[]> {
   try {
     const ordersWithProductImgUrls = await Promise.all(
       [...orders].map(async (order) => {
@@ -15,7 +17,7 @@ export async function addImgUrlsToOrders(orders: Order[]): Promise<Order[]> {
             });
 
           //if there is not sanity product or image found, set the imgUrl field undefined
-          if (!sanityProduct?.images[0]) {
+          if (!sanityProduct?.images[0] || !sanityProduct?.detail) {
             notify(
               'error',
               'image not found for' +
@@ -27,6 +29,7 @@ export async function addImgUrlsToOrders(orders: Order[]): Promise<Order[]> {
           }
 
           //add image url
+          order.purchasedProducts[i].detail = sanityProduct.detail;
           order.purchasedProducts[i].imgUrl = builder
             .image(sanityProduct.images[0])
             .quality(80)

@@ -1,43 +1,53 @@
 import Image from 'next/image';
 import { solidBlurDataUrl } from '../utils/utils';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { PortableTextComponents, PortableText } from '@portabletext/react';
+import React from 'react';
 
 interface Props {
   product: {
+    priceAtTheOrderTime: string;
+    quantity: number;
     sanitySlug: string;
-    title: string;
-    imgUrl: string;
-    description: string;
+    titleAtTheOrderTime: string;
+    imgUrl?: string | undefined;
+    detail?: any;
   };
-  priceAtTheOrderTime: string;
-  quantity: number;
 }
 
-export default function HistoryOrderProduct({
-  product,
-  priceAtTheOrderTime,
-  quantity,
-}: Props) {
+const myPortableTextComponents: PortableTextComponents | undefined = {
+  block: {
+    normal: ({ children }) => <p className="hidden md:block">{children}</p>,
+  },
+};
+
+export default function HistoryOrderProduct({ product }: Props) {
   return (
-    <div className="p-4 pt-0 md:p-8 md:pt-0 lg:p-12 lg:pt-0">
-      <div className="mb-4 flex items-center gap-4 md:items-start">
-        <Image
-          src={product.imgUrl}
-          width={80}
-          height={80}
-          alt="order-history-image"
-          className="h-[80px] w-[80px] rounded-md md:h-[160px] md:w-[160px]"
-          placeholder="blur"
-          blurDataURL={solidBlurDataUrl}
-        />
-        <div className="md:grow">
-          <div className="flex flex-col gap-2 text-sm font-medium text-gray-800 md:mb-2 md:flex-row md:justify-between">
-            <p>{product.title}</p>
-            <p>${priceAtTheOrderTime}</p>
-          </div>
-          <p className="hidden md:block">{product.description}</p>
+    <li className="flex items-center gap-4 md:items-start">
+      <Image
+        src={product.imgUrl || solidBlurDataUrl}
+        width={80}
+        height={80}
+        alt="order-history-image"
+        className="h-[80px] w-[80px] rounded-md md:h-[160px] md:w-[160px]"
+        placeholder="blur"
+        blurDataURL={solidBlurDataUrl}
+      />
+      <div className="md:grow">
+        <div className="flex flex-col gap-2 text-sm md:mb-2 md:flex-row md:justify-between md:text-base">
+          <p className="font-medium text-gray-800">
+            {product.titleAtTheOrderTime}
+          </p>
+          <p className="font-medium text-gray-800">
+            ${product.priceAtTheOrderTime}
+          </p>
         </div>
+        {product.detail && (
+          <PortableText
+            value={product.detail}
+            components={myPortableTextComponents}
+          />
+        )}
       </div>
-    </div>
+    </li>
   );
 }
