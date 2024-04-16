@@ -29,7 +29,7 @@ export default function Navbar() {
     {
       id: 2,
       dropDownComponent: (
-        <DropdownMenu dropdownItemInforArr={dropdownItemInforArr} />
+        <DropdownMenu key={2} dropdownItemInforArr={dropdownItemInforArr} />
       ),
     },
     {
@@ -42,7 +42,13 @@ export default function Navbar() {
       id: 4,
       linkName: 'Contact',
       className: linkClassname,
-      href: '#',
+      href: '/beta-page',
+    },
+    {
+      id: 5,
+      linkName: 'Your Orders',
+      className: linkClassname,
+      href: '/order-history',
     },
   ];
 
