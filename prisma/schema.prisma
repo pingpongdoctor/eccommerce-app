@@ -12,7 +12,7 @@ datasource db {
 }
 
 enum Category{
-comestic
+cosmetic
 supplement
 book
 jewelry

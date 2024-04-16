@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import { SanityDocument } from 'next-sanity';
 import supplementImg from '../../public/assets/supplement.jpg';
-import comesticImg from '../../public/assets/comestic.jpg';
+import cosmeticImg from '../../public/assets/comestic.jpg';
 import jewelryImg from '../../public/assets/jewelry.jpg';
 import bookImg from '../../public/assets/books.jpg';
 
@@ -21,7 +21,7 @@ export default function IntroduceClientComponent({
         </div>
 
         <Image
-          src={comesticImg}
+          src={cosmeticImg}
           alt="hero-image-1"
           className="hidden h-auto grow rounded-2xl object-fill object-center lg:block"
           priority
