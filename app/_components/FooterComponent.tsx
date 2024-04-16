@@ -39,7 +39,9 @@ export default function FooterComponent() {
           >
             <p className="font-semibold text-gray-900">{infor.heading}</p>
             {infor.detail.map((ele) => (
-              <p key={ele.id}>{ele.name}</p>
+              <Link className="block" href={ele.href} key={ele.id}>
+                {ele.name}
+              </Link>
             ))}
           </li>
         ))}
