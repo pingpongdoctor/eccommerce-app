@@ -18,6 +18,7 @@ import CategoryCards from './_components/CategoryCards';
 import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
 import { addDetailedAuthorDataToBlogs } from './_lib/addDetailedAuthorToBlogs';
+import Link from 'next/link';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
@@ -82,6 +83,7 @@ export default async function Home() {
           <ProductCards products={featuredProductData.data} />
         </Suspense>
       ),
+      href: '/product',
     },
     {
       id: '2',
@@ -96,11 +98,13 @@ export default async function Home() {
           <ProductCards products={trendingProductData.data} />
         </Suspense>
       ),
+      href: '/product',
     },
     {
       id: '3',
       name: 'From Blogs',
       component: <BlogCards blogs={blogsDataWithDetailedAuthorData} />,
+      href: '/blog',
     },
   ];
 
@@ -127,12 +131,15 @@ export default async function Home() {
             <div>
               <div className="mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 xl:max-w-7xl">
                 <h3>{data.name}</h3>
-                <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
+                <Link
+                  href={data.href}
+                  className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900"
+                >
                   <span> See all </span>
                   <span className="transition-all duration-500 group-hover:translate-x-2">
                     &rarr;
                   </span>
-                </p>
+                </Link>
               </div>
               {data.component}
             </div>
