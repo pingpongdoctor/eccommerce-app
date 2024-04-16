@@ -60,7 +60,7 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Comestic', value: 'comestic' },
+          { title: 'Cosmetic', value: 'cosmetic' },
           { title: 'Supplement', value: 'supplement' },
           { title: 'Book', value: 'book' },
           { title: 'Jewelry', value: 'jewelry' },
