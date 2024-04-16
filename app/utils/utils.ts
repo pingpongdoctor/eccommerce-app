@@ -8,9 +8,9 @@ import {
 export const textInfor: {
   [index: string]: { mainText: string; text: string };
 } = {
-  comestic: {
-    mainText: 'Comestic',
-    text: 'Start finding your suitable comestic merchandise',
+  cosmetic: {
+    mainText: 'Cosmetic',
+    text: 'Start finding your suitable cosmetic merchandise',
   },
   book: {
     mainText: 'Books',
@@ -27,7 +27,7 @@ export const textInfor: {
 };
 
 export const categories: Categories[] = [
-  'comestic',
+  'cosmetic',
   'supplement',
   'book',
   'jewelry',
@@ -39,9 +39,9 @@ export const categoryInfor: {
   className: string;
 }[] = [
   {
-    id: 'comestic',
-    text: 'Comestic',
-    revealText: 'Find Comestic Products Here',
+    id: 'cosmetic',
+    text: 'Cosmetic',
+    revealText: 'Find Cosmetic Products Here',
     className: 'w-full rounded-xl [&_p]:text-3xl sm:[&_p]:text-4xl',
   },
   {
@@ -77,9 +77,9 @@ export const validEmailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 export const dropdownItemInforArr: DropdownItemInfor[] = [
   {
-    path: '/category/comestic',
-    name: 'Comestic',
-    description: 'Choose your high-quality comestic products',
+    path: '/category/cosmetic',
+    name: 'Cosmetic',
+    description: 'Choose your high-quality cosmetic products',
     icon: BeakerIcon,
   },
   {
@@ -112,8 +112,8 @@ export const footerInfor: {
     detail: [
       {
         id: '1',
-        name: 'Comestic',
-        href: '/category/comestic',
+        name: 'Cosmetic',
+        href: '/category/cosmetic',
       },
       {
         id: '2',

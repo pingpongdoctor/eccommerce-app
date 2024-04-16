@@ -1,4 +1,4 @@
-type Categories = 'comestic' | 'book' | 'supplement' | 'jewelry';
+type Categories = 'cosmetic' | 'book' | 'supplement' | 'jewelry';
 
 type EmailTemplates = 'welcome' | 'confirm-payment';
 
