@@ -19,8 +19,6 @@ export default function Avatar({
       priority={avatarPriority}
       width={30}
       height={30}
-      placeholder="blur"
-      blurDataURL={solidBlurDataUrl}
       alt="avatar"
     />
   );

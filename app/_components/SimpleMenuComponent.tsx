@@ -4,13 +4,8 @@ import Avatar from './Avatar';
 
 const links = [
   {
-    href: '#',
-    label: 'Setting',
-    classname: 'ui-active:bg-gray-50 block px-4 py-2 text-gray-700',
-  },
-  {
-    href: '#',
-    label: 'Profile',
+    href: '/order-history',
+    label: 'Your orders',
     classname: 'ui-active:bg-gray-50 block px-4 py-2 text-gray-700',
   },
   {

@@ -16,6 +16,42 @@ export default function Navbar() {
   const { userProfile, isLoading, productsInCart } =
     useContext(globalStatesContext);
 
+  const linkClassname =
+    'transition-all hover:border-b-2 hover:border-gray-900 hover:pb-[2px] hover:pt-[4px]';
+
+  const navigationLinksInfor = [
+    {
+      id: 1,
+      linkName: 'Home',
+      className: linkClassname,
+      href: '/',
+    },
+    {
+      id: 2,
+      dropDownComponent: (
+        <DropdownMenu key={2} dropdownItemInforArr={dropdownItemInforArr} />
+      ),
+    },
+    {
+      id: 3,
+      linkName: 'Blogs',
+      className: linkClassname,
+      href: '/blog',
+    },
+    {
+      id: 4,
+      linkName: 'Contact',
+      className: linkClassname,
+      href: '/beta-page',
+    },
+    {
+      id: 5,
+      linkName: 'Your Orders',
+      className: linkClassname,
+      href: '/order-history',
+    },
+  ];
+
   return (
     <div className="mb-8 flex flex-col gap-2 p-4 text-sm text-gray-900 md:block md:p-8 lg:mb-12 lg:p-12 xl:mx-auto xl:max-w-7xl">
       <nav className="flex h-8 items-center justify-between overflow-visible bg-white">
@@ -31,11 +67,20 @@ export default function Navbar() {
 
         {/* table and desktop navigation links */}
         <div className="hidden items-center sm:flex sm:gap-10 lg:gap-12 xl:gap-16 [&>a]:font-semibold">
-          <Link href="/">Home</Link>
-          <DropdownMenu dropdownItemInforArr={dropdownItemInforArr} />
-          <Link href="#">About</Link>
-          <Link href="/blog">Blogs</Link>
-          <Link href="#">Contact</Link>
+          {navigationLinksInfor.map((navigationLinkInfor) => {
+            if (navigationLinkInfor.id === 2) {
+              return navigationLinkInfor.dropDownComponent;
+            }
+            return (
+              <Link
+                className={navigationLinkInfor.className as string}
+                href={navigationLinkInfor.href as string}
+                key={navigationLinkInfor.id}
+              >
+                {navigationLinkInfor.linkName}
+              </Link>
+            );
+          })}
         </div>
 
         <div className={`flex w-[109px] justify-end transition-all`}>
@@ -88,10 +133,20 @@ export default function Navbar() {
 
       {/* mobile navigation links */}
       <div className="mx-auto flex items-center gap-8 sm:hidden [&>a]:font-semibold">
-        <Link href="/">Home</Link>
-        <DropdownMenu dropdownItemInforArr={dropdownItemInforArr} />
-        <Link href="/blogs">Blogs</Link>
-        <Link href="#">About</Link>
+        {navigationLinksInfor.map((navigationLinkInfor) => {
+          if (navigationLinkInfor.id === 2) {
+            return navigationLinkInfor.dropDownComponent;
+          }
+          return (
+            <Link
+              className={navigationLinkInfor.className}
+              href={navigationLinkInfor.href as string}
+              key={navigationLinkInfor.id}
+            >
+              {navigationLinkInfor.linkName}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

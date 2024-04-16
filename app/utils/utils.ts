@@ -104,7 +104,7 @@ export const dropdownItemInforArr: DropdownItemInfor[] = [
 
 export const footerInfor: {
   id: string;
-  detail: { id: string; name: string }[];
+  detail: { id: string; name: string; href: string }[];
   heading: string;
 }[] = [
   {
@@ -113,18 +113,22 @@ export const footerInfor: {
       {
         id: '1',
         name: 'Comestic',
+        href: '/category/comestic',
       },
       {
         id: '2',
         name: 'Supplement',
+        href: '/category/supplement',
       },
       {
         id: '3',
         name: 'Jewelry',
+        href: '/category/jewelry',
       },
       {
         id: '4',
         name: 'Book',
+        href: '/category/book',
       },
     ],
     heading: 'Products',
@@ -136,14 +140,17 @@ export const footerInfor: {
       {
         id: '1',
         name: 'About',
+        href: '/beta-page',
       },
       {
         id: '2',
         name: 'Blog',
+        href: '/blog',
       },
       {
         id: '3',
         name: 'Partner',
+        href: '/beta-page',
       },
     ],
   },
@@ -154,14 +161,17 @@ export const footerInfor: {
       {
         id: '1',
         name: 'Contact',
+        href: '/beta-page',
       },
       {
         id: '2',
         name: 'Pricing',
+        href: '/beta-page',
       },
       {
         id: '3',
         name: 'Returning',
+        href: '/beta-page',
       },
     ],
   },
@@ -172,10 +182,12 @@ export const footerInfor: {
       {
         id: '1',
         name: 'Privacy',
+        href: '/beta-page',
       },
       {
         id: '2',
         name: 'Terms',
+        href: '/beta-page',
       },
     ],
   },
