@@ -1,5 +1,4 @@
 import Image, { StaticImageData } from 'next/image';
-import { solidBlurDataUrl } from '../utils/utils';
 
 interface Props {
   avatarSrc: string | StaticImageData;
