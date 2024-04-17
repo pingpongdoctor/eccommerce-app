@@ -11,7 +11,7 @@ export default function HistoryOrderItemComponent({ order }: Props) {
   const orderInfor = generateOrderInforObject(order);
 
   return (
-    <li className="rounded-md border border-gray-200">
+    <li className="rounded-lg border border-gray-300">
       <div className="p-4 pb-0 md:p-8 md:pb-0 lg:p-12 lg:pb-0">
         {/* order infor */}
         <ul className="mb-4 flex list-none justify-between">

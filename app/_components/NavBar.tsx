@@ -46,7 +46,7 @@ export default function Navbar() {
     },
     {
       id: 5,
-      linkName: 'Your Orders',
+      linkName: 'Order History',
       className: linkClassname,
       href: '/order-history',
     },

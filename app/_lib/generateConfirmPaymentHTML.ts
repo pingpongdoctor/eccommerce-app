@@ -39,7 +39,6 @@ export const generateConfirmPaymentHTML = function (
   return `<html
   data-editor-version="2"
   class="sg-campaigns"
-  xmlns="http://www.w3.org/1999/xhtml"
 >
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -193,54 +192,6 @@ export const generateConfirmPaymentHTML = function (
                     >
                       <tr>
                         <td>
-                          <!--[if mso]>
-    <center>
-    <table><tr><td width="600">
-  <![endif]-->
-                          <table
-                            width="100%"
-                            cellpadding="0"
-                            cellspacing="0"
-                            border="0"
-                            style="width: 100%; max-width: 600px"
-                            align="center"
-                          >
-                            <tr>
-                              <td
-                                role="modules-container"
-                                style="
-                                  padding: 0px 0px 0px 0px;
-                                  color: #000000;
-                                  text-align: left;
-                                "
-                                bgcolor="#ffffff"
-                                width="100%"
-                                align="left"
-                              >
-                                <table
-                                  class="module preheader preheader-hide"
-                                  role="module"
-                                  data-type="preheader"
-                                  border="0"
-                                  cellpadding="0"
-                                  cellspacing="0"
-                                  width="100%"
-                                  style="
-                                    display: none !important;
-                                    mso-hide: all;
-                                    visibility: hidden;
-                                    opacity: 0;
-                                    color: transparent;
-                                    height: 0;
-                                    width: 0;
-                                  "
-                                >
-                                  <tr>
-                                    <td role="module-content">
-                                      <p></p>
-                                    </td>
-                                  </tr>
-                                </table>
                                 <table
                                   border="0"
                                   cellpadding="0"
@@ -281,51 +232,6 @@ export const generateConfirmPaymentHTML = function (
                                                 "
                                               >
                                                 <table
-                                                  class="wrapper"
-                                                  role="module"
-                                                  data-type="image"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="b422590c-5d79-4675-8370-a10c2c76af02"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          font-size: 6px;
-                                                          line-height: 10px;
-                                                          padding: 0px 0px 0px
-                                                            0px;
-                                                        "
-                                                        valign="top"
-                                                        align="left"
-                                                      >
-                                                        <img
-                                                          class="max-width"
-                                                          border="0"
-                                                          style="
-                                                            display: block;
-                                                            color: #000000;
-                                                            text-decoration: none;
-                                                            font-family: Helvetica,
-                                                              arial, sans-serif;
-                                                            font-size: 16px;
-                                                          "
-                                                          width="140"
-                                                          alt=""
-                                                          data-proportionally-constrained="true"
-                                                          data-responsive="false"
-                                                          src="http://cdn.mcauto-images-production.sendgrid.net/954c252fedab403f/14815610-37b1-409c-ada6-acbc5352d36d/140x40.png"
-                                                          height="40"
-                                                        />
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
                                                   class="module"
                                                   role="module"
                                                   data-type="text"
@@ -352,6 +258,23 @@ export const generateConfirmPaymentHTML = function (
                                                         role="module-content"
                                                       >
                                                         <div>
+                                                          <div
+                                                          style="
+                                                            font-family: inherit;
+                                                            text-align: inherit;
+                                                          "
+                                                        >
+                                                          <span
+                                                            style="
+                                                              color: #ffffff;
+                                                              font-size: 40px;
+                                                              font-family: inherit;
+                                                              margin-bottom: 32px;
+                                                            "
+                                                            >Glowy Lab</span
+                                                          >
+                                                        </div>
+
                                                           <div
                                                             style="
                                                               font-family: inherit;
@@ -400,38 +323,6 @@ export const generateConfirmPaymentHTML = function (
                                                         bgcolor=""
                                                         role="module-content"
                                                       >
-                                                        <div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: inherit;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                font-size: 24px;
-                                                              "
-                                                              >Now you can
-                                                              relax. We're
-                                                              workin on</span
-                                                            >
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: inherit;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                font-size: 24px;
-                                                              "
-                                                              >getting your food
-                                                              to you ASAP!</span
-                                                            >
-                                                          </div>
-                                                          <div></div>
-                                                        </div>
                                                       </td>
                                                     </tr>
                                                   </tbody>
@@ -482,7 +373,7 @@ export const generateConfirmPaymentHTML = function (
                                                                 "
                                                               >
                                                                 <a
-                                                                  href="https://ecommerece-app-for-thao.vercel.app/"
+                                                                  href="https://ecommerece-app-for-thao.vercel.app/order-history"
                                                                   style="
                                                                     background-color: #000000;
                                                                     border: 1px
@@ -671,14 +562,6 @@ export const generateConfirmPaymentHTML = function (
                                             "
                                           >
                                             <br />
-                                          </div>
-                                          <div
-                                            style="
-                                              font-family: inherit;
-                                              text-align: inherit;
-                                            "
-                                          >
-                                            Monday, July 26, 2019 9:34 PM
                                           </div>
                                         </div>
                                       </td>
@@ -969,13 +852,12 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://ecommerece-app-for-thao.vercel.app/"
+                                                              href="https://ecommerece-app-for-thao.vercel.app/blog"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
                                                                 "
-                                                                >Contact
-                                                                Us</span
+                                                                >Blogs</span
                                                               ></a
                                                             >
                                                           </div>
@@ -1047,12 +929,12 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://ecommerece-app-for-thao.vercel.app/"
+                                                              href="https://ecommerece-app-for-thao.vercel.app/beta-page"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
                                                                 "
-                                                                >Help</span
+                                                                >Contact</span
                                                               ></a
                                                             >
                                                           </div>
@@ -1124,12 +1006,12 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://ecommerece-app-for-thao.vercel.app/"
+                                                              href="https://ecommerece-app-for-thao.vercel.app/beta-page"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
                                                                 "
-                                                                >Legal</span
+                                                                >About</span
                                                               ></a
                                                             >
                                                           </div>
@@ -1156,7 +1038,6 @@ export const generateConfirmPaymentHTML = function (
                   </td>
                 </tr>
               </table>
-            </td>
           </tr>
         </table>
       </div>

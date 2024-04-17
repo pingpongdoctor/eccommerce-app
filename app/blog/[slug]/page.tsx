@@ -13,6 +13,7 @@ import BlogComponent from '@/app/_components/BlogComponent';
 import BlogPreviewComponent from '@/app/_components/BlogPreviewComponent';
 import { addDetailedAuthorDataToBlogs } from '@/app/_lib/addDetailedAuthorToBlogs';
 import BlogCardsComponent from '@/app/_components/BlogCardsComponent';
+import GoBackBtn from '@/app/_components/GoBackBtn';
 
 export async function generateMetadata({
   params,
@@ -64,7 +65,7 @@ export default async function DetailedBlog({
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
       next: { tags: ['blog'], revalidate: 3600 },
-    } as Pick<any, 'next' | 'cache' | 'perspective'>
+    }
   );
 
   if (!initialData?.data) {
@@ -80,7 +81,7 @@ export default async function DetailedBlog({
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
       next: { tags: ['blog'], revalidate: 3600 },
-    } as Pick<any, 'next' | 'cache' | 'perspective'>
+    }
   );
 
   //add detailed author data to blogs that customers also read
@@ -90,6 +91,7 @@ export default async function DetailedBlog({
 
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
+      <GoBackBtn goBackBtnClassname="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl !mb-4" />
       {/* blog content */}
       {draftMode().isEnabled ? (
         <BlogPreviewComponent initial={initialData} params={params} />
