@@ -11,6 +11,7 @@ import { categories } from '@/app/utils/utils';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import ProductsWithSearchBar from '@/app/_components/ProductsWithSearchBar';
 import { textInfor } from '@/app/utils/utils';
+import GoBackBtn from '@/app/_components/GoBackBtn';
 
 export async function generateMetadata({
   params,
@@ -43,7 +44,7 @@ export default async function Category({ params }: { params: QueryParams }) {
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
       next: { tags: ['post'], revalidate: 3600 },
-    } as Pick<any, 'next' | 'cache' | 'perspective'>
+    }
   );
 
   if (!initial.data) {
@@ -52,7 +53,8 @@ export default async function Category({ params }: { params: QueryParams }) {
 
   return (
     <main className="relative">
-      <div className="px-4 pt-24 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+      <GoBackBtn goBackBtnClassname="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl" />
+      <div className="mt-28 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
         <h1 className="mb-6 text-center">
           {categories.includes(params.category)
             ? textInfor[params.category].mainText

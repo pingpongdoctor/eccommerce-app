@@ -5,6 +5,7 @@ import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { addDetailedAuthorDataToBlogs } from '../_lib/addDetailedAuthorToBlogs';
 import BlogCardsWithSearchBar from '../_components/BlogCardsWithSearchBar';
+import GoBackBtn from '../_components/GoBackBtn';
 
 export default async function BlogsPage() {
   const initial = await loadQuery<(SanityBlog & SanityDocument)[]>(
@@ -12,7 +13,7 @@ export default async function BlogsPage() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-    } as Pick<any, 'next' | 'cache' | 'perspective'>
+    }
   );
 
   if (!initial.data) {
@@ -25,7 +26,8 @@ export default async function BlogsPage() {
 
   return (
     <main className="relative">
-      <div className="px-4 pt-24 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+      <GoBackBtn goBackBtnClassname="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl" />
+      <div className="mt-28 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
         <h1 className="mb-6 text-center">Search blogs you wanna read</h1>
         <div className="mb-8 h-[2px] w-full rounded-xl bg-gray-200 lg:mb-12"></div>
       </div>

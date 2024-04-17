@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getAllOrdersOnServerSide } from '../_lib/getAllOrdersOnServerSide';
 import { getUserProfileFromServer } from '../_lib/getUserProfileFromServer';
-
 import HistoryOrderListComponent from '../_components/HistoryOrderListComponent';
 import { addImgUrlsAndDescriptionToOrders } from '../_lib/addImgUrlsToOrders';
 
@@ -13,7 +12,7 @@ export default async function OrderHistoryPage() {
   const userData = await getUserProfileFromServer();
 
   if (!userData) {
-    redirect('/');
+    redirect('/api/auth/login');
   }
 
   const ordersWithoutDetailedProducts: Order[] =
@@ -36,6 +35,6 @@ export default async function OrderHistoryPage() {
       </div>
     );
   } else {
-    return <h2>You have not had any orders yet</h2>;
+    return <h3 className="h-[60vh]">You have not had any orders yet</h3>;
   }
 }

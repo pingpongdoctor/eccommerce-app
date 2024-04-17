@@ -13,6 +13,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import CustomerReviews from '@/app/_components/CustomerReviews';
+import GoBackBtn from '@/app/_components/GoBackBtn';
 
 export async function generateMetadata({
   params,
@@ -65,7 +66,7 @@ export default async function DetailedProduct({
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
 
       next: { tags: ['post'], revalidate: 3600 },
-    } as Pick<any, 'next' | 'cache' | 'perspective'>
+    }
   );
 
   if (!initialData.data) {
@@ -86,6 +87,7 @@ export default async function DetailedProduct({
 
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
+      <GoBackBtn goBackBtnClassname="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl !mb-4" />
       {/* product detail */}
       {draftMode().isEnabled ? (
         <ProductDetailPreview initial={initialData} params={params} />
@@ -98,17 +100,19 @@ export default async function DetailedProduct({
 
       {/* product you may like */}
       <div>
-        {customerAlsoBuyInitialData?.length > 0 && (
-          <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-            <h3 className="mb-0">Products you may like</h3>
+        <div className="mb-6 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+          <h3 className="mb-0">Products you may like</h3>
+          {customerAlsoBuyInitialData?.length > 0 ? (
             <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
               <span> See all </span>
               <span className="transition-all duration-500 group-hover:translate-x-2">
                 &rarr;
               </span>
             </p>
-          </div>
-        )}
+          ) : (
+            <p>No related products</p>
+          )}
+        </div>
 
         <ProductCards products={customerAlsoBuyInitialData} />
       </div>

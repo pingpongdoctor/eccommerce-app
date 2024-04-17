@@ -69,6 +69,7 @@ export async function POST(req: NextRequest) {
     });
 
     //revalidate product data in SSG pages
+    console.log(body._type);
     revalidateTag(body._type);
 
     //trigger product event to update product quantity in realtime using Pusher severless service
