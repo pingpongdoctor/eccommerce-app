@@ -8,7 +8,7 @@ export default function HistoryOrderListComponent({
   ordersWithDetailedProducts,
 }: Props) {
   return (
-    <ul>
+    <ul className="flex flex-col gap-8 md:gap-12">
       {ordersWithDetailedProducts.map((order: Order) => (
         <HistoryOrderItemComponent
           key={order.transactionNumber}

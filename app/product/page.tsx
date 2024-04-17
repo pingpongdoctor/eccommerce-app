@@ -5,6 +5,7 @@ import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import ProductCardsPreview from '@/app/_components/ProductCardsPreview';
 import ProductsWithSearchBar from '@/app/_components/ProductsWithSearchBar';
+import GoBackBtn from '../_components/GoBackBtn';
 
 export default async function ProductsPage() {
   const initial = await loadQuery<(SanityProduct & SanityDocument)[]>(
@@ -12,7 +13,7 @@ export default async function ProductsPage() {
     {},
     {
       perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-    } as Pick<any, 'next' | 'cache' | 'perspective'>
+    }
   );
 
   if (!initial.data) {
@@ -21,7 +22,8 @@ export default async function ProductsPage() {
 
   return (
     <main className="relative">
-      <div className="px-4 pt-24 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+      <GoBackBtn goBackBtnClassname="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl" />
+      <div className="mt-28 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
         <h1 className="mb-6 text-center">All Products</h1>
         <p className="mb-8 text-balance text-center lg:mb-12">
           We have everything you need
