@@ -34,21 +34,29 @@ export default function Navbar() {
     },
     {
       id: 3,
+      linkName: 'Products',
+      className: linkClassname,
+      href: '/product',
+    },
+    {
+      id: 4,
       linkName: 'Blogs',
       className: linkClassname,
       href: '/blog',
     },
-    {
-      id: 4,
-      linkName: 'Contact',
-      className: linkClassname,
-      href: '/beta-page',
-    },
+
     {
       id: 5,
-      linkName: 'Order History',
+      linkName: 'Orders',
       className: linkClassname,
       href: '/order-history',
+    },
+
+    {
+      id: 5,
+      linkName: 'Cart',
+      className: linkClassname,
+      href: '/shopping-cart',
     },
   ];
 
@@ -66,7 +74,7 @@ export default function Navbar() {
         </Link>
 
         {/* table and desktop navigation links */}
-        <div className="hidden items-center sm:flex sm:gap-10 lg:gap-12 xl:gap-16 [&>a]:font-semibold">
+        <div className="hidden items-center sm:flex sm:gap-6 lg:gap-12 xl:gap-16 [&>a]:font-semibold">
           {navigationLinksInfor.map((navigationLinkInfor) => {
             if (navigationLinkInfor.id === 2) {
               return navigationLinkInfor.dropDownComponent;
@@ -132,7 +140,7 @@ export default function Navbar() {
       </nav>
 
       {/* mobile navigation links */}
-      <div className="mx-auto flex items-center gap-8 sm:hidden [&>a]:font-semibold">
+      <div className="mx-auto flex items-center gap-4 sm:hidden [&>a]:font-semibold">
         {navigationLinksInfor.map((navigationLinkInfor) => {
           if (navigationLinkInfor.id === 2) {
             return navigationLinkInfor.dropDownComponent;
