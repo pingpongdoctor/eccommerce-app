@@ -96,7 +96,7 @@ model Order {
 model PurchasedProduct {
   id        Int     @id @default(autoincrement())
   orderId Int
-  sanitySlug String @unique
+  sanitySlug String
   priceAtTheOrderTime Decimal
   titleAtTheOrderTime String
   quantity Int
