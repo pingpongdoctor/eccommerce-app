@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
 
-//get all orders
+//get all orders of the current user
 export const GET = withApiAuthRequired(async () => {
   const session = await getSession();
   if (!session) {
@@ -27,27 +27,13 @@ export const GET = withApiAuthRequired(async () => {
       );
     }
 
-    const orders = (await prisma.order.findMany({
-      where: { userId: userData.id },
-      select: {
-        purchasedProducts: {
-          select: {
-            sanitySlug: true,
-            priceAtTheOrderTime: true,
-            titleAtTheOrderTime: true,
-            quantity: true,
-          },
-        },
-        transactionNumber: true,
-        expectedDeliveryDate: true,
-        placedDate: true,
-        status: true,
-        updatedAt: true,
-        shipping: true,
-        subtotal: true,
-        tax: true,
-      },
-    })) as {
+    //check if user is admin
+    const isAdmin =
+      session?.user[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
+        'admin'
+      );
+
+    let orders: {
       transactionNumber: string;
       expectedDeliveryDate: Date;
       placedDate: Date;
@@ -62,7 +48,54 @@ export const GET = withApiAuthRequired(async () => {
         sanitySlug: string;
         titleAtTheOrderTime: string;
       }[];
-    }[];
+    }[] = [];
+
+    if (isAdmin) {
+      //if user is admin, get all available orders
+      orders = await prisma.order.findMany({
+        select: {
+          purchasedProducts: {
+            select: {
+              sanitySlug: true,
+              priceAtTheOrderTime: true,
+              titleAtTheOrderTime: true,
+              quantity: true,
+            },
+          },
+          transactionNumber: true,
+          expectedDeliveryDate: true,
+          placedDate: true,
+          status: true,
+          updatedAt: true,
+          shipping: true,
+          subtotal: true,
+          tax: true,
+        },
+      });
+    } else {
+      //if user is not admin, get orders of the current user
+      orders = await prisma.order.findMany({
+        where: { userId: userData.id },
+        select: {
+          purchasedProducts: {
+            select: {
+              sanitySlug: true,
+              priceAtTheOrderTime: true,
+              titleAtTheOrderTime: true,
+              quantity: true,
+            },
+          },
+          transactionNumber: true,
+          expectedDeliveryDate: true,
+          placedDate: true,
+          status: true,
+          updatedAt: true,
+          shipping: true,
+          subtotal: true,
+          tax: true,
+        },
+      });
+    }
 
     //convert decimal to string
     const returnedOrders: {
