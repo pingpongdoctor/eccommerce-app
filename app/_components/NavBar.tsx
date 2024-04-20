@@ -53,7 +53,7 @@ export default function Navbar() {
     },
 
     {
-      id: 5,
+      id: 6,
       linkName: 'Cart',
       className: linkClassname,
       href: '/shopping-cart',

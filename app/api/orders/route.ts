@@ -1,10 +1,10 @@
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
 
 //get all orders of the current user
-export const GET = withApiAuthRequired(async () => {
+export const GET = withApiAuthRequired(async (req: NextRequest) => {
   const session = await getSession();
   if (!session) {
     return NextResponse.json(
@@ -33,6 +33,9 @@ export const GET = withApiAuthRequired(async () => {
         'admin'
       );
 
+    //check if API call is made from admin endpoint
+    const path = req.nextUrl.pathname;
+
     let orders: {
       transactionNumber: string;
       expectedDeliveryDate: Date;
@@ -50,7 +53,8 @@ export const GET = withApiAuthRequired(async () => {
       }[];
     }[] = [];
 
-    if (isAdmin) {
+    //if user is admin and the API call is made from the path /admin, return all orders
+    if (isAdmin && path === '/api/orders') {
       //if user is admin, get all available orders
       orders = await prisma.order.findMany({
         select: {
