@@ -256,3 +256,21 @@ export const navigationLinksInfor = [
     href: '/shopping-cart',
   },
 ];
+
+export const statusDesign: Record<
+  OrderStatus,
+  { flag: string; background: string }
+> = {
+  prepare: {
+    flag: ' text-purple-300 group-hover:text-purple-500',
+    background: 'bg-purple-500/5 hover:bg-purple-500/10',
+  },
+  onTheWay: {
+    flag: 'text-blue-300 group-hover:text-blue-500',
+    background: 'bg-blue-500/5 hover:bg-blue-500/10',
+  },
+  delivered: {
+    flag: 'text-green-300 group-hover:text-green-500',
+    background: 'bg-green-500/5 hover:bg-green-500/10',
+  },
+};
