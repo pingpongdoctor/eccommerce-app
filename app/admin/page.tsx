@@ -110,10 +110,10 @@ export default function AdminPage() {
                   menuItems={[
                     { label: 'All' },
                     {
-                      label: 'prepare',
+                      label: 'processing',
                     },
                     {
-                      label: 'onTheWay',
+                      label: 'shipping',
                     },
                     {
                       label: 'delivered',

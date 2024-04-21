@@ -261,11 +261,11 @@ export const statusDesign: Record<
   OrderStatus,
   { flag: string; background: string }
 > = {
-  prepare: {
+  processing: {
     flag: ' text-purple-300 group-hover:text-purple-500',
     background: 'bg-purple-500/5 hover:bg-purple-500/10',
   },
-  onTheWay: {
+  shipping: {
     flag: 'text-blue-300 group-hover:text-blue-500',
     background: 'bg-blue-500/5 hover:bg-blue-500/10',
   },

@@ -2,7 +2,7 @@ type Categories = 'cosmetic' | 'book' | 'supplement' | 'jewelry';
 
 type EmailTemplates = 'welcome' | 'confirm-payment';
 
-type OrderStatus = 'prepare' | 'onTheWay' | 'delivered';
+type OrderStatus = 'processing' | 'shipping' | 'delivered';
 
 type TemplateEnvs = Record<EmailTemplates, string>;
 

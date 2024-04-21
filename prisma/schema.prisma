@@ -19,8 +19,8 @@ jewelry
 }
 
 enum Status{
-prepare
-onTheWay
+processing
+shipping
 delivered
 }
 
