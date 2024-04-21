@@ -21,7 +21,7 @@ jewelry
 enum Status{
 prepare
 onTheWay
-done
+delivered
 }
 
 model User {

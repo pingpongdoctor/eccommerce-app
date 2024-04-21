@@ -45,6 +45,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
       subtotal: Decimal | string;
       updatedAt: Date;
       status: OrderStatus;
+      users?: { name: string; imgUrl: string };
       purchasedProducts: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;
@@ -64,6 +65,12 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
               priceAtTheOrderTime: true,
               titleAtTheOrderTime: true,
               quantity: true,
+            },
+          },
+          user: {
+            select: {
+              name: true,
+              imgUrl: true,
             },
           },
           transactionNumber: true,
@@ -111,6 +118,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
       subtotal: Decimal | string;
       updatedAt: Date;
       status: OrderStatus;
+      users?: { name: string; imgUrl: string };
       purchasedProducts: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;
