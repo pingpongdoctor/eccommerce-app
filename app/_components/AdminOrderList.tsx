@@ -1,4 +1,4 @@
-import React from 'react';
+'use client';
 import AdminOrderItem from './AdminOrderItem';
 
 interface Props {

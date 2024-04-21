@@ -69,11 +69,6 @@ interface InputBoxInfor {
   name: Field;
 }
 
-interface ColunmInfor {
-  id: string;
-  colunm: Field;
-}
-
 interface User {
   _id: string;
   name: string;
