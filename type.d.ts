@@ -2,7 +2,7 @@ type Categories = 'cosmetic' | 'book' | 'supplement' | 'jewelry';
 
 type EmailTemplates = 'welcome' | 'confirm-payment';
 
-type OrderStatus = 'prepare' | 'onTheWay' | 'done';
+type OrderStatus = 'prepare' | 'onTheWay' | 'delivered';
 
 type TemplateEnvs = Record<EmailTemplates, string>;
 
@@ -122,6 +122,7 @@ interface Order {
   shipping: string;
   subtotal: string;
   status: OrderStatus;
+  user?: { name: string; imgUrl: string };
   purchasedProducts: {
     priceAtTheOrderTime: string;
     quantity: number;

@@ -17,8 +17,8 @@ import PreviewIntroduceComponent from './_components/PreviewIntroduceComponent';
 import CategoryCards from './_components/CategoryCards';
 import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
-import { addDetailedAuthorDataToBlogs } from './_lib/addDetailedAuthorToBlogs';
 import Link from 'next/link';
+import { addDetailedAuthorDataToBlogs } from './_lib/addDetailedAuthorToBlogs';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(

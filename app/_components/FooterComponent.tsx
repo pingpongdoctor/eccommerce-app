@@ -10,9 +10,9 @@ import { footerInfor } from '../utils/utils';
 
 export default function FooterComponent() {
   return (
-    <div className="flex flex-col p-4 text-sm text-gray-600 md:p-8 lg:flex-row lg:items-center lg:gap-14 lg:p-12 xl:mx-auto xl:max-w-7xl">
+    <div className="flex min-h-[70vh] flex-col p-4 text-sm text-gray-600 md:p-8 lg:flex-row lg:items-center lg:gap-14 lg:p-12 xl:mx-auto xl:max-w-7xl">
       <div className="mb-8 md:mb-10 lg:max-w-[400px]">
-        <Link href="/">
+        <Link href="/" className="inline-block w-32">
           <Image
             src={glowyLab}
             alt="logo"
