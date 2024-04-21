@@ -2,7 +2,6 @@ import { baseUrl } from '../utils/baseUrl';
 
 export async function createOrder(
   fullname: string,
-  status: OrderStatus,
   address: Address,
   purchasedProducts: PurchasedProduct[],
   subtotal: string,
@@ -21,7 +20,6 @@ export async function createOrder(
       method: 'POST',
       body: JSON.stringify({
         fullname,
-        status,
         address,
         purchasedProducts,
         subtotal,
