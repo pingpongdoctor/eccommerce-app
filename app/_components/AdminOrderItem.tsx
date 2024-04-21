@@ -2,6 +2,7 @@ import { FlagIcon } from '@heroicons/react/20/solid';
 import Avatar from './Avatar';
 import { formatDateToWords } from '../_lib/formatDateToWords';
 import { solidBlurDataUrl } from '../utils/utils';
+import { caplitalizeFirstLetterOfAWord } from '../_lib/caplitalizeFirstLetterOfAWord';
 
 interface Props {
   order: Order;
@@ -23,7 +24,9 @@ export default function AdminOrderItem({ order }: Props) {
         </p>
         <div className="group flex w-[102px] items-center gap-2">
           <FlagIcon className="h-4 w-4 text-green-300 group-hover:text-green-400" />
-          <p className="font-medium text-gray-700">{order.status}</p>
+          <p className="font-medium text-gray-700">
+            {caplitalizeFirstLetterOfAWord(order.status)}
+          </p>
         </div>
         <p className="w-[100px] text-center">
           {formatDateToWords(order.placedDate)}
