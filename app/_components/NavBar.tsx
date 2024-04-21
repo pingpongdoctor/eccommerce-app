@@ -35,6 +35,17 @@ export default function Navbar() {
     ...navigationLinksInfor,
   ];
 
+  const menuItems = [
+    {
+      href: '/order-history',
+      label: 'Your orders',
+    },
+    {
+      href: '/api/auth/logout',
+      label: 'Log out',
+    },
+  ];
+
   const pathname = usePathname();
 
   return (
@@ -110,6 +121,7 @@ export default function Navbar() {
                 <SimpleMenuComponent
                   avatarSrc={userProfile.imgUrl}
                   username={userProfile.name}
+                  menuItems={menuItems}
                 />
                 <Link
                   href="/shopping-cart"

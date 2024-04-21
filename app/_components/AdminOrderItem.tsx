@@ -16,7 +16,7 @@ export default function AdminOrderItem({ order }: Props) {
         <div className="flex items-center gap-4">
           <Avatar avatarSrc={order.user?.imgUrl || solidBlurDataUrl} />
           <p className="w-[100px] truncate text-nowrap font-medium">
-            {order.user?.name}
+            {order.fullname}
           </p>
         </div>
 

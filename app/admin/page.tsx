@@ -1,10 +1,11 @@
 'use client';
-
 import { MouseEvent, useContext, useEffect, useState } from 'react';
 import AdminOrderList from '../_components/AdminOrderList';
 import { getAllOrdersOnClientSide } from '../_lib/getAllOrdersOnClientSide';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
 import { useRouter } from 'next/navigation';
+import SimpleMenuComponent from '../_components/SimpleMenuComponent';
+import { orderTableColumnsInfor } from '../utils/utils';
 
 export default function AdminPage() {
   const { user, isLoading } = useContext(globalStatesContext);
@@ -12,13 +13,6 @@ export default function AdminPage() {
   const [isLoadingOrdersData, setIsLoadingOrdersData] = useState<boolean>(true);
   const router = useRouter();
 
-  const columnsInfor = [
-    { name: 'User', className: 'w-[156px]' },
-    { name: 'Order Number', className: 'w-[150px]' },
-    { name: 'Status', className: 'w-[102px]' },
-    { name: 'Date Placed', className: 'w-[100px]' },
-    { name: 'Delivery Date', className: 'w-[100px]' },
-  ];
   //protect this page from unauthenticated users
   useEffect(() => {
     if (!isLoading && !user) {
@@ -42,7 +36,6 @@ export default function AdminPage() {
     }
   }, [user]);
 
-  //sortingOrdersFunction
   const sortingOrdersFunction = function (e: MouseEvent<HTMLParagraphElement>) {
     if (e.currentTarget.innerText === 'User') {
       setOrdersData(
@@ -84,19 +77,29 @@ export default function AdminPage() {
         <div className="cursor-default px-4 text-white md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
           {/* column name */}
           <div className="flex justify-between border-b-[2px] border-gray-200 p-4 font-medium *:text-center">
-            {columnsInfor.map((infor) => (
-              <p
-                key={infor.name}
-                className={infor.className}
-                onClick={
-                  infor.name === 'Status' || infor.name === 'Order Number'
-                    ? undefined
-                    : sortingOrdersFunction
-                }
-              >
-                {infor.name}
-              </p>
-            ))}
+            {orderTableColumnsInfor.map((infor) => {
+              if (infor.name === 'Status') {
+                return (
+                  <SimpleMenuComponent
+                    key={infor.name}
+                    menuItems={[{ label: 'Prepare' }]}
+                  />
+                );
+              }
+              return (
+                <p
+                  key={infor.name}
+                  className={infor.className}
+                  onClick={
+                    infor.name === 'Status' || infor.name === 'Order Number'
+                      ? undefined
+                      : sortingOrdersFunction
+                  }
+                >
+                  {infor.name}
+                </p>
+              );
+            })}
           </div>
 
           {/* orders */}

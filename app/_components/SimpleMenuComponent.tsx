@@ -1,30 +1,36 @@
-import { Fragment } from 'react';
+'use client';
+import { Fragment, MouseEvent } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Avatar from './Avatar';
 
-const links = [
-  {
-    href: '/order-history',
-    label: 'Your orders',
-    classname: 'ui-active:bg-gray-50 block px-4 py-2 text-gray-700',
-  },
-  {
-    href: '/api/auth/logout',
-    label: 'Log out',
-    classname: 'ui-active:bg-gray-50 px-4 py-2 text-gray-700',
-  },
-];
-
 interface Props {
-  avatarSrc: string;
-  username: string;
+  menuItems: {
+    href?: string;
+    label: string;
+    classname?: string;
+    simpleMenuOnclickHandler?: (e: MouseEvent<HTMLAnchorElement>) => void;
+  }[];
+  avatarSrc?: string;
+  btnName?: string;
+  btnClassname?: string;
+  username?: string;
 }
 
-export default function SimpleMenuComponent({ avatarSrc, username }: Props) {
+export default function SimpleMenuComponent({
+  avatarSrc,
+  username,
+  menuItems,
+  btnName,
+  btnClassname,
+}: Props) {
   return (
     <Menu as="div" className="relative">
       <Menu.Button>
-        <Avatar avatarSrc={avatarSrc} avatarClassname="size-10" />
+        {avatarSrc ? (
+          <Avatar avatarSrc={avatarSrc} avatarClassname="size-10" />
+        ) : (
+          <p className={btnClassname}>{btnName}</p>
+        )}
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -36,22 +42,28 @@ export default function SimpleMenuComponent({ avatarSrc, username }: Props) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 top-11 z-20 flex w-40 origin-top-right flex-col rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
-          <Menu.Item
-            as="div"
-            key="username"
-            className="block truncate text-nowrap border-b px-4 py-2 font-semibold text-gray-700"
-          >
-            {username}
-          </Menu.Item>
+          {username && (
+            <Menu.Item
+              as="div"
+              key="username"
+              className="block truncate text-nowrap border-b px-4 py-2 font-semibold text-gray-700"
+            >
+              {username}
+            </Menu.Item>
+          )}
 
-          {links.map((link) => (
+          {menuItems.map((menuItem) => (
             <Menu.Item
               as="a"
-              key={link.label}
-              href={link.href}
-              className={link.classname}
+              key={menuItem.label}
+              href={menuItem.href || 'javascript:void(0)'} //if there is not href, set javascript:void(0) to prevent refreshing the page and scrolling to the top
+              className={
+                menuItem.classname ||
+                'block px-4 py-2 text-gray-700 ui-active:bg-gray-50'
+              }
+              onClick={menuItem.simpleMenuOnclickHandler}
             >
-              {link.label}
+              {menuItem.label}
             </Menu.Item>
           ))}
         </Menu.Items>

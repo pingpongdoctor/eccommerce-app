@@ -274,3 +274,11 @@ export const statusDesign: Record<
     background: 'bg-green-500/5 hover:bg-green-500/10',
   },
 };
+
+export const orderTableColumnsInfor = [
+  { name: 'User', className: 'w-[156px]' },
+  { name: 'Order Number', className: 'w-[150px]' },
+  { name: 'Status' },
+  { name: 'Date Placed', className: 'w-[100px]' },
+  { name: 'Delivery Date', className: 'w-[100px]' },
+];

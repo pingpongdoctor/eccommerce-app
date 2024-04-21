@@ -118,6 +118,14 @@ interface Order {
   subtotal: string;
   status: OrderStatus;
   user?: { name: string; imgUrl: string };
+  fullname?: string;
+  email?: string;
+  city?: string;
+  country?: string;
+  line1?: string;
+  line2?: string | null;
+  postal_code?: string;
+  state?: string;
   purchasedProducts: {
     priceAtTheOrderTime: string;
     quantity: number;
