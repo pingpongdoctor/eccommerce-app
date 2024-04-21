@@ -3,9 +3,9 @@ import { loadQuery } from '@/sanity/lib/store';
 import { BLOGS_QUERY } from '@/sanity/lib/queries';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { addDetailedAuthorDataToBlogs } from '../_lib/addDetailedAuthorToBlogs';
 import BlogCardsWithSearchBar from '../_components/BlogCardsWithSearchBar';
 import GoBackBtn from '../_components/GoBackBtn';
+import { addDetailedAuthorDataToBlogs } from '../_lib/addDetailedAuthorToBlogs';
 
 export default async function BlogsPage() {
   const initial = await loadQuery<(SanityBlog & SanityDocument)[]>(

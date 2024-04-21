@@ -1,10 +1,10 @@
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
 
-//get all orders
-export const GET = withApiAuthRequired(async () => {
+//get all orders of the current user
+export const GET = withApiAuthRequired(async (req: NextRequest) => {
   const session = await getSession();
   if (!session) {
     return NextResponse.json(
@@ -27,27 +27,16 @@ export const GET = withApiAuthRequired(async () => {
       );
     }
 
-    const orders = (await prisma.order.findMany({
-      where: { userId: userData.id },
-      select: {
-        purchasedProducts: {
-          select: {
-            sanitySlug: true,
-            priceAtTheOrderTime: true,
-            titleAtTheOrderTime: true,
-            quantity: true,
-          },
-        },
-        transactionNumber: true,
-        expectedDeliveryDate: true,
-        placedDate: true,
-        status: true,
-        updatedAt: true,
-        shipping: true,
-        subtotal: true,
-        tax: true,
-      },
-    })) as {
+    //check if user is admin
+    const isAdmin =
+      session?.user[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
+        'admin'
+      );
+
+    //check if API call is made from admin endpoint
+    const path = req.nextUrl.pathname;
+
+    let orders: {
       transactionNumber: string;
       expectedDeliveryDate: Date;
       placedDate: Date;
@@ -56,13 +45,84 @@ export const GET = withApiAuthRequired(async () => {
       subtotal: Decimal | string;
       updatedAt: Date;
       status: OrderStatus;
+      users?: { name: string; imgUrl: string };
+      fullname?: string;
+      email?: string;
+      city?: string;
+      country?: string;
+      line1?: string;
+      line2?: string | null;
+      postal_code?: string;
+      state?: string;
       purchasedProducts: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;
         sanitySlug: string;
         titleAtTheOrderTime: string;
       }[];
-    }[];
+    }[] = [];
+
+    //if user is admin and the API call is made from the path /admin, return all orders
+    if (isAdmin && path === '/api/orders') {
+      //if user is admin, get all available orders
+      orders = await prisma.order.findMany({
+        select: {
+          purchasedProducts: {
+            select: {
+              sanitySlug: true,
+              priceAtTheOrderTime: true,
+              titleAtTheOrderTime: true,
+              quantity: true,
+            },
+          },
+          user: {
+            select: {
+              name: true,
+              imgUrl: true,
+            },
+          },
+          fullname: true,
+          email: true,
+          city: true,
+          country: true,
+          line1: true,
+          line2: true,
+          postal_code: true,
+          state: true,
+          transactionNumber: true,
+          expectedDeliveryDate: true,
+          placedDate: true,
+          status: true,
+          updatedAt: true,
+          shipping: true,
+          subtotal: true,
+          tax: true,
+        },
+      });
+    } else {
+      //if user is not admin, get orders of the current user
+      orders = await prisma.order.findMany({
+        where: { userId: userData.id },
+        select: {
+          purchasedProducts: {
+            select: {
+              sanitySlug: true,
+              priceAtTheOrderTime: true,
+              titleAtTheOrderTime: true,
+              quantity: true,
+            },
+          },
+          transactionNumber: true,
+          expectedDeliveryDate: true,
+          placedDate: true,
+          status: true,
+          updatedAt: true,
+          shipping: true,
+          subtotal: true,
+          tax: true,
+        },
+      });
+    }
 
     //convert decimal to string
     const returnedOrders: {
@@ -74,6 +134,15 @@ export const GET = withApiAuthRequired(async () => {
       subtotal: Decimal | string;
       updatedAt: Date;
       status: OrderStatus;
+      users?: { name: string; imgUrl: string };
+      fullname?: string;
+      email?: string;
+      city?: string;
+      country?: string;
+      line1?: string;
+      line2?: string | null;
+      postal_code?: string;
+      state?: string;
       purchasedProducts: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;

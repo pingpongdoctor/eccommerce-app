@@ -17,6 +17,7 @@ import { createStripePaymentIntent } from '../_lib/createStripePaymentIntent';
 import { addSanityProductId } from '../_lib/addSanityProductId';
 import ButtonSkeleton from '../_components/ButtonSkeleton';
 import { notify } from '../_components/ReactToastifyProvider';
+import GoBackBtn from '../_components/GoBackBtn';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -138,42 +139,45 @@ export default function CheckoutPage() {
   }, [sanityProductsInCart, router]);
 
   return (
-    <main className="mx-auto max-w-7xl rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12">
-      {isFetchingSanityProducts && (
-        <>
-          <div className="mb-8 *:mb-8 md:w-[35%]">
-            <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
-            <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
-          </div>
-          <OrderSummarySkeleton orderSummarySkeletonClassname="lg:w-full mb-8" />
-          <ButtonSkeleton />
-        </>
-      )}
-
-      {!isFetchingSanityProducts &&
-        clientSecret &&
-        productsWithImgUrlAndQuantity.length > 0 && (
-          <Elements
-            stripe={stripePromise}
-            options={{
-              appearance: { theme: 'stripe' },
-              clientSecret,
-            }}
-          >
-            <PaymentForm
-              subtotal={subtotal}
-              productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-              productsInCartWithSanityProductId={
-                productsInCartWithSanityProductId
-              }
-            />
-          </Elements>
+    <main className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+      <GoBackBtn goBackBtnClassname="mb-4" />
+      <div className="rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12 xl:mx-auto xl:max-w-7xl">
+        {isFetchingSanityProducts && (
+          <>
+            <div className="mb-8 *:mb-8 md:w-[35%]">
+              <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
+              <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
+            </div>
+            <OrderSummarySkeleton orderSummarySkeletonClassname="lg:w-full mb-8" />
+            <ButtonSkeleton />
+          </>
         )}
 
-      {!isFetchingSanityProducts &&
-        (!clientSecret || productsWithImgUrlAndQuantity.length === 0) && (
-          <p>No products to proceed payment</p>
-        )}
+        {!isFetchingSanityProducts &&
+          clientSecret &&
+          productsWithImgUrlAndQuantity.length > 0 && (
+            <Elements
+              stripe={stripePromise}
+              options={{
+                appearance: { theme: 'stripe' },
+                clientSecret,
+              }}
+            >
+              <PaymentForm
+                subtotal={subtotal}
+                productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+                productsInCartWithSanityProductId={
+                  productsInCartWithSanityProductId
+                }
+              />
+            </Elements>
+          )}
+
+        {!isFetchingSanityProducts &&
+          (!clientSecret || productsWithImgUrlAndQuantity.length === 0) && (
+            <p>No products to proceed payment</p>
+          )}
+      </div>
     </main>
   );
 }

@@ -2,7 +2,6 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { SanityDocument } from 'next-sanity';
 import BlogCard from './BlogCard';
 import Link from 'next/link';
 

@@ -1,3 +1,4 @@
+import { caplitalizeFirstLetterOfWords } from './caplitalizeFirstLetterOfWords';
 import { formatDateToWords } from './formatDateToWords';
 
 export default function generateOrderInforObject(order: Order) {
@@ -8,7 +9,11 @@ export default function generateOrderInforObject(order: Order) {
       field: 'Date Placed',
       value: formatDateToWords(order.placedDate),
     },
-    { id: 3, field: 'Subtotal', value: `$${order.subtotal}` },
+    {
+      id: 3,
+      field: 'Status',
+      value: `${caplitalizeFirstLetterOfWords(order.status)}`,
+    },
     {
       id: 4,
       field: 'Total',

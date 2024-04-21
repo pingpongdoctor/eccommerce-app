@@ -2,7 +2,7 @@ type Categories = 'cosmetic' | 'book' | 'supplement' | 'jewelry';
 
 type EmailTemplates = 'welcome' | 'confirm-payment';
 
-type OrderStatus = 'prepare' | 'onTheWay' | 'done';
+type OrderStatus = 'processing' | 'shipping' | 'delivered';
 
 type TemplateEnvs = Record<EmailTemplates, string>;
 
@@ -69,11 +69,6 @@ interface InputBoxInfor {
   name: Field;
 }
 
-interface ColunmInfor {
-  id: string;
-  colunm: Field;
-}
-
 interface User {
   _id: string;
   name: string;
@@ -122,6 +117,15 @@ interface Order {
   shipping: string;
   subtotal: string;
   status: OrderStatus;
+  user?: { name: string; imgUrl: string };
+  fullname?: string;
+  email?: string;
+  city?: string;
+  country?: string;
+  line1?: string;
+  line2?: string | null;
+  postal_code?: string;
+  state?: string;
   purchasedProducts: {
     priceAtTheOrderTime: string;
     quantity: number;
