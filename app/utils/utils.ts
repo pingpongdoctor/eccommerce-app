@@ -217,3 +217,68 @@ export const months = [
   'November',
   'December',
 ];
+
+const linkClassname =
+  'transition-all hover:border-b-2 hover:border-gray-900 hover:pb-[2px] hover:pt-[4px] order-2';
+
+export const navigationLinksInfor = [
+  {
+    id: 1,
+    linkName: 'Home',
+    className:
+      'transition-all hover:border-b-2 hover:border-gray-900 hover:pb-[2px] hover:pt-[4px]',
+    href: '/',
+  },
+  {
+    id: 3,
+    linkName: 'Products',
+    className: linkClassname,
+    href: '/product',
+  },
+  {
+    id: 4,
+    linkName: 'Blogs',
+    className: linkClassname,
+    href: '/blog',
+  },
+
+  {
+    id: 5,
+    linkName: 'Orders',
+    className: linkClassname,
+    href: '/order-history',
+  },
+
+  {
+    id: 6,
+    linkName: 'Cart',
+    className: linkClassname,
+    href: '/shopping-cart',
+  },
+];
+
+export const statusDesign: Record<
+  OrderStatus,
+  { flag: string; background: string }
+> = {
+  processing: {
+    flag: ' text-purple-300 group-hover:text-purple-500',
+    background: 'bg-purple-500/5 hover:bg-purple-500/10',
+  },
+  shipping: {
+    flag: 'text-blue-300 group-hover:text-blue-500',
+    background: 'bg-blue-500/5 hover:bg-blue-500/10',
+  },
+  delivered: {
+    flag: 'text-green-300 group-hover:text-green-500',
+    background: 'bg-green-500/5 hover:bg-green-500/10',
+  },
+};
+
+export const orderTableColumnsInfor = [
+  { name: 'User', className: 'w-[156px]' },
+  { name: 'Order Number', className: 'w-[150px]' },
+  { name: 'Status' },
+  { name: 'Date Placed', className: 'w-[100px]' },
+  { name: 'Delivery Date', className: 'w-[100px]' },
+];
