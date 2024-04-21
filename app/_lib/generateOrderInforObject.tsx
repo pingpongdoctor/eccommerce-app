@@ -1,4 +1,4 @@
-import { caplitalizeFirstLetterOfAWord } from './caplitalizeFirstLetterOfAWord';
+import { caplitalizeFirstLetterOfWords } from './caplitalizeFirstLetterOfWords';
 import { formatDateToWords } from './formatDateToWords';
 
 export default function generateOrderInforObject(order: Order) {
@@ -12,7 +12,7 @@ export default function generateOrderInforObject(order: Order) {
     {
       id: 3,
       field: 'Status',
-      value: `${caplitalizeFirstLetterOfAWord(order.status)}`,
+      value: `${caplitalizeFirstLetterOfWords(order.status)}`,
     },
     {
       id: 4,

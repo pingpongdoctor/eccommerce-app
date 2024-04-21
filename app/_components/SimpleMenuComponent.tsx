@@ -2,18 +2,19 @@
 import { Fragment, MouseEvent } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Avatar from './Avatar';
+import { caplitalizeFirstLetterOfWords } from '../_lib/caplitalizeFirstLetterOfWords';
 
 interface Props {
   menuItems: {
     href?: string;
     label: string;
-    classname?: string;
-    simpleMenuOnclickHandler?: (e: MouseEvent<HTMLAnchorElement>) => void;
   }[];
   avatarSrc?: string;
   btnName?: string;
   btnClassname?: string;
   username?: string;
+  postionClassname?: string;
+  simpleMenuSortFunction?: (status: OrderStatus) => void;
 }
 
 export default function SimpleMenuComponent({
@@ -22,6 +23,8 @@ export default function SimpleMenuComponent({
   menuItems,
   btnName,
   btnClassname,
+  postionClassname,
+  simpleMenuSortFunction,
 }: Props) {
   return (
     <Menu as="div" className="relative">
@@ -41,7 +44,9 @@ export default function SimpleMenuComponent({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 top-11 z-20 flex w-40 origin-top-right flex-col rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
+        <Menu.Items
+          className={`absolute right-0 top-11 z-20 flex w-40 origin-top-right flex-col rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none ${postionClassname}`}
+        >
           {username && (
             <Menu.Item
               as="div"
@@ -56,14 +61,16 @@ export default function SimpleMenuComponent({
             <Menu.Item
               as="a"
               key={menuItem.label}
-              href={menuItem.href || 'javascript:void(0)'} //if there is not href, set javascript:void(0) to prevent refreshing the page and scrolling to the top
-              className={
-                menuItem.classname ||
-                'block px-4 py-2 text-gray-700 ui-active:bg-gray-50'
-              }
-              onClick={menuItem.simpleMenuOnclickHandler}
+              href={menuItem.href || '#'}
+              className="block px-4 py-2 text-gray-700 ui-active:bg-gray-50"
+              onClick={() => {
+                if (simpleMenuSortFunction) {
+                  //check if value of simpleMenuSortFunction prop is not undefined to execute the function
+                  simpleMenuSortFunction(menuItem.label as OrderStatus);
+                }
+              }}
             >
-              {menuItem.label}
+              {caplitalizeFirstLetterOfWords(menuItem.label)}
             </Menu.Item>
           ))}
         </Menu.Items>
