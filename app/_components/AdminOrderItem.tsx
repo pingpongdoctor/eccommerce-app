@@ -3,7 +3,7 @@ import { FlagIcon } from '@heroicons/react/20/solid';
 import Avatar from './Avatar';
 import { formatDateToWords } from '../_lib/formatDateToWords';
 import { solidBlurDataUrl, statusDesign } from '../utils/utils';
-import { caplitalizeFirstLetterOfAWord } from '../_lib/caplitalizeFirstLetterOfAWord';
+import { caplitalizeFirstLetterOfWords } from '../_lib/caplitalizeFirstLetterOfWords';
 
 interface Props {
   order: Order;
@@ -34,7 +34,7 @@ export default function AdminOrderItem({ order }: Props) {
             />
           </div>
           <p className="font-medium">
-            {caplitalizeFirstLetterOfAWord(order.status)}
+            {caplitalizeFirstLetterOfWords(order.status)}
           </p>
         </div>
         <p className="w-[100px] text-center">
