@@ -217,3 +217,42 @@ export const months = [
   'November',
   'December',
 ];
+
+const linkClassname =
+  'transition-all hover:border-b-2 hover:border-gray-900 hover:pb-[2px] hover:pt-[4px] order-2';
+
+export const navigationLinksInfor = [
+  {
+    id: 1,
+    linkName: 'Home',
+    className:
+      'transition-all hover:border-b-2 hover:border-gray-900 hover:pb-[2px] hover:pt-[4px]',
+    href: '/',
+  },
+  {
+    id: 3,
+    linkName: 'Products',
+    className: linkClassname,
+    href: '/product',
+  },
+  {
+    id: 4,
+    linkName: 'Blogs',
+    className: linkClassname,
+    href: '/blog',
+  },
+
+  {
+    id: 5,
+    linkName: 'Orders',
+    className: linkClassname,
+    href: '/order-history',
+  },
+
+  {
+    id: 6,
+    linkName: 'Cart',
+    className: linkClassname,
+    href: '/shopping-cart',
+  },
+];

@@ -11,10 +11,10 @@ interface Props {
 export default function AdminOrderItem({ order }: Props) {
   return (
     <li className="border-b border-gray-200 last:border-b-0">
-      <div className="flex h-full items-center justify-between rounded-md p-4 hover:bg-blue-100">
+      <div className="flex h-full items-center justify-between rounded-md p-4">
         <div className="flex items-center gap-4">
           <Avatar avatarSrc={order.user?.imgUrl || solidBlurDataUrl} />
-          <p className="w-[100px] truncate text-nowrap font-medium text-gray-700">
+          <p className="w-[100px] truncate text-nowrap font-medium">
             {order.user?.name}
           </p>
         </div>
@@ -24,7 +24,7 @@ export default function AdminOrderItem({ order }: Props) {
         </p>
         <div className="group flex w-[102px] items-center gap-2">
           <FlagIcon className="h-4 w-4 text-green-300 group-hover:text-green-400" />
-          <p className="font-medium text-gray-700">
+          <p className="font-medium">
             {caplitalizeFirstLetterOfAWord(order.status)}
           </p>
         </div>
