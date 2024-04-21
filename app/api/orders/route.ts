@@ -46,6 +46,14 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
       updatedAt: Date;
       status: OrderStatus;
       users?: { name: string; imgUrl: string };
+      fullname?: string;
+      email?: string;
+      city?: string;
+      country?: string;
+      line1?: string;
+      line2?: string | null;
+      postal_code?: string;
+      state?: string;
       purchasedProducts: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;
@@ -73,6 +81,14 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
               imgUrl: true,
             },
           },
+          fullname: true,
+          email: true,
+          city: true,
+          country: true,
+          line1: true,
+          line2: true,
+          postal_code: true,
+          state: true,
           transactionNumber: true,
           expectedDeliveryDate: true,
           placedDate: true,
@@ -119,6 +135,14 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
       updatedAt: Date;
       status: OrderStatus;
       users?: { name: string; imgUrl: string };
+      fullname?: string;
+      email?: string;
+      city?: string;
+      country?: string;
+      line1?: string;
+      line2?: string | null;
+      postal_code?: string;
+      state?: string;
       purchasedProducts: {
         priceAtTheOrderTime: Decimal | string;
         quantity: number;
