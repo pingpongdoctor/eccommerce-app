@@ -1,16 +1,25 @@
 'use client';
-import { MouseEvent, useContext, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import AdminOrderList from '../_components/AdminOrderList';
 import { getAllOrdersOnClientSide } from '../_lib/getAllOrdersOnClientSide';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
 import { useRouter } from 'next/navigation';
 import SimpleMenuComponent from '../_components/SimpleMenuComponent';
 import { orderTableColumnsInfor } from '../utils/utils';
+import SearchBar from '../_components/SearchBar';
+import { formatDateToWords } from '../_lib/formatDateToWords';
 
 export default function AdminPage() {
   const { user, isLoading } = useContext(globalStatesContext);
   const [ordersData, setOrdersData] = useState<Order[]>([]);
   const [isLoadingOrdersData, setIsLoadingOrdersData] = useState<boolean>(true);
+  const [searchResult, setSearchResult] = useState<string>('');
   const router = useRouter();
 
   //protect this page from unauthenticated users
@@ -81,9 +90,16 @@ export default function AdminPage() {
     );
   };
 
+  const handleUpdateSearchResult = function (e: ChangeEvent<HTMLInputElement>) {
+    setSearchResult(e.target.value.toLowerCase());
+  };
+
   return (
     <div className="min-h-[70vh] bg-gray-900 pt-8 md:pt-12">
       <div className="cursor-default px-4 text-white md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+        {/* search bars */}
+        <SearchBar changeEventHanlder={handleUpdateSearchResult} isBlackTheme />
+
         {/* column name */}
         <div className="flex justify-between border-b-[2px] border-gray-200 p-4 font-medium *:text-center">
           {orderTableColumnsInfor.map((infor) => {
@@ -132,7 +148,25 @@ export default function AdminPage() {
         )}
 
         {/* orders */}
-        {ordersData.length > 0 && <AdminOrderList orders={ordersData} />}
+        {ordersData.length > 0 && (
+          <AdminOrderList
+            orders={ordersData.filter((data) => {
+              return (
+                (data.fullname as string)
+                  .toLowerCase()
+                  .includes(searchResult) ||
+                data.transactionNumber.toLowerCase().includes(searchResult) ||
+                data.status.toLowerCase().includes(searchResult) ||
+                formatDateToWords(data.placedDate)
+                  .toLowerCase()
+                  .includes(searchResult) ||
+                formatDateToWords(data.expectedDeliveryDate)
+                  .toLowerCase()
+                  .includes(searchResult)
+              );
+            })}
+          />
+        )}
       </div>
 
       {!isLoadingOrdersData && ordersData.length === 0 && (

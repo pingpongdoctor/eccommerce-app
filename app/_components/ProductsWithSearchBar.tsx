@@ -16,7 +16,10 @@ export default function ProductsWithSearchBar({
 
   return (
     <>
-      <SearchBar changeEventHanlder={handleUpdateSearchResult} />
+      <SearchBar
+        searchBarClassname="absolute left-0 right-0 top-16"
+        changeEventHanlder={handleUpdateSearchResult}
+      />
 
       <ProductCardsClientComponent
         products={products.filter((product) => {
