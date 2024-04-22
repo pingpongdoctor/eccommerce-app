@@ -109,6 +109,7 @@ interface PurchasedProduct {
 }
 
 interface Order {
+  id: number;
   transactionNumber: string;
   expectedDeliveryDate: string;
   placedDate: string;
