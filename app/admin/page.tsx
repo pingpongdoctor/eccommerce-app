@@ -14,12 +14,18 @@ import SimpleMenuComponent from '../_components/SimpleMenuComponent';
 import { orderTableColumnsInfor } from '../utils/utils';
 import SearchBar from '../_components/SearchBar';
 import { formatDateToWords } from '../_lib/formatDateToWords';
+import AdminDetailedOrder from '../_components/AdminDetailedOrder';
+import { addImgUrlsAndDescriptionToOrders } from '../_lib/addImgUrlsToOrders';
+import ModalBox from '../_components/ModalBox';
 
 export default function AdminPage() {
   const { user, isLoading } = useContext(globalStatesContext);
   const [ordersData, setOrdersData] = useState<Order[]>([]);
   const [isLoadingOrdersData, setIsLoadingOrdersData] = useState<boolean>(true);
   const [searchResult, setSearchResult] = useState<string>('');
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [detailedOrder, setDetailedOrder] = useState<Order | null>(null);
+
   const router = useRouter();
 
   //protect this page from unauthenticated users
@@ -34,7 +40,10 @@ export default function AdminPage() {
     if (user) {
       getAllOrdersOnClientSide()
         .then((data) => {
-          setOrdersData(data);
+          return addImgUrlsAndDescriptionToOrders(data);
+        })
+        .then((ordersWithDetailedProducts) => {
+          setOrdersData(ordersWithDetailedProducts);
         })
         .catch((e: any) => {
           console.log('Error when setting ordersData state' + e);
@@ -94,35 +103,51 @@ export default function AdminPage() {
     setSearchResult(e.target.value.toLowerCase());
   };
 
+  const handleSetDetailedOrderState = function (order: Order) {
+    setDetailedOrder(order);
+    setIsOpen(true);
+  };
+
+  const handleCloseModalBox = function () {
+    setDetailedOrder(null);
+    setIsOpen(false);
+  };
+
   return (
     <div className="min-h-[70vh] bg-gray-900 pt-8 md:pt-12">
+      {/* search bars */}
+      <SearchBar changeEventHanlder={handleUpdateSearchResult} isBlackTheme />
       <div className="cursor-default px-4 text-white md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-        {/* search bars */}
-        <SearchBar changeEventHanlder={handleUpdateSearchResult} isBlackTheme />
-
         {/* column name */}
-        <div className="flex justify-between border-b-[2px] border-gray-200 p-4 font-medium *:text-center">
+        <div className="flex justify-between border-b border-white p-4 font-medium *:text-center">
           {orderTableColumnsInfor.map((infor) => {
             if (infor.name === 'Status') {
               return (
                 <SimpleMenuComponent
                   key={infor.name}
                   menuItems={[
-                    { label: 'All' },
                     {
                       label: 'processing',
+                      simpleMenuOnclickHandler: () => {
+                        sortOrdersDataBasedOnStatus('processing');
+                      },
                     },
                     {
                       label: 'shipping',
+                      simpleMenuOnclickHandler: () => {
+                        sortOrdersDataBasedOnStatus('shipping');
+                      },
                     },
                     {
                       label: 'delivered',
+                      simpleMenuOnclickHandler: () => {
+                        sortOrdersDataBasedOnStatus('delivered');
+                      },
                     },
                   ]}
-                  btnClassname="text-white font-semibold"
+                  btnClassname="text-white font-semibold w-[111px]"
                   btnName="Status"
-                  postionClassname="-right-[3.7rem]"
-                  simpleMenuSortFunction={sortOrdersDataBasedOnStatus}
+                  postionClassname="-left-[1rem]"
                 />
               );
             }
@@ -165,6 +190,7 @@ export default function AdminPage() {
                   .includes(searchResult)
               );
             })}
+            handleSetDetailedOrderState={handleSetDetailedOrderState}
           />
         )}
       </div>
@@ -173,6 +199,15 @@ export default function AdminPage() {
         <h3 className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
           There are no orders
         </h3>
+      )}
+
+      {detailedOrder && (
+        <ModalBox isOpen={isOpen}>
+          <AdminDetailedOrder
+            order={detailedOrder}
+            handleCloseModalBox={handleCloseModalBox}
+          />
+        </ModalBox>
       )}
     </div>
   );

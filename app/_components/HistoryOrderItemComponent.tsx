@@ -38,13 +38,16 @@ export default function HistoryOrderItemComponent({ order }: Props) {
 
         <div className="flex gap-2">
           <CheckCircleIcon className="h-6 w-6 text-green-500" />
-          <p>{formatDateToWords(order.expectedDeliveryDate)}</p>
+          <p>
+            <span className="font-medium text-gray-800">Delivery Date:</span>{' '}
+            {formatDateToWords(order.expectedDeliveryDate)}
+          </p>
         </div>
       </div>
 
-      <div className="my-4 h-[1px] w-full bg-gray-200 md:my-8"></div>
+      <div className="my-4 h-[1px] w-full bg-gray-200 md:my-8 lg:my-12"></div>
 
-      <ul className="flex flex-col gap-8 p-4 pt-0 md:gap-12 md:p-8 md:pt-0 lg:p-12 lg:pt-0">
+      <ul className="flex flex-col gap-4 p-4 pt-0 md:gap-8 md:p-8 md:pt-0 lg:gap-12 lg:p-12 lg:pt-0">
         {order.purchasedProducts.map((product) => (
           <HistoryOrderProduct key={product.sanitySlug} product={product} />
         ))}
