@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import { solidBlurDataUrl } from '../utils/utils';
 import { PortableTextComponents, PortableText } from '@portabletext/react';
@@ -15,13 +16,13 @@ interface Props {
 
 const myPortableTextComponents: PortableTextComponents | undefined = {
   block: {
-    normal: ({ children }) => <p>{children}</p>,
+    normal: ({ children }) => <p className="hidden md:block">{children}</p>,
   },
 };
 
-export default function HistoryOrderProduct({ product }: Props) {
+export default function AdminProductComponent({ product }: Props) {
   return (
-    <li className="flex items-center gap-4 border-b border-gray-200 pb-4 last:border-b-0 last:pb-0 md:pb-8 lg:pb-12">
+    <li className="flex items-center gap-4 border-b border-gray-300 pb-4 last:border-b-0 last:pb-0 md:pb-8 lg:pb-12">
       <Image
         src={product.imgUrl || solidBlurDataUrl}
         width={80}

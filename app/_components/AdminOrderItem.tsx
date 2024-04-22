@@ -7,11 +7,20 @@ import { caplitalizeFirstLetterOfWords } from '../_lib/caplitalizeFirstLetterOfW
 
 interface Props {
   order: Order;
+  handleSetDetailedOrderState: (order: Order) => void;
 }
 
-export default function AdminOrderItem({ order }: Props) {
+export default function AdminOrderItem({
+  order,
+  handleSetDetailedOrderState,
+}: Props) {
   return (
-    <li className="border-b border-gray-200 last:border-b-0 hover:bg-gray-800">
+    <li
+      className="border-b border-gray-300 last:border-b-0 hover:bg-gray-800"
+      onClick={() => {
+        handleSetDetailedOrderState(order);
+      }}
+    >
       <div className="flex h-full items-center justify-between rounded-md p-4">
         <div className="flex items-center gap-4">
           <Avatar avatarSrc={order.user?.imgUrl || solidBlurDataUrl} />
@@ -23,7 +32,7 @@ export default function AdminOrderItem({ order }: Props) {
         <p className="max-w-[150px] cursor-default truncate text-nowrap">
           {order.transactionNumber}
         </p>
-        <div className="group flex w-[102px] items-center gap-2">
+        <div className="group flex w-[111px] items-center gap-2">
           <div
             className={`group flex h-8 w-8 items-center justify-center rounded-full ${
               statusDesign[order.status].background
