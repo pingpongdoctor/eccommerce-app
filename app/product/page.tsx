@@ -22,7 +22,7 @@ export default async function ProductsPage() {
 
   return (
     <main className="relative">
-      <GoBackBtn goBackBtnClassname="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl" />
+      <GoBackBtn goBackBtnClassname="text-gray-700 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl" />
       <div className="mt-28 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
         <h1 className="mb-6 text-center">All Products</h1>
         <p className="mb-8 text-balance text-center lg:mb-12">

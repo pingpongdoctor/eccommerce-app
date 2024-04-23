@@ -140,7 +140,7 @@ export default function CheckoutPage() {
 
   return (
     <main className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-      <GoBackBtn goBackBtnClassname="mb-4" />
+      <GoBackBtn goBackBtnClassname="text-gray-700 mb-4" />
       <div className="rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12 xl:mx-auto xl:max-w-7xl">
         {isFetchingSanityProducts && (
           <>

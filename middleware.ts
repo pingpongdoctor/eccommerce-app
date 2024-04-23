@@ -24,5 +24,5 @@ export default withMiddlewareAuthRequired(async function middleware(
 });
 
 export const config = {
-  matcher: ['/admin', '/order-history'],
+  matcher: ['/admin/:path*', '/order-history'],
 };

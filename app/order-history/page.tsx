@@ -27,7 +27,7 @@ export default async function OrderHistoryPage() {
   if (ordersWithDetailedProducts.length > 0) {
     return (
       <div className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-        <GoBackBtn goBackBtnClassname="mb-4" />
+        <GoBackBtn goBackBtnClassname="text-gray-700 mb-4" />
         <h2 className="mb-4">Order history</h2>
         <p className="mb-8">
           Check the status of recent orders, manage returns, and discover

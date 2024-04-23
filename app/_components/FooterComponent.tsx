@@ -15,15 +15,15 @@ export default function FooterComponent() {
   const pathname = usePathname();
 
   return (
-    <div className={`${pathname === '/admin' ? 'bg-gray-900' : ''}`}>
+    <div className={`${pathname.startsWith('/admin') ? 'bg-gray-900' : ''}`}>
       <div
         className={`flex min-h-[70vh] flex-col p-4 text-sm text-gray-600 md:p-8 lg:flex-row lg:items-center lg:gap-14 lg:p-12 xl:mx-auto xl:max-w-7xl ${
-          pathname === '/admin' ? 'text-white' : ''
+          pathname.startsWith('/admin') ? 'text-white' : ''
         }`}
       >
         <div className="mb-8 md:mb-10 lg:max-w-[400px]">
           <Link href="/" className="inline-block w-32">
-            {pathname === '/admin' ? (
+            {pathname.startsWith('/admin') ? (
               <p className="mb-4 w-32 font-dancingScript text-4xl font-bold">
                 Glowy
               </p>

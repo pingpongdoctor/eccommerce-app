@@ -49,19 +49,19 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <div className={`${pathname === '/admin' ? 'bg-gray-900' : ''}`}>
+    <div className={`${pathname.startsWith('/admin') ? 'bg-gray-900' : ''}`}>
       <div
         className={`mb-8 flex flex-col gap-2 p-4 text-sm text-gray-900 md:p-8 lg:mb-12 lg:p-12 xl:mx-auto xl:max-w-7xl ${
-          pathname === '/admin' ? '!mb-0 bg-gray-900' : ''
+          pathname.startsWith('/admin') ? '!mb-0 bg-gray-900' : ''
         }`}
       >
         <nav
           className={`flex h-8 items-center justify-between overflow-visible ${
-            pathname === '/admin' ? 'bg-gray-900' : 'bg-white'
+            pathname.startsWith('/admin') ? 'bg-gray-900' : 'bg-white'
           }`}
         >
           <Link href="/" className="-m-1.5 p-1.5">
-            {pathname === '/admin' ? (
+            {pathname.startsWith('/admin') ? (
               <p className="font-dancingScript text-3xl font-bold text-white">
                 Glowy
               </p>
@@ -79,7 +79,7 @@ export default function Navbar() {
           {/* table and desktop navigation links */}
           <div
             className={`hidden items-center sm:flex sm:gap-6 lg:gap-12 xl:gap-16 [&>a]:font-semibold ${
-              pathname === '/admin' ? 'bg-gray-900 text-white' : ''
+              pathname.startsWith('/admin') ? 'bg-gray-900 text-white' : ''
             }`}
           >
             {linksInfor.map((navigationLinkInfor) => {
@@ -89,7 +89,7 @@ export default function Navbar() {
               return (
                 <Link
                   className={`${navigationLinkInfor.className as string} ${
-                    pathname === '/admin' ? 'hover:border-white' : ''
+                    pathname.startsWith('/admin') ? 'hover:border-white' : ''
                   }`}
                   href={navigationLinkInfor.href as string}
                   key={navigationLinkInfor.id}
@@ -129,14 +129,14 @@ export default function Navbar() {
                 >
                   <ShoppingBagIcon
                     className={`h-7 text-gray-400 transition-all group-hover:animate-pulse ${
-                      pathname === '/admin'
+                      pathname.startsWith('/admin')
                         ? 'group-hover:text-white'
                         : 'group-hover:text-gray-600'
                     }`}
                   />
                   <p
                     className={`text-lg font-medium text-gray-400 transition-all group-hover:animate-pulse group-hover:text-gray-600 ${
-                      pathname === '/admin'
+                      pathname.startsWith('/admin')
                         ? 'group-hover:text-white'
                         : 'group-hover:text-gray-600'
                     }`}
@@ -154,7 +154,7 @@ export default function Navbar() {
                 visible={true}
                 height="50"
                 width="50"
-                color={pathname === '/admin' ? 'white' : 'black'}
+                color={pathname.startsWith('/admin') ? 'white' : 'black'}
                 radius="9"
               />
             )}
@@ -164,7 +164,7 @@ export default function Navbar() {
         {/* mobile navigation links */}
         <div
           className={`mx-auto flex items-center gap-4 sm:hidden [&>a]:font-semibold ${
-            pathname === '/admin' ? 'bg-gray-900 text-white' : ''
+            pathname.startsWith('/admin') ? 'bg-gray-900 text-white' : ''
           }`}
         >
           {linksInfor.map((linkInfor) => {

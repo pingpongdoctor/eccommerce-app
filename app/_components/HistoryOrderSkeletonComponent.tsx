@@ -28,7 +28,18 @@ export default function HistoryOrderSkeletonComponent() {
       <div className="my-4 h-[1px] w-full bg-gray-200 md:my-8"></div>
 
       <ul className="flex flex-col gap-8 p-4 pt-0 md:gap-12 md:p-8 md:pt-0 lg:p-12 lg:pt-0">
-        <li className="flex items-center gap-4 md:items-start">
+        <li key={1} className="flex items-center gap-4 md:items-start">
+          <div className="h-[80px] w-[80px] animate-pulse rounded-md bg-gray-200 md:h-[160px] md:w-[160px]"></div>
+          <div className="md:grow">
+            <div className="flex flex-col gap-2 text-sm md:mb-2 md:flex-row md:justify-between">
+              <div className="h-8 w-24 animate-pulse rounded-xl bg-gray-200 md:w-28 lg:w-32"></div>
+              <div className="h-8 w-24 animate-pulse rounded-xl bg-gray-200 md:w-28 lg:w-32"></div>
+            </div>
+            <div className="hidden h-24 w-[70%] animate-pulse rounded-xl bg-gray-200 md:block"></div>
+          </div>
+        </li>
+
+        <li key={2} className="flex items-center gap-4 md:items-start">
           <div className="h-[80px] w-[80px] animate-pulse rounded-md bg-gray-200 md:h-[160px] md:w-[160px]"></div>
           <div className="md:grow">
             <div className="flex flex-col gap-2 text-sm md:mb-2 md:flex-row md:justify-between">
