@@ -1,15 +1,25 @@
 import { baseUrl } from '../utils/baseUrl';
 
-export async function updateOrderStatus(orderId: number, status: OrderStatus) {
+export async function updateOrderStatus(
+  orderId: number,
+  status: OrderStatus,
+  to: string,
+  from: string,
+  order_number: string,
+  username: string
+) {
   try {
-    const res = await fetch(`${baseUrl}/api/orders`, {
+    const res = await fetch(`${baseUrl}/api/orders/${orderId}`, {
       headers: {
         'Content-Type': 'application/json',
       },
       method: 'PUT',
       body: JSON.stringify({
-        orderId,
         status,
+        to,
+        from,
+        order_number,
+        username,
       }),
     });
 

@@ -2,9 +2,11 @@ import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
+import { orderStatusArr } from '@/app/utils/utils';
+import sgMail from '@sendgrid/mail';
 
 //get one specific order (only implemented if user is admin)
-export const GET = withApiAuthRequired(async (req: NextRequest, context) => {
+export const GET = withApiAuthRequired(async (_req: NextRequest, context) => {
   const session = await getSession();
   if (!session) {
     return NextResponse.json(
@@ -129,6 +131,124 @@ export const GET = withApiAuthRequired(async (req: NextRequest, context) => {
     }
 
     return NextResponse.json({ data: order }, { status: 200 });
+  } catch (e: any) {
+    console.log('Internal server error' + e);
+    return NextResponse.json(
+      { message: e.message },
+      { status: e.statusCode || 500 }
+    );
+  }
+});
+
+//update order status (only admin can use this endpoint)
+export const PUT = withApiAuthRequired(async (req: NextRequest, context) => {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json(
+      {
+        message: 'user is not found on Auth0 cloud database',
+      },
+      { status: 500 }
+    );
+  }
+
+  const orderId = context.params?.slug as string | undefined;
+
+  if (!orderId) {
+    return NextResponse.json(
+      {
+        message: 'Miss required slug',
+      },
+      { status: 400 }
+    );
+  }
+
+  const {
+    status,
+    to,
+    from,
+    order_number,
+    username,
+  }: {
+    orderId: number;
+    status: OrderStatus;
+    to: string;
+    from: string;
+    order_number: string;
+    username: string;
+  } = await req.json();
+
+  if (!orderId || !status || !orderStatusArr.includes(status)) {
+    return NextResponse.json(
+      { message: 'Miss required data' },
+      { status: 400 }
+    );
+  }
+
+  try {
+    //check if user is available on app database
+    const auth0Id: string = session.user.sub;
+    const userData = await prisma.user.findUnique({ where: { auth0Id } });
+
+    if (!userData) {
+      return NextResponse.json(
+        { message: 'user is not found in app database' },
+        { status: 500 }
+      );
+    }
+
+    //check if user is admin
+    const isAdmin =
+      session?.user[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
+        'admin'
+      );
+
+    if (!isAdmin) {
+      return NextResponse.json(
+        { message: 'user is not admin' },
+        { status: 400 }
+      );
+    }
+
+    await prisma.order.update({
+      where: {
+        id: Number(orderId),
+      },
+      data: {
+        status,
+      },
+    });
+
+    //send email if status is not processing
+    if (status !== 'processing') {
+      let emailStatus = '';
+
+      if (status === 'delivered') {
+        emailStatus = status;
+      } else {
+        emailStatus = 'shipped';
+      }
+
+      sgMail.setApiKey(process.env.SENGRID_API_KEY as string);
+      const msg = {
+        to,
+        from,
+        templateId: process.env
+          .SENGRID_TEMPLATE_ID_ORDER_NOTIFICATION as string,
+        dynamicTemplateData: {
+          status: emailStatus,
+          order_number,
+          username,
+        },
+      };
+
+      await sgMail.send(msg);
+    }
+
+    return NextResponse.json(
+      { message: 'order status is updated' },
+      { status: 200 }
+    );
   } catch (e: any) {
     console.log('Internal server error' + e);
     return NextResponse.json(
