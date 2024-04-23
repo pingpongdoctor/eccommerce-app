@@ -139,7 +139,6 @@ export default function PaymentForm({
             expectedDeliveryDate?: string | undefined;
           } = await createOrder(
             fullname,
-            'processing',
             address,
             purchasedProducts,
             subtotal.toString(),

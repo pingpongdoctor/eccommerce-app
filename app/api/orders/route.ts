@@ -2,6 +2,7 @@ import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
+import { orderStatusArr } from '@/app/utils/utils';
 
 //get all orders of the current user
 export const GET = withApiAuthRequired(async (req: NextRequest) => {
@@ -33,10 +34,8 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
         'admin'
       );
 
-    //check if API call is made from admin endpoint
-    const path = req.nextUrl.pathname;
-
     let orders: {
+      id: number;
       transactionNumber: string;
       expectedDeliveryDate: Date;
       placedDate: Date;
@@ -62,9 +61,8 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
       }[];
     }[] = [];
 
-    //if user is admin and the API call is made from the path /admin, return all orders
-    if (isAdmin && path === '/api/orders') {
-      //if user is admin, get all available orders
+    if (isAdmin) {
+      //if user is admin, return all orders
       orders = await prisma.order.findMany({
         select: {
           purchasedProducts: {
@@ -81,6 +79,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
               imgUrl: true,
             },
           },
+          id: true,
           fullname: true,
           email: true,
           city: true,
@@ -100,7 +99,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
         },
       });
     } else {
-      //if user is not admin, get orders of the current user
+      //if user is not admin or the origin is not, get orders of the current user
       orders = await prisma.order.findMany({
         where: { userId: userData.id },
         select: {
@@ -112,6 +111,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
               quantity: true,
             },
           },
+          id: true,
           transactionNumber: true,
           expectedDeliveryDate: true,
           placedDate: true,
@@ -150,7 +150,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
         titleAtTheOrderTime: string;
       }[];
     }[] = [...orders].map((order) => {
-      order.tax = order.tax;
+      order.tax = order.tax.toString();
       order.shipping = order.shipping.toString();
       order.subtotal = order.subtotal.toString();
       const products = order.purchasedProducts;
@@ -162,6 +162,75 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
     });
 
     return NextResponse.json({ data: returnedOrders }, { status: 200 });
+  } catch (e: any) {
+    console.log('Internal server error' + e);
+    return NextResponse.json(
+      { message: e.message },
+      { status: e.statusCode || 500 }
+    );
+  }
+});
+
+//update order status (only admin can use this endpoint)
+export const PUT = withApiAuthRequired(async (req: NextRequest) => {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json(
+      {
+        message: 'user is not found on Auth0 cloud database',
+      },
+      { status: 500 }
+    );
+  }
+
+  const { orderId, status }: { orderId: number; status: OrderStatus } =
+    await req.json();
+
+  if (!orderId || !status || !orderStatusArr.includes(status)) {
+    return NextResponse.json(
+      { message: 'Miss required data' },
+      { status: 400 }
+    );
+  }
+
+  try {
+    //check if user is available on app database
+    const auth0Id: string = session.user.sub;
+    const userData = await prisma.user.findUnique({ where: { auth0Id } });
+
+    if (!userData) {
+      return NextResponse.json(
+        { message: 'user is not found in app database' },
+        { status: 500 }
+      );
+    }
+
+    //check if user is admin
+    const isAdmin =
+      session?.user[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
+        'admin'
+      );
+
+    if (!isAdmin) {
+      return NextResponse.json(
+        { message: 'user is not admin' },
+        { status: 400 }
+      );
+    }
+
+    await prisma.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        status,
+      },
+    });
+
+    return NextResponse.json(
+      { message: 'order status is updated' },
+      { status: 200 }
+    );
   } catch (e: any) {
     console.log('Internal server error' + e);
     return NextResponse.json(

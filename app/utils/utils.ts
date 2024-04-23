@@ -282,3 +282,9 @@ export const orderTableColumnsInfor = [
   { name: 'Date Placed', className: 'w-[100px]' },
   { name: 'Delivery Date', className: 'w-[100px]' },
 ];
+
+export const orderStatusArr: OrderStatus[] = [
+  'processing',
+  'shipping',
+  'delivered',
+];

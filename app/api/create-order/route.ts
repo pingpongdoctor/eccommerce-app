@@ -20,14 +20,12 @@ export const POST = withApiAuthRequired(async (req: Request) => {
   const {
     fullname,
     address,
-    status,
     purchasedProducts,
     subtotal,
     shipping,
     tax,
   }: {
     fullname: string;
-    status: OrderStatus;
     address: Address;
     purchasedProducts: PurchasedProduct[];
     subtotal: string;
@@ -37,7 +35,6 @@ export const POST = withApiAuthRequired(async (req: Request) => {
 
   if (
     !fullname ||
-    !status ||
     !subtotal ||
     !shipping ||
     !tax ||
@@ -72,6 +69,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
 
     //create new order
     const { city, country, line1, line2, postal_code, state } = address;
+
     const order: Order = await prisma.order.create({
       data: {
         transactionNumber,
@@ -85,7 +83,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
         line1,
         line2,
         postal_code,
-        status,
+        status: 'processing',
         shipping,
         tax,
         subtotal,

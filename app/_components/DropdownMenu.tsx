@@ -16,12 +16,12 @@ export default function DropdownMenu({ dropdownItemInforArr }: Props) {
       <Popover className="group relative z-[60]">
         <Popover.Button
           className={`flex cursor-default items-center gap-x-1 text-sm font-semibold leading-6 outline-none ${
-            pathname === '/admin' ? 'text-white' : 'text-gray-900 '
+            pathname.startsWith('/admin') ? 'text-white' : 'text-gray-900 '
           }`}
         >
           <span
             className={`transition-all group-hover:border-b-2 group-hover:pb-[2px] group-hover:pt-[4px] ${
-              pathname === '/admin'
+              pathname.startsWith('/admin')
                 ? 'group-hover:border-white'
                 : 'group-hover:border-gray-800'
             }`}
@@ -30,7 +30,7 @@ export default function DropdownMenu({ dropdownItemInforArr }: Props) {
           </span>
           <ChevronDownIcon
             className={`h-5 w-5 flex-none ${
-              pathname === '/admin' ? 'text-white' : 'text-gray-400'
+              pathname.startsWith('/admin') ? 'text-white' : 'text-gray-400'
             }`}
           />
         </Popover.Button>
@@ -46,7 +46,9 @@ export default function DropdownMenu({ dropdownItemInforArr }: Props) {
         >
           <Popover.Panel
             className={`absolute -left-8 top-full z-10 mt-3 w-[65vw] overflow-hidden rounded-3xl shadow-lg ring-1 ring-gray-900/5 sm:w-[25rem] md:w-[28rem] ${
-              pathname === '/admin' ? 'bg-gray-800 text-white' : 'bg-white'
+              pathname.startsWith('/admin')
+                ? 'bg-gray-800 text-white'
+                : 'bg-white'
             }`}
           >
             {({ close }) => (
