@@ -2,7 +2,6 @@ import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
-import { orderStatusArr } from '@/app/utils/utils';
 
 //get all orders of the current user
 export const GET = withApiAuthRequired(async (req: NextRequest) => {
@@ -162,75 +161,6 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
     });
 
     return NextResponse.json({ data: returnedOrders }, { status: 200 });
-  } catch (e: any) {
-    console.log('Internal server error' + e);
-    return NextResponse.json(
-      { message: e.message },
-      { status: e.statusCode || 500 }
-    );
-  }
-});
-
-//update order status (only admin can use this endpoint)
-export const PUT = withApiAuthRequired(async (req: NextRequest) => {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json(
-      {
-        message: 'user is not found on Auth0 cloud database',
-      },
-      { status: 500 }
-    );
-  }
-
-  const { orderId, status }: { orderId: number; status: OrderStatus } =
-    await req.json();
-
-  if (!orderId || !status || !orderStatusArr.includes(status)) {
-    return NextResponse.json(
-      { message: 'Miss required data' },
-      { status: 400 }
-    );
-  }
-
-  try {
-    //check if user is available on app database
-    const auth0Id: string = session.user.sub;
-    const userData = await prisma.user.findUnique({ where: { auth0Id } });
-
-    if (!userData) {
-      return NextResponse.json(
-        { message: 'user is not found in app database' },
-        { status: 500 }
-      );
-    }
-
-    //check if user is admin
-    const isAdmin =
-      session?.user[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
-        'admin'
-      );
-
-    if (!isAdmin) {
-      return NextResponse.json(
-        { message: 'user is not admin' },
-        { status: 400 }
-      );
-    }
-
-    await prisma.order.update({
-      where: {
-        id: orderId,
-      },
-      data: {
-        status,
-      },
-    });
-
-    return NextResponse.json(
-      { message: 'order status is updated' },
-      { status: 200 }
-    );
   } catch (e: any) {
     console.log('Internal server error' + e);
     return NextResponse.json(
