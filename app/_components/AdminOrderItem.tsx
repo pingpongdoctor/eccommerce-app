@@ -7,20 +7,11 @@ import { caplitalizeFirstLetterOfWords } from '../_lib/caplitalizeFirstLetterOfW
 
 interface Props {
   order: Order;
-  handleSetDetailedOrderState: (order: Order) => void;
 }
 
-export default function AdminOrderItem({
-  order,
-  handleSetDetailedOrderState,
-}: Props) {
+export default function AdminOrderItem({ order }: Props) {
   return (
-    <li
-      className="border-b border-gray-300 last:border-b-0 hover:bg-gray-800"
-      onClick={() => {
-        handleSetDetailedOrderState(order);
-      }}
-    >
+    <div>
       <div className="flex h-full items-center justify-between rounded-md p-4">
         <div className="flex items-center gap-4">
           <Avatar avatarSrc={order.user?.imgUrl || solidBlurDataUrl} />
@@ -53,6 +44,6 @@ export default function AdminOrderItem({
           {formatDateToWords(order.expectedDeliveryDate)}
         </p>
       </div>
-    </li>
+    </div>
   );
 }

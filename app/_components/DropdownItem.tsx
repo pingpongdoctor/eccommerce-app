@@ -20,17 +20,21 @@ export default function DropdownItem({
   dropdownClickEventHanlder,
 }: Props) {
   const pathname = usePathname();
-
+  'abc'.startsWith;
   return (
     <Link href={dropdownPath} onClick={dropdownClickEventHanlder}>
       <div
         className={`group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 ${
-          pathname === '/admin' ? 'hover:bg-gray-900' : 'hover:bg-gray-50'
+          pathname.startsWith('/admin')
+            ? 'hover:bg-gray-900'
+            : 'hover:bg-gray-50'
         }`}
       >
         <div
           className={`flex h-11 w-11 flex-none items-center justify-center rounded-lg ${
-            pathname === '/admin' ? '' : 'bg-gray-50 group-hover:bg-white'
+            pathname.startsWith('/admin')
+              ? ''
+              : 'bg-gray-50 group-hover:bg-white'
           }`}
         >
           <DropdownIcon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" />
@@ -38,7 +42,7 @@ export default function DropdownItem({
         <div className="flex-auto">
           <p
             className={`font-semibold ${
-              pathname === '/admin' ? 'text-white' : 'text-gray-900'
+              pathname.startsWith('/admin') ? 'text-white' : 'text-gray-900'
             }`}
           >
             {dropdownName}

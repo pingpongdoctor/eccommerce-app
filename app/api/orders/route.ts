@@ -150,7 +150,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
         titleAtTheOrderTime: string;
       }[];
     }[] = [...orders].map((order) => {
-      order.tax = order.tax;
+      order.tax = order.tax.toString();
       order.shipping = order.shipping.toString();
       order.subtotal = order.subtotal.toString();
       const products = order.purchasedProducts;

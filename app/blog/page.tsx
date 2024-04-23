@@ -26,7 +26,7 @@ export default async function BlogsPage() {
 
   return (
     <main className="relative">
-      <GoBackBtn goBackBtnClassname="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl" />
+      <GoBackBtn goBackBtnClassname="text-gray-700 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl" />
       <div className="mt-28 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
         <h1 className="mb-6 text-center">Search blogs you wanna read</h1>
         <div className="mb-8 h-[2px] w-full rounded-xl bg-gray-200 lg:mb-12"></div>

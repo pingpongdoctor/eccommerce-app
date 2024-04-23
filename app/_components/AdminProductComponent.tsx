@@ -16,13 +16,13 @@ interface Props {
 
 const myPortableTextComponents: PortableTextComponents | undefined = {
   block: {
-    normal: ({ children }) => <p className="hidden md:block">{children}</p>,
+    normal: ({ children }) => <p>{children}</p>,
   },
 };
 
 export default function AdminProductComponent({ product }: Props) {
   return (
-    <li className="flex items-center gap-4 border-b border-gray-300 pb-4 last:border-b-0 last:pb-0 md:pb-8 lg:pb-12">
+    <li className="flex items-center gap-4 border-b border-gray-300 pb-4 first:pt-2 last:border-b-0 last:pb-0 md:pb-8 first:md:pt-4 lg:pb-12 first:lg:pt-6">
       <Image
         src={product.imgUrl || solidBlurDataUrl}
         width={80}
@@ -34,13 +34,9 @@ export default function AdminProductComponent({ product }: Props) {
       />
       <div className="flex h-[160px] grow flex-col justify-between">
         <div>
-          <div className="mb-2 flex justify-between gap-2 text-sm">
-            <p className="font-medium text-gray-800">
-              {product.titleAtTheOrderTime}
-            </p>
-            <p className="font-medium text-gray-800">
-              ${product.priceAtTheOrderTime}
-            </p>
+          <div className="mb-2 flex justify-between gap-2">
+            <p className="font-medium">{product.titleAtTheOrderTime}</p>
+            <p className="font-medium">${product.priceAtTheOrderTime}</p>
           </div>
 
           {product.detail && (
@@ -51,9 +47,7 @@ export default function AdminProductComponent({ product }: Props) {
           )}
         </div>
 
-        <p className="font-medium text-gray-800">
-          Quantity: {product.quantity}
-        </p>
+        <p className="font-medium">Quantity: {product.quantity}</p>
       </div>
     </li>
   );

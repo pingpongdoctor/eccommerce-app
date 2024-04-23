@@ -1,24 +1,24 @@
 'use client';
+import Link from 'next/link';
 import AdminOrderItem from './AdminOrderItem';
 
 interface Props {
   orders: Order[];
-  handleSetDetailedOrderState: (order: Order) => void;
 }
 
-export default function AdminOrderList({
-  orders,
-  handleSetDetailedOrderState,
-}: Props) {
+export default function AdminOrderList({ orders }: Props) {
   return (
-    <ul className="list-none text-sm">
+    <div className="text-sm">
       {orders.map((order) => (
-        <AdminOrderItem
-          key={order.transactionNumber}
-          order={order}
-          handleSetDetailedOrderState={handleSetDetailedOrderState}
-        />
+        <Link
+          href={`/admin/${order.id}`}
+          key={order.id}
+          className="block border-b border-gray-300 last:border-b-0 hover:bg-gray-800"
+        >
+          {' '}
+          <AdminOrderItem order={order} />
+        </Link>
       ))}
-    </ul>
+    </div>
   );
 }

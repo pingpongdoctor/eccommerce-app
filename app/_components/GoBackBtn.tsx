@@ -16,8 +16,8 @@ export default function GoBackBtn({ goBackBtnClassname }: Props) {
           router.back();
         }}
       >
-        <ChevronLeftIcon className="h-6 w-6 flex-none text-gray-700 transition-all duration-500 group-hover:translate-x-[-4px]" />
-        <p className="font-medium text-gray-700">Go back</p>
+        <ChevronLeftIcon className="h-6 w-6 flex-none transition-all duration-500 group-hover:translate-x-[-4px]" />
+        <p className="font-medium">Go back</p>
       </div>
     </div>
   );

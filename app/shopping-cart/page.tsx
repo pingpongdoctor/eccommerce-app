@@ -113,7 +113,7 @@ export default function ShoppingCart() {
 
   return (
     <main className="min-h-[600px]">
-      <GoBackBtn goBackBtnClassname="mb-4 mx-auto max-w-7xl px-4 md:px-8 lg:px-12" />
+      <GoBackBtn goBackBtnClassname="text-gray-700 mb-4 mx-auto max-w-7xl px-4 md:px-8 lg:px-12" />
       <h2 className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">Shopping Cart</h2>
       {/* products in cart */}
       <div className="mb-8 flex flex-col px-4 md:px-8 lg:mb-12 lg:flex-row lg:justify-between lg:px-12 xl:mx-auto xl:max-w-7xl">

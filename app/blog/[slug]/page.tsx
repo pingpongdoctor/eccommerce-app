@@ -91,7 +91,7 @@ export default async function DetailedBlog({
 
   return (
     <main className="*:mb-8 *:md:mb-12 *:lg:mb-20">
-      <GoBackBtn goBackBtnClassname="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl !mb-4" />
+      <GoBackBtn goBackBtnClassname="text-gray-700 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl !mb-4" />
       {/* blog content */}
       {draftMode().isEnabled ? (
         <BlogPreviewComponent initial={initialData} params={params} />
