@@ -57,7 +57,7 @@ export default function AdminOrderDetail({
           setIsFetchingOrder(false);
         });
     }
-  }, [user, params]);
+  }, [user, params.slug]);
 
   //update order data when order status changes
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function AdminOrderDetail({
           setIsStatusUpdated(false);
         });
     }
-  }, [isStatusUpdated]);
+  }, [isStatusUpdated, params.slug]);
 
   //generate information object to render an order
   const orderInfor = order && generateOrderInforObject(order, true);

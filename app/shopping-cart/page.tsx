@@ -152,7 +152,7 @@ export default function ShoppingCart() {
         {isFetchingSanityProducts ? (
           <ProductCardsSkeleton />
         ) : (
-          productsWithImgUrlAndQuantity.length > 0 && (
+          productsAlsoBuy.length > 0 && (
             <div>
               <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
                 <p className="text-lg font-medium text-gray-900">
@@ -169,9 +169,7 @@ export default function ShoppingCart() {
                 </Link>
               </div>
 
-              <ProductCardsClientComponent
-                products={productsWithImgUrlAndQuantity}
-              />
+              <ProductCardsClientComponent products={productsAlsoBuy} />
             </div>
           )
         )}
