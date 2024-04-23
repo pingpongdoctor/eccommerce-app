@@ -17,8 +17,12 @@ export default withMiddlewareAuthRequired(async function middleware(
   if (!isAdmin) {
     return NextResponse.redirect(new URL('/', req.url));
   }
+
+  if (isAdmin && req.nextUrl.pathname.startsWith('/order-history')) {
+    return NextResponse.redirect(new URL('/admin', req.url));
+  }
 });
 
 export const config = {
-  matcher: '/admin',
+  matcher: ['/admin/:path*', '/order-history'],
 };

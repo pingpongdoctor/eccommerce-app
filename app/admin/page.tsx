@@ -14,12 +14,15 @@ import SimpleMenuComponent from '../_components/SimpleMenuComponent';
 import { orderTableColumnsInfor } from '../utils/utils';
 import SearchBar from '../_components/SearchBar';
 import { formatDateToWords } from '../_lib/formatDateToWords';
+import GoBackBtn from '../_components/GoBackBtn';
 
 export default function AdminPage() {
   const { user, isLoading } = useContext(globalStatesContext);
   const [ordersData, setOrdersData] = useState<Order[]>([]);
-  const [isLoadingOrdersData, setIsLoadingOrdersData] = useState<boolean>(true);
+  const [isFetchingOrdersData, setIsFetchingOrdersData] =
+    useState<boolean>(false);
   const [searchResult, setSearchResult] = useState<string>('');
+
   const router = useRouter();
 
   //protect this page from unauthenticated users
@@ -32,15 +35,18 @@ export default function AdminPage() {
   //set ordersData state
   useEffect(() => {
     if (user) {
+      setIsFetchingOrdersData(true);
+
       getAllOrdersOnClientSide()
-        .then((data) => {
+        .then((data: Order[]) => {
           setOrdersData(data);
         })
+
         .catch((e: any) => {
           console.log('Error when setting ordersData state' + e);
         })
         .finally(() => {
-          setIsLoadingOrdersData(false);
+          setIsFetchingOrdersData(false);
         });
     }
   }, [user]);
@@ -94,35 +100,45 @@ export default function AdminPage() {
     setSearchResult(e.target.value.toLowerCase());
   };
 
+  const menuItemsAttributeValue = [
+    {
+      label: 'processing',
+      simpleMenuOnclickHandler: () => {
+        sortOrdersDataBasedOnStatus('processing');
+      },
+    },
+    {
+      label: 'shipping',
+      simpleMenuOnclickHandler: () => {
+        sortOrdersDataBasedOnStatus('shipping');
+      },
+    },
+    {
+      label: 'delivered',
+      simpleMenuOnclickHandler: () => {
+        sortOrdersDataBasedOnStatus('delivered');
+      },
+    },
+  ];
+
   return (
     <div className="min-h-[70vh] bg-gray-900 pt-8 md:pt-12">
-      <div className="cursor-default px-4 text-white md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-        {/* search bars */}
-        <SearchBar changeEventHanlder={handleUpdateSearchResult} isBlackTheme />
+      <GoBackBtn goBackBtnClassname="px-4 text-white md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl mb-4" />
 
+      {/* search bars */}
+      <SearchBar changeEventHanlder={handleUpdateSearchResult} isBlackTheme />
+      <div className="cursor-default px-4 text-white md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
         {/* column name */}
-        <div className="flex justify-between border-b-[2px] border-gray-200 p-4 font-medium *:text-center">
+        <div className="flex justify-between border-b border-white p-4 font-medium *:text-center">
           {orderTableColumnsInfor.map((infor) => {
             if (infor.name === 'Status') {
               return (
                 <SimpleMenuComponent
                   key={infor.name}
-                  menuItems={[
-                    { label: 'All' },
-                    {
-                      label: 'processing',
-                    },
-                    {
-                      label: 'shipping',
-                    },
-                    {
-                      label: 'delivered',
-                    },
-                  ]}
-                  btnClassname="text-white font-semibold"
+                  menuItems={menuItemsAttributeValue}
+                  btnClassname="text-white font-semibold w-[111px]"
                   btnName="Status"
-                  postionClassname="-right-[3.7rem]"
-                  simpleMenuSortFunction={sortOrdersDataBasedOnStatus}
+                  postionClassname="-left-[1rem]"
                 />
               );
             }
@@ -142,13 +158,11 @@ export default function AdminPage() {
           })}
         </div>
 
-        {/* Skeleton component */}
-        {isLoadingOrdersData && (
+        {isFetchingOrdersData ? (
+          // Skeleton component
           <div className="h-[50vh] w-full animate-pulse rounded-md bg-gray-800 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl"></div>
-        )}
-
-        {/* orders */}
-        {ordersData.length > 0 && (
+        ) : ordersData.length > 0 ? (
+          // Orders
           <AdminOrderList
             orders={ordersData.filter((data) => {
               return (
@@ -166,14 +180,12 @@ export default function AdminPage() {
               );
             })}
           />
+        ) : (
+          <h3 className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+            There are no orders
+          </h3>
         )}
       </div>
-
-      {!isLoadingOrdersData && ordersData.length === 0 && (
-        <h3 className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-          There are no orders
-        </h3>
-      )}
     </div>
   );
 }

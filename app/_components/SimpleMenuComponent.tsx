@@ -1,20 +1,22 @@
 'use client';
-import { Fragment, MouseEvent } from 'react';
+import { Fragment, MouseEventHandler } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Avatar from './Avatar';
 import { caplitalizeFirstLetterOfWords } from '../_lib/caplitalizeFirstLetterOfWords';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 interface Props {
   menuItems: {
     href?: string;
     label: string;
+    simpleMenuOnclickHandler?: MouseEventHandler<HTMLAnchorElement>;
   }[];
   avatarSrc?: string;
   btnName?: string;
   btnClassname?: string;
   username?: string;
   postionClassname?: string;
-  simpleMenuSortFunction?: (status: OrderStatus) => void;
+  menuClassname?: string;
 }
 
 export default function SimpleMenuComponent({
@@ -24,15 +26,18 @@ export default function SimpleMenuComponent({
   btnName,
   btnClassname,
   postionClassname,
-  simpleMenuSortFunction,
+  menuClassname,
 }: Props) {
   return (
-    <Menu as="div" className="relative">
+    <Menu as="div" className={`relative ${menuClassname}`}>
       <Menu.Button>
         {avatarSrc ? (
           <Avatar avatarSrc={avatarSrc} avatarClassname="size-10" />
         ) : (
-          <p className={btnClassname}>{btnName}</p>
+          <div className={`flex ${btnClassname}`}>
+            <p>{btnName}</p>
+            <ChevronDownIcon className="h-6 w-6" />
+          </div>
         )}
       </Menu.Button>
       <Transition
@@ -62,13 +67,8 @@ export default function SimpleMenuComponent({
               as="a"
               key={menuItem.label}
               href={menuItem.href || '#'}
-              className="block px-4 py-2 text-gray-700 ui-active:bg-gray-50"
-              onClick={() => {
-                if (simpleMenuSortFunction) {
-                  //check if value of simpleMenuSortFunction prop is not undefined to execute the function
-                  simpleMenuSortFunction(menuItem.label as OrderStatus);
-                }
-              }}
+              className="block px-4 py-2 text-gray-700 ui-active:bg-gray-100"
+              onClick={menuItem.simpleMenuOnclickHandler}
             >
               {caplitalizeFirstLetterOfWords(menuItem.label)}
             </Menu.Item>

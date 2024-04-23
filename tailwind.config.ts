@@ -21,9 +21,14 @@ const config: Config = {
           '0%': { width: '0' },
           '100%': { width: 'full' },
         },
+        modalBoxGrow: {
+          '0%': { width: '0', height: '0' },
+          '100%': { width: '100vw', height: '100vh' },
+        },
       },
       animation: {
         scaleAnimation: 'grow 2s ease-in-out',
+        modalBoxScaleAnimation: 'modalBoxGrow 0.5s ease-in-out',
       },
     },
     screens: {
