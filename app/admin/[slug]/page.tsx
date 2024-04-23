@@ -97,7 +97,7 @@ export default function AdminOrderDetail({
         {/* skeleton component */}
         {isFetchingOrder ? (
           <HistoryOrderSkeletonComponent />
-        ) : (
+        ) : order ? (
           <div className="rounded-xl border border-gray-300">
             {/* order infor */}
             <ul className="flex list-none flex-wrap justify-between gap-y-4 border-b border-gray-300 p-4 pb-2 md:gap-y-6 md:p-8 md:pb-4 lg:p-12 lg:pb-6">
@@ -170,6 +170,10 @@ export default function AdminOrderDetail({
                 ))}
             </ul>
           </div>
+        ) : (
+          <h3 className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+            There are no orders
+          </h3>
         )}
       </div>
     </div>

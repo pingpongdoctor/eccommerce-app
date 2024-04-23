@@ -158,13 +158,11 @@ export default function AdminPage() {
           })}
         </div>
 
-        {/* Skeleton component */}
-        {isFetchingOrdersData && (
+        {isFetchingOrdersData ? (
+          // Skeleton component
           <div className="h-[50vh] w-full animate-pulse rounded-md bg-gray-800 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl"></div>
-        )}
-
-        {/* orders */}
-        {!isFetchingOrdersData && ordersData.length > 0 && (
+        ) : ordersData.length > 0 ? (
+          // Orders
           <AdminOrderList
             orders={ordersData.filter((data) => {
               return (
@@ -182,14 +180,12 @@ export default function AdminPage() {
               );
             })}
           />
+        ) : (
+          <h3 className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+            There are no orders
+          </h3>
         )}
       </div>
-
-      {!isFetchingOrdersData && ordersData.length === 0 && (
-        <h3 className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-          There are no orders
-        </h3>
-      )}
     </div>
   );
 }

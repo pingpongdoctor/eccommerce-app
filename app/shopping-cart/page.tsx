@@ -18,6 +18,7 @@ import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import ProductCardsSkeleton from '../_components/ProductCardsSkeleton';
 import { useRouter } from 'next/navigation';
 import GoBackBtn from '../_components/GoBackBtn';
+import Link from 'next/link';
 
 export default function ShoppingCart() {
   const router = useRouter();
@@ -113,7 +114,7 @@ export default function ShoppingCart() {
       {/* products in cart */}
       <div className="mb-8 flex flex-col px-4 md:px-8 lg:mb-12 lg:flex-row lg:justify-between lg:px-12 xl:mx-auto xl:max-w-7xl">
         {/* skeleton components */}
-        {isFetchingSanityProducts && (
+        {isFetchingSanityProducts ? (
           <>
             <div className="mb-8 *:mb-8 md:w-[35%] lg:mb-12">
               <ShoppingCartItemSkeleton />
@@ -121,51 +122,58 @@ export default function ShoppingCart() {
             </div>
             <OrderSummarySkeleton />
           </>
+        ) : (
+          <>
+            {productsWithImgUrlAndQuantity.length > 0 && (
+              <>
+                <ShoppingCartList
+                  productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+                  shoppingCartListClassname="lg:w-[50%]"
+                />
+                <OrderSummaryComponent
+                  subtotal={subtotal}
+                  tax={Math.round((subtotal * 10) / 100)}
+                  shipping={Math.round((subtotal * 10) / 100)}
+                  orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
+                />
+              </>
+            )}
+
+            {/* text shown when there is not product in cart */}
+            {productsWithImgUrlAndQuantity.length === 0 && (
+              <p>There are not any products in your cart</p>
+            )}
+          </>
         )}
-
-        {!isFetchingSanityProducts &&
-          productsWithImgUrlAndQuantity.length > 0 && (
-            <>
-              <ShoppingCartList
-                productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-                shoppingCartListClassname="lg:w-[50%]"
-              />
-              <OrderSummaryComponent
-                subtotal={subtotal}
-                tax={Math.round((subtotal * 10) / 100)}
-                shipping={Math.round((subtotal * 10) / 100)}
-                orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
-              />
-            </>
-          )}
-
-        {/* text shown when there is not product in cart */}
-        {!isFetchingSanityProducts &&
-          productsWithImgUrlAndQuantity.length === 0 && (
-            <p>There are not any products in your cart</p>
-          )}
       </div>
 
       {/* product you may like */}
       <div>
-        {isFetchingSanityProducts && <ProductCardsSkeleton />}
+        {isFetchingSanityProducts ? (
+          <ProductCardsSkeleton />
+        ) : (
+          productsWithImgUrlAndQuantity.length > 0 && (
+            <div>
+              <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+                <p className="text-lg font-medium text-gray-900">
+                  You may also like
+                </p>
+                <Link
+                  href="/product"
+                  className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900"
+                >
+                  <span> See all </span>
+                  <span className="transition-all duration-500 group-hover:translate-x-2">
+                    &rarr;
+                  </span>
+                </Link>
+              </div>
 
-        {!isFetchingSanityProducts && productsAlsoBuy.length > 0 && (
-          <>
-            <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-              <p className="text-lg font-medium text-gray-900">
-                You may also like
-              </p>
-              <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
-                <span> See all </span>
-                <span className="transition-all duration-500 group-hover:translate-x-2">
-                  &rarr;
-                </span>
-              </p>
+              <ProductCardsClientComponent
+                products={productsWithImgUrlAndQuantity}
+              />
             </div>
-
-            <ProductCardsClientComponent products={productsAlsoBuy} />
-          </>
+          )
         )}
       </div>
     </main>
