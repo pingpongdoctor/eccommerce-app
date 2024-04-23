@@ -19,7 +19,6 @@ import ProductCardsSkeleton from '../_components/ProductCardsSkeleton';
 import { useRouter } from 'next/navigation';
 import GoBackBtn from '../_components/GoBackBtn';
 
-//get products that customers also buy
 export default function ShoppingCart() {
   const router = useRouter();
   const { productsInCart, isLoading, user } = useContext(globalStatesContext);
@@ -44,6 +43,7 @@ export default function ShoppingCart() {
     }
   }, [user, isLoading, router]);
 
+  //set sanityProductInCart and productAlsoBuy states
   useEffect(() => {
     if (productsInCart.length > 0) {
       const productSlugs: string[] = productsInCart
@@ -60,7 +60,6 @@ export default function ShoppingCart() {
 
       setIsFetchingSanityProducts(true);
 
-      //fetch product sanity documents
       client
         .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
           slugArr: productSlugs,
@@ -75,7 +74,6 @@ export default function ShoppingCart() {
           setIsFetchingSanityProducts(false);
         });
 
-      //fetch product sanity documents that users might also like
       client
         .fetch<(SanityProduct & SanityDocument)[]>(
           PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
@@ -94,10 +92,9 @@ export default function ShoppingCart() {
     }
   }, [productsInCart]);
 
+  // set product with image url and quantity state and subtotal state
   useEffect(() => {
     if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
-      // set the state for product with image url and quantity
-
       const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
         addProductImgUrls(sanityProductsInCart);
       const productsWithImgAndQuantity = addProductQuantity(
@@ -105,8 +102,6 @@ export default function ShoppingCart() {
         productsInCart
       );
       setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
-
-      //set subtotal state
       setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
     }
   }, [productsInCart, sanityProductsInCart]);

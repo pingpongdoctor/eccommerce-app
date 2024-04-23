@@ -19,7 +19,7 @@ export default function AdminOrderDetail({
 }) {
   const { user, isLoading } = useContext(globalStatesContext);
   const [order, setOrder] = useState<Order | null>(null);
-  const [isFetchingOrder, setIsFetchingOrder] = useState<boolean>(true);
+  const [isFetchingOrder, setIsFetchingOrder] = useState<boolean>(false);
   const [isStatusUpdated, setIsStatusUpdated] = useState<boolean>(false);
   const router = useRouter();
 
