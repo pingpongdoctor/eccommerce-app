@@ -14,7 +14,7 @@ import SimpleMenuComponent from '../_components/SimpleMenuComponent';
 import { orderTableColumnsInfor } from '../utils/utils';
 import SearchBar from '../_components/SearchBar';
 import { formatDateToWords } from '../_lib/formatDateToWords';
-import { addImgUrlsAndDescriptionToOrders } from '../_lib/addImgUrlsToOrders';
+import GoBackBtn from '../_components/GoBackBtn';
 
 export default function AdminPage() {
   const { user, isLoading } = useContext(globalStatesContext);
@@ -123,6 +123,8 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-[70vh] bg-gray-900 pt-8 md:pt-12">
+      <GoBackBtn goBackBtnClassname="px-4 text-white md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl mb-4" />
+
       {/* search bars */}
       <SearchBar changeEventHanlder={handleUpdateSearchResult} isBlackTheme />
       <div className="cursor-default px-4 text-white md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">

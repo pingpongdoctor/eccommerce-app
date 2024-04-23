@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FC, MouseEvent } from 'react';
@@ -20,7 +19,6 @@ export default function DropdownItem({
   dropdownClickEventHanlder,
 }: Props) {
   const pathname = usePathname();
-  'abc'.startsWith;
   return (
     <Link href={dropdownPath} onClick={dropdownClickEventHanlder}>
       <div
