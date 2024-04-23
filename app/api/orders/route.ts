@@ -98,7 +98,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
         },
       });
     } else {
-      //if user is not admin or the origin is not, get orders of the current user
+      //if user is not admin, get orders of the current user
       orders = await prisma.order.findMany({
         where: { userId: userData.id },
         select: {

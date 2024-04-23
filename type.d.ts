@@ -4,8 +4,6 @@ type EmailTemplates = 'welcome' | 'order notification';
 
 type OrderStatus = 'processing' | 'shipping' | 'delivered';
 
-type TemplateEnvs = Record<EmailTemplates, string>;
-
 type BlogsWithDetailedAuthorData = SanityBlog &
   SanityDocument & {
     authorData: SanityAuthor & SanityDocument;
