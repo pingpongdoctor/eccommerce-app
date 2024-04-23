@@ -1,35 +1,31 @@
 import { NextResponse } from 'next/server';
 import sgMail from '@sendgrid/mail';
-import { emailTemplates, templateEnvs } from '@/app/utils/utils';
+import { headers } from 'next/headers';
 
 sgMail.setApiKey(process.env.SENGRID_API_KEY as string);
 
 export async function POST(req: Request) {
-  const {
-    from,
-    to,
-    template,
-    subject,
-    recipient_name,
-  }: { [index: string]: string } = await req.json();
+  const headerList = headers();
+  const key = headerList.get('Authorization')?.split(' ')[1];
 
-  if (!from || !to || !template || !subject || !recipient_name) {
+  if (key !== process.env.ROUTE_API_KEY) {
+    return NextResponse.json({ message: 'Wrong api key' }, { status: 401 });
+  }
+
+  const { from, to, subject, recipient_name }: { [index: string]: string } =
+    await req.json();
+
+  if (!from || !to || !subject || !recipient_name) {
     return NextResponse.json(
       { message: 'Miss required data' },
       { status: 400 }
     );
   }
 
-  if (!emailTemplates.includes(template as EmailTemplates)) {
-    return NextResponse.json({ message: 'Wrong Template' }, { status: 400 });
-  }
-
   const msg = {
     to,
     from,
-    templateId: process.env[
-      templateEnvs[template as keyof TemplateEnvs]
-    ] as string,
+    templateId: process.env.SENGRID_TEMPLATE_ID_WELCOME as string,
     dynamicTemplateData: {
       subject,
       recipient_name,

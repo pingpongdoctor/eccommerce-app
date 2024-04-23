@@ -196,16 +196,6 @@ export const footerInfor: {
 export const solidBlurDataUrl =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPccehcPQAHSwLJQnqfnAAAAABJRU5ErkJggg==';
 
-export const emailTemplates: EmailTemplates[] = [
-  'welcome',
-  'order notification',
-];
-
-export const templateEnvs: TemplateEnvs = {
-  welcome: 'SENGRID_TEMPLATE_ID_WELCOME',
-  'order notification': 'SENGRID_TEMPLATE_ID_ORDER-NOTIFICATION',
-};
-
 export const months = [
   'January',
   'February',
