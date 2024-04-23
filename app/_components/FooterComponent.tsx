@@ -1,5 +1,4 @@
 'use client';
-
 import Image from 'next/image';
 import glowyLab from '../../public/assets/glowy-lab.png';
 import Link from 'next/link';
@@ -17,7 +16,7 @@ export default function FooterComponent() {
   return (
     <div className={`${pathname.startsWith('/admin') ? 'bg-gray-900' : ''}`}>
       <div
-        className={`flex min-h-[70vh] flex-col p-4 text-sm text-gray-600 md:p-8 lg:flex-row lg:items-center lg:gap-14 lg:p-12 xl:mx-auto xl:max-w-7xl ${
+        className={`flex flex-col p-4 text-sm text-gray-600 md:p-8 lg:flex-row lg:items-center lg:gap-14 lg:p-12 xl:mx-auto xl:max-w-7xl ${
           pathname.startsWith('/admin') ? 'text-white' : ''
         }`}
       >

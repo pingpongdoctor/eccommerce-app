@@ -2,7 +2,6 @@ import { SanityDocument } from 'next-sanity';
 import { generateConfirmPaymentHTML } from '@/app/_lib/generateConfirmPaymentHTML';
 import { NextResponse } from 'next/server';
 import sgMail from '@sendgrid/mail';
-import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
 sgMail.setApiKey(process.env.SENGRID_API_KEY as string);
 
