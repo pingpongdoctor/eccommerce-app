@@ -142,7 +142,7 @@ export default function CheckoutPage() {
     <main className="px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
       <GoBackBtn goBackBtnClassname="text-gray-700 mb-4" />
       <div className="rounded-md bg-gray-100/85 p-4 md:p-8 lg:p-12 xl:mx-auto xl:max-w-7xl">
-        {isFetchingSanityProducts && (
+        {isFetchingSanityProducts ? (
           <>
             <div className="mb-8 *:mb-8 md:w-[35%]">
               <ShoppingCartItemSkeleton shoppingCartItemSkeletonClassname="w-28" />
@@ -151,32 +151,25 @@ export default function CheckoutPage() {
             <OrderSummarySkeleton orderSummarySkeletonClassname="lg:w-full mb-8" />
             <ButtonSkeleton />
           </>
+        ) : clientSecret && productsWithImgUrlAndQuantity.length > 0 ? (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              appearance: { theme: 'stripe' },
+              clientSecret,
+            }}
+          >
+            <PaymentForm
+              subtotal={subtotal}
+              productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+              productsInCartWithSanityProductId={
+                productsInCartWithSanityProductId
+              }
+            />
+          </Elements>
+        ) : (
+          <p>No products to proceed payment</p>
         )}
-
-        {!isFetchingSanityProducts &&
-          clientSecret &&
-          productsWithImgUrlAndQuantity.length > 0 && (
-            <Elements
-              stripe={stripePromise}
-              options={{
-                appearance: { theme: 'stripe' },
-                clientSecret,
-              }}
-            >
-              <PaymentForm
-                subtotal={subtotal}
-                productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-                productsInCartWithSanityProductId={
-                  productsInCartWithSanityProductId
-                }
-              />
-            </Elements>
-          )}
-
-        {!isFetchingSanityProducts &&
-          (!clientSecret || productsWithImgUrlAndQuantity.length === 0) && (
-            <p>No products to proceed payment</p>
-          )}
       </div>
     </main>
   );
