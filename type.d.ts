@@ -1,10 +1,8 @@
 type Categories = 'cosmetic' | 'book' | 'supplement' | 'jewelry';
 
-type EmailTemplates = 'welcome' | 'confirm-payment';
+type EmailTemplates = 'welcome' | 'order notification';
 
 type OrderStatus = 'processing' | 'shipping' | 'delivered';
-
-type TemplateEnvs = Record<EmailTemplates, string>;
 
 type BlogsWithDetailedAuthorData = SanityBlog &
   SanityDocument & {

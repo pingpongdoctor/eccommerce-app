@@ -89,6 +89,61 @@ export default function AdminOrderDetail({
   //generate information object to render an order
   const orderInfor = order && generateOrderInforObject(order, true);
 
+  //function to update order status
+  const handleStatusUpdate = async (
+    order: Order,
+    updatedStatus: OrderStatus
+  ) => {
+    try {
+      const { id, email, transactionNumber, fullname } = order;
+
+      if (!email || !fullname) {
+        throw new Error('Invalid input data');
+      }
+
+      await updateOrderStatus(
+        id,
+        updatedStatus,
+        email, //from email
+        'thanhnhantran1501@gmail.com', //to email
+        transactionNumber,
+        fullname
+      );
+      setIsStatusUpdated(true);
+    } catch (error) {
+      console.log('Error updating order status: ' + error);
+    }
+  };
+
+  //function that returns value for menuitems attribute in SimpleMenu component
+  const returnMenuItemsValue = function (order: Order) {
+    return [
+      {
+        label: 'processing',
+        simpleMenuOnclickHandler: async () => {
+          if (order.status !== 'processing') {
+            handleStatusUpdate(order, 'processing');
+          }
+        },
+      },
+      {
+        label: 'shipping',
+        simpleMenuOnclickHandler: async () => {
+          if (order.status !== 'shipping') {
+            handleStatusUpdate(order, 'shipping');
+          }
+        },
+      },
+      {
+        label: 'delivered',
+        simpleMenuOnclickHandler: async () => {
+          if (order.status !== 'delivered') {
+            handleStatusUpdate(order, 'delivered');
+          }
+        },
+      },
+    ];
+  };
   return (
     <div className="bg-gray-900 px-4 text-white">
       <div className="min-h-[70vh] pt-8 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
@@ -107,35 +162,7 @@ export default function AdminOrderDetail({
                     return (
                       <SimpleMenuComponent
                         key={infor.id}
-                        menuItems={[
-                          {
-                            label: 'processing',
-                            simpleMenuOnclickHandler: async () => {
-                              if (order.status !== 'processing') {
-                                await updateOrderStatus(order.id, 'processing');
-                                setIsStatusUpdated(true);
-                              }
-                            },
-                          },
-                          {
-                            label: 'shipping',
-                            simpleMenuOnclickHandler: async () => {
-                              if (order.status !== 'shipping') {
-                                await updateOrderStatus(order.id, 'shipping');
-                                setIsStatusUpdated(true);
-                              }
-                            },
-                          },
-                          {
-                            label: 'delivered',
-                            simpleMenuOnclickHandler: async () => {
-                              if (order.status !== 'delivered') {
-                                await updateOrderStatus(order.id, 'delivered');
-                                setIsStatusUpdated(true);
-                              }
-                            },
-                          },
-                        ]}
+                        menuItems={returnMenuItemsValue(order)}
                         btnClassname="font-semibold p-2 rounded-[0.42rem] text-white bg-gray-700 hover:bg-gray-800 transition-transform duration-200 active:scale-[0.98]"
                         btnName={`Status: ${caplitalizeFirstLetterOfWords(
                           order.status
