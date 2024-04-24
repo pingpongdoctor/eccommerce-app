@@ -14,10 +14,10 @@ import GlobalStatesContext from './_components/GlobalStatesContext';
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Ecommerce Main Page',
-    template: '%s | Ecommerce',
+    default: 'Glowy Lab Homepage',
+    template: '%s | Glowy Lab',
   },
-  description: 'Main',
+  description: 'This is the homepage of Glowy Lab website',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
