@@ -35,29 +35,6 @@ export async function checkProductQuantity(
       return { isSuccess: false };
     }
 
-    //check if there products that are sold out
-    if (!data.noProductsSoldOut) {
-      notify(
-        'info',
-        'some products in your cart are sold out',
-        'product-sold-out'
-      );
-
-      notify(
-        'info',
-        'please delete sold out products from your cart',
-        'delete-product'
-      );
-    }
-
-    if (!data.sufficientProducts) {
-      notify(
-        'info',
-        'some products in your cart have insufficient quantity to purchase',
-        'not-sufficient-product'
-      );
-    }
-
     return {
       isSuccess: true,
       noProductsSoldOut: data.noProductsSoldOut,
