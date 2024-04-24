@@ -36,6 +36,7 @@ export async function generateMetadata({
 
   return {
     title: blog.title,
+    description: `This is the ${blog.title} blog page`,
   };
 }
 

@@ -30,12 +30,13 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: 'wrong product id',
+      title: 'Wrong product id',
     };
   }
 
   return {
     title: product.title,
+    description: `This is the ${product.title} page`,
   };
 }
 

@@ -97,6 +97,7 @@ export const POST = withApiAuthRequired(async (req: Request) => {
 
           //check if product does not have enough quantity to purchase
           if (productData.productQuantity > product.instock) {
+            //update purchased quantity to be equivalent to product in-stock quantity
             await prisma.usersProducts.update({
               where: {
                 userId_productId: { userId: user.id, productId: product.id },

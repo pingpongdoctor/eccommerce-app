@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useContext, useState } from 'react';
 import { globalStatesContext } from './GlobalStatesContext';
 import { checkProductQuantity } from '../_lib/checkProductQuantity';
-import { revalidateWithTag } from '../_lib/revalidateWithTag';
+import { notify } from './ReactToastifyProvider';
 
 interface Props {
   subtotal: number;
@@ -53,10 +53,30 @@ export default function OrderSummaryComponent({
         return;
       }
 
-      //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
-      if (!result.noProductsSoldOut || !result.sufficientProducts) {
-        await revalidateWithTag('post');
+      //if there are products that are sold out or are insufficient, set changeProductsInCart to true to re-fetch product data
+      if (!result.noProductsSoldOut) {
+        notify(
+          'info',
+          'Some products in your cart are sold out',
+          'product-sold-out'
+        );
+
+        notify(
+          'info',
+          'Please delete sold out products from your cart',
+          'delete-product'
+        );
         setChangeProductsInCart(true);
+        return;
+      }
+
+      if (!result.sufficientProducts) {
+        notify(
+          'info',
+          'Quantity of some products exceeds available stock and is adjusted to match the available quantity limit',
+          'not-sufficient-product'
+        );
+
         return;
       }
 

@@ -26,6 +26,7 @@ export async function generateMetadata({
 
   return {
     title: params.category + 'products',
+    description: `This is the ${params.category} page`,
   };
 }
 
