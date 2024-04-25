@@ -154,7 +154,7 @@ export default function CheckoutPage() {
             `${product.title} has been sold out`,
             'cart-include-sold-out-products'
           );
-          router.back();
+          router.push('/shopping-cart');
           return;
         }
       });

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 
-////get products in shopping cart of the current user
+//get products in shopping cart of the current user
 export const GET = withApiAuthRequired(async () => {
   const session = await getSession();
 
@@ -29,6 +29,7 @@ export const GET = withApiAuthRequired(async () => {
                 id: true,
                 price: true,
                 title: true,
+                instock: true,
               },
             },
             productQuantity: true,
@@ -50,6 +51,7 @@ export const GET = withApiAuthRequired(async () => {
         productId: ele.product.id,
         productPrice: ele.product.price.toString(),
         productTitle: ele.product.title,
+        productInstock: ele.product.instock,
       };
     });
 
