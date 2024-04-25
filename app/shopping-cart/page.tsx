@@ -45,6 +45,7 @@ export default function ShoppingCart() {
   }, [user, isLoading, router]);
 
   const handleClearAllStates = function () {
+    'running';
     setSanityProductsInCart([]);
     setProductsAlsoBuy([]);
     setProductsWithImgUrlAndQuantity([]);
@@ -96,13 +97,9 @@ export default function ShoppingCart() {
           })
           .catch((e: any) => {
             throw new Error(e.message);
-          })
-          .finally(() => {
-            //set this state to false if its value is true
-            if (isFetchingSanityProducts) {
-              setIsFetchingSanityProducts(false);
-            }
           });
+      } else {
+        handleClearAllStates();
       }
     } catch (e: any) {
       console.error(
@@ -110,12 +107,8 @@ export default function ShoppingCart() {
       );
       handleClearAllStates();
     } finally {
-      () => {
-        //set this state to false if its value is true
-        if (isFetchingSanityProducts) {
-          setIsFetchingSanityProducts(false);
-        }
-      };
+      //set this state to false if its value is true
+      setIsFetchingSanityProducts(false);
     }
   }, [productsInCart]);
 
