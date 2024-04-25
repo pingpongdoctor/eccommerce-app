@@ -144,14 +144,14 @@ export default function CheckoutPage() {
     }
   }, [user, subtotal]);
 
-  //check if any product in cart is sold out
+  //check if any product in cart is sold out when sanityProductInCart data is initially fetched
   useEffect(() => {
     if (sanityProductsInCart.length > 0) {
       sanityProductsInCart.map((product: SanityProduct & SanityDocument) => {
         if (product.instock === 0) {
           notify(
             'info',
-            'your cart includes sold out products',
+            `${product.title} has been sold out`,
             'cart-include-sold-out-products'
           );
           router.back();

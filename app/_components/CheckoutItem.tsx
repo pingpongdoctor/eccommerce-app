@@ -5,10 +5,11 @@ import { solidBlurDataUrl } from '../utils/utils';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import ChangeItemQuantityComponent from './ChangeItemQuantityComponent';
 import { deleteProductFromCart } from '../_lib/deleteProductFromCart';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { globalStatesContext } from './GlobalStatesContext';
 import { useRouter } from 'next/navigation';
 import { notify } from './ReactToastifyProvider';
+import pusherJs from 'pusher-js';
 
 interface Props {
   product: ProductWithImgUrl & SanityDocument & { productQuantity: number };
@@ -16,6 +17,7 @@ interface Props {
 export default function CheckoutItem({ product }: Props) {
   const router = useRouter();
   const { setChangeProductsInCart } = useContext(globalStatesContext);
+  const [productInstock, setProductInstock] = useState<number>(product.instock);
   const handleDeleteProductFromCart = async function (): Promise<void> {
     const isSuccess = await deleteProductFromCart(product.slug.current);
 
@@ -26,9 +28,40 @@ export default function CheckoutItem({ product }: Props) {
         'Product is deleted from your cart',
         'success-delete-product-from-cart'
       );
-      router.refresh();
+      // router.refresh();
     }
   };
+
+  //bind a function to new-product-quantity channel to listen to the new-product-quantity event
+  //when there are new product stocked quantity, set productInstock state with new value to update the UI
+  //also nofity user if this product is sold out
+  useEffect(() => {
+    const pusher = new pusherJs(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER as string,
+    });
+
+    const channel = pusher.subscribe('new-product-quantity');
+
+    channel.bind(
+      `new-product-quantity-${product.slug.current}-event`,
+      function (data: { newProductQuantity: number }) {
+        setProductInstock(data.newProductQuantity);
+        if (data.newProductQuantity === 0) {
+          notify(
+            'info',
+            `${product.title} has been sold out`,
+            'sold-out-notification'
+          );
+          router.back();
+        }
+      }
+    );
+    return () => {
+      pusher.unsubscribe('new-product-quantity');
+      channel.unbind_all();
+      pusher.disconnect();
+    };
+  }, [product.slug.current]);
 
   return (
     <div className="flex gap-6 border-b pb-8 last:mb-0">
@@ -53,7 +86,7 @@ export default function CheckoutItem({ product }: Props) {
         </div>
         <div className="flex items-center justify-between">
           <p>${product.price}</p>
-          {product.instock === 0 ? (
+          {productInstock === 0 ? (
             <p className="text-red-500">Product is sold out</p>
           ) : (
             <ChangeItemQuantityComponent showIcon={false} product={product} />
