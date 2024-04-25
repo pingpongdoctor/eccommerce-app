@@ -4,6 +4,7 @@ import { solidBlurDataUrl } from '../utils/utils';
 import { SanityDocument } from 'next-sanity';
 import ChangeItemQuantityComponent from './ChangeItemQuantityComponent';
 import { XMarkIcon } from '@heroicons/react/20/solid';
+import { useEffect } from 'react';
 
 interface Props {
   product: ProductWithImgUrl & SanityDocument & { productQuantity: number };
