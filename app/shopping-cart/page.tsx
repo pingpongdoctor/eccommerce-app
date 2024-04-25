@@ -44,66 +44,99 @@ export default function ShoppingCart() {
     }
   }, [user, isLoading, router]);
 
+  const handleClearAllStates = function () {
+    setSanityProductsInCart([]);
+    setProductsAlsoBuy([]);
+    setProductsWithImgUrlAndQuantity([]);
+    setSubtotal(0);
+  };
+
   //set sanityProductInCart and productAlsoBuy states
   useEffect(() => {
-    if (productsInCart.length > 0) {
-      const productSlugs: string[] = productsInCart
-        ? [...productsInCart].map((product: ProductInShoppingCart) => {
-            return product.productSlug;
+    try {
+      if (productsInCart.length > 0) {
+        // only show skeleton component when page is initially rendered
+        if (sanityProductsInCart.length === 0) {
+          setIsFetchingSanityProducts(true);
+        }
+
+        const productSlugs: string[] = productsInCart
+          ? [...productsInCart].map((product: ProductInShoppingCart) => {
+              return product.productSlug;
+            })
+          : [];
+
+        const productCategories: Categories[] = productsInCart
+          ? [...productsInCart].map(
+              (product: ProductInShoppingCart) => product.productCategory
+            )
+          : [];
+
+        client
+          .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
+            slugArr: productSlugs,
           })
-        : [];
+          .then((products: (SanityProduct & SanityDocument)[]) => {
+            setSanityProductsInCart(products);
+          })
+          .catch((e: any) => {
+            //rethrow error so that it can be caught in the surrounding catch block and hault the code execution
+            throw new Error(e.message);
+          });
 
-      const productCategories: Categories[] = productsInCart
-        ? [...productsInCart].map(
-            (product: ProductInShoppingCart) => product.productCategory
+        client
+          .fetch<(SanityProduct & SanityDocument)[]>(
+            PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
+            { categoryArr: productCategories, slugArr: productSlugs }
           )
-        : [];
-
-      setIsFetchingSanityProducts(true);
-
-      client
-        .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
-          slugArr: productSlugs,
-        })
-        .then((products: (SanityProduct & SanityDocument)[]) => {
-          setSanityProductsInCart(products);
-        })
-        .catch((e: any) => {
-          console.log(e);
-        })
-        .finally(() => {
+          .then((products: (SanityProduct & SanityDocument)[]) => {
+            if (products.length > 0) {
+              setProductsAlsoBuy(products);
+            }
+          })
+          .catch((e: any) => {
+            throw new Error(e.message);
+          })
+          .finally(() => {
+            //set this state to false if its value is true
+            if (isFetchingSanityProducts) {
+              setIsFetchingSanityProducts(false);
+            }
+          });
+      }
+    } catch (e: any) {
+      console.error(
+        'Error when setting sanityProductsIncCart and productAlsoBuy states' + e
+      );
+      handleClearAllStates();
+    } finally {
+      () => {
+        //set this state to false if its value is true
+        if (isFetchingSanityProducts) {
           setIsFetchingSanityProducts(false);
-        });
-
-      client
-        .fetch<(SanityProduct & SanityDocument)[]>(
-          PRODUCTS_QUERY_CUSTOMER_ALSO_BUY_IN_CART_PAGE,
-          { categoryArr: productCategories, slugArr: productSlugs }
-        )
-        .then((products: (SanityProduct & SanityDocument)[]) => {
-          if (products.length > 0) {
-            setProductsAlsoBuy(products);
-          }
-        });
-    } else {
-      setSanityProductsInCart([]);
-      setProductsAlsoBuy([]);
-      setProductsWithImgUrlAndQuantity([]);
-      setSubtotal(0);
+        }
+      };
     }
   }, [productsInCart]);
 
   // set product with image url and quantity state and subtotal state
   useEffect(() => {
-    if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
-      const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
-        addProductImgUrls(sanityProductsInCart);
-      const productsWithImgAndQuantity = addProductQuantity(
-        productsWithImgUrl,
-        productsInCart
+    try {
+      if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
+        const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
+          addProductImgUrls(sanityProductsInCart);
+        const productsWithImgAndQuantity = addProductQuantity(
+          productsWithImgUrl,
+          productsInCart
+        );
+        setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
+        setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
+      }
+    } catch (e: any) {
+      console.error(
+        'Error when setting the productsWithImgUrlAndQuantity and subtotal states'
       );
-      setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
-      setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
+      handleClearAllStates();
     }
   }, [productsInCart, sanityProductsInCart]);
 
@@ -122,28 +155,21 @@ export default function ShoppingCart() {
             </div>
             <OrderSummarySkeleton />
           </>
-        ) : (
+        ) : productsWithImgUrlAndQuantity.length > 0 ? (
           <>
-            {productsWithImgUrlAndQuantity.length > 0 && (
-              <>
-                <ShoppingCartList
-                  productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
-                  shoppingCartListClassname="lg:w-[50%]"
-                />
-                <OrderSummaryComponent
-                  subtotal={subtotal}
-                  tax={Math.round((subtotal * 10) / 100)}
-                  shipping={Math.round((subtotal * 10) / 100)}
-                  orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
-                />
-              </>
-            )}
-
-            {/* text shown when there is not product in cart */}
-            {productsWithImgUrlAndQuantity.length === 0 && (
-              <p>There are not any products in your cart</p>
-            )}
+            <ShoppingCartList
+              productsWithImgUrlAndQuantity={productsWithImgUrlAndQuantity}
+              shoppingCartListClassname="lg:w-[50%]"
+            />
+            <OrderSummaryComponent
+              subtotal={subtotal}
+              tax={Math.round((subtotal * 10) / 100)}
+              shipping={Math.round((subtotal * 10) / 100)}
+              orderSummaryComponentClassname="lg:w-[40%] mb-8 lg:mb-0"
+            />
           </>
+        ) : (
+          <p>There are not any products in your cart</p>
         )}
       </div>
 

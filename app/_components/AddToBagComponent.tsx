@@ -22,7 +22,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
   const [productInstock, setProductInstock] = useState<number | null>(null);
 
   //bind a function to new-product-quantity channel to listen to the new-product-quantity event
-  //when there are new product quantity that is in stock, set productInstock state with new value to update the UI
+  //when there are new product stocked quantity, set productInstock state with new value to update the UI
   useEffect(() => {
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER as string,
