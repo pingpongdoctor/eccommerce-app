@@ -3,6 +3,7 @@ export function calculateTotalProducts(
 ): number {
   try {
     const totalNumber = products
+      //do not calculate products that are sold out
       .filter((product) => {
         return product.productInstock !== 0;
       })
