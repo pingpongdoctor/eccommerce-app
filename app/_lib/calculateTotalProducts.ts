@@ -2,10 +2,15 @@ export function calculateTotalProducts(
   products: ProductInShoppingCart[]
 ): number {
   try {
-    const totalNumber = products.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.productQuantity,
-      0
-    );
+    const totalNumber = products
+      .filter((product) => {
+        return product.productInstock !== 0;
+      })
+      .reduce(
+        (accumulator, currentValue) =>
+          accumulator + currentValue.productQuantity,
+        0
+      );
 
     return totalNumber;
   } catch (e: any) {
