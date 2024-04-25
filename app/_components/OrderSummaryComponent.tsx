@@ -66,7 +66,6 @@ export default function OrderSummaryComponent({
           'Please delete sold out products from your cart',
           'delete-product'
         );
-        setChangeProductsInCart(true);
         return;
       }
 
@@ -76,7 +75,7 @@ export default function OrderSummaryComponent({
           'Quantity of some products exceeds available stock and is adjusted to match the available quantity limit',
           'not-sufficient-product'
         );
-
+        setChangeProductsInCart(true);
         return;
       }
 
