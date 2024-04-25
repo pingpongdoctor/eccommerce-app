@@ -183,8 +183,8 @@ export default function PaymentForm({
             );
           }
 
-          // //navigate user to order summary page
-          // router.push('/');
+          // //navigate user to order order-history page
+          router.push('/order-history');
           break;
         default:
           notify('error', 'Something went wrong.', 'payment-error');
@@ -207,13 +207,31 @@ export default function PaymentForm({
         console.log('Error when checking product quantity');
         return;
       }
-      //if there are products that are sold out or are insufficient, revalidate product data for SSG pages and set changeProductsInCart to true to re-fetch product data for client components
-      if (!noProductsSoldOut || !sufficientProducts) {
+      //if there are products that are sold out or are insufficient, set changeProductsInCart to true to re-fetch product data
+      if (!noProductsSoldOut) {
         notify(
           'info',
-          'some products are sold out or not sufficient to purchase',
-          'product-sold-out-or-not-sufficient'
+          'Some products in your cart are sold out',
+          'product-sold-out'
         );
+
+        notify(
+          'info',
+          'Please delete sold out products from your cart',
+          'delete-product'
+        );
+        router.back();
+        return;
+      }
+
+      if (!sufficientProducts) {
+        notify(
+          'info',
+          'Quantity of some products exceeds available stock and is adjusted to match the available quantity limit',
+          'not-sufficient-product'
+        );
+        setChangeProductsInCart(true);
+        router.back();
         return;
       }
       //update product data first before executing payment
