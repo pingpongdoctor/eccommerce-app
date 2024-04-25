@@ -53,71 +53,94 @@ export default function CheckoutPage() {
     }
   }, [user, isLoading, router]);
 
+  const handleClearAllStates = function () {
+    setSanityProductsInCart([]);
+    setProductsWithImgUrlAndQuantity([]);
+    setProductsInCartWithSanityProductId([]);
+    setClientSecret('');
+    setSubtotal(0);
+  };
+
   //get product sanity documents
   useEffect(() => {
-    if (productsInCart.length > 0) {
-      const productSlugs: string[] = productsInCart
-        ? productsInCart.map(
-            (product: ProductInShoppingCart) => product.productSlug
-          )
-        : [];
+    try {
+      if (productsInCart.length > 0) {
+        // only show skeleton component when page is initially rendered
+        if (sanityProductsInCart.length === 0) {
+          setIsFetchingSanityProducts(true);
+        }
 
-      setIsFetchingSanityProducts(true);
-      client
-        .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
-          slugArr: productSlugs,
-        })
-        .then((products: (SanityProduct & SanityDocument)[]) => {
-          setSanityProductsInCart(products);
-        })
-        .catch((e: any) => {
-          console.log(e);
-        })
-        .finally(() => {
-          setIsFetchingSanityProducts(false);
-        });
-    } else {
-      setSanityProductsInCart([]);
-      setProductsWithImgUrlAndQuantity([]);
-      setProductsInCartWithSanityProductId([]);
-      setClientSecret('');
-      setSubtotal(0);
+        const productSlugs: string[] = productsInCart
+          ? productsInCart.map(
+              (product: ProductInShoppingCart) => product.productSlug
+            )
+          : [];
+
+        client
+          .fetch<(SanityProduct & SanityDocument)[]>(PRODUCTS_QUERY_BY_SLUGS, {
+            slugArr: productSlugs,
+          })
+          .then((products: (SanityProduct & SanityDocument)[]) => {
+            setSanityProductsInCart(products);
+          })
+          .catch((e: any) => {
+            console.log(e);
+          });
+      } else {
+        handleClearAllStates();
+      }
+    } catch (e: any) {
+      console.error('Error when setting sanityProductsIncCart state' + e);
+      handleClearAllStates();
+    } finally {
+      //set this state to false if its value is true
+      setIsFetchingSanityProducts(false);
     }
   }, [productsInCart]);
 
   useEffect(() => {
-    if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
-      // set the state of products with image url and quantity
-      const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
-        addProductImgUrls(sanityProductsInCart);
-      const productsWithImgAndQuantity = addProductQuantity(
-        productsWithImgUrl,
-        productsInCart
+    try {
+      if (productsInCart.length > 0 && sanityProductsInCart.length > 0) {
+        // set the state of products with image url and quantity
+        const productsWithImgUrl: (ProductWithImgUrl & SanityDocument)[] =
+          addProductImgUrls(sanityProductsInCart);
+        const productsWithImgAndQuantity = addProductQuantity(
+          productsWithImgUrl,
+          productsInCart
+        );
+        setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
+
+        //set subtotal state
+        setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
+
+        // set the state of products in cart with sanity product id
+        const productsInCartWithSanityId: (ProductInShoppingCart & {
+          sanityProductId: string;
+        })[] = addSanityProductId(productsInCart, sanityProductsInCart);
+
+        setProductsInCartWithSanityProductId(productsInCartWithSanityId);
+      }
+    } catch (e: any) {
+      console.error(
+        'Error when setting the productsWithImgUrlAndQuantity, productsInCartWithSanityProductId and subtotal states' +
+          e
       );
-      setProductsWithImgUrlAndQuantity(productsWithImgAndQuantity);
-
-      //set subtotal state
-      setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
-
-      // set the state of products in cart with sanity product id
-      const productsInCartWithSanityId: (ProductInShoppingCart & {
-        sanityProductId: string;
-      })[] = addSanityProductId(productsInCart, sanityProductsInCart);
-
-      setProductsInCartWithSanityProductId(productsInCartWithSanityId);
+      handleClearAllStates();
     }
   }, [productsInCart, sanityProductsInCart]);
 
   // Create PaymentIntent as soon as the page loads
   useEffect(() => {
     if (user && subtotal !== 0) {
-      createStripePaymentIntent(subtotal).then(
-        (secretString: string | undefined) => {
+      createStripePaymentIntent(subtotal)
+        .then((secretString: string | undefined) => {
           if (secretString) {
             setClientSecret(secretString);
           }
-        }
-      );
+        })
+        .catch((e: any) => {
+          console.error('Error when creating stripe payment intent' + e);
+        });
     }
   }, [user, subtotal]);
 

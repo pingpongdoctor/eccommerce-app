@@ -85,9 +85,7 @@ export default function OrderSummaryComponent({
     } catch (e: any) {
       console.log('Error in handleCheckout function' + e);
     } finally {
-      () => {
-        setIsLoading(false);
-      };
+      setIsLoading(false);
     }
   };
 
