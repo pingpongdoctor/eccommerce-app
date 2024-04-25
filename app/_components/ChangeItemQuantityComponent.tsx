@@ -19,11 +19,14 @@ export default function ChangeItemQuantityComponent({
   product,
   showIcon = true,
 }: Props) {
-  const [currentQuantity, setCurrentQuantity] = useState<number>(
-    product.productQuantity
-  );
+  const [currentQuantity, setCurrentQuantity] = useState<number>(0);
   const [productInstock, setProductInstock] = useState<number>(product.instock);
   const { setChangeProductsInCart } = useContext(globalStatesContext);
+
+  //set product quantity state
+  useEffect(() => {
+    setCurrentQuantity(product.productQuantity);
+  }, [product]);
 
   //bind a function to new-product-quantity channel to listen to the new-product-quantity event
   //when there are new product stocked quantity, set productInstock state with new value to update the UI
@@ -38,6 +41,7 @@ export default function ChangeItemQuantityComponent({
     channel.bind(
       `new-product-quantity-${product.slug.current}-event`,
       function (data: { newProductQuantity: number }) {
+        //set new product instock state and notify user if product is sold out
         setProductInstock(data.newProductQuantity);
         if (data.newProductQuantity === 0) {
           notify(
@@ -46,6 +50,8 @@ export default function ChangeItemQuantityComponent({
             'sold-out-notification'
           );
         }
+        //set this state to true to trigger navbar re-fetching product in cart data
+        setChangeProductsInCart(true);
       }
     );
     return () => {

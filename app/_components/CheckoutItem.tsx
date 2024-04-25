@@ -28,7 +28,6 @@ export default function CheckoutItem({ product }: Props) {
         'Product is deleted from your cart',
         'success-delete-product-from-cart'
       );
-      // router.refresh();
     }
   };
 
@@ -45,14 +44,18 @@ export default function CheckoutItem({ product }: Props) {
     channel.bind(
       `new-product-quantity-${product.slug.current}-event`,
       function (data: { newProductQuantity: number }) {
+        //set this state to true to trigger navbar re-fetching product in cart data
+        setChangeProductsInCart(true);
+        //update product instock state
         setProductInstock(data.newProductQuantity);
+        //notify users if product is sold out and then redirect user to the shopping cart page
         if (data.newProductQuantity === 0) {
           notify(
             'info',
             `${product.title} has been sold out`,
             'sold-out-notification'
           );
-          router.back();
+          router.push('/shopping-cart');
         }
       }
     );

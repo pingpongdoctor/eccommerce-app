@@ -207,7 +207,7 @@ export default function PaymentForm({
         console.log('Error when checking product quantity');
         return;
       }
-      //if there are products that are sold out or are insufficient, set changeProductsInCart to true to re-fetch product data
+      //if there are products that are sold out or are insufficient, notify users
       if (!noProductsSoldOut) {
         notify(
           'info',
@@ -220,8 +220,6 @@ export default function PaymentForm({
           'Please delete sold out products from your cart',
           'delete-product'
         );
-        router.back();
-        return;
       }
 
       if (!sufficientProducts) {
@@ -230,10 +228,15 @@ export default function PaymentForm({
           'Quantity of some products exceeds available stock and is adjusted to match the available quantity limit',
           'not-sufficient-product'
         );
+      }
+
+      //reroute users to shopping cart page to check the order again and set the changeProductIncart to true to update the UI
+      if (!noProductsSoldOut || !sufficientProducts) {
         setChangeProductsInCart(true);
-        router.back();
+        router.push('/shopping-cart');
         return;
       }
+
       //update product data first before executing payment
       const { result, rollbackDataKey } = await updateProductsAfterPayment(
         productsInCartWithSanityProductId

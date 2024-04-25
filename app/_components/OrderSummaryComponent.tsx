@@ -66,7 +66,6 @@ export default function OrderSummaryComponent({
           'Please delete sold out products from your cart',
           'delete-product'
         );
-        return;
       }
 
       if (!result.sufficientProducts) {
@@ -75,6 +74,10 @@ export default function OrderSummaryComponent({
           'Quantity of some products exceeds available stock and is adjusted to match the available quantity limit',
           'not-sufficient-product'
         );
+      }
+
+      //set the changeProductIncart to true to update the UI
+      if (!result.noProductsSoldOut || !result.sufficientProducts) {
         setChangeProductsInCart(true);
         return;
       }
