@@ -41,6 +41,7 @@ export default function ChangeItemQuantityComponent({
     channel.bind(
       `new-product-quantity-${product.slug.current}-event`,
       function (data: { newProductQuantity: number }) {
+        //set new product instock state and notify user if product is sold out
         setProductInstock(data.newProductQuantity);
         if (data.newProductQuantity === 0) {
           notify(
@@ -49,6 +50,8 @@ export default function ChangeItemQuantityComponent({
             'sold-out-notification'
           );
         }
+        //set this state to true to trigger navbar re-fetching product in cart data
+        setChangeProductsInCart(true);
       }
     );
     return () => {

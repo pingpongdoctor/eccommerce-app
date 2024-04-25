@@ -10,7 +10,7 @@ import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
 import { globalStatesContext } from './GlobalStatesContext';
 import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { navigationLinksInfor } from '../utils/utils';
 import { usePathname } from 'next/navigation';
 
