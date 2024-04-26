@@ -373,7 +373,7 @@ export const generateConfirmPaymentHTML = function (
                                                                 "
                                                               >
                                                                 <a
-                                                                  href="https://www.glowylab.shop/order-history"
+                                                                  href="https://glowylab.shop/order-history"
                                                                   style="
                                                                     background-color: #000000;
                                                                     border: 1px
@@ -775,7 +775,7 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://www.glowylab.shop/"
+                                                              href="https://glowylab.shop/"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
@@ -852,7 +852,7 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://www.glowylab.shop/blog"
+                                                              href="https://glowylab.shop/blog"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
@@ -929,7 +929,7 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://www.glowylab.shop/beta-page"
+                                                              href="https://glowylab.shop/beta-page"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
@@ -1006,7 +1006,7 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://www.glowylab.shop/beta-page"
+                                                              href="https://glowylab.shop/beta-page"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
