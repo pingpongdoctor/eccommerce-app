@@ -20,7 +20,7 @@ export async function getUserProfileFromClientSide(): Promise<
 
     return data.data;
   } catch (e: any) {
-    console.log('Error in getUserProfile function' + ' ' + e);
+    console.log('Error in getUserProfileFromClientSide function' + ' ' + e);
     return undefined;
   }
 }
