@@ -45,7 +45,6 @@ export default function ShoppingCart() {
   }, [user, isLoading, router]);
 
   const handleClearAllStates = function () {
-    'running';
     setSanityProductsInCart([]);
     setProductsAlsoBuy([]);
     setProductsWithImgUrlAndQuantity([]);
@@ -102,7 +101,7 @@ export default function ShoppingCart() {
         handleClearAllStates();
       }
     } catch (e: any) {
-      console.error(
+      console.log(
         'Error when setting sanityProductsIncCart and productAlsoBuy states' + e
       );
       handleClearAllStates();
@@ -126,7 +125,7 @@ export default function ShoppingCart() {
         setSubtotal(calculateSubtotal(productsInCart, sanityProductsInCart));
       }
     } catch (e: any) {
-      console.error(
+      console.log(
         'Error when setting the productsWithImgUrlAndQuantity and subtotal states'
       );
       handleClearAllStates();

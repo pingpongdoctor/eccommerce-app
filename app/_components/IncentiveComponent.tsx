@@ -1,28 +1,5 @@
 import Image from 'next/image';
-import truckIcon from '../../public/truck.svg';
-import medalIcon from '../../public/medal.svg';
-import supportIcon from '../../public/support.svg';
-
-const incentiveDataArr = [
-  {
-    id: '1',
-    icon: truckIcon,
-    mainText: 'Free shipping',
-    text: 'It is not actually free we just price it into the products. Someone is paying for it, and it is not us.',
-  },
-  {
-    id: '2',
-    icon: medalIcon,
-    mainText: 'Quality Assurance',
-    text: 'We meticulously test each product, ensuring a symphony of quality that resonates with trust and excellence.',
-  },
-  {
-    id: '3',
-    icon: supportIcon,
-    mainText: 'Exchanges',
-    text: "We've got your back with an easy-breezy product exchange. It's like a friendly swap dance where you leave with a smile.",
-  },
-];
+import { incentiveDataArr } from '../utils/utils';
 
 export default function IncentiveComponent() {
   return (

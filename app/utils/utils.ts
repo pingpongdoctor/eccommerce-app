@@ -4,6 +4,11 @@ import {
   SquaresPlusIcon,
   BookOpenIcon,
 } from '@heroicons/react/24/outline';
+import { formatDateToWords } from '../_lib/formatDateToWords';
+import truckIcon from '../../public/truck.svg';
+import medalIcon from '../../public/medal.svg';
+import supportIcon from '../../public/support.svg';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 export const textInfor: {
   [index: string]: { mainText: string; text: string };
@@ -280,4 +285,62 @@ export const orderStatusArr: OrderStatus[] = [
   'processing',
   'shipping',
   'delivered',
+];
+
+export const hardCodedUserFeedback: {
+  message: string;
+  name: string;
+  date: string;
+}[] = [
+  {
+    message: `I recently started using the new version of the app, and I must say, I'm impressed! The interface is much cleaner and intuitive compared to the previous version. The new features make it easier for me to navigate and find what I need quickly. Overall, great job on the update!`,
+    name: 'Simon',
+    date: formatDateToWords('2024-03-25'),
+  },
+  {
+    message: `The app's new update is fantastic! I love the sleek design and improved performance. It's so much easier to navigate now. Keep up the great work!`,
+    name: 'Ashley',
+    date: formatDateToWords('2024-01-12'),
+  },
+  {
+    message: `Your ecommerce platform is my favorite for online shopping! The variety of products is impressive, and the checkout process is a breeze. I appreciate the attention to detail in packaging, ensuring my items arrive in perfect condition.`,
+    name: 'Claura',
+    date: formatDateToWords('2024-02-08'),
+  },
+  {
+    message: `I'm delighted with my recent purchase from your platform. From browsing to delivery, everything was smooth and efficient. The quality of the product exceeded my expectations, and I'll definitely be returning for future purchases.`,
+    name: 'John',
+    date: formatDateToWords('2023-10-14'),
+  },
+  {
+    message: `Your website's intuitive navigation made it easy for me to find the exact product I was looking for, and the detailed product descriptions and images gave me confidence in my purchase.`,
+    name: 'Coraline',
+    date: formatDateToWords('2023-11-26'),
+  },
+];
+
+export const incentiveDataArr: {
+  id: number;
+  icon: string | StaticImport;
+  text: string;
+  mainText: string;
+}[] = [
+  {
+    id: 1,
+    icon: truckIcon,
+    mainText: 'Free shipping',
+    text: 'It is not actually free we just price it into the products. Someone is paying for it, and it is not us.',
+  },
+  {
+    id: 2,
+    icon: medalIcon,
+    mainText: 'Quality Assurance',
+    text: 'We meticulously test each product, ensuring a symphony of quality that resonates with trust and excellence.',
+  },
+  {
+    id: 3,
+    icon: supportIcon,
+    mainText: 'Exchanges',
+    text: "We've got your back with an easy-breezy product exchange. It's like a friendly swap dance where you leave with a smile.",
+  },
 ];

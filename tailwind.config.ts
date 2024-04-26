@@ -1,5 +1,8 @@
 import type { Config } from 'tailwindcss';
 const withMT = require('@material-tailwind/react/utils/withMT');
+const {
+  default: flattenColorPalette,
+} = require('tailwindcss/lib/util/flattenColorPalette');
 
 const config: Config = {
   content: [
@@ -25,10 +28,17 @@ const config: Config = {
           '0%': { width: '0', height: '0' },
           '100%': { width: '100vw', height: '100vh' },
         },
+        scroll: {
+          to: {
+            transform: 'translate(calc(-50% - 0.5rem))',
+          },
+        },
       },
       animation: {
         scaleAnimation: 'grow 2s ease-in-out',
         modalBoxScaleAnimation: 'modalBoxGrow 0.5s ease-in-out',
+        scroll:
+          'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
       },
     },
     screens: {
@@ -44,5 +54,16 @@ const config: Config = {
     require('@headlessui/tailwindcss')({ prefix: 'ui' }),
   ],
 };
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme('colors'));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ':root': newVars,
+  });
+}
 
 export default withMT(config);
