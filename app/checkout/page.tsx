@@ -90,7 +90,7 @@ export default function CheckoutPage() {
         handleClearAllStates();
       }
     } catch (e: any) {
-      console.error('Error when setting sanityProductsIncCart state' + e);
+      console.log('Error when setting sanityProductsIncCart state' + e);
       handleClearAllStates();
     } finally {
       //set this state to false if its value is true
@@ -121,7 +121,7 @@ export default function CheckoutPage() {
         setProductsInCartWithSanityProductId(productsInCartWithSanityId);
       }
     } catch (e: any) {
-      console.error(
+      console.log(
         'Error when setting the productsWithImgUrlAndQuantity, productsInCartWithSanityProductId and subtotal states' +
           e
       );
@@ -139,7 +139,7 @@ export default function CheckoutPage() {
           }
         })
         .catch((e: any) => {
-          console.error('Error when creating stripe payment intent' + e);
+          console.log('Error when creating stripe payment intent' + e);
         });
     }
   }, [user, subtotal]);
