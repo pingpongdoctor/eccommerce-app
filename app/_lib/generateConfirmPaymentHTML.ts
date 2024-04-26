@@ -373,7 +373,7 @@ export const generateConfirmPaymentHTML = function (
                                                                 "
                                                               >
                                                                 <a
-                                                                  href="https://ecommerece-app-for-thao.vercel.app/order-history"
+                                                                  href="https://www.glowylab.shop/order-history"
                                                                   style="
                                                                     background-color: #000000;
                                                                     border: 1px
@@ -775,7 +775,7 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://ecommerece-app-for-thao.vercel.app/"
+                                                              href="https://www.glowylab.shop/"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
@@ -852,7 +852,7 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://ecommerece-app-for-thao.vercel.app/blog"
+                                                              href="https://www.glowylab.shop/blog"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
@@ -929,7 +929,7 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://ecommerece-app-for-thao.vercel.app/beta-page"
+                                                              href="https://www.glowylab.shop/beta-page"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
@@ -1006,7 +1006,7 @@ export const generateConfirmPaymentHTML = function (
                                                             "
                                                           >
                                                             <a
-                                                              href="https://ecommerece-app-for-thao.vercel.app/beta-page"
+                                                              href="https://www.glowylab.shop/beta-page"
                                                               ><span
                                                                 style="
                                                                   color: #ffffff;
