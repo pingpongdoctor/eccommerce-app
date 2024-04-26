@@ -19,6 +19,7 @@ import IncentiveComponent from './_components/IncentiveComponent';
 import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
 import Link from 'next/link';
 import { addDetailedAuthorDataToBlogs } from './_lib/addDetailedAuthorToBlogs';
+import UserFeedbackComponent from './_components/UserFeedbackComponent';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
@@ -67,9 +68,14 @@ export default async function Home() {
       ? []
       : await addDetailedAuthorDataToBlogs(blogsData.data);
 
-  const dataArr = [
+  const dataArr: {
+    id: number;
+    name: string;
+    component: JSX.Element;
+    href: string;
+  }[] = [
     {
-      id: '1',
+      id: 1,
       name: 'Featured Products',
       component: draftMode().isEnabled ? (
         <ProductCardsPreview
@@ -86,7 +92,7 @@ export default async function Home() {
       href: '/product',
     },
     {
-      id: '2',
+      id: 2,
       name: 'New Products',
       component: draftMode().isEnabled ? (
         <ProductCardsPreview
@@ -101,7 +107,7 @@ export default async function Home() {
       href: '/product',
     },
     {
-      id: '3',
+      id: 3,
       name: 'From Blogs',
       component: <BlogCards blogs={blogsDataWithDetailedAuthorData} />,
       href: '/blog',
@@ -145,6 +151,8 @@ export default async function Home() {
             </div>
           </div>
         ))}
+
+      <UserFeedbackComponent />
 
       <IncentiveComponent />
     </main>

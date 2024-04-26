@@ -278,7 +278,7 @@ export default function PaymentForm({
         return;
       }
       if (!paymentIntent) {
-        console.error('payment intent not available');
+        console.log('payment intent not available');
         await rollbackData(rollbackDataKey as string);
         return;
       }
