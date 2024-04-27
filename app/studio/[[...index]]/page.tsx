@@ -1,16 +1,30 @@
 'use client';
-/**
- * This route is responsible for the built-in authoring environment using Sanity Studio.
- * All routes under your studio path is handled by this file using Next.js' catch-all routes:
- * https://nextjs.org/docs/routing/dynamic-routes#catch-all-routes
- *
- * You can learn more about the next-sanity package here:
- * https://github.com/sanity-io/next-sanity
- */
-
 import { NextStudio } from 'next-sanity/studio';
 import config from '../../../sanity.config';
+import { useContext, useEffect } from 'react';
+import { globalStatesContext } from '@/app/_components/GlobalStatesContext';
+import { useRouter } from 'next/navigation';
 
 export default function StudioPage() {
+  const { user, isLoading } = useContext(globalStatesContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    //prodtect this page from unauthenticated users
+    if (!isLoading && !user) {
+      router.back();
+    }
+
+    //protect this page from users who do not have admin role
+    if (!isLoading && user) {
+      const isAdmin: boolean =
+        user[
+          process.env.NEXT_PUBLIC_AUTH0_CUSTOM_ROLE_CLAIM as string
+        ].includes('admin');
+
+      !isAdmin && router.back();
+    }
+  }, [user, isLoading, router]);
+
   return <NextStudio config={config} />;
 }
