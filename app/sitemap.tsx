@@ -1,4 +1,3 @@
-import { MetadataRoute } from 'next';
 import { baseUrl } from './utils/baseUrl';
 import { client } from '@/sanity/lib/client';
 import { SanityDocument } from 'next-sanity';
