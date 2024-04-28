@@ -30,7 +30,9 @@ export default function ProductDetail({ product }: Props) {
           <div className="hidden md:flex md:flex-col md:gap-4 lg:gap-8">
             <Image
               className="aspect-square w-full rounded-lg object-cover"
-              src={builder.image(images[0]).quality(80).url()}
+              src={
+                builder.image(images[1]).quality(80).url() || solidBlurDataUrl
+              }
               width={200}
               height={200}
               alt={images[0].alt || 'product-image'}
@@ -41,7 +43,9 @@ export default function ProductDetail({ product }: Props) {
 
             <Image
               className="aspect-square w-full rounded-lg object-cover"
-              src={builder.image(images[0]).quality(80).url()}
+              src={
+                builder.image(images[2]).quality(80).url() || solidBlurDataUrl
+              }
               width={200}
               height={200}
               alt={images[0].alt || 'product-image'}
