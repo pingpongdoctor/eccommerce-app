@@ -109,7 +109,7 @@ export default function CustomerReviews({
       className={`mx-auto px-4 md:px-8 lg:flex lg:justify-between lg:gap-16 lg:px-12 xl:max-w-7xl ${customerReviewsClassname}`}
     >
       <div>
-        <h3 className="mb-4">Customer Reiview</h3>
+        <h3 className="mb-4">Customer Review</h3>
         <div className="mb-6 flex gap-4">
           {<RatingStar starValue={0} id="main-rating" />}
           <p className="pb-1">
