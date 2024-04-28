@@ -31,7 +31,9 @@ export default function ProductDetail({ product }: Props) {
             <Image
               className="aspect-square w-full rounded-lg object-cover"
               src={
-                builder.image(images[1]).quality(80).url() || solidBlurDataUrl
+                images.length > 1
+                  ? builder.image(images[1]).quality(80).url()
+                  : solidBlurDataUrl
               }
               width={200}
               height={200}
@@ -44,7 +46,9 @@ export default function ProductDetail({ product }: Props) {
             <Image
               className="aspect-square w-full rounded-lg object-cover"
               src={
-                builder.image(images[2]).quality(80).url() || solidBlurDataUrl
+                images.length > 2
+                  ? builder.image(images[2]).quality(80).url()
+                  : solidBlurDataUrl
               }
               width={200}
               height={200}
