@@ -14,7 +14,6 @@ const pusher = new Pusher({
 
 //endpoint used for creating and updating products, that is triggered by Sanity webhook
 export async function POST(req: NextRequest) {
-  console.log('running');
   const { body, isValidSignature } = await parseBody<{
     sanitySlug: string;
     title: string;
@@ -68,8 +67,6 @@ export async function POST(req: NextRequest) {
         updatedAt: new Date(),
       },
     });
-
-    console.log(res);
 
     //revalidate product data in SSG pages
     revalidateTag(body._type);
