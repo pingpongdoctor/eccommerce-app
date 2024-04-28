@@ -13,7 +13,7 @@ const pusher = new Pusher({
 });
 
 //endpoint used for creating and updating products, that is triggered by Sanity webhook
-export async function POST(req: NextRequest) {
+export async function PUT(req: NextRequest) {
   const { body, isValidSignature } = await parseBody<{
     sanitySlug: string;
     title: string;
