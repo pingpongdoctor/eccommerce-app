@@ -30,12 +30,13 @@ export default function ProductDetail({ product }: Props) {
           <div className="hidden md:flex md:flex-col md:gap-4 lg:gap-8">
             <Image
               className="aspect-square w-full rounded-lg object-cover"
-              src={
-                builder.image(images[1]).quality(80).url() || solidBlurDataUrl
-              }
+              src={builder
+                .image(images[images.length > 1 ? 1 : 0])
+                .quality(80)
+                .url()}
               width={200}
               height={200}
-              alt={images[0].alt || 'product-image'}
+              alt={images[images.length > 1 ? 1 : 0].alt || 'product-image'}
               priority
               placeholder="blur"
               blurDataURL={solidBlurDataUrl}
@@ -43,12 +44,13 @@ export default function ProductDetail({ product }: Props) {
 
             <Image
               className="aspect-square w-full rounded-lg object-cover"
-              src={
-                builder.image(images[2]).quality(80).url() || solidBlurDataUrl
-              }
+              src={builder
+                .image(images[images.length > 2 ? 2 : 0])
+                .quality(80)
+                .url()}
               width={200}
               height={200}
-              alt={images[0].alt || 'product-image'}
+              alt={images[images.length > 2 ? 2 : 0].alt || 'product-image'}
               priority
               placeholder="blur"
               blurDataURL={solidBlurDataUrl}
