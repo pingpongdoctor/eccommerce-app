@@ -49,14 +49,14 @@ export async function POST(req: NextRequest) {
 
   const productData = {
     title: body.title,
-    price: body.price,
+    price: body.price.trim(),
     category: body.category,
     featured: body.featured,
     instock: body.instock,
   };
 
   try {
-    await prisma.product.upsert({
+    const res = await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,
