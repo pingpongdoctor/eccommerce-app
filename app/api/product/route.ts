@@ -19,7 +19,7 @@ export async function PUT(req: NextRequest) {
     title: string;
     price: string;
     category: Categories;
-    featured: boolean;
+    featured: boolean | null; //field with boolean value on Sanity has null as its initial value
     _type: string;
     instock: number;
   } | null>(
@@ -47,16 +47,20 @@ export async function PUT(req: NextRequest) {
     );
   }
 
+  console.log(body);
+
   const productData = {
     title: body.title,
     price: body.price.trim(),
     category: body.category,
-    featured: body.featured,
+    featured: body.featured === null ? false : body.featured,
     instock: body.instock,
   };
 
+  console.log(productData);
+
   try {
-    const res = await prisma.product.upsert({
+    await prisma.product.upsert({
       where: { sanitySlug: body.sanitySlug },
       create: {
         ...productData,
