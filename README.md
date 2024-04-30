@@ -10,7 +10,7 @@ Welcome to Glowy Lab. The website showcases a meticulously curated array of top-
 
 ## Key Features
 
-- Allow users sign in and sign up their Google accounts
+- Allow users sign in and sign up using their Google accounts
 - Browse through a wide range of product categories
 - Add desired items to the shopping cart
 - Conveniently execute payments using credit or debit cards
