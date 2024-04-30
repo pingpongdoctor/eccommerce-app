@@ -1,17 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![Logo](https://res.cloudinary.com/dtdzvyf4s/image/upload/v1705736245/E-commerce/glowy-lab_azfonb.png)
+
+# Build Your Diet
+
+[Deployment link](https://glowylab.shop/)
+
+Welcome to Glowy Lab. The website showcases a meticulously curated array of top-tier products. Let's discover unparalleled quality and convenience at my Canadian E-commerce hub, where I curate and offer the finest selection of products.
+
+![](https://res.cloudinary.com/dtdzvyf4s/image/upload/v1706208265/glowy_nshjip.gif)
+
+## Key Features
+
+- Allow users sign in and sign up their Google accounts
+- Browse through a wide range of product categories
+- Add desired items to the shopping cart
+- Conveniently execute payments using credit or debit cards
+- Receive email notifications post-payment and upon shipment or delivery of orders
+- Real-time updates on product reviews and available stock quantities
+- Access informative blogs for additional insights and knowledge
+- Exclusive access to admin dashboard restricted to authorized personnel
+- Admin privileges include overseeing all orders and updating their status (processing, shipping, or delivered)
+- Admins can manage Sanity documents efficiently through the /studio route in Sanity studio
+- Instant visual feedback provided through preview components during Sanity document editing
+
+## Tech Stack Frontend
+
+- Next.js
+- React
+- TypeScript
+- Tailwind
+- React Context API
+- Sanity- a modern Headless CMS that helps manage heavy content
+- Headless UI, Tailwind UI, Flowbite UI, Material-Tailwind UI and Aceternity UI
+- Heroicons
+- Husky
+- Lint-staged
+
+## Tech Stack Backend
+
+- Auth0 - an IAM provider that facilitates OAuth 2.0 and Open ID Connect integration
+- PostgreSQL database (hosted on Supabase)
+- Prisma - ORM
+- Ngrok - a reverse proxy that creates a secured tunnel between the local server and the internet, facilitating web hook testing
+- Sendgrid API - a SMTP provider
+- Stripe SDK - implement online payment
+- Upstash SDK - severless platform that helps manage Redis database in serverless environment
+- Pusher SDK - create bi-directional and realtime communication between servers and clients
+- REST API
 
 ## Getting Started
 
-First, run the development server:
+Create an env file that includes all information as same as the env.sample file.
+
+Install node-module and pakage json files with npm
+
+```bash
+  npm install
+```
+
+Run app in development mode:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+
+Creates an optimized production build:
+
+```bash
+npm run build
+```
+
+Run app in production mode:
+
+```bash
+npm run start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
