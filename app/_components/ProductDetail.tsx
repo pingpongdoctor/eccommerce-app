@@ -65,7 +65,7 @@ export default function ProductDetail({ product }: Props) {
           <div className="lg:min-h-[400px]">
             <h2>{title}</h2>
             {detail && (
-              <div className="hidden text-base lg:block">
+              <div className="hidden text-base lg:block lg:max-w-[710px]">
                 <PortableText value={detail} />
               </div>
             )}

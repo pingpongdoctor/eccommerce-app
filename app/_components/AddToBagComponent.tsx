@@ -97,7 +97,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
     return (
       <form
         onSubmit={handleSubmitNewProductToCart}
-        className="flex flex-col gap-52"
+        className="flex flex-col gap-12 lg:gap-52"
       >
         <ListComponent
           selectedValue={quantity}
@@ -115,7 +115,7 @@ export default function AddToBagComponent({ productSlug }: Props) {
     return (
       <form
         onSubmit={handleSubmitNewProductToCart}
-        className="flex flex-col gap-52"
+        className="flex flex-col gap-12 lg:gap-52"
       >
         <ListComponent
           selectedValue={quantity}
