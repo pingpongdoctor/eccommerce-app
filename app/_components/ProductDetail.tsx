@@ -4,6 +4,7 @@ import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
 import { solidBlurDataUrl } from '../utils/utils';
 import AddToBagComponent from './AddToBagComponent';
+import CustomizedSanityPortableTextComponent from './CustomizedSanityPortableTextComponent';
 
 interface Props {
   product: SanityProduct & SanityDocument;
@@ -66,7 +67,7 @@ export default function ProductDetail({ product }: Props) {
             <h2>{title}</h2>
             {detail && (
               <div className="hidden text-base lg:block lg:max-w-[710px]">
-                <PortableText value={detail} />
+                <CustomizedSanityPortableTextComponent value={detail} />
               </div>
             )}
           </div>

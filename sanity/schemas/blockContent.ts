@@ -1,5 +1,4 @@
 import { defineType, defineArrayMember } from 'sanity';
-import ExternalLinkRenderer from '@/app/_components/ExternalLinkRenderer';
 
 export default defineType({
   title: 'Block Content',
@@ -30,13 +29,11 @@ export default defineType({
             title: 'link',
             fields: [
               {
-                name: 'url',
+                name: 'href',
                 type: 'url',
+                title: 'URL',
               },
             ],
-            components: {
-              annotation: ExternalLinkRenderer,
-            },
           },
         ],
       },
