@@ -101,10 +101,10 @@ export default async function DetailedProduct({
 
       {/* product you may like */}
       <div>
-        <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
-          <h3 className="mb-0">Products you may like</h3>
+        <div className="mb-6 flex items-center justify-between px-4 font-medium text-gray-900 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+          <h3 className="mb-0 text-xl">Products you may like</h3>
           {customerAlsoBuyInitialData?.length > 0 ? (
-            <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
+            <p className="group flex cursor-default justify-start gap-1">
               <span> See all </span>
               <span className="transition-all duration-500 group-hover:translate-x-2">
                 &rarr;
