@@ -64,7 +64,7 @@ export default function CheckoutItem({ product }: Props) {
       channel.unbind_all();
       pusher.disconnect();
     };
-  }, [product.slug.current]);
+  }, [product.slug, product.title]);
 
   return (
     <div className="flex gap-6 border-b pb-8 last:mb-0">

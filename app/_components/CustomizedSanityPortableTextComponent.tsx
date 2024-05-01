@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { solidBlurDataUrl } from '../utils/utils';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { PortableTextComponents } from '@portabletext/react';
+import Link from 'next/link';
+import { LaunchIcon } from '@sanity/icons';
 
 const PortableTextImage = ({
   value,
@@ -57,6 +59,21 @@ const myPortableTextComponents: PortableTextComponents | undefined = {
     checkmarks: ({ children }) => (
       <ol className="m-auto text-lg">{children}</ol>
     ),
+  },
+
+  marks: {
+    link: ({ value, children }) => {
+      const { href } = value;
+      return (
+        <Link
+          className="flex items-center gap-2 text-blue-700 hover:underline"
+          href={href || '#'}
+        >
+          {children}
+          <LaunchIcon />
+        </Link>
+      );
+    },
   },
 
   listItem: {

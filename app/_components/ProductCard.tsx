@@ -7,9 +7,9 @@ export default function ProductCard({
   product: ProductWithImgUrl & SanityDocument;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="group flex flex-col gap-2">
       <Image
-        className="object-fit aspect-[1/1.2] w-full rounded-md object-cover object-center transition-all hover:opacity-90"
+        className="object-fit aspect-[1/1.2] w-full rounded-md object-cover object-center transition-all group-hover:opacity-90"
         src={product.imgUrl}
         alt="product-image"
         width={300}
@@ -18,7 +18,9 @@ export default function ProductCard({
         blurDataURL={solidBlurDataUrl}
       />
 
-      <p>{product.title ? product.title : 'No Title'}</p>
+      <p className="line-clamp-2 h-12">
+        {product.title ? product.title : 'No Title'}
+      </p>
 
       <p className="text-lg text-gray-900">${product.price}</p>
     </div>
