@@ -18,7 +18,7 @@ interface HomePageData {
 interface SanityProduct {
   slug: { _type: string; current: string };
   title: string;
-  images: any;
+  images: SanityImage[];
   detail: any;
   featured: boolean;
   price: string;
@@ -29,12 +29,12 @@ interface SanityProduct {
 interface SanityAuthor {
   slug: { _type: string; current: string };
   name: string;
-  image: any;
+  image: SanityImage;
 }
 
 interface SanityBlog {
   slug: { _type: string; current: string };
-  image: any;
+  image: SanityImage;
   title: string;
   author: any;
   category: Categories;
@@ -77,11 +77,14 @@ interface User {
   updatedAt: string;
 }
 
-interface ImageInfor {
+interface SanityImage {
   _type: string;
-  alt: string;
   _key: string;
-  asset: [Object];
+  asset: {
+    _ref: string;
+    _type: string;
+  };
+  alt?: string;
 }
 
 interface DropdownItemInfor {

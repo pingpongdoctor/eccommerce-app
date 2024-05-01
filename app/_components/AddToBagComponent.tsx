@@ -48,7 +48,6 @@ export default function AddToBagComponent({ productSlug }: Props) {
   useEffect(() => {
     getProduct(productSlug)
       .then((productData: Product | undefined) => {
-        console.log(productData);
         if (!productData) {
           setProductInstock(0);
           return;
