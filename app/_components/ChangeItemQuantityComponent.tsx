@@ -59,7 +59,7 @@ export default function ChangeItemQuantityComponent({
       channel.unbind_all();
       pusher.disconnect();
     };
-  }, [product.slug.current]);
+  }, [product.slug, product.title]);
 
   const handleUpdateQuantityState = async function (value: number) {
     if (value !== currentQuantity) {
