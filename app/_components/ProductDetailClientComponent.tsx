@@ -24,7 +24,7 @@ export default function ProductDetailClientComponent({ product }: Props) {
             src={builder.image(images[0]).quality(80).url()}
             width={200}
             height={200}
-            alt={images[0].alt}
+            alt={images[0].alt || 'product-image'}
             priority
             placeholder="blur"
             blurDataURL={solidBlurDataUrl}
@@ -35,7 +35,7 @@ export default function ProductDetailClientComponent({ product }: Props) {
               src={builder.image(images[0]).quality(80).url()}
               width={200}
               height={200}
-              alt={images[0].alt}
+              alt={images[0].alt || 'product-image'}
               priority
               placeholder="blur"
               blurDataURL={solidBlurDataUrl}
@@ -46,7 +46,7 @@ export default function ProductDetailClientComponent({ product }: Props) {
               src={builder.image(images[0]).quality(80).url()}
               width={200}
               height={200}
-              alt={images[0].alt}
+              alt={images[0].alt || 'product-image'}
               priority
               placeholder="blur"
               blurDataURL={solidBlurDataUrl}
