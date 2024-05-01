@@ -18,7 +18,9 @@ export default function ProductCard({
         blurDataURL={solidBlurDataUrl}
       />
 
-      <p>{product.title ? product.title : 'No Title'}</p>
+      <p className="line-clamp-2 h-12">
+        {product.title ? product.title : 'No Title'}
+      </p>
 
       <p className="text-lg text-gray-900">${product.price}</p>
     </div>
