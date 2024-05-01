@@ -101,7 +101,7 @@ export default async function DetailedProduct({
 
       {/* product you may like */}
       <div>
-        <div className="mb-6 px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
+        <div className="mb-6 flex items-center justify-between px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
           <h3 className="mb-0">Products you may like</h3>
           {customerAlsoBuyInitialData?.length > 0 ? (
             <p className="group flex cursor-default justify-start gap-1 font-semibold text-gray-900">
