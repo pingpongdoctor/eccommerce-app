@@ -1,9 +1,17 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import prisma from '@/lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
+import Pusher from 'pusher';
+
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID as string,
+  key: process.env.PUSHER_KEY as string,
+  secret: process.env.PUSHER_SECRET as string,
+  cluster: process.env.PUSHER_CLUSTER as string,
+  useTLS: true,
+});
 
 //get all reviews
 export async function GET(
@@ -141,7 +149,10 @@ export const POST = withApiAuthRequired(async (req: Request, context) => {
       },
     });
 
-    revalidateTag('review');
+    //trigger an event to update reviews in realtime
+    await pusher.trigger('new-reviews', `new-reviews-${productSlug}-event`, {
+      productSlug,
+    });
 
     return NextResponse.json(
       {

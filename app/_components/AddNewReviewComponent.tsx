@@ -51,7 +51,7 @@ export default function AddNewReviewComponent({ productSlug }: Props) {
 
       if (isSuccess) {
         notify('success', 'Thank your for your review', 'review-success');
-        await triggerNewReviewsEvent(productSlug);
+        // await triggerNewReviewsEvent(productSlug);
       }
     } catch (e: any) {
       console.log('Error in handleReviewContentUpdate function' + ' ' + e);

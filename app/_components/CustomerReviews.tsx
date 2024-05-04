@@ -23,6 +23,7 @@ export default function CustomerReviews({
   const [productReviews, setProductReviews] = useState<
     (Review & { user: { name: string; imgUrl: string } })[]
   >([]);
+  const [isNewReview, setIsNewReview] = useState<boolean>(false);
 
   //function to update rating star value
   const updateRatingStarValue = function (averageStarNum: number) {
@@ -65,14 +66,9 @@ export default function CustomerReviews({
 
     const channel = pusher.subscribe('new-reviews');
 
-    channel.bind(
-      `new-reviews-${productSlug}-event`,
-      function (data: {
-        reviews: (Review & { user: { name: string; imgUrl: string } })[];
-      }) {
-        setProductReviews(sortReviews(data.reviews));
-      }
-    );
+    channel.bind(`new-reviews-${productSlug}-event`, function () {
+      setIsNewReview(true);
+    });
 
     return () => {
       pusher.unsubscribe('new-reviews');
@@ -103,6 +99,34 @@ export default function CustomerReviews({
         setProductReviews([]);
       });
   }, [productSlug]);
+
+  //get new reviews when isNewReview is true
+  useEffect(() => {
+    if (isNewReview) {
+      getProductReviews(productSlug)
+        .then(
+          (
+            reviews:
+              | (Review & { user: { name: string; imgUrl: string } })[]
+              | undefined
+          ) => {
+            if (!reviews) {
+              setProductReviews([]);
+              return;
+            }
+
+            setProductReviews(sortReviews(reviews));
+          }
+        )
+        .catch((e: any) => {
+          console.log(e);
+          setProductReviews([]);
+        })
+        .finally(() => {
+          setIsNewReview(false);
+        });
+    }
+  }, [isNewReview]);
 
   return (
     <div
