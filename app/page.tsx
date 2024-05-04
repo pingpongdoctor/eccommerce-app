@@ -20,6 +20,7 @@ import ProductCardsSkeleton from './_components/ProductCardsSkeleton';
 import Link from 'next/link';
 import { addDetailedAuthorDataToBlogs } from './_lib/addDetailedAuthorToBlogs';
 import UserFeedbackComponent from './_components/UserFeedbackComponent';
+import IntroduceSkeletonComponent from './_components/IntroduceSkeletonComponent';
 
 export default async function Home() {
   const featuredProductPromise = loadQuery<(SanityProduct & SanityDocument)[]>(
@@ -121,7 +122,9 @@ export default async function Home() {
       {draftMode().isEnabled ? (
         <PreviewIntroduceComponent initial={homePageData} />
       ) : (
-        <IntroduceComponent homePageData={homePageData.data} />
+        <Suspense fallback={<IntroduceSkeletonComponent />}>
+          <IntroduceComponent homePageData={homePageData.data} />
+        </Suspense>
       )}
 
       <div>
