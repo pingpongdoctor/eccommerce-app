@@ -10,42 +10,62 @@ Welcome to Glowy Lab. The website showcases a meticulously curated array of top-
 
 ## Key Features
 
-- Allow users sign in and sign up using their Google accounts
-- Browse through a wide range of product categories
-- Add desired items to the shopping cart
-- Conveniently execute payments using credit or debit cards
-- Receive email notifications post-payment and upon shipment or delivery of orders
-- Real-time updates on product reviews and available stock quantities
-- Access informative blogs for additional insights and knowledge
-- Exclusive access to admin dashboard restricted to authorized personnel
-- Admin privileges include overseeing all orders and updating their status (processing, shipping, or delivered)
-- Admins can manage Sanity documents efficiently through the /studio route in Sanity studio
-- Instant visual feedback provided through preview components during Sanity document editing
+● Allow users sign in and sign up using their Google accounts
+● Browse through a wide range of product categories
+● Add desired items to the shopping cart
+● Conveniently execute payments using credit or debit cards
+● Receive email notifications post-payment and upon shipment or delivery of orders
+● Real-time updates on product reviews and available stock quantities
+● Access informative blogs for additional insights and knowledge
+● Exclusive access to admin dashboard restricted to authorized personnel
+● Admin privileges include overseeing all orders and updating their status (processing, shipping, or delivered)
+● Admins can manage Sanity documents efficiently through the /studio route in Sanity studio
+● Instant visual feedback provided through preview components during Sanity document editing
 
 ## Tech Stack Frontend
 
-- Next.js
-- React
-- TypeScript
-- Tailwind
-- React Context API
-- Sanity- a modern Headless CMS that helps manage heavy content
-- Headless UI, Tailwind UI, Flowbite UI, Material-Tailwind UI and Aceternity UI
-- Heroicons
-- Husky
-- Lint-staged
+● Next.js
+● React
+● TypeScript
+● Tailwind
+● React Context API
+● Sanity - a modern Headless CMS that helps manage heavy content
+● Headless UI, Tailwind UI, Flowbite UI, Material-Tailwind UI and Aceternity UI
+● Heroicons
+● Husky
+● Lint-staged
 
 ## Tech Stack Backend
 
-- Auth0 - an IAM provider that facilitates OAuth 2.0 and Open ID Connect integration
-- PostgreSQL database (hosted on Supabase)
-- Prisma - ORM
-- Ngrok - a reverse proxy that creates a secured tunnel between the local server and the internet, facilitating web hook testing
-- Sendgrid API - a SMTP provider
-- Stripe SDK - implement online payment
-- Upstash SDK - severless platform that helps manage Redis database in serverless environment
-- Pusher SDK - create bi-directional and realtime communication between servers and clients
-- REST API
+● Auth0 - an IAM provider that facilitates OAuth 2.0 and Open ID Connect integration
+● PostgreSQL database (hosted on Supabase)
+● Prisma - ORM
+● Ngrok - a reverse proxy that creates a secured tunnel between the local server and the internet, facilitating web hook testing
+● Sendgrid API - a SMTP provider
+● Stripe SDK - implement online payment
+● Upstash SDK - severless platform that helps manage Redis database in serverless environment
+● Pusher SDK - create bi-directional and realtime communication between servers and clients
+● REST API
+
+## Project achievement
+
+● Utilize Sanity Headless CMS to manage rich content and provide instant visual feedback using presentation tool
+● Incorporate Auth0 IAM provider to implement OAuth 2.0 and OpenID Connect, authenticating and authorizing users.
+● Employ Prisma ORM to execute CRUD operations on a PostgreSQL database (hosted on Supabase).
+● Deploy Ngrok (a reverse proxy that creates a secured tunnel between the local server and the internet) to facilitate local webhook testing.
+● Use Sendgrid API (an SMTP provider) to send automated emails.
+● Utilize Stripe SDK and Stripe API for online payments with credit and debit cards.
+● Leverage Upstash SDK to manage Redis database in a serverless environment.
+● Integrate Pusher SDK (a hosted WebSockets solution) to enable bidirectional communication between servers and clients
+● Employ Next.js to build SSR and SSG pages, improving SEO and page load time
+● Integrate UI components from libraries such as Headless UI, Tailwind UI, Flowbite UI and Material-Tailwind UI.
+
+## Next steps
+
+● Incorporate Docker for a high level of isolation between applications and their dependencies.
+● Leverage Kubernetes (k8s) to facilitate service discovery, load balancing within the cluster, automated rollouts and rollbacks, self-healing of containers that fail, and configuration management.
+● Deploy OpenAI api to build an AI chat supporter
+● Create documentation for developers and end-users to facilitate easier usage and contribution
 
 ## Getting Started
 
