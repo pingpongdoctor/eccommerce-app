@@ -1,6 +1,6 @@
 ![Logo](https://res.cloudinary.com/dtdzvyf4s/image/upload/v1705736245/E-commerce/glowy-lab_azfonb.png)
 
-# Build Your Diet
+# Glowy Lab
 
 [Deployment link](https://glowylab.shop/)
 
