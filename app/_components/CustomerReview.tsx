@@ -9,7 +9,7 @@ interface Props {
 
 export default function CustomerReview({ productReview }: Props) {
   return (
-    <li className="flex flex-col gap-4 px-4 py-8 last:border-none last:pb-0 lg:first:pt-0">
+    <li className="flex flex-col gap-4 border-b px-4 py-8 last:border-none last:pb-0 lg:first:pt-0">
       <div className="flex items-center gap-4">
         <AvatarClientComponent
           avatarClassname="size-11"
