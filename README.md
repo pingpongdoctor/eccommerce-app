@@ -10,7 +10,7 @@ Welcome to Glowy Lab. The website showcases a meticulously curated array of top-
 
 ## Project achievement
 
-- Utilize Sanity Headless CMS for content management, offering immediate visual feedback with presentation tools
+- Utilize Sanity Headless CMS for for efficient content management and instant visual feedback with its presentation tool
 - Incorporate Auth0 IAM provider to implement OAuth 2.0 and OpenID Connect, authenticating and authorizing users
 - Employ Prisma ORM to execute CRUD operations on a PostgreSQL database (hosted on Supabase)
 - Use Sendgrid API (an SMTP provider) to send automated emails
@@ -63,7 +63,7 @@ Welcome to Glowy Lab. The website showcases a meticulously curated array of top-
 ## Next steps
 
 - Incorporate Docker for a high level of isolation between applications and their dependencies
-- Leverage Kubernetes (k8s) to facilitate service discovery, load balancing within the cluster, automated rollouts and rollbacks, self-healing of containers that fail, and configuration management
+- Leverage Kubernetes (k8s) to facilitate service discovery, load balancing within the cluster, self-healing of containers that fail, and configuration management
 - Deploy OpenAI api to build an AI chat supporter
 - Create documentation for developers and end-users to facilitate easier usage and contribution
 
