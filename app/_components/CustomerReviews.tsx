@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { getProductReviews } from '../_lib/getProductReviews';
 import Pusher from 'pusher-js';
 import { sortReviews } from '../_lib/sortReviews';
+import ReviewsSkeletonComponent from './ReviewsSkeletonComponent';
 
 interface Props {
   customerReviewsClassname?: string;
@@ -24,6 +25,7 @@ export default function CustomerReviews({
     (Review & { user: { name: string; imgUrl: string } })[]
   >([]);
   const [isNewReview, setIsNewReview] = useState<boolean>(false);
+  const [isFetchingReviews, setIsFetchingReviews] = useState<boolean>(false);
 
   //function to update rating star value
   const updateRatingStarValue = function (averageStarNum: number) {
@@ -79,6 +81,7 @@ export default function CustomerReviews({
 
   //get product reviews when page is initially loaded
   useEffect(() => {
+    setIsFetchingReviews(true);
     getProductReviews(productSlug)
       .then(
         (
@@ -97,6 +100,9 @@ export default function CustomerReviews({
       .catch((e: any) => {
         console.log(e);
         setProductReviews([]);
+      })
+      .finally(() => {
+        setIsFetchingReviews(false);
       });
   }, [productSlug]);
 
@@ -179,14 +185,11 @@ export default function CustomerReviews({
       </div>
 
       {/* customer review messages */}
-      <div
-        className={`max-h-[700px] w-full overflow-auto lg:max-h-[505px] [&>div]:border-b ${
-          productReviews.length == 0 &&
-          'flex h-[500px] items-center justify-center'
-        }`}
-      >
-        {productReviews.length > 0 ? (
-          productReviews.map(
+      {isFetchingReviews ? (
+        <ReviewsSkeletonComponent />
+      ) : productReviews.length > 0 ? (
+        <ul className="max-h-[700px] w-full list-none overflow-auto lg:max-h-[505px] [&>div]:border-b">
+          {productReviews.map(
             (
               productReview: Review & { user: { name: string; imgUrl: string } }
             ) => (
@@ -195,11 +198,13 @@ export default function CustomerReviews({
                 productReview={productReview}
               />
             )
-          )
-        ) : (
-          <p className="text-xl">No Reviews</p>
-        )}
-      </div>
+          )}
+        </ul>
+      ) : (
+        <div className="flex h-[500px] w-full items-center justify-center">
+          <p className="text-xl"> No Reviews</p>
+        </div>
+      )}
     </div>
   );
 }
