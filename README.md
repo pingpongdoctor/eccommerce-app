@@ -8,6 +8,19 @@ Welcome to Glowy Lab. The website showcases a meticulously curated array of top-
 
 ![](https://res.cloudinary.com/dtdzvyf4s/image/upload/v1706208265/glowy_nshjip.gif)
 
+## Project achievement
+
+- Utilize Sanity Headless CMS for content management, offering immediate visual feedback with presentation tools
+- Incorporate Auth0 IAM provider to implement OAuth 2.0 and OpenID Connect, authenticating and authorizing users
+- Employ Prisma ORM to execute CRUD operations on a PostgreSQL database (hosted on Supabase)
+- Use Sendgrid API (an SMTP provider) to send automated emails
+- Utilize Stripe SDK and Stripe API for online payments with credit and debit cards
+- Leverage Upstash SDK to manage Redis database in a serverless environment
+- Use Pusher SDK (a hosted WebSockets solution) to enable bidirectional communication between servers and clients
+- Employ Next.js to build SSR and SSG pages, improving SEO and page load time
+- Integrate UI components from libraries such as Headless UI, Tailwind UI, Flowbite UI and Material-Tailwind UI
+- Deploy Ngrok to facilitate local webhook testing
+
 ## Key Features
 
 - Allow users sign in and sign up using their Google accounts
@@ -47,23 +60,10 @@ Welcome to Glowy Lab. The website showcases a meticulously curated array of top-
 - Pusher SDK - create bi-directional and realtime communication between servers and clients
 - REST API
 
-## Project achievement
-
-- Utilize Sanity Headless CMS to manage rich content and provide instant visual feedback using presentation tool
-- Incorporate Auth0 IAM provider to implement OAuth 2.0 and OpenID Connect, authenticating and authorizing users.
-- Employ Prisma ORM to execute CRUD operations on a PostgreSQL database (hosted on Supabase).
-- Deploy Ngrok (a reverse proxy that creates a secured tunnel between the local server and the internet) to facilitate local webhook testing.
-- Use Sendgrid API (an SMTP provider) to send automated emails.
-- Utilize Stripe SDK and Stripe API for online payments with credit and debit cards.
-- Leverage Upstash SDK to manage Redis database in a serverless environment.
-- Integrate Pusher SDK (a hosted WebSockets solution) to enable bidirectional communication between servers and clients
-- Employ Next.js to build SSR and SSG pages, improving SEO and page load time
-- Integrate UI components from libraries such as Headless UI, Tailwind UI, Flowbite UI and Material-Tailwind UI.
-
 ## Next steps
 
-- Incorporate Docker for a high level of isolation between applications and their dependencies.
-- Leverage Kubernetes (k8s) to facilitate service discovery, load balancing within the cluster, automated rollouts and rollbacks, self-healing of containers that fail, and configuration management.
+- Incorporate Docker for a high level of isolation between applications and their dependencies
+- Leverage Kubernetes (k8s) to facilitate service discovery, load balancing within the cluster, automated rollouts and rollbacks, self-healing of containers that fail, and configuration management
 - Deploy OpenAI api to build an AI chat supporter
 - Create documentation for developers and end-users to facilitate easier usage and contribution
 
