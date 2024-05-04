@@ -185,26 +185,30 @@ export default function CustomerReviews({
       </div>
 
       {/* customer review messages */}
-      {isFetchingReviews ? (
-        <ReviewsSkeletonComponent />
-      ) : productReviews.length > 0 ? (
-        <ul className="max-h-[700px] w-full list-none overflow-auto lg:max-h-[505px] [&>div]:border-b">
-          {productReviews.map(
-            (
-              productReview: Review & { user: { name: string; imgUrl: string } }
-            ) => (
-              <CustomerReview
-                key={productReview.id}
-                productReview={productReview}
-              />
-            )
-          )}
-        </ul>
-      ) : (
-        <div className="flex h-[500px] w-full items-center justify-center">
-          <p className="text-xl"> No Reviews</p>
-        </div>
-      )}
+      <div className="max-h-[700px] w-full lg:max-h-[505px]">
+        {isFetchingReviews ? (
+          <ReviewsSkeletonComponent />
+        ) : productReviews.length > 0 ? (
+          <ul className="w-full list-none overflow-auto">
+            {productReviews.map(
+              (
+                productReview: Review & {
+                  user: { name: string; imgUrl: string };
+                }
+              ) => (
+                <CustomerReview
+                  key={productReview.id}
+                  productReview={productReview}
+                />
+              )
+            )}
+          </ul>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <p className="text-xl"> No Reviews</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
