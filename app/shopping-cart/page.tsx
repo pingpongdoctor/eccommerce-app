@@ -16,13 +16,11 @@ import { addProductQuantity } from '../_lib/addProductQuantity';
 import ProductCardsClientComponent from '../_components/ProductCardsClientComponent';
 import { calculateSubtotal } from '../_lib/calculateSubtotal';
 import ProductCardsSkeleton from '../_components/ProductCardsSkeleton';
-import { useRouter } from 'next/navigation';
 import GoBackBtn from '../_components/GoBackBtn';
 import Link from 'next/link';
 
 export default function ShoppingCart() {
-  const router = useRouter();
-  const { productsInCart, isLoading, user } = useContext(globalStatesContext);
+  const { productsInCart } = useContext(globalStatesContext);
   const [sanityProductsInCart, setSanityProductsInCart] = useState<
     (SanityProduct & SanityDocument)[]
   >([]);
@@ -36,13 +34,6 @@ export default function ShoppingCart() {
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
     useState<boolean>(false);
-
-  //protect this page from unauthenticated users
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/');
-    }
-  }, [user, isLoading, router]);
 
   const handleClearAllStates = function () {
     setSanityProductsInCart([]);

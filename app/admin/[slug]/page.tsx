@@ -9,26 +9,17 @@ import { caplitalizeFirstLetterOfWords } from '@/app/_lib/caplitalizeFirstLetter
 import generateOrderInforObject from '@/app/_lib/generateOrderInforObject';
 import { getOrderOnClientSide } from '@/app/_lib/getOrderOnClientSide';
 import { updateOrderStatus } from '@/app/_lib/updateOrderStatus';
-import { useRouter } from 'next/navigation';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 export default function AdminOrderDetail({
   params,
 }: {
   params: { slug: string };
 }) {
-  const { user, isLoading } = useContext(globalStatesContext);
+  const { user } = useContext(globalStatesContext);
   const [order, setOrder] = useState<Order | null>(null);
   const [isFetchingOrder, setIsFetchingOrder] = useState<boolean>(false);
   const [isStatusUpdated, setIsStatusUpdated] = useState<boolean>(false);
-  const router = useRouter();
-
-  //protect this page from unauthenticated users
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/');
-    }
-  }, [user, isLoading, router]);
 
   //fetch order data
   useEffect(() => {

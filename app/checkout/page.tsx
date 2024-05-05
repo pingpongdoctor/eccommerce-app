@@ -26,7 +26,7 @@ const stripePromise = loadStripe(
 export default function CheckoutPage() {
   const router = useRouter();
   const [clientSecret, setClientSecret] = useState<string>('');
-  const { productsInCart, user, isLoading } = useContext(globalStatesContext);
+  const { productsInCart, user } = useContext(globalStatesContext);
   const [
     productsInCartWithSanityProductId,
     setProductsInCartWithSanityProductId,
@@ -45,13 +45,6 @@ export default function CheckoutPage() {
   const [subtotal, setSubtotal] = useState<number>(0);
   const [isFetchingSanityProducts, setIsFetchingSanityProducts] =
     useState<boolean>(false);
-
-  //protect this page from unauthenticated users
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/');
-    }
-  }, [user, isLoading, router]);
 
   const handleClearAllStates = function () {
     setSanityProductsInCart([]);

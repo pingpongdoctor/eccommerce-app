@@ -1,6 +1,4 @@
-import { redirect } from 'next/navigation';
 import { getAllOrdersOnServerSide } from '../_lib/getAllOrdersOnServerSide';
-import { getUserProfileFromServer } from '../_lib/getUserProfileFromServer';
 import HistoryOrderListComponent from '../_components/HistoryOrderListComponent';
 import { addImgUrlsAndDescriptionToOrders } from '../_lib/addImgUrlsToOrders';
 import GoBackBtn from '../_components/GoBackBtn';
@@ -12,12 +10,6 @@ import { Suspense } from 'react';
 export const dynamic = 'force-dynamic';
 
 export default async function OrderHistoryPage() {
-  const userData = await getUserProfileFromServer();
-
-  if (!userData) {
-    redirect('/api/auth/login');
-  }
-
   const ordersWithoutDetailedProducts: Order[] =
     await getAllOrdersOnServerSide();
 

@@ -25,7 +25,7 @@ export default function GlobalStatesContext({
 
   useEffect(() => {
     //set user profile state
-    if (user && !isLoading) {
+    if (!isLoading && user) {
       getUserProfileFromClientSide().then(
         (userData: Omit<User, 'auth0Id' | 'id'> | undefined) => {
           if (userData) {

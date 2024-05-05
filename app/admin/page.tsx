@@ -9,7 +9,6 @@ import {
 import AdminOrderList from '../_components/AdminOrderList';
 import { getAllOrdersOnClientSide } from '../_lib/getAllOrdersOnClientSide';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
-import { useRouter } from 'next/navigation';
 import SimpleMenuComponent from '../_components/SimpleMenuComponent';
 import { orderTableColumnsInfor } from '../utils/utils';
 import SearchBar from '../_components/SearchBar';
@@ -17,20 +16,11 @@ import { formatDateToWords } from '../_lib/formatDateToWords';
 import GoBackBtn from '../_components/GoBackBtn';
 
 export default function AdminPage() {
-  const { user, isLoading } = useContext(globalStatesContext);
+  const { user } = useContext(globalStatesContext);
   const [ordersData, setOrdersData] = useState<Order[]>([]);
   const [isFetchingOrdersData, setIsFetchingOrdersData] =
     useState<boolean>(false);
   const [searchResult, setSearchResult] = useState<string>('');
-
-  const router = useRouter();
-
-  //protect this page from unauthenticated users
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/');
-    }
-  }, [user, isLoading, router]);
 
   //set ordersData state
   useEffect(() => {

@@ -229,17 +229,16 @@ export const navigationLinksInfor = [
   },
   {
     id: 3,
-    linkName: 'Products',
-    className: linkClassname,
-    href: '/product',
-  },
-  {
-    id: 4,
     linkName: 'Blogs',
     className: linkClassname,
     href: '/blog',
   },
-
+  {
+    id: 4,
+    linkName: 'Admin',
+    className: linkClassname,
+    href: '/admin',
+  },
   {
     id: 5,
     linkName: 'Orders',
@@ -342,5 +341,16 @@ export const incentiveDataArr: {
     icon: supportIcon,
     mainText: 'Exchanges',
     text: "We've got your back with an easy-breezy product exchange. It's like a friendly swap dance where you leave with a smile.",
+  },
+];
+
+export const menuListItems = [
+  {
+    href: '/order-history',
+    label: 'Your orders',
+  },
+  {
+    href: '/api/auth/logout',
+    label: 'Log out',
   },
 ];
