@@ -1,5 +1,5 @@
 'use client';
-import { dropdownItemInforArr } from '../utils/utils';
+import { dropdownItemInforArr, menuListItems } from '../utils/utils';
 import DropdownMenu from './DropdownMenu';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,14 +10,29 @@ import SimpleMenuComponent from './SimpleMenuComponent';
 import { ThreeDots } from 'react-loader-spinner';
 import { globalStatesContext } from './GlobalStatesContext';
 import { calculateTotalProducts } from '../_lib/calculateTotalProducts';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { navigationLinksInfor } from '../utils/utils';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
-  const { userProfile, isLoading, productsInCart } =
+  const { userProfile, isLoading, productsInCart, user } =
     useContext(globalStatesContext);
+  const [isAdmin, setIsAdmin] = useState<null | boolean>(null);
 
+  useEffect(() => {
+    if (!isLoading && user) {
+      const isAdmin: boolean | undefined =
+        user?.[
+          process.env.NEXT_PUBLIC_AUTH0_CUSTOM_ROLE_CLAIM as string
+        ].includes('admin');
+
+      setIsAdmin(isAdmin === undefined ? null : isAdmin);
+    } else {
+      setIsAdmin(null);
+    }
+  }, [user, isLoading]);
+
+  //generate linksInfor
   const linksInfor: {
     id?: number;
     linkName?: string;
@@ -35,16 +50,42 @@ export default function Navbar() {
     ...navigationLinksInfor,
   ];
 
-  const menuItems = [
-    {
-      href: '/order-history',
-      label: 'Your orders',
-    },
-    {
-      href: '/api/auth/logout',
-      label: 'Log out',
-    },
-  ];
+  //render link elements function
+  const renderLinks = function (
+    links: {
+      id?: number;
+      linkName?: string;
+      className?: string;
+      href?: string;
+      classname?: string;
+      dropDownComponent?: JSX.Element;
+    }[]
+  ) {
+    return (
+      links
+        //filter to render admin or order elements based on isAdmin state
+        .filter((link) => {
+          const hiddenElementId = isAdmin ? 5 : 4;
+          return link.id != hiddenElementId;
+        })
+        .map((link) => {
+          if (link.id === 2) {
+            return link.dropDownComponent;
+          }
+          return (
+            <Link
+              className={`${link.className as string} ${
+                pathname.startsWith('/admin') ? 'hover:border-white' : ''
+              }`}
+              href={link.href as string}
+              key={link.id}
+            >
+              {link.linkName}
+            </Link>
+          );
+        })
+    );
+  };
 
   const pathname = usePathname();
 
@@ -82,22 +123,7 @@ export default function Navbar() {
               pathname.startsWith('/admin') ? 'bg-gray-900 text-white' : ''
             }`}
           >
-            {linksInfor.map((navigationLinkInfor) => {
-              if (navigationLinkInfor.id === 2) {
-                return navigationLinkInfor.dropDownComponent;
-              }
-              return (
-                <Link
-                  className={`${navigationLinkInfor.className as string} ${
-                    pathname.startsWith('/admin') ? 'hover:border-white' : ''
-                  }`}
-                  href={navigationLinkInfor.href as string}
-                  key={navigationLinkInfor.id}
-                >
-                  {navigationLinkInfor.linkName}
-                </Link>
-              );
-            })}
+            {renderLinks(linksInfor)}
           </div>
 
           <div className={`flex w-[109px] justify-end transition-all`}>
@@ -121,7 +147,7 @@ export default function Navbar() {
                 <SimpleMenuComponent
                   avatarSrc={userProfile.imgUrl}
                   username={userProfile.name}
-                  menuItems={menuItems}
+                  menuItems={menuListItems}
                 />
                 <Link
                   href="/shopping-cart"
@@ -163,24 +189,11 @@ export default function Navbar() {
 
         {/* mobile navigation links */}
         <div
-          className={`mx-auto flex items-center gap-4 sm:hidden [&>a]:font-semibold ${
+          className={`mx-auto mt-4 flex h-8 items-center gap-4 sm:hidden [&>a]:font-semibold ${
             pathname.startsWith('/admin') ? 'bg-gray-900 text-white' : ''
           }`}
         >
-          {linksInfor.map((linkInfor) => {
-            if (linkInfor.id === 2) {
-              return linkInfor.dropDownComponent;
-            }
-            return (
-              <Link
-                className={linkInfor.className}
-                href={linkInfor.href as string}
-                key={linkInfor.id}
-              >
-                {linkInfor.linkName}
-              </Link>
-            );
-          })}
+          {renderLinks(linksInfor)}
         </div>
       </div>
     </div>

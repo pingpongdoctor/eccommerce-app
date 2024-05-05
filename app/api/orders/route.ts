@@ -28,8 +28,8 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
     }
 
     //check if user is admin
-    const isAdmin =
-      session?.user[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
+    const isAdmin: boolean | undefined =
+      session?.user?.[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
         'admin'
       );
 
