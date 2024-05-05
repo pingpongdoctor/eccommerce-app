@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import BlogCard from './BlogCard';
 import CarouselComponent from './CarouselComponent';
 import { SanityDocument } from 'next-sanity';
@@ -24,7 +25,11 @@ export default function BlogCards({ blogs }: Props) {
                 SanityDocument & {
                   authorData: SanityAuthor & SanityDocument;
                 } & { imageUrl: string }
-            ) => <BlogCard blog={blog} key={blog._id} />
+            ) => (
+              <Link key={blog._id} href={`/blog/${blog.slug.current}`}>
+                <BlogCard blog={blog} />
+              </Link>
+            )
           )}
       </div>
     </div>
