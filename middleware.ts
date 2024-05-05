@@ -9,20 +9,38 @@ export default withMiddlewareAuthRequired(async function middleware(
 ) {
   const session = await getSession();
 
-  const isAdmin =
-    session?.user[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
+  //redirect user to login page if they are not authenticated
+  if (!session) {
+    return NextResponse.redirect(new URL('/api/auth/login', req.url));
+  }
+
+  //if user is authenticated, check if they are admin
+  const isAdmin: boolean | undefined =
+    session.user?.[process.env.AUTH0_CUSTOM_ROLE_CLAIM as string].includes(
       'admin'
     );
 
-  if (!isAdmin) {
-    return NextResponse.redirect(new URL('/', req.url));
+  //check if isAdmin claim is available
+  if (isAdmin === undefined) {
+    console.log('Error No isAdmin claim available in Auth0 user object ');
   }
 
-  if (isAdmin && req.nextUrl.pathname.startsWith('/order-history')) {
-    return NextResponse.redirect(new URL('/admin', req.url));
+  //if isAdmin is undefined or user try to access admin page and studio page when they are not admin, redirect them to homepage
+  if (
+    !isAdmin &&
+    (req.nextUrl.pathname.startsWith('/admin') ||
+      req.nextUrl.pathname.startsWith('/studio'))
+  ) {
+    return NextResponse.redirect(new URL('/', req.url));
   }
 });
 
 export const config = {
-  matcher: ['/admin/:path*', '/order-history'],
+  matcher: [
+    '/admin/:path*',
+    '/order-history',
+    '/shopping-cart',
+    '/studio',
+    '/checkout',
+  ],
 };
