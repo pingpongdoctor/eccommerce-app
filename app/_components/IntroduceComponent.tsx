@@ -13,8 +13,8 @@ export default function IntroduceComponent({
 }) {
   return (
     <div className="bg-white px-4 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl ">
-      <div className="mb-8 block lg:flex lg:gap-16 xl:gap-28">
-        <div className="w-full text-pretty text-xl lg:w-[55%] [&_p]:mb-4">
+      <div className="mb-8 block lg:flex lg:gap-8 xl:gap-12">
+        <div className="grow text-pretty text-xl [&_p]:mb-4">
           <h1 className="text-pretty">{homePageData.introheading}</h1>
           <PortableText value={homePageData.introcontent} />
         </div>
@@ -22,7 +22,7 @@ export default function IntroduceComponent({
         <Image
           src={cosmeticImg}
           alt="hero-image-1"
-          className="hidden h-auto grow rounded-2xl object-fill object-center lg:block"
+          className="hidden h-auto w-[60%] rounded-2xl object-fill object-center lg:block"
           priority
           placeholder="blur"
         />
