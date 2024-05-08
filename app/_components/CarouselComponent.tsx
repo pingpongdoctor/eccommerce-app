@@ -16,7 +16,7 @@ interface Props {
 export default function CarouselComponent({
   carouselAutoPlay,
   carouselAutoPlaySpeed,
-  carouselPauseOnHover = true,
+  carouselPauseOnHover = false,
   carouselSwipeToSlide = true,
   blogs,
 }: Props) {
