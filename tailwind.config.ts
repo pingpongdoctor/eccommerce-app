@@ -1,8 +1,5 @@
 import type { Config } from 'tailwindcss';
 const withMT = require('@material-tailwind/react/utils/withMT');
-const {
-  default: flattenColorPalette,
-} = require('tailwindcss/lib/util/flattenColorPalette');
 
 const config: Config = {
   content: [
@@ -54,16 +51,5 @@ const config: Config = {
     require('@headlessui/tailwindcss')({ prefix: 'ui' }),
   ],
 };
-
-function addVariablesForColors({ addBase, theme }: any) {
-  let allColors = flattenColorPalette(theme('colors'));
-  let newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
-  );
-
-  addBase({
-    ':root': newVars,
-  });
-}
 
 export default withMT(config);
