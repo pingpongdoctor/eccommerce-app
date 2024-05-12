@@ -14,6 +14,7 @@ import { notFound } from 'next/navigation';
 import ProductCards from '@/app/_components/ProductCards';
 import CustomerReviews from '@/app/_components/CustomerReviews';
 import GoBackBtn from '@/app/_components/GoBackBtn';
+import Link from 'next/link';
 
 export async function generateMetadata({
   params,
@@ -104,12 +105,15 @@ export default async function DetailedProduct({
         <div className="mb-6 flex items-center justify-between px-4 font-medium text-gray-900 md:px-8 lg:px-12 xl:mx-auto xl:max-w-7xl">
           <h3 className="mb-0 text-xl">Products you may like</h3>
           {customerAlsoBuyInitialData?.length > 0 ? (
-            <p className="group flex cursor-default justify-start gap-1">
+            <Link
+              href="/product"
+              className="group flex cursor-default justify-start gap-1"
+            >
               <span> See all </span>
               <span className="transition-all duration-500 group-hover:translate-x-2">
                 &rarr;
               </span>
-            </p>
+            </Link>
           ) : (
             <p>No related products</p>
           )}
