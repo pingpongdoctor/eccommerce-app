@@ -183,9 +183,10 @@ export default function PaymentForm({
             );
           }
 
-          // //navigate user to order order-history page
+          //navigate user to order order-history page
           router.push('/order-history');
           break;
+
         default:
           notify('error', 'Something went wrong.', 'payment-error');
           await rollbackData(rollbackDataKey);

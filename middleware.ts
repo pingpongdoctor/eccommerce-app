@@ -25,7 +25,7 @@ export default withMiddlewareAuthRequired(async function middleware(
     console.log('Error No isAdmin claim available in Auth0 user object ');
   }
 
-  //if isAdmin is undefined or user try to access admin page and studio page when they are not admin, redirect them to homepage
+  //if isAdmin is undefined or false when user try to access admin page and studio page, redirect them to homepage
   if (
     !isAdmin &&
     (req.nextUrl.pathname.startsWith('/admin') ||
@@ -33,6 +33,11 @@ export default withMiddlewareAuthRequired(async function middleware(
   ) {
     return NextResponse.redirect(new URL('/', req.url));
   }
+
+  //if user is admin and try to access /order-history route, redirect user to the /admin route
+  // if (isAdmin && req.nextUrl.pathname.startsWith('/order-history')) {
+  //   return NextResponse.redirect(new URL('/admin', req.url));
+  // }
 });
 
 export const config = {

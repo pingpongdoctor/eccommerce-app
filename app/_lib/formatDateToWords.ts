@@ -1,4 +1,17 @@
-import { months } from '../utils/utils';
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 
 export function formatDateToWords(dateString: string): string {
   try {

@@ -63,6 +63,7 @@ export const POST = async (req: Request) => {
 
   try {
     await sgMail.send(msg);
+
     return NextResponse.json({ message: 'email was sent' }, { status: 200 });
   } catch (err: any) {
     console.log('Internal server error' + err);

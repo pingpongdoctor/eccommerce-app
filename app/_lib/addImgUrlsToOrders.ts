@@ -2,7 +2,6 @@ import { client } from '@/sanity/lib/client';
 import { PRODUCT_QUERY } from '@/sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
 import { builder } from '../utils/imageBuilder';
-import { notify } from '../_components/ReactToastifyProvider';
 
 export async function addImgUrlsAndDescriptionToOrders(
   orders: Order[]
@@ -18,11 +17,9 @@ export async function addImgUrlsAndDescriptionToOrders(
 
           //if there is not sanity product or image found, set the imgUrl field undefined
           if (!sanityProduct?.images[0] || !sanityProduct?.detail) {
-            notify(
-              'error',
+            console.log(
               'image not found for' +
-                order.purchasedProducts[i].titleAtTheOrderTime,
-              'missing-data'
+                order.purchasedProducts[i].titleAtTheOrderTime
             );
             order.purchasedProducts[i].imgUrl = undefined;
             continue;
@@ -42,7 +39,7 @@ export async function addImgUrlsAndDescriptionToOrders(
 
     return ordersWithProductImgUrls as Order[];
   } catch (e: any) {
-    console.log('Error in addDetailedProductDataToOrders' + e);
+    console.log('Error in addImgUrlsAndDescriptionToOrders' + e);
     return [];
   }
 }
