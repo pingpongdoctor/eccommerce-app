@@ -201,21 +201,6 @@ export const footerInfor: {
 export const solidBlurDataUrl =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPccehcPQAHSwLJQnqfnAAAAABJRU5ErkJggg==';
 
-export const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
 const linkClassname =
   'transition-all hover:border-b-2 hover:border-gray-900 hover:pb-[2px] hover:pt-[4px] order-2';
 

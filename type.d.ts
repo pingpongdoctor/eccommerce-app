@@ -68,15 +68,6 @@ interface InputBoxInfor {
   name: Field;
 }
 
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  message: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 interface SanityImage {
   _type: string;
   _key: string;
