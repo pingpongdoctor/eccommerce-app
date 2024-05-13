@@ -35,9 +35,9 @@ export default withMiddlewareAuthRequired(async function middleware(
   }
 
   //if user is admin and try to access /order-history route, redirect user to the /admin route
-  // if (isAdmin && req.nextUrl.pathname.startsWith('/order-history')) {
-  //   return NextResponse.redirect(new URL('/admin', req.url));
-  // }
+  if (isAdmin && req.nextUrl.pathname.startsWith('/order-history')) {
+    return NextResponse.redirect(new URL('/admin', req.url));
+  }
 });
 
 export const config = {
