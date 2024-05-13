@@ -4,7 +4,6 @@ import { Review } from '@prisma/client';
 export const calculateAverageStar = function (
   productReviews: (Review & { user: { name: string; imgUrl: string } })[]
 ): number | undefined {
-  console.log(productReviews);
   try {
     const starCounts: number[] = [0, 0, 0, 0, 0];
 
