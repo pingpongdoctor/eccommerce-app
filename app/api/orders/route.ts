@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
 
 //get all orders of the current user
-export const GET = withApiAuthRequired(async (req: NextRequest) => {
+export const GET = withApiAuthRequired(async (_req: NextRequest) => {
   const session = await getSession();
   if (!session) {
     return NextResponse.json(
