@@ -16,14 +16,14 @@ export default function AdminOrderDetail({
 }: {
   params: { slug: string };
 }) {
-  const { user } = useContext(globalStatesContext);
+  const { user, isLoading } = useContext(globalStatesContext);
   const [order, setOrder] = useState<Order | null>(null);
   const [isFetchingOrder, setIsFetchingOrder] = useState<boolean>(false);
   const [isStatusUpdated, setIsStatusUpdated] = useState<boolean>(false);
 
   //fetch order data
   useEffect(() => {
-    if (user) {
+    if (!isLoading && user) {
       setIsFetchingOrder(true);
 
       getOrderOnClientSide(Number(params.slug))
