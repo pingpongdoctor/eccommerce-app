@@ -1,11 +1,11 @@
 'use client';
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
-import { PortableText } from '@portabletext/react';
 import { builder } from '../utils/imageBuilder';
 import { solidBlurDataUrl } from '../utils/utils';
 import RatingStar from './RatingStar';
 import ButtonComponent from './ButtonComponent';
+import CustomizedSanityPortableTextClientComponent from './CustomizedSanityPortableTextClientComponent';
 
 interface Props {
   product: SanityProduct & SanityDocument;
@@ -62,7 +62,7 @@ export default function ProductDetailClientComponent({ product }: Props) {
             <h2>{title}</h2>
             {detail && (
               <div className="hidden lg:block">
-                <PortableText value={detail} />
+                <CustomizedSanityPortableTextClientComponent value={detail} />
               </div>
             )}
           </div>
@@ -79,7 +79,7 @@ export default function ProductDetailClientComponent({ product }: Props) {
 
         {detail && (
           <div className="lg:hidden">
-            <PortableText value={detail} />
+            <CustomizedSanityPortableTextClientComponent value={detail} />
           </div>
         )}
       </div>

@@ -86,7 +86,7 @@ export default function ProductDetail({ product }: Props) {
 
         {detail && (
           <div className="lg:hidden">
-            <PortableText value={detail} />
+            <CustomizedSanityPortableTextComponent value={detail} />
           </div>
         )}
       </div>
