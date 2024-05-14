@@ -1,6 +1,6 @@
 import { getAllOrdersOnServerSide } from '../_lib/getAllOrdersOnServerSide';
 import HistoryOrderListComponent from '../_components/HistoryOrderListComponent';
-import { addImgUrlsAndDescriptionToOrders } from '../_lib/addImgUrlsToOrders';
+import { addImgUrlsToOrders } from '../_lib/addImgUrlsToOrders';
 import GoBackBtn from '../_components/GoBackBtn';
 import HistoryOrderSkeletonComponent from '../_components/HistoryOrderSkeletonComponent';
 import { Suspense } from 'react';
@@ -13,8 +13,9 @@ export default async function OrderHistoryPage() {
   const ordersWithoutDetailedProducts: Order[] =
     await getAllOrdersOnServerSide();
 
-  const ordersWithDetailedProducts: Order[] =
-    await addImgUrlsAndDescriptionToOrders(ordersWithoutDetailedProducts);
+  const ordersWithDetailedProducts: Order[] = await addImgUrlsToOrders(
+    ordersWithoutDetailedProducts
+  );
 
   if (ordersWithDetailedProducts.length > 0) {
     return (

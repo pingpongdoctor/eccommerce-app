@@ -4,7 +4,7 @@ import { globalStatesContext } from '@/app/_components/GlobalStatesContext';
 import GoBackBtn from '@/app/_components/GoBackBtn';
 import HistoryOrderSkeletonComponent from '@/app/_components/HistoryOrderSkeletonComponent';
 import SimpleMenuComponent from '@/app/_components/SimpleMenuComponent';
-import { addImgUrlsAndDescriptionToOrders } from '@/app/_lib/addImgUrlsToOrders';
+import { addImgUrlsToOrders } from '@/app/_lib/addImgUrlsToOrders';
 import { caplitalizeFirstLetterOfWords } from '@/app/_lib/caplitalizeFirstLetterOfWords';
 import generateOrderInforObject from '@/app/_lib/generateOrderInforObject';
 import { getOrderOnClientSide } from '@/app/_lib/getOrderOnClientSide';
@@ -32,7 +32,7 @@ export default function AdminOrderDetail({
             return null;
           }
 
-          return addImgUrlsAndDescriptionToOrders([order]);
+          return addImgUrlsToOrders([order]);
         })
         .then((order: Order[] | null) => {
           if (!order) {
@@ -59,7 +59,7 @@ export default function AdminOrderDetail({
             return null;
           }
 
-          return addImgUrlsAndDescriptionToOrders([order]);
+          return addImgUrlsToOrders([order]);
         })
         .then((order: Order[] | null) => {
           if (!order) {
