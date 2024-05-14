@@ -3,9 +3,7 @@ import { PRODUCT_QUERY } from '@/sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
 import { builder } from '../utils/imageBuilder';
 
-export async function addImgUrlsAndDescriptionToOrders(
-  orders: Order[]
-): Promise<Order[]> {
+export async function addImgUrlsToOrders(orders: Order[]): Promise<Order[]> {
   try {
     const ordersWithProductImgUrls = await Promise.all(
       [...orders].map(async (order) => {
@@ -15,8 +13,8 @@ export async function addImgUrlsAndDescriptionToOrders(
               slug: order.purchasedProducts[i].sanitySlug,
             });
 
-          //if there is not sanity product or image found, set the imgUrl field undefined
-          if (!sanityProduct?.images[0] || !sanityProduct?.detail) {
+          //if sanity image not found, set the imgUrl field undefined
+          if (!sanityProduct?.images[0]) {
             console.log(
               'image not found for' +
                 order.purchasedProducts[i].titleAtTheOrderTime
@@ -26,7 +24,6 @@ export async function addImgUrlsAndDescriptionToOrders(
           }
 
           //add image url
-          order.purchasedProducts[i].detail = sanityProduct.detail;
           order.purchasedProducts[i].imgUrl = builder
             .image(sanityProduct.images[0])
             .quality(80)
@@ -39,7 +36,7 @@ export async function addImgUrlsAndDescriptionToOrders(
 
     return ordersWithProductImgUrls as Order[];
   } catch (e: any) {
-    console.log('Error in addImgUrlsAndDescriptionToOrders' + e);
+    console.log('Error in addImgUrlsToOrders' + e);
     return [];
   }
 }

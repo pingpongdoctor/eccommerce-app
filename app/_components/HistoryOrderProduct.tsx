@@ -8,7 +8,6 @@ interface Props {
     sanitySlug: string;
     titleAtTheOrderTime: string;
     imgUrl?: string | undefined;
-    detail?: any;
   };
 }
 
@@ -25,19 +24,13 @@ export default function HistoryOrderProduct({ product }: Props) {
         blurDataURL={solidBlurDataUrl}
       />
 
-      <div className="text- flex w-[50%] flex-col gap-12 text-sm sm:w-[65%] sm:text-base md:w-[70%] lg:text-lg">
+      <div className="flex w-[50%] flex-col gap-12 text-sm font-medium text-gray-800 sm:w-[65%] sm:text-base md:w-[70%] lg:text-lg">
         <div className="flex items-center justify-between gap-2">
-          <p className="font-medium text-gray-800">
-            {product.titleAtTheOrderTime}
-          </p>
-          <p className="font-medium text-gray-800">
-            ${product.priceAtTheOrderTime}
-          </p>
+          <p>{product.titleAtTheOrderTime}</p>
+          <p>${product.priceAtTheOrderTime}</p>
         </div>
 
-        <p className="font-medium text-gray-800">
-          Quantity: {product.quantity}
-        </p>
+        <p>Quantity: {product.quantity}</p>
       </div>
     </li>
   );
