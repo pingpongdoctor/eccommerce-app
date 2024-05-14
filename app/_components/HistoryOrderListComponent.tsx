@@ -1,3 +1,4 @@
+'use client';
 import HistoryOrderItemComponent from './HistoryOrderItemComponent';
 
 interface Props {
