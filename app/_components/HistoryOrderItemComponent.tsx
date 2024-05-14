@@ -1,3 +1,4 @@
+'use client';
 import { CheckCircleIcon } from '@heroicons/react/16/solid';
 import { formatDateToWords } from '../_lib/formatDateToWords';
 import HistoryOrderProduct from './HistoryOrderProduct';
