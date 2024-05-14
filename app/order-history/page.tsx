@@ -1,17 +1,19 @@
+'use client';
 import { getAllOrdersOnServerSide } from '../_lib/getAllOrdersOnServerSide';
 import HistoryOrderListComponent from '../_components/HistoryOrderListComponent';
 import { addImgUrlsToOrders } from '../_lib/addImgUrlsToOrders';
 import GoBackBtn from '../_components/GoBackBtn';
 import HistoryOrderSkeletonComponent from '../_components/HistoryOrderSkeletonComponent';
 import { Suspense } from 'react';
+import { getAllOrdersOnClientSide } from '../_lib/getAllOrdersOnClientSide';
 
 //force page to be dynamically rendered (SSR page)
 //next.js renders pages statically by default so whenever we use dynamic functions like next.js header(), we need to force it rendered dynamically. Otherwise, it will throw erros.
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
 export default async function OrderHistoryPage() {
   const ordersWithoutDetailedProducts: Order[] =
-    await getAllOrdersOnServerSide();
+    await getAllOrdersOnClientSide();
 
   const ordersWithDetailedProducts: Order[] = await addImgUrlsToOrders(
     ordersWithoutDetailedProducts
