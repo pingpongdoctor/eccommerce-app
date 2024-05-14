@@ -189,8 +189,8 @@ export default function PaymentForm({
             );
           }
 
-          //navigate to homepage after a successful purchase
-          router.push('/');
+          //navigate to orders page after a successful purchase
+          router.push('/order-history');
           break;
 
         default:

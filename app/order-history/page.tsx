@@ -6,13 +6,8 @@ import { useContext, useEffect, useState } from 'react';
 import { getAllOrdersOnClientSide } from '../_lib/getAllOrdersOnClientSide';
 import { globalStatesContext } from '../_components/GlobalStatesContext';
 
-//force page to be dynamically rendered (SSR page)
-//next.js renders pages statically by default so whenever we use dynamic functions like next.js header(), we need to force it rendered dynamically. Otherwise, it will throw erros.
-// export const dynamic = 'force-dynamic';
-
 export default function OrderHistoryPage() {
   const { user, isLoading } = useContext(globalStatesContext);
-
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
