@@ -179,13 +179,7 @@ export default function PaymentForm({
             notify(
               'success',
               'Thank you for your purchase at Glowy Lab!',
-              'success-payment-1'
-            );
-
-            notify(
-              'success',
-              'You can check order status in your orders page!',
-              'success-payment-2'
+              'success-payment'
             );
           }
 
