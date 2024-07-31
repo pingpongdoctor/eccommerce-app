@@ -2,7 +2,7 @@
 
 # Glowy Lab
 
-[Deployment link](https://glowylab.shop/)
+[Deployment link](https://ecommerece-app-for-thao.vercel.app/)
 
 Welcome to Glowy Lab. The website showcases a meticulously curated array of top-tier products. Let's discover unparalleled quality and convenience at my Canadian E-commerce hub, where I curate and offer the finest selection of products.
 
