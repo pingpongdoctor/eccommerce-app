@@ -118,4 +118,3 @@ model UsersProducts {
   @@index([userId])
   @@index([productId])
 }
-
