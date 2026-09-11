@@ -128,7 +128,7 @@ export default function Navbar() {
 
           <div className={`flex w-[109px] justify-end transition-all`}>
             {!userProfile && !isLoading && (
-              <Link
+              <a
                 href="/api/auth/login"
                 className="group relative ml-auto h-[25px] w-[88px] font-semibold"
               >
@@ -139,7 +139,7 @@ export default function Navbar() {
                 </span>
 
                 <span className="absolute left-0 top-0 z-0 h-full w-0 rounded-lg bg-gray-900 transition-all group-hover:w-full"></span>
-              </Link>
+              </a>
             )}
 
             {userProfile && !isLoading && (
